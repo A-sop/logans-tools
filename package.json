@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "ahrefs:test": "tsx scripts/ahrefs-test.ts"
+    "ahrefs:test": "tsx scripts/ahrefs-test.ts",
+    "screenshot:landing": "tsx scripts/screenshot-landing.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -54,6 +55,7 @@
     "eslint-config-next": "latest",
     "eslint-config-prettier": "^10.0.0",
     "jsdom": "^25.0.0",
+    "playwright": "^1.58.2",
     "prettier": "^3.4.0",
     "supabase": "^2.0.0",
     "tailwindcss": "^4",

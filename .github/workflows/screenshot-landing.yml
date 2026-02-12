@@ -1,0 +1,42 @@
+# Screenshot the Concierge landing page and update public/cm-landing.png
+# Trigger: manual or weekly (Sundays)
+name: Screenshot landing page
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 0' # Sundays at 08:00 UTC
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npx playwright install chromium
+
+      - run: npm run screenshot:landing
+        env:
+          # Set LANDING_PAGE_URL in repo Settings → Variables to override
+          LANDING_PAGE_URL: ${{ vars.LANDING_PAGE_URL }}
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cm-landing.png
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update landing page screenshot [skip ci]"
+            git push
+          fi

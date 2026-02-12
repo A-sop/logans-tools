@@ -27,3 +27,4 @@ Copy into new chat when working on this project.
 ## Key docs
 
 - `src/docs/project-plans/` — plan (in loganwilliams-website repo)
+- `scripts/README.md` — index of scripts
