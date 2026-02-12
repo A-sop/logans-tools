@@ -1,0 +1,34 @@
+---
+description: Security best practices for TypeScript development
+globs: ["**/*.ts","**/*.tsx"]
+alwaysApply: true
+---
+
+When working with TypeScript files, enforce these security practices:
+
+**Type Safety:**
+- Never use `any` type except in well-documented cases with explicit reasoning
+- Use specific types, interfaces, or `unknown` instead of `any`
+- Enable strict mode in TypeScript configuration
+
+**Input Validation:**
+- Always validate and sanitize user inputs before processing
+- Use proper validation libraries like Zod or Joi for data validation
+- Never trust data from external sources (APIs, forms, URL parameters)
+
+**Environment Security:**
+- Store sensitive data (API keys, secrets) in environment variables
+- Never commit secrets to version control
+- Use proper environment variable validation
+
+**Dependencies:**
+- Regularly update dependencies to patch security vulnerabilities
+- Audit dependencies for known security issues
+- Avoid using deprecated or unmaintained packages
+
+**Code Execution:**
+- Never use `eval()` or similar functions that execute code from strings
+- Be cautious with dynamic imports and code generation
+- Sanitize any user-provided content before rendering
+
+Apply these practices consistently to maintain secure, maintainable code.

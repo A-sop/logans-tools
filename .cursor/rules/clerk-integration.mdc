@@ -1,0 +1,29 @@
+---
+description: Clerk + Next.js App Router integration guardrails
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Clerk Integration Rules
+
+Use only current Clerk + Next.js App Router patterns.
+
+## Always do
+
+- Use `clerkMiddleware()` from `@clerk/nextjs/server` in `src/middleware.ts` (Next.js requires middleware.ts)
+- Wrap app with `<ClerkProvider>` in layout
+- Import from `@clerk/nextjs` or `@clerk/nextjs/server`
+- Use Clerk components: SignInButton, SignUpButton, UserButton, SignedIn, SignedOut
+- Store keys only in `.env.local`; use placeholders in code/docs
+- Use async/await for `auth()` from `@clerk/nextjs/server`
+
+## Never do
+
+- Use `authMiddleware()` — replaced by `clerkMiddleware()`
+- Reference `_app.tsx` or pages/ structure
+- Use deprecated APIs (withAuth, old currentUser patterns)
+- Put real keys in tracked files
+
+## Verification
+
+Before returning Clerk code: clerkMiddleware in middleware.ts, ClerkProvider in layout, imports from @clerk/nextjs, App Router only.

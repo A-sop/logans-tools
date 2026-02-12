@@ -1,0 +1,26 @@
+[
+  {
+    "id": "sop-1",
+    "title": "Document Intake and Processing",
+    "content": "When a document is received (PDF, image, or DOCX):\n1. Upload via the Workspace Document Intake area.\n2. System extracts text (OCR if needed) and detects language (EN/DE).\n3. Extracted text is sent to the model for 1–5 task suggestions.\n4. Review suggestions before saving. No outbound actions until approved.\n5. All records remain unassigned until you link them to an assignment.",
+    "updatedAt": "2026-01-15"
+  },
+  {
+    "id": "sop-2",
+    "title": "Task Assignment and Follow-up",
+    "content": "For new tasks:\n1. Create via Add Task or from suggested tasks after document intake.\n2. Assign to an assignment (or leave unassigned).\n3. Set status (Todo, In progress, Waiting, Done) and priority.\n4. Use Waiting-on to track blockers (e.g. \"Waiting for employer contract\").\n5. Review tasks regularly; escalate urgent items for approval.",
+    "updatedAt": "2026-01-12"
+  },
+  {
+    "id": "sop-3",
+    "title": "Client Communication Approval",
+    "content": "Before any outbound communication:\n1. System drafts the message or letter.\n2. You or your assistant reviews the draft.\n3. Approve, edit, or reject. Nothing is sent without explicit approval.\n4. Tone matches input language (e.g. German documents → formal Sie-form output).\n5. Log approved communications in the assignment timeline.",
+    "updatedAt": "2026-01-10"
+  },
+  {
+    "id": "sop-4",
+    "title": "Escalation and Urgent Items",
+    "content": "When an item is marked Urgent:\n1. Flag appears in the task list.\n2. Notify the responsible assistant or executive.\n3. Set a due date; add to Waiting-on if blocked.\n4. Escalate to human review if automation cannot resolve.\n5. Document the resolution in the timeline for audit.",
+    "updatedAt": "2026-01-08"
+  }
+]

@@ -1,0 +1,104 @@
+# Linear Task Management & Prefix System
+
+**Purpose:** Structured task ownership, permission, and execution scope across multi-product, human-in-the-loop system.
+
+**Context:** This system applies to all projects. When in loganwilliams-website, use `LDW-` for this project's tasks—but you can create Linear issues for any project (CM, LDW, LT, GFP) from this workspace.
+
+---
+
+## Prefix Structure
+
+All Linear issues and tasks use structured prefixes:
+
+```
+[OWNER]-[DOMAIN]-[SURFACE] Task description
+```
+
+### OWNERS (Project Identifiers)
+
+| Prefix | Owner | Project |
+|--------|-------|---------|
+| `CM` | Consulting & More | Reza's business / concierge system (my-app) |
+| `LDW` | Logan Williams | Logan's personal branding website (loganwilliams.com) — this project |
+| `LT` | Logan Tools | logans.tools — productised internal or external tools |
+| `GFP` | German Financial Planning | Regulated financial planning business (high compliance sensitivity) |
+
+**Note:** Owner prefixes identify **which project** the task belongs to, not permission level. You can create Linear issues for any project from this IDE—it's the central task-management hub when working across projects in parallel.
+
+### DOMAINS (Permission & Scope)
+
+| Prefix | Domain | Permission | Scope |
+|--------|--------|------------|-------|
+| `BIZ` | Business | **Human Required** | Big picture, strategy, content, compliance, outreach, positioning, marketing, one-way-door decisions |
+| `OPS` | Operations | **Human-in-the-loop** | Day-to-day operational work, recurring tasks, running existing processes for real clients |
+| `DEV` | Development | **Can Execute** | Code, systems, automation, infrastructure, technical implementation |
+
+**Key Rule:**
+- **`-BIZ-`** = Strategic / directional decisions → humans decide, AI assists.
+- **`-OPS-`** = Operative daily work → humans act, AI prepares/checklists/automation.
+- **`-DEV-`** = Technical implementation → AI can execute autonomously in code.
+
+### SURFACES (Optional)
+
+| Prefix | Surface | Scope |
+|--------|---------|-------|
+| `WEB` | Web | Public website, landing pages, marketing site |
+| `APP` | Application | Dashboard, system, authenticated app interface |
+
+**Note:** If SURFACE is omitted, task applies across all surfaces.
+
+---
+
+## Execution Rules
+
+### 1. -BIZ- Tasks (Human Required)
+
+**Rule:** Any task with `-BIZ-` requires **human judgment, decisions, or approval**.
+
+**Examples:** `LDW-BIZ`: "Define personal brand messaging" → Draft options, human chooses. `CM-BIZ`: "Draft pricing strategy" → Draft options, human decides.
+
+### 2. -OPS- Tasks (Operations)
+
+**Rule:** Any task with `-OPS-` is **human-in-the-loop**—running the machine, real clients, repeatable work.
+
+**Examples:** `LDW-OPS-WEB`: "Publish this pre-approved case study" → I prepare content and steps; you click publish.
+
+### 3. -DEV- Tasks (Can Execute)
+
+**Rule:** Tasks with `-DEV-` can be **executed autonomously** (write code, implement features, fix bugs).
+
+**Examples:** `LDW-DEV`: "Build portfolio gallery component" → Execute directly. `LDW-DEV-WEB`: "Add insights page with MDX" → Execute directly.
+
+### 4. GFP Tasks (Regulatory Sensitivity)
+
+**Rule:** GFP tasks must be handled **conservatively** due to regulatory compliance.
+
+### 5. LDW Tasks (This Project)
+
+**Rule:** LDW tasks are for Logan's personal branding website (loganwilliams.com). `LDW-BIZ` = human decisions (brand, messaging). `LDW-DEV` = can execute (technical implementation). When in this workspace, default LDW for coding tasks unless you specify another project.
+
+---
+
+## Integration with Linear
+
+**When creating Linear issues:**
+1. Always include prefix in title: `[OWNER]-[DOMAIN]-[SURFACE] Description`
+2. Use `-BIZ-` for business/strategy/content tasks (human required)
+3. Use `-DEV-` for development/technical tasks (can execute)
+4. Create issues for **any project** (CM, LDW, LT, GFP) when requested
+
+**For this project (loganwilliams-website):**
+- Use `LDW-` prefix for tasks related to this site
+- `LDW-DEV` = Development (can execute)
+- `LDW-BIZ` = Business (human required)
+- You can still create CM, GFP, LT issues from here when needed
+
+---
+
+## Acknowledgment
+
+**I acknowledge this prefix system and will:**
+- ✅ Use appropriate owner prefix (CM, LDW, LT, GFP) for each task
+- ✅ Create Linear issues for any project from this workspace when requested
+- ✅ Use `LDW-` when in loganwilliams-website for this project's tasks
+- ✅ Treat GFP tasks with regulatory sensitivity

@@ -1,0 +1,86 @@
+---
+description: Safety protocol for Supabase database schema changes
+globs: ["supabase/**/*", "**/*.sql", "**/migrations/*"]
+alwaysApply: false
+---
+
+# Database Migration Safety Protocol
+
+When the user requests database schema changes, follow this 6-step protocol:
+
+**Reference Documentation:**
+Always reference the official Supabase documentation for best practices:
+https://supabase.com/docs/guides/local-development/declarative-database-schemas
+We are using the declarative schema approach.
+
+**Important: API Key Names**
+Supabase transitioned to new API keys in November 2025. When working with environment variables or client initialization:
+- Use "publishable key" (format: sb_publishable_...) not "anon key"
+- Use "secret key" (format: sb_secret_...) not "service_role key"
+- Environment variable names are: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY and SUPABASE_SECRET_KEY
+- Reference: https://supabase.com/docs/guides/auth/server-side/nextjs
+- Note: This app currently uses server-only access (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY); use NEXT_PUBLIC_* when adding client-side Supabase.
+
+**Remote Database Only (No Local Docker)**
+We use a single remote Supabase project for development AND production:
+- Simpler setup (no Docker complexity)
+- Webhook-ready from day one (Stripe, etc.)
+- This IS the production database
+- No local Supabase Docker setup required
+
+## Step 1: Understand & Plan
+- Clarify what the user wants to change
+- Review current schema structure (check supabase/schema.sql)
+- Plan the schema modifications following best practices
+
+## Step 2: Update Schema
+- Edit supabase/schema.sql to reflect desired state
+- Show the user what you changed in the schema file
+- Explain why each change is needed
+
+## Step 3: Generate Migration
+- Run: supabase db diff -f descriptive_migration_name
+- Show the generated migration SQL to the user
+- Explain what the migration will do
+
+## Step 4: Risk Assessment (REQUIRED)
+Before running supabase db push, you MUST analyze and explain:
+
+- What tables/columns will be added, modified, or deleted?
+- Will this break existing functionality?
+- Will this cause data loss?
+- Are there foreign key constraints that might fail?
+- Is this a safe, additive change or a potentially dangerous one?
+
+**Risk Categories:**
+- ✅ SAFE: Adding new tables, adding nullable columns, creating indexes
+- ⚠️ CAUTION: Adding NOT NULL columns (needs default), adding constraints to existing data
+- 🚨 DANGEROUS: Dropping columns/tables, changing column types, removing constraints
+
+## Step 5: Confirm Before Push (CRITICAL)
+- NEVER run supabase db push without explicit user confirmation
+- Present your risk assessment clearly
+- Ask: "This change is [SAFE/CAUTION/DANGEROUS]. Should I apply it to your database?"
+- Only proceed after user types explicit approval
+
+**Example Risk Assessment:**
+"I'll add a new 'comments' table. This is a SAFE change ✅ because:
+- It only adds a new table (no modifications to existing data)
+- No existing queries will break
+- You can roll back if needed
+
+Should I apply this migration to your database?"
+
+## Step 6: Apply & Commit
+After user confirms:
+- Run: supabase db push
+- Verify the changes in Supabase dashboard
+- Commit both schema file and migration to Git
+- Remind user to test their app
+
+## Important Rules
+- NEVER skip the risk assessment step
+- NEVER run supabase db push without confirmation
+- Always explain what will happen before it happens
+- For DANGEROUS changes, emphasize risks multiple times
+- Recommend testing in a separate branch for risky changes

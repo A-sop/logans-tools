@@ -1,0 +1,51 @@
+---
+description: Tech stack and framework conventions for this project
+alwaysApply: true
+---
+
+# Tech Stack
+
+## Framework & Runtime
+
+- **Next.js 16** — App Router only. Use `app/` directory for routes and layouts.
+- **React 19** — Functional components. Prefer `import type` for types; use `ReactNode`, `KeyboardEvent`, etc. from `react` instead of `React.ReactNode`.
+- **TypeScript 5** — Strict mode. Path alias `@/*` → `./src/*`.
+
+## Styling
+
+- **Tailwind CSS 4** — Via `@tailwindcss/postcss` and `@import 'tailwindcss'` in `globals.css`.
+- **Theme:** CSS variables in `:root` and `.dark` (HSL values). `@theme inline` maps vars to Tailwind colors.
+- **Utility:** `cn()` from `@/lib/utils` (clsx + tailwind-merge) for conditional classes.
+
+## UI Components
+
+- **shadcn/ui** — Style: new-york. Components live in `src/components/ui/`. Use RSC where possible.
+- **Radix UI** — Primitives: Avatar, Dialog, ScrollArea, Select, Tabs.
+- **Lucide React** — Icons. Use named imports (e.g. `ChevronUp`, `ChevronDown`).
+- **class-variance-authority (cva)** — For variant-based component APIs.
+
+## Data & Validation
+
+- **Zod** — Schemas in `src/lib/schemas/`. Validate at boundaries (forms, Server Actions, API routes).
+- **Supabase** — Server: `createSupabaseAdmin()` from `@/lib/supabase-server`. Client: `createSupabaseBrowserClient()` from `@/lib/supabase-client` (for Auth/Realtime). Never expose service role key to client.
+
+## Server & API
+
+- **Server Actions** — Prefer over API routes. Use `'use server'` in dedicated action files (e.g. `actions.ts`, `supabase-actions.ts`).
+- **API routes** — Use only when external services or non-React clients need HTTP.
+
+## i18n
+
+- **Custom** — `LocaleProvider` + `useLocale` + `t()` from `@/lib/i18n`. Translations in `src/lib/i18n/translations.ts`. Supported locales: `en`, `de`.
+
+## Code Quality
+
+- **ESLint 9** — Flat config (`eslint.config.mjs`). Extends `next/core-web-vitals` and `prettier`. Unused vars allowed with `_` prefix.
+- **Prettier** — Single quotes, semicolons, trailing commas (es5), printWidth 100.
+- **Vitest** — Tests in `src/**/*.{test,spec}.{ts,tsx}`. Setup: `src/test/setup.ts`. Use `@testing-library/react` and `@testing-library/jest-dom`.
+
+## File Conventions
+
+- **Data:** JSON files in `src/data/` for mock/dev data.
+- **Docs:** PRDs and concepts in `src/docs/`.
+- **Paths:** Always use `@/` for imports from `src/`.

@@ -1,0 +1,80 @@
+{
+  "name": "Feedback from app (full)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "feedback",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-feedback",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "feedback"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "feedback@logans.tools",
+        "subject": "New feedback received",
+        "emailType": "html",
+        "message": "=<p><strong>From:</strong> {{ $json.body?.firstName }} {{ $json.body?.lastName }} ({{ $json.body?.email || 'no email' }})</p><p><strong>Message:</strong></p><p>{{ $json.body?.message }}</p><p><small>URL: {{ $json.body?.url || '—' }} · {{ $json.body?.timestamp }}</small></p>",
+        "options": {}
+      },
+      "id": "gmail-send",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "notesInFlow": true,
+      "notes": "After import: add Gmail OAuth2 credential (Connect account / Sign in with Google). To is set to feedback@logans.tools (catchall)."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cm.logans.tools/api/webhooks/n8n/feedback",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Webhook').first().json.body ?? { firstName: 'Anonymous', lastName: '', message: '' }) }}",
+        "options": {}
+      },
+      "id": "http-callback",
+      "name": "HTTP Request (app callback)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "notesInFlow": true,
+      "notes": "Production: cm.logans.tools. For local testing change URL to http://localhost:3000/api/webhooks/n8n/feedback. Optional: add header X-API-Key (5.5)."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"received\": true}",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Gmail", "type": "main", "index": 0 }]]
+    },
+    "Gmail": {
+      "main": [[{ "node": "HTTP Request (app callback)", "type": "main", "index": 0 }]]
+    },
+    "HTTP Request (app callback)": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1"
+}

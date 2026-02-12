@@ -1,0 +1,218 @@
+---
+description: Design system for consistent UI styling
+alwaysApply: true
+---
+
+# Design System
+
+Use this system when styling components in `src/components/ui/` or building new UI. The palette is **soft stone, calm & professional** (authority/government feel).
+
+**Component inventory:** AppHeader, Avatar, Badge, Button, Calendar, Card, DataList, DatePicker, Dialog, ErrorMessage, FormField, Input, Label, LikeToggleButton, Popover, ScrollArea, Select, Separator, Table, Tabs, Textarea.
+
+---
+
+## Color Usage
+
+**Use CSS variables via Tailwind.** Never hardcode hex unless matching an external design spec (e.g. LikeToggleButton `#7c5ac2`, DatePicker dark variant `#2a2d35`).
+
+| Token | Tailwind | Use for |
+|-------|----------|---------|
+| `background` | `bg-background` | Page and main surface |
+| `foreground` | `text-foreground` | Primary text |
+| `card` | `bg-card`, `text-card-foreground` | Cards, elevated surfaces |
+| `primary` | `bg-primary`, `text-primary` | Primary buttons, links, emphasis |
+| `primary-foreground` | `text-primary-foreground` | Text on primary bg |
+| `secondary` | `bg-secondary` | Secondary buttons, badges |
+| `muted` | `bg-muted`, `text-muted-foreground` | Subtle backgrounds, labels, descriptions |
+| `accent` | `bg-accent`, `hover:bg-accent` | Hover states, inactive tabs |
+| `accent-foreground` | `text-accent-foreground` | Text on accent bg (e.g. ghost button hover) |
+| `destructive` | `bg-destructive` | Errors, danger actions |
+| `border` | `border-border` | Default borders |
+| `input` | `border-input`, `bg-input` | Input borders (dark mode uses `bg-input/30`) |
+| `ring` | `ring-ring`, `focus-visible:ring-ring` | Focus rings |
+| `popover` | `bg-popover`, `text-popover-foreground` | Dropdowns, select content, popovers |
+| `chart-1`–`chart-5` | `text-chart-1`, etc. | Data visualization |
+
+**Opacity modifiers:** `bg-muted/50`, `hover:bg-primary/90`, `border-border/80`, `dark:bg-input/30`
+
+---
+
+## Spacing Scale
+
+Prefer these values for consistency:
+
+| Token | Tailwind | Pixels | Use for |
+|-------|----------|--------|---------|
+| 1 | `p-1`, `gap-1`, `space-y-1` | 4px | Tight padding |
+| 1.5 | `p-1.5`, `gap-1.5` | 6px | Icon–text gaps |
+| 2 | `p-2`, `gap-2`, `px-2` | 8px | Table cells, compact padding |
+| 3 | `p-3`, `gap-3` | 12px | Buttons, inputs |
+| 4 | `p-4`, `gap-4` | 16px | Card sections, table cells |
+| 6 | `p-6` | 24px | Card header/content padding |
+| 8 | `space-y-8` | 32px | Section spacing |
+
+**Heights:**
+- Inputs, default buttons: `h-9` (36px)
+- Small: `h-8`; Large: `h-10`
+- Extra small (Button xs): `h-6`
+
+**Icons:** `size-4` (16px) default, `size-3` for xs, `size-3.5` for calendar dropdowns. Use `[&_svg]:size-4` or `[&_svg:not([class*='size-'])]:size-4` in parent to size child SVGs.
+
+---
+
+## Typography
+
+| Role | Classes | Use for |
+|------|---------|---------|
+| Page title | `text-2xl sm:text-3xl font-bold tracking-tight` | H1 |
+| Section title | `text-lg font-semibold` | Dialog title, card headers |
+| Card/block title | `text-base font-semibold leading-tight` | Case cards |
+| Body | `text-sm` | Default content, tables |
+| Form label | `text-sm font-medium leading-none` | Form field labels (Label component) |
+| Small / inline | `text-xs text-muted-foreground` | Timestamps, secondary hints, inline labels |
+| Description | `text-sm text-muted-foreground` | CardDescription, hints |
+| Numbers (tabular) | `tabular-nums` | Counts, dates |
+
+**Weights:** `font-medium` (buttons, labels), `font-semibold` (titles), `font-bold` (hero).
+
+---
+
+## Borders & Radius
+
+- **Radius:** `--radius: 0.5rem` → use `rounded-md` (default), `rounded-lg`, `rounded-xl` for cards
+- **Borders:** `border`, `border-b`, `border-t` with `border-border` or `border-input`
+- **Rounded corners:** Buttons/inputs `rounded-md`; cards `rounded-xl`; avatars `rounded-full`
+
+---
+
+## Shadows
+
+- `shadow-sm` — inputs, selects
+- `shadow` — cards
+- `shadow-xs` — subtle elevation (outline buttons)
+- `shadow-lg` — modals, dialogs
+
+---
+
+## Component Patterns
+
+### shadcn/ui Customization
+
+1. **Extend, don’t replace:** Add `className` to customize; keep `cn()` for merging
+2. **Variants:** Use `cva` for variant-based styling (e.g. Button, Badge, Tabs)
+3. **Dark mode:** Rely on `.dark` CSS variables; use `dark:` prefix only when needed (e.g. `dark:bg-input/30`)
+4. **Focus:** Use `focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50` (or `ring-1` for lighter) or the `focus-ring` utility for custom elements
+5. **data-slot:** Preserve `data-slot="component-name"` for debugging
+
+### When to Use shadcn/ui vs Custom
+
+- **Use shadcn/ui** when a primitive exists (Button, Card, Badge, Input, Select, Dialog, Tabs, Table, etc.). Install via `npx shadcn@latest add [component]` and then customize with Tailwind. Base style: **new-york**.
+- **Use custom** when the design is highly specific (e.g. LikeToggleButton with heart + count) or no shadcn primitive fits.
+
+### Navigation (AppHeader)
+
+- **Height:** `h-14` for header bar
+- **Structure:** `border-b border-border`, `px-4`, logo/nav `gap-6`, nav links `gap-1`
+- **Nav link:** `rounded-md px-3 py-2 text-sm font-medium text-muted-foreground` with `hover:bg-accent hover:text-foreground`
+
+### Forms
+
+- **Input:** Use shadcn/ui Input with `h-9`, `rounded-md`, `border-input`, `shadow-sm`, `placeholder:text-muted-foreground`
+- **Select:** Use shadcn/ui Select; trigger matches Input height (`h-9` default, `h-8` for sm)
+- **Textarea:** Same border/ring tokens as Input; `min-h-[80px]` default
+- **Label:** Use `Label` component — `text-sm font-medium leading-none`
+- **FormField:** Wrap label + control + description + error. Use `space-y-2`. Required: `after:ml-0.5 after:text-destructive after:content-['*']`
+- **Form layout:** `space-y-2` between label and input, `space-y-4` between form groups
+
+### Error Messages
+
+- **Inline (below field):** `text-sm text-destructive` or `text-sm font-medium text-destructive`. Use `role="alert"` for errors that appear after submit. Wrap in `aria-describedby` on the input for association.
+- **Block (page/section):** `Card` with `border-destructive`, `CardTitle` with `text-destructive`, `CardDescription` for the message
+- **Component:** Use `<ErrorMessage />` from `@/components/ui/error-message` for inline errors
+
+### Data Display
+
+- **Table:** Base uses `p-2` for cells. Override with `p-4` for spacious layouts (e.g. workspace). Head: `h-10 px-2 font-medium`
+- **DataList:** List items `px-4 py-3`, `divide-y divide-border`, `hover:bg-muted/50`. Empty state: `bg-muted/30 px-4 py-8 rounded-lg`
+- **List item structure:** Title `font-medium text-foreground`; subtitle `text-xs text-muted-foreground`; trailing content `shrink-0`
+
+### Custom Component Checklist
+
+- Use `cn()` from `@/lib/utils` for class merging
+- Support `className` and spread `...props` to allow overrides
+- Use semantic tokens (`bg-primary`, `text-muted-foreground`) over raw colors
+- Add `transition-colors` or `transition-all` for interactive states
+- Include `focus-visible:ring-*` for keyboard focus
+
+---
+
+## Preferred Tailwind Classes
+
+**Layout:** `flex`, `flex-col`, `flex-wrap`, `items-center`, `justify-between`, `gap-*`, `space-y-*`  
+**Sizing:** `w-full`, `min-w-0`, `shrink-0`, `flex-1`  
+**Text:** `text-sm`, `text-muted-foreground`, `font-medium`, `capitalize`  
+**Interactive:** `hover:bg-accent`, `disabled:opacity-50`, `disabled:pointer-events-none`  
+**Transitions:** `transition-colors duration-150` or `duration-200`  
+
+**Avoid:** Inline hex/rgb except for design-spec matches; `!important`; arbitrary values unless necessary.
+
+---
+
+## Animations & Transitions
+
+- **Modals/dropdowns:** `data-[state=open]:animate-in data-[state=closed]:animate-out`, `fade-in-0`, `zoom-in-95`, `slide-in-from-top-2`
+- **Transitions:** `transition-colors`, `transition-all`, `duration-150` or `duration-200`
+- **Reduced motion:** Handled globally in `globals.css` via `prefers-reduced-motion`
+
+---
+
+## Examples
+
+**Button-like custom component:**
+```tsx
+<button
+  className={cn(
+    'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium',
+    'transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+    'disabled:pointer-events-none disabled:opacity-50',
+    isActive ? 'bg-primary text-primary-foreground' : 'border border-input bg-transparent hover:bg-accent',
+    className
+  )}
+/>
+```
+
+**Card with consistent spacing:**
+```tsx
+<Card className="rounded-xl">
+  <CardHeader className="pb-2">
+    <CardTitle className="text-base leading-tight">Title</CardTitle>
+    <CardDescription className="mt-0.5">Subtitle</CardDescription>
+  </CardHeader>
+  <CardContent className="space-y-1 text-sm text-muted-foreground">
+    {children}
+  </CardContent>
+</Card>
+```
+
+**Table cell (spacious):**
+```tsx
+<td className="p-4">
+  <div className="font-medium">{title}</div>
+  <div className="text-xs text-muted-foreground">{subtitle}</div>
+</td>
+```
+
+**DataList item structure:**
+```tsx
+<DataList
+  items={[{ id: '1', title: 'Item', subtitle: 'Detail', trailing: <Badge>Status</Badge> }]}
+  emptyMessage="No items"
+/>
+```
+
+**FormField with required:**
+```tsx
+<FormField id="email" label="Email" required error={error}>
+  <Input id="email" />
+</FormField>
+```

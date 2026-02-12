@@ -1,0 +1,96 @@
+{
+  "plannedFeatures": [
+    {
+      "id": "persist-emails",
+      "labelKey": "featurePersistEmails",
+      "section": "must-have",
+      "votes": 1
+    },
+    {
+      "id": "crud-assignments",
+      "labelKey": "featureCrudAssignments",
+      "section": "must-have",
+      "votes": 0
+    },
+    {
+      "id": "update-metadata",
+      "labelKey": "featureUpdateMetadata",
+      "section": "must-have",
+      "votes": 0
+    },
+    {
+      "id": "document-ingestion",
+      "labelKey": "featureDocumentIngestion",
+      "section": "must-have",
+      "votes": 0
+    },
+    {
+      "id": "approval-flows",
+      "labelKey": "featureApprovalFlows",
+      "section": "must-have",
+      "votes": 0
+    },
+    {
+      "id": "turbopack-cache",
+      "labelKey": "featureTurbopackCache",
+      "section": "bugs-ideas",
+      "votes": 0
+    },
+    {
+      "id": "port-conflict",
+      "labelKey": "featurePortConflict",
+      "section": "bugs-ideas",
+      "votes": 0
+    },
+    {
+      "id": "geist-fonts",
+      "labelKey": "featureGeistFonts",
+      "section": "bugs-ideas",
+      "votes": 1
+    },
+    {
+      "id": "openai-test-card",
+      "labelKey": "featureOpenaiTestCard",
+      "section": "bugs-ideas",
+      "votes": 1
+    },
+    {
+      "id": "mobile-app",
+      "labelKey": "featureMobileApp",
+      "section": "fun",
+      "votes": 0
+    },
+    {
+      "id": "assignment-templates",
+      "labelKey": "featureAssignmentTemplates",
+      "section": "fun",
+      "votes": 0
+    },
+    {
+      "id": "automated-followups",
+      "labelKey": "featureAutomatedFollowups",
+      "section": "fun",
+      "votes": 0
+    },
+    {
+      "id": "additional-assistants",
+      "labelKey": "featureAdditionalAssistants",
+      "section": "fun",
+      "votes": 0
+    },
+    {
+      "id": "voice-instructions",
+      "labelKey": "featureVoiceInstructions",
+      "section": "fun",
+      "votes": 0
+    }
+  ],
+  "userSuggestions": [
+    {
+      "id": "sugg-1769973943209",
+      "text": "this thing",
+      "votes": 4,
+      "createdAt": "2026-02-01T19:25:43.209Z"
+    }
+  ]
+}

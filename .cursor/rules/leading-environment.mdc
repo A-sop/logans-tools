@@ -1,0 +1,11 @@
+# Leading environment & develop together
+
+**This repo is the leading environment.** Docs, workflows, and code here are the single source of truth. External tools (n8n, Linear, Vercel, Clerk) follow what we define here.
+
+**Before building non-trivial work:** Request scope and approach in advance. Develop together with the user instead of implementing first and then presenting.
+
+- **Do:** Ask what they want (e.g. “What should this workflow do end-to-end?”), propose options or a short spec, get confirmation, then implement.
+- **Do:** For new features, integrations, or new workflow/docs, clarify: purpose, scope, and where it lives in this repo before writing full solutions.
+- **Avoid:** Delivering a complete implementation (e.g. full JSON, full doc) without having agreed scope and approach first.
+
+Applies to: new n8n/workflow features, new docs or READMEs, integration design, and any “build the whole thing” requests. Small fixes and obvious follow-ups can stay direct.

@@ -1,0 +1,173 @@
+{
+  "assignments": [
+    {
+      "id": "case-1",
+      "client": "Maria Schmidt",
+      "serviceType": "Relocation",
+      "status": "active",
+      "taskCount": 4,
+      "documentCount": 6,
+      "lastActivity": "2 hours ago"
+    },
+    {
+      "id": "case-2",
+      "client": "Kai Weber GmbH",
+      "serviceType": "Business Setup",
+      "status": "active",
+      "taskCount": 2,
+      "documentCount": 3,
+      "lastActivity": "1 day ago"
+    },
+    {
+      "id": "case-3",
+      "client": "Elena Petrov",
+      "serviceType": "Residence Permit",
+      "status": "pending",
+      "taskCount": 1,
+      "documentCount": 2,
+      "lastActivity": "3 days ago"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Submit residence permit application",
+      "caseId": "case-1",
+      "caseClient": "Maria Schmidt",
+      "status": "in_progress",
+      "priority": "high",
+      "dueDate": "2025-02-05",
+      "owner": "Assistant",
+      "waitingOn": "Passport scan from client"
+    },
+    {
+      "id": "task-2",
+      "title": "Request employment contract from employer",
+      "caseId": "case-1",
+      "caseClient": "Maria Schmidt",
+      "status": "waiting",
+      "priority": "high",
+      "dueDate": "2025-02-03",
+      "owner": "Executive",
+      "waitingOn": "HR department response"
+    },
+    {
+      "id": "task-3",
+      "title": "Review extracted data from lease agreement",
+      "caseId": "case-1",
+      "caseClient": "Maria Schmidt",
+      "status": "todo",
+      "priority": "medium",
+      "dueDate": "2025-02-07",
+      "owner": "Assistant"
+    },
+    {
+      "id": "task-4",
+      "title": "Draft cover letter for Ausländerbehörde",
+      "caseId": "case-1",
+      "caseClient": "Maria Schmidt",
+      "status": "todo",
+      "priority": "medium",
+      "dueDate": "2025-02-06",
+      "owner": "Assistant"
+    },
+    {
+      "id": "task-5",
+      "title": "Register company with Handelsregister",
+      "caseId": "case-2",
+      "caseClient": "Kai Weber GmbH",
+      "status": "in_progress",
+      "priority": "urgent",
+      "dueDate": "2025-02-01",
+      "owner": "Executive",
+      "waitingOn": "Notar appointment confirmation"
+    },
+    {
+      "id": "task-6",
+      "title": "Follow up on forwarded email — Elena",
+      "caseId": null,
+      "status": "todo",
+      "priority": "medium",
+      "dueDate": "2025-02-04",
+      "owner": "Assistant"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "name": "Passport_Maria_Schmidt_2025-01-15.pdf",
+      "type": "PDF",
+      "status": "approved",
+      "approvalStatus": "approved",
+      "uploadedAt": "2025-01-15"
+    },
+    {
+      "id": "doc-2",
+      "name": "Lease_Agreement_Wohnung_Berlin.pdf",
+      "type": "PDF",
+      "status": "pending_approval",
+      "approvalStatus": "pending",
+      "uploadedAt": "2025-01-20"
+    },
+    {
+      "id": "doc-3",
+      "name": "Employment_Contract_Draft.docx",
+      "type": "DOCX",
+      "status": "extracting",
+      "uploadedAt": "2025-01-28"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "contact-1",
+      "name": "Maria Schmidt",
+      "role": "client",
+      "email": "maria.schmidt@example.com",
+      "initials": "MS"
+    },
+    {
+      "id": "contact-2",
+      "name": "Ausländerbehörde Berlin",
+      "role": "authority",
+      "email": "auslaenderbehoerde@berlin.de",
+      "initials": "AB"
+    },
+    {
+      "id": "contact-3",
+      "name": "Thomas Immobilien GmbH",
+      "role": "vendor",
+      "email": "info@thomas-immobilien.de",
+      "initials": "TI"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "ev-1",
+      "type": "document",
+      "title": "Lease agreement uploaded",
+      "description": "Extracted: address, landlord, monthly rent. Pending approval.",
+      "timestamp": "2 hours ago"
+    },
+    {
+      "id": "ev-2",
+      "type": "task",
+      "title": "Task updated",
+      "description": "\"Submit residence permit application\" — status changed to In Progress.",
+      "timestamp": "5 hours ago"
+    },
+    {
+      "id": "ev-3",
+      "type": "approval",
+      "title": "Data approved",
+      "description": "Passport data approved and applied to case.",
+      "timestamp": "1 day ago"
+    },
+    {
+      "id": "ev-4",
+      "type": "message",
+      "title": "Email drafted",
+      "description": "Draft to Ausländerbehörde — awaiting approval before send.",
+      "timestamp": "2 days ago"
+    }
+  ]
+}

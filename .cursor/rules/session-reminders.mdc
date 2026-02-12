@@ -1,0 +1,29 @@
+---
+description: Session start reminder and end-of-day summary for the human
+globs: "**/*"
+alwaysApply: true
+---
+
+# Session reminders
+
+**Single reference:** Project root **`CHAT-PRIMER.md`** (context for new chat + "I'm back" reminder + "I'm done for the day" behavior).
+
+## When the user says they're back or starts fresh
+
+If the user says things like **"I'm back"**, **"new chat"**, **"just opened the project"**, or **"remind me what I need to do"**:
+
+1. Read **`CHAT-PRIMER.md`** (section **"When you say I'm back / new chat"**).
+2. Give them a **short, friendly ELI5 reminder** (2–4 bullets): Node/deps (`npm install`), env (`.env.local` from `.env.example`), run app (`npm run dev`), human to-dos in `src/docs/human-todos.md`. Don’t paste the whole doc — summarize so they can get going fast.
+
+## When the user says they're done for the day
+
+If the user says things like **"I'm done for the day"**, **"wrapping up"**, or **"that's it for today"**:
+
+1. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
+2. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
+3. **Valuation:** EUR. Benchmark = **German/European average Arbeiterbelastung (Arbeitgeberbelastung)**. Rate from **`private/cost-estimate-reference.md`** (€52/hr there). Floor = 14 EUR/hr. See PROJECT-VALUE.md.
+4. **Always include in your reply:**
+   - **This session:** X hrs → Y EUR value.
+   - **Total project value so far:** ~55–70 dev-hours → **~2,860–3,640 EUR** at €52/hr (rate in `private/cost-estimate-reference.md`).
+   - **Savings:** Same as total project value — what they’d have paid a dev to build this. Optionally: add today’s session to the value log in PROJECT-VALUE.md.
+5. One short paragraph; end on a positive note.
