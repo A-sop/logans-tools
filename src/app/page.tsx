@@ -10,7 +10,7 @@ const USING = [
   'Vercel for deployment',
 ];
 
-const OFFBOARDING = [
+const OFFBOARDING: string[] = [
   // Add tools you're moving away from
 ];
 
@@ -50,6 +50,29 @@ export default function Home() {
             height={675}
             className="w-full h-auto"
           />
+        </div>
+      </section>
+
+      <section id="public-tools" className="mt-16 space-y-4">
+        <h2 className="text-lg font-semibold">Public tools</h2>
+        <p className="text-muted-foreground">
+          Practical guides and workflows you can use directly.
+        </p>
+        <div className="rounded-lg border border-border p-4">
+          <h3 className="text-sm font-medium text-foreground">
+            Android phone backup (USB + LAN)
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Set up Android backup to a local Windows folder that your external
+            HDD schedule already includes.
+          </p>
+          <Link
+            href="/android-phone-backup"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            Open backup guide
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
       </section>
 

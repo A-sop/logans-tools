@@ -19,6 +19,7 @@ Logan's tools and projects hub — overview of projects, how I work, and AI tool
 
 - Show Logan's own tools/work as it grows
 - Add projects as they ship
+- Public guide: Android phone backup via USB/LAN to local PC for external HDD backup (`/android-phone-backup`)
 
 ---
 
