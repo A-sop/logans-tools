@@ -108,6 +108,34 @@ export default function AndroidPhoneBackupPage() {
         </ul>
       </section>
 
+      <section className="space-y-3 rounded-xl border border-dashed border-border bg-muted/20 p-6">
+        <h2 className="text-lg font-semibold">At work (office Wi‑Fi)</h2>
+        <p className="text-sm text-muted-foreground">
+          Some office networks block phone–laptop sync (client isolation) or non‑HTTP
+          traffic. If Syncthing will not connect, use USB (MTP) for a snapshot, or
+          tether the laptop to your phone&apos;s hotspot and sync there. When unsure,
+          ask IT whether device‑to‑device traffic on Wi‑Fi is allowed.
+        </p>
+      </section>
+
+      <section className="space-y-3 rounded-xl border border-border bg-card p-6">
+        <h2 className="text-lg font-semibold">Local runner v2 (manual + scheduled)</h2>
+        <p className="text-sm text-muted-foreground">
+          For low-maintenance automation, use the local scripts in this repo:
+          run manually with a double-click wrapper or create a daily Task
+          Scheduler job.
+        </p>
+        <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+          <li>`scripts/run-android-backup.cmd` (manual double-click run)</li>
+          <li>`scripts/android-backup.ps1` (core backup logic)</li>
+          <li>
+            `scripts/register-android-backup-task.ps1` (creates daily scheduled
+            backup task)
+          </li>
+          <li>`scripts/android-backup.config.json` (editable source/destination config)</li>
+        </ul>
+      </section>
+
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">
           Optional power-user path: ADB pulls
@@ -155,7 +183,9 @@ adb pull /sdcard/Documents "D:\\Backups\\Android-Phone\\adb-snapshots\\YYYY-MM-D
       </section>
 
       <section className="space-y-2 text-sm text-muted-foreground">
-        <p>Want copy-and-paste command templates? See `scripts/README-android-backup.md` in this repo.</p>
+        <p>
+          Setup and usage docs live in `scripts/README-android-backup.md`.
+        </p>
         <p>
           Back to the{' '}
           <Link href="/" className="text-primary hover:underline">

@@ -1,0 +1,15 @@
+{
+  "stagingRoot": "C:\\Dev\\_android-backup-smoke-out",
+  "sourceFolders": [
+    {
+      "name": "tiny",
+      "path": "C:\\Dev\\logans-tools\\scripts\\smoke-test-source",
+      "enabled": true
+    }
+  ],
+  "robocopy": {
+    "retryCount": 1,
+    "waitSeconds": 1,
+    "useRestartableMode": true
+  }
+}

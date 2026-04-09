@@ -12,7 +12,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "ahrefs:test": "tsx scripts/ahrefs-test.ts",
-    "screenshot:landing": "tsx scripts/screenshot-landing.ts"
+    "screenshot:landing": "tsx scripts/screenshot-landing.ts",
+    "backup:android": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.config.json",
+    "backup:android:smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.smoke-test.config.json -SnapshotLabel smoke-ok"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -1,0 +1,20 @@
+{
+  "stagingRoot": "D:\\Backups\\Android-Phone",
+  "sourceFolders": [
+    {
+      "name": "syncthing-incoming",
+      "path": "D:\\Backups\\Android-Phone\\incoming",
+      "enabled": true
+    },
+    {
+      "name": "manual-usb-drop",
+      "path": "D:\\Backups\\Android-Phone\\manual-drop",
+      "enabled": false
+    }
+  ],
+  "robocopy": {
+    "retryCount": 2,
+    "waitSeconds": 2,
+    "useRestartableMode": true
+  }
+}

@@ -13,6 +13,11 @@
 # testing
 /coverage
 
+# Android backup smoke / mistaken test trees (do not commit)
+/_tmp-backup-test2/
+/scripts/_tmp-backup-test/
+/_smoke-android-backup-out/
+
 # next.js
 /.next/
 /out/
