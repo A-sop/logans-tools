@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale } from '@/components/providers/locale-provider';
-import { supportedLocales, type Locale } from '@/lib/i18n';
+import { enabledLocales, showLanguageToggle, type Locale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 const labels: Record<Locale, string> = {
@@ -12,13 +12,15 @@ const labels: Record<Locale, string> = {
 export function LanguageToggle() {
   const { locale, setLocale } = useLocale();
 
+  if (!showLanguageToggle || enabledLocales.length < 2) return null;
+
   return (
     <div
       className="flex rounded-md border border-border bg-muted/50 p-0.5"
       role="group"
       aria-label="Language selection"
     >
-      {supportedLocales.map((loc) => (
+      {enabledLocales.map((loc) => (
         <button
           key={loc}
           type="button"

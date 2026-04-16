@@ -1,10 +1,24 @@
-export type Locale = 'en' | 'de';
-
-export const defaultLocale: Locale = 'en';
-export const supportedLocales: Locale[] = ['en', 'de'];
+import type { Locale } from './config';
 
 export const translations = {
   en: {
+    layout: {
+      siteName: 'Logans.Tools',
+      homeAriaLabel: 'Logans.Tools home',
+      impressum: 'Impressum',
+      copyright: '© {year} Logan Williams',
+    },
+    search: {
+      navLabel: 'Search',
+      title: 'Search',
+      hint: 'Find pages, guides, and tools quickly.',
+      placeholder: 'Search tools, backup, dev test...',
+      resultsFor: 'Results for "{query}"',
+      noResults: 'No matching results found.',
+      minChars: 'Type at least 2 characters to search.',
+      disabled: 'Search is currently disabled.',
+      openFull: 'Open full search page',
+    },
     // Home
     comingSoon: 'Coming Soon',
     heroTitle: 'Delegate the Chaos. Keep the Control.',
@@ -140,6 +154,23 @@ export const translations = {
     sops: 'SOPs',
   },
   de: {
+    layout: {
+      siteName: 'Logans.Tools',
+      homeAriaLabel: 'Logans.Tools Startseite',
+      impressum: 'Impressum',
+      copyright: '© {year} Logan Williams',
+    },
+    search: {
+      navLabel: 'Suche',
+      title: 'Suche',
+      hint: 'Finden Sie Seiten, Anleitungen und Tools schnell.',
+      placeholder: 'Nach Tools, Backup, Dev-Test suchen...',
+      resultsFor: 'Ergebnisse fuer "{query}"',
+      noResults: 'Keine passenden Ergebnisse gefunden.',
+      minChars: 'Geben Sie mindestens 2 Zeichen ein.',
+      disabled: 'Die Suche ist derzeit deaktiviert.',
+      openFull: 'Vollstaendige Suche oeffnen',
+    },
     comingSoon: 'Demnächst',
     heroTitle: 'Chaos delegieren. Kontrolle behalten.',
     heroSubtitle:

@@ -1,8 +1,9 @@
-import { translations, type Locale, defaultLocale, supportedLocales } from './translations';
+import { allLocales, defaultLocale, enabledLocales, showLanguageToggle, type Locale } from './config';
+import { translations } from './translations';
 
 const STORAGE_KEY = 'locale';
 
-export { translations, defaultLocale, supportedLocales };
+export { translations, allLocales, defaultLocale, enabledLocales, showLanguageToggle };
 export type { Locale };
 
 /** Get a translation; supports dot notation for nested keys (e.g. "validation.email_required"). */
@@ -27,7 +28,7 @@ export function t(locale: Locale, key: string, params?: Record<string, string>):
 export function getStoredLocale(): Locale | null {
   if (typeof window === 'undefined') return null;
   const stored = localStorage.getItem(STORAGE_KEY);
-  return stored && supportedLocales.includes(stored as Locale) ? (stored as Locale) : null;
+  return stored && enabledLocales.includes(stored as Locale) ? (stored as Locale) : null;
 }
 
 /** Store locale in localStorage (client only). */

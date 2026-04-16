@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import {
   type Locale,
   defaultLocale,
+  enabledLocales,
   getStoredLocale,
   setStoredLocale,
   t as translate,
@@ -22,11 +23,18 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = getStoredLocale();
-    if (stored) setLocaleState(stored);
+    if (stored && enabledLocales.includes(stored)) setLocaleState(stored);
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = locale === 'de' ? 'de' : 'en';
+    }
+  }, [locale]);
+
   const setLocale = useCallback((newLocale: Locale) => {
+    if (!enabledLocales.includes(newLocale)) return;
     setLocaleState(newLocale);
     setStoredLocale(newLocale);
   }, []);
