@@ -17,6 +17,7 @@
     "backup:android:smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.smoke-test.config.json -SnapshotLabel smoke-ok"
   },
   "dependencies": {
+    "@eslint-community/eslint-utils": "^4.9.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
