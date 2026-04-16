@@ -6,6 +6,7 @@ export const defaultLocale: Locale = 'en';
 /**
  * Locales that are currently “live” in the app.
  * You can set this to ['en'] to ship English-only while keeping translations ready.
+ * With a single entry, middleware and the UI always resolve to that locale; Accept-Language is ignored for switching.
  */
 export const enabledLocales: Locale[] = ['en', 'de'];
 

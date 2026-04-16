@@ -1,9 +1,25 @@
 import { allLocales, defaultLocale, enabledLocales, showLanguageToggle, type Locale } from './config';
+import {
+  LOCALE_COOKIE_NAME,
+  MIDDLEWARE_LOCALE_HEADER,
+  pickLocaleForMiddleware,
+  pickLocaleFromMiddlewareHeader,
+} from './locale-request';
 import { translations } from './translations';
 
 const STORAGE_KEY = 'locale';
 
-export { translations, allLocales, defaultLocale, enabledLocales, showLanguageToggle };
+export {
+  translations,
+  allLocales,
+  defaultLocale,
+  enabledLocales,
+  showLanguageToggle,
+  LOCALE_COOKIE_NAME,
+  MIDDLEWARE_LOCALE_HEADER,
+  pickLocaleForMiddleware,
+  pickLocaleFromMiddlewareHeader,
+};
 export type { Locale };
 
 /** Get a translation; supports dot notation for nested keys (e.g. "validation.email_required"). */
@@ -35,5 +51,13 @@ export function getStoredLocale(): Locale | null {
 export function setStoredLocale(locale: Locale): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem(STORAGE_KEY, locale);
+  }
+}
+
+/** Persist locale for both client (localStorage) and server/middleware (cookie). */
+export function persistLocalePreference(locale: Locale): void {
+  setStoredLocale(locale);
+  if (typeof document !== 'undefined') {
+    document.cookie = `${LOCALE_COOKIE_NAME}=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
   }
 }

@@ -6,7 +6,7 @@ import {
   defaultLocale,
   enabledLocales,
   getStoredLocale,
-  setStoredLocale,
+  persistLocalePreference,
   t as translate,
 } from '@/lib/i18n';
 
@@ -17,15 +17,22 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-  const [mounted, setMounted] = useState(false);
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: {
+  children: ReactNode;
+  initialLocale: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
     const stored = getStoredLocale();
-    if (stored && enabledLocales.includes(stored)) setLocaleState(stored);
-    setMounted(true);
-  }, []);
+    if (stored && enabledLocales.includes(stored) && stored !== initialLocale) {
+      setLocaleState(stored);
+      persistLocalePreference(stored);
+    }
+  }, [initialLocale]);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -36,12 +43,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const setLocale = useCallback((newLocale: Locale) => {
     if (!enabledLocales.includes(newLocale)) return;
     setLocaleState(newLocale);
-    setStoredLocale(newLocale);
+    persistLocalePreference(newLocale);
   }, []);
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;
 }
