@@ -9,7 +9,7 @@ import {
 const PREVIEW_COOKIE_NAME = 'gabc_preview';
 const ACCESS_PATH = '/gabc-access';
 
-function isGabcPreviewHost(host: string | null) {
+function isGabcPreviewHost(host: string | null | undefined) {
   if (!host) return false;
   return host.toLowerCase().startsWith('gabc.');
 }
@@ -17,8 +17,12 @@ function isGabcPreviewHost(host: string | null) {
 export function middleware(request: NextRequest) {
   // Lightweight preview gate for board-approval deployments.
   // Enabled on host `gabc.*` or when explicitly enabled for local testing.
-  const host = request.headers.get('host');
-  const previewGateEnabled = process.env.GABC_PREVIEW_GATE_ENABLED === 'true' || isGabcPreviewHost(host);
+  const host =
+    request.headers.get('x-forwarded-host') ??
+    request.headers.get('host') ??
+    request.nextUrl.host;
+  const previewGateEnabled =
+    process.env.GABC_PREVIEW_GATE_ENABLED === 'true' || isGabcPreviewHost(host);
   if (previewGateEnabled) {
     const { pathname } = request.nextUrl;
 
