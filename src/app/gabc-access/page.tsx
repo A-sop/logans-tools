@@ -19,7 +19,7 @@ export default function GabcAccessPage({
 }: {
   searchParams?: { next?: string };
 }) {
-  const next = searchParams?.next ?? '/';
+  const next = searchParams?.next ?? '/gabc';
 
   const [state, formAction, pending] = useActionState<ActionState, FormData>(async (_prev, fd) => {
     const res = await grantPreviewAccess(fd);

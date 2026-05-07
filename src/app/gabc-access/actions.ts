@@ -41,7 +41,7 @@ export async function grantPreviewAccess(formData: FormData): Promise<
 
   // Honeypot: if filled, pretend success to avoid bot iteration.
   if (parsed.data.company && parsed.data.company.trim().length > 0) {
-    return { ok: true, nextPath: '/' };
+    return { ok: true, nextPath: '/gabc' };
   }
 
   if (!isAllowedEmail(parsed.data.email)) {
@@ -55,7 +55,7 @@ export async function grantPreviewAccess(formData: FormData): Promise<
   const nextPath =
     parsed.data.next && parsed.data.next.startsWith('/') && !parsed.data.next.startsWith('//')
       ? parsed.data.next
-      : '/';
+      : '/gabc';
 
   const cookieStore = await cookies();
   cookieStore.set(PREVIEW_COOKIE_NAME, '1', {

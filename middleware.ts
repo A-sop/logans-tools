@@ -8,6 +8,7 @@ import {
 
 const PREVIEW_COOKIE_NAME = 'gabc_preview';
 const ACCESS_PATH = '/gabc-access';
+const DEFAULT_AFTER_ACCESS = '/gabc';
 
 function isGabcPreviewHost(host: string | null | undefined) {
   if (!host) return false;
@@ -24,7 +25,7 @@ export function middleware(request: NextRequest) {
   const previewGateEnabled =
     process.env.GABC_PREVIEW_GATE_ENABLED === 'true' || isGabcPreviewHost(host);
   if (previewGateEnabled) {
-    const { pathname } = request.nextUrl;
+    const { pathname, search } = request.nextUrl;
 
     const isAccessPage = pathname === ACCESS_PATH;
     const isAllowedPublicAsset =
@@ -38,9 +39,18 @@ export function middleware(request: NextRequest) {
       if (!hasPreviewCookie) {
         const url = request.nextUrl.clone();
         url.pathname = ACCESS_PATH;
-        url.searchParams.set('next', pathname);
+        const next = pathname === '/' ? DEFAULT_AFTER_ACCESS : `${pathname}${search ?? ''}`;
+        url.searchParams.set('next', next);
         return NextResponse.redirect(url);
       }
+    }
+
+    // When accessing the subdomain root, treat it as the board hub entry.
+    if (pathname === '/' && request.cookies.get(PREVIEW_COOKIE_NAME)?.value === '1') {
+      const url = request.nextUrl.clone();
+      url.pathname = DEFAULT_AFTER_ACCESS;
+      url.search = '';
+      return NextResponse.redirect(url);
     }
   }
 
