@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -75,8 +76,10 @@ export default async function GabcBoardApprovalPage() {
                 </p>
                 <ul className="list-disc space-y-2 pl-5">
                   <li>
-                    <span className="font-medium text-foreground">Home</span> — positioning, patrons
-                    proof, clear next action
+                    <Link href="/gabc-draft/home" className="font-medium text-primary hover:underline">
+                      Home (draft)
+                    </Link>{' '}
+                    — positioning, patrons proof, clear next action
                   </li>
                   <li>
                     <span className="font-medium text-foreground">Events</span> — list + detail,
