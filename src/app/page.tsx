@@ -1,3 +1,5 @@
+import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Cpu, Zap } from 'lucide-react';
@@ -15,6 +17,15 @@ const OFFBOARDING: string[] = [
 ];
 
 export default function Home() {
+  const h = headers();
+  const host = (h.get('x-forwarded-host') ?? h.get('host') ?? '').toLowerCase();
+  if (host.startsWith('gabc.')) {
+    const c = cookies();
+    const hasPreview = c.get('gabc_preview')?.value === '1';
+    if (hasPreview) redirect('/gabc');
+    redirect('/gabc-access?next=/gabc');
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:py-20">
       <section className="space-y-4">
