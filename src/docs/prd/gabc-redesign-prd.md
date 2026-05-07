@@ -1,4 +1,4 @@
-# PRD — GABC Website Redo (Board-Approval Preview)
+# PRD — GABC Website Redo (Early Draft)
 
 **Preview domain (board approval):** `gabc.logans.tools`  
 **Canonical current site:** `https://gabc.eu/`

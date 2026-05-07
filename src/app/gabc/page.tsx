@@ -20,7 +20,7 @@ export default async function GabcBoardApprovalPage() {
     <div className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
       <div className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          GABC website redo (board approval)
+          GABC website redo (early draft)
         </h1>
         <p className="text-sm text-muted-foreground">
           Preview target: <span className="font-medium">gabc.logans.tools</span>
@@ -64,13 +64,13 @@ export default async function GabcBoardApprovalPage() {
             <Card className="rounded-xl">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base font-semibold leading-tight">
-                  Draft preview (board review checklist)
+                  Draft preview checklist
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-sm text-muted-foreground">
                 <p>
                   This tab will host the live draft pages as we build them. For now, use it as a
-                  checklist of what the board should be able to review on{' '}
+                  checklist of what should exist on{' '}
                   <span className="font-medium text-foreground">gabc.logans.tools</span>.
                 </p>
                 <ul className="list-disc space-y-2 pl-5">
@@ -111,7 +111,7 @@ export default async function GabcBoardApprovalPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Share feedback for the board-approval draft. This sends an email to{' '}
+                  Share feedback for this draft. This sends an email to{' '}
                   <span className="font-medium">logan.williams@gabc.eu</span>.
                 </p>
                 <GabcSuggestionForm />

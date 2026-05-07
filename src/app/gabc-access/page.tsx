@@ -40,8 +40,7 @@ export default function GabcAccessPage({
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            This is a board-approval preview. Enter your <span className="font-medium">gabc.eu</span>{' '}
-            email address to continue.
+            This is an early internal draft. Enter your email address to continue.
           </p>
 
           <form action={formAction} className="space-y-4">
