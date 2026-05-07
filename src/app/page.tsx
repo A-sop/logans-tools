@@ -16,7 +16,6 @@ const OFFBOARDING: string[] = [
   // Add tools you're moving away from
 ];
 
-export default function Home() {
 export default async function Home() {
   const h = await headers();
   const host = (h.get('x-forwarded-host') ?? h.get('host') ?? '').toLowerCase();
