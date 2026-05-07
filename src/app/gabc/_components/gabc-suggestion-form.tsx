@@ -70,7 +70,8 @@ export function GabcSuggestionForm() {
             </p>
           ) : (
             <p className="text-muted-foreground">
-              Suggestions are emailed to <span className="font-medium">logan.williams@gabc.eu</span>.
+              If you would like me to also work on this with you and I have Asana access, we can
+              communicate there.
             </p>
           )}
         </div>
