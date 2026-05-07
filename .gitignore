@@ -68,3 +68,5 @@ next-env.d.ts
 
 # private/internal reference (do not commit)
 /private/
+
+.vercel
