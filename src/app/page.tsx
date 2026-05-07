@@ -17,10 +17,11 @@ const OFFBOARDING: string[] = [
 ];
 
 export default function Home() {
-  const h = headers();
+export default async function Home() {
+  const h = await headers();
   const host = (h.get('x-forwarded-host') ?? h.get('host') ?? '').toLowerCase();
   if (host.startsWith('gabc.')) {
-    const c = cookies();
+    const c = await cookies();
     const hasPreview = c.get('gabc_preview')?.value === '1';
     if (hasPreview) redirect('/gabc');
     redirect('/gabc-access?next=/gabc');
