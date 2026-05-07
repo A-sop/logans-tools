@@ -22,8 +22,11 @@ export function middleware(request: NextRequest) {
     request.headers.get('x-forwarded-host') ??
     request.headers.get('host') ??
     request.nextUrl.host;
+  const hostname = request.nextUrl.hostname;
   const previewGateEnabled =
-    process.env.GABC_PREVIEW_GATE_ENABLED === 'true' || isGabcPreviewHost(host);
+    process.env.GABC_PREVIEW_GATE_ENABLED === 'true' ||
+    isGabcPreviewHost(host) ||
+    hostname.toLowerCase() === 'gabc.logans.tools';
   if (previewGateEnabled) {
     const { pathname, search } = request.nextUrl;
 
