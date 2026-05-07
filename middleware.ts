@@ -44,7 +44,9 @@ export function middleware(request: NextRequest) {
         url.pathname = ACCESS_PATH;
         const next = pathname === '/' ? DEFAULT_AFTER_ACCESS : `${pathname}${search ?? ''}`;
         url.searchParams.set('next', next);
-        return NextResponse.redirect(url);
+        const res = NextResponse.redirect(url);
+        res.headers.set('x-gabc-preview-mw', '1');
+        return res;
       }
     }
 
@@ -53,7 +55,9 @@ export function middleware(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = DEFAULT_AFTER_ACCESS;
       url.search = '';
-      return NextResponse.redirect(url);
+      const res = NextResponse.redirect(url);
+      res.headers.set('x-gabc-preview-mw', '1');
+      return res;
     }
   }
 
@@ -64,6 +68,7 @@ export function middleware(request: NextRequest) {
   requestHeaders.set(MIDDLEWARE_LOCALE_HEADER, chosen);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
+  if (previewGateEnabled) response.headers.set('x-gabc-preview-mw', '1');
 
   if (cookie !== chosen) {
     response.cookies.set(LOCALE_COOKIE_NAME, chosen, {
