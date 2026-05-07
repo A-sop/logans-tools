@@ -21,7 +21,7 @@ export default async function RootLayout({
   const htmlLang = initialLocale === 'de' ? 'de' : 'en';
 
   return (
-    <html lang={htmlLang} className="dark" suppressHydrationWarning>
+    <html lang={htmlLang} suppressHydrationWarning>
       <body className="antialiased">
         <LocaleProvider initialLocale={initialLocale}>
           <AppShell>{children}</AppShell>

@@ -5,6 +5,7 @@ Plans for creating new projects from this codebase. Use when cloning to build:
 - **logan-williams-personal-website-plan.md** — Logan Williams personal site (no login, insights-style blog)
 - **german-financial-planning-website-plan.md** — German Financial Planning site (login, blog, eventual planner app)
 - **logans-tools-website-plan.md** — logans.tools hub (project overview, AI tools, Pirate Skills plug; evolve with own work)
+- **gabc-website-plan.md** — GABC site redo tracked here; board-approval preview deploys to `gabc.logans.tools`
 
 Each plan includes: clone steps, what to strip/keep, AI prompts, and deployment notes.
 

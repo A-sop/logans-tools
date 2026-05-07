@@ -1,17 +1,20 @@
 @import 'tailwindcss';
 
 :root {
-  --background: 40 20% 98%;
-  --foreground: 30 10% 18%;
+  /* Brand-aligned (canonical gabc.eu): blue + gold accent on light */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
   --card: 0 0% 100%;
-  --card-foreground: 30 10% 18%;
-  --muted: 40 15% 96%;
-  --muted-foreground: 30 8% 45%;
-  --primary: 220 25% 35%;
+  --card-foreground: 0 0% 0%;
+  --muted: 0 0% 98%;
+  --muted-foreground: 0 0% 40%;
+  /* #327af6 */
+  --primary: 219 91% 58%;
   --primary-foreground: 0 0% 100%;
-  --accent: 40 18% 93%;
-  --border: 40 12% 90%;
-  --ring: 220 25% 40%;
+  /* #b89b5e */
+  --accent: 42 39% 54%;
+  --border: 0 0% 86%;
+  --ring: 219 91% 58%;
   --radius: 0.5rem;
 }
 
