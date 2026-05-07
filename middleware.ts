@@ -23,6 +23,8 @@ export function middleware(request: NextRequest) {
     request.headers.get('host') ??
     request.nextUrl.host;
   const hostname = request.nextUrl.hostname;
+  const debugHost = host ?? '';
+  const debugHostname = hostname ?? '';
   const previewGateEnabled =
     process.env.GABC_PREVIEW_GATE_ENABLED === 'true' ||
     isGabcPreviewHost(host) ||
@@ -46,6 +48,8 @@ export function middleware(request: NextRequest) {
         url.searchParams.set('next', next);
         const res = NextResponse.redirect(url);
         res.headers.set('x-gabc-preview-mw', '1');
+        res.headers.set('x-gabc-debug-host', debugHost);
+        res.headers.set('x-gabc-debug-hostname', debugHostname);
         return res;
       }
     }
@@ -57,6 +61,8 @@ export function middleware(request: NextRequest) {
       url.search = '';
       const res = NextResponse.redirect(url);
       res.headers.set('x-gabc-preview-mw', '1');
+      res.headers.set('x-gabc-debug-host', debugHost);
+      res.headers.set('x-gabc-debug-hostname', debugHostname);
       return res;
     }
   }
@@ -68,6 +74,8 @@ export function middleware(request: NextRequest) {
   requestHeaders.set(MIDDLEWARE_LOCALE_HEADER, chosen);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
+  response.headers.set('x-gabc-debug-host', debugHost);
+  response.headers.set('x-gabc-debug-hostname', debugHostname);
   if (previewGateEnabled) response.headers.set('x-gabc-preview-mw', '1');
 
   if (cookie !== chosen) {
