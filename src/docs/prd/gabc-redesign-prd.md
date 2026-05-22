@@ -1,7 +1,8 @@
 # PRD — GABC Website Redo (Early Draft)
 
 **Preview domain (board approval):** `gabc.logans.tools`  
-**Canonical current site:** `https://gabc.eu/`
+**Canonical current site:** `https://gabc.eu/`  
+**Session archive (Cursor plan, chat transcript, closeout):** [`gabc-archive/README.md`](./gabc-archive/README.md)
 
 ## Direct answer (what we’re building)
 
