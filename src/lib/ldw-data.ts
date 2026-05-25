@@ -8,29 +8,63 @@ export type EurSummaryRow = {
   rowCount: number;
 };
 
-export type InboxRow = {
+export type TransactionRow = {
+  id: string;
   date: string;
   payee: string;
+  direction: 'in' | 'out';
   amount: number;
   hat: string;
   suggestedAccount: string;
+  skr03: string;
+  eurZeile: string;
+  eurLabel: string;
   confidence: string;
   bank: string;
   source: string;
+  needsReview: boolean;
 };
 
-export type LedgerRow = {
-  date: string;
-  payee: string;
-  amount: number;
-  hat: string;
-  zeileHint: string;
-  account: string;
-  bank: string;
+/** @deprecated Use TransactionRow — kept for gradual migration */
+export type InboxRow = Pick<
+  TransactionRow,
+  'date' | 'payee' | 'amount' | 'hat' | 'suggestedAccount' | 'confidence' | 'bank' | 'source'
+> & {
+  skr03: string;
+  eurZeile: string;
+  eurLabel: string;
 };
+
+/** @deprecated Use TransactionRow */
+export type LedgerRow = Pick<
+  TransactionRow,
+  | 'date'
+  | 'payee'
+  | 'amount'
+  | 'hat'
+  | 'suggestedAccount'
+  | 'skr03'
+  | 'eurZeile'
+  | 'eurLabel'
+  | 'bank'
+  | 'direction'
+>;
 
 const DEFAULT_ROOT = 'C:\\DATA\\20_ADMIN';
 const BUNDLED_DIR = path.join(process.cwd(), 'src', 'data', 'euer');
+
+const ACCOUNT_ALIASES: Record<string, string> = {
+  'Telephony/Internet': 'Telefax u Internetkosten',
+  'Consumption, Meals, and Entertainment': 'Consumption Meals and Entertainment',
+  'Consumption Meals and Entertainment': 'Consumption Meals and Entertainment',
+};
+
+const SKIP_HATS = new Set(['private', 'transfer']);
+const DEFAULT_REVIEW_ZEILE = '66';
+
+let cachedAccountMap: Map<string, string> | null = null;
+let cachedEurLabels: Record<string, string> | null = null;
+let cachedChartByName: Map<string, string> | null = null;
 
 function dataRoot(): string {
   const env = process.env.LDW_DATA_ROOT;
@@ -74,23 +108,218 @@ function parseGermanAmount(raw: string): number {
   return Math.abs(parseFloat(cleaned) || 0);
 }
 
+function parseCommaCsv(content: string): string[][] {
+  const lines = content.split(/\r?\n/).filter((l) => l.trim());
+  return lines.map((line) => {
+    const parts: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+        continue;
+      }
+      if (ch === ',' && !inQuotes) {
+        parts.push(current.trim());
+        current = '';
+        continue;
+      }
+      current += ch;
+    }
+    parts.push(current.trim());
+    return parts;
+  });
+}
+
+function loadAccountEurMap(): Map<string, string> {
+  if (cachedAccountMap) return cachedAccountMap;
+  const paths = [
+    path.join(zohoBooksDir(), 'zoho-account-eur-map.csv'),
+    path.join(BUNDLED_DIR, 'account-eur-map.csv'),
+  ];
+  const map = new Map<string, string>();
+  for (const filePath of paths) {
+    if (!fs.existsSync(filePath)) continue;
+    const rows = parseCommaCsv(fs.readFileSync(filePath, 'utf-8'));
+    for (let i = 1; i < rows.length; i++) {
+      const [name, zeile] = rows[i];
+      if (!name?.trim()) continue;
+      const z = (zeile ?? '').trim();
+      if (z) map.set(name.trim(), z);
+    }
+    break;
+  }
+  cachedAccountMap = map;
+  return map;
+}
+
+function loadEurLabels(): Record<string, string> {
+  if (cachedEurLabels) return cachedEurLabels;
+  const bundled = path.join(BUNDLED_DIR, 'eur-zeile-labels.json');
+  if (fs.existsSync(bundled)) {
+    cachedEurLabels = JSON.parse(fs.readFileSync(bundled, 'utf-8')) as Record<string, string>;
+    return cachedEurLabels;
+  }
+  cachedEurLabels = {};
+  return cachedEurLabels;
+}
+
+function loadChartByAccountName(): Map<string, string> {
+  if (cachedChartByName) return cachedChartByName;
+  const chartPath = path.join(zohoBooksDir(), 'Chart_of_Accounts.csv');
+  const map = new Map<string, string>();
+  if (fs.existsSync(chartPath)) {
+    const rows = parseCommaCsv(fs.readFileSync(chartPath, 'utf-8'));
+    const headers = rows[0] ?? [];
+    const nameIdx = headers.findIndex((h) => h === 'Account Name');
+    const codeIdx = headers.findIndex((h) => h === 'Account Code');
+    if (nameIdx >= 0 && codeIdx >= 0) {
+      for (let i = 1; i < rows.length; i++) {
+        const name = rows[i][nameIdx]?.trim();
+        const code = rows[i][codeIdx]?.trim();
+        if (name && code) map.set(name, code);
+      }
+    }
+  }
+  cachedChartByName = map;
+  return map;
+}
+
+function resolveAccountName(raw: string): string {
+  const trimmed = raw.trim();
+  return ACCOUNT_ALIASES[trimmed] ?? trimmed;
+}
+
+function resolveEurZeile(accountName: string, hat: string): string {
+  if (hat === 'income') {
+    const map = loadAccountEurMap();
+    const z = map.get(resolveAccountName(accountName));
+    if (z) return z;
+    return '11';
+  }
+  const map = loadAccountEurMap();
+  const resolved = resolveAccountName(accountName);
+  const z = map.get(resolved);
+  if (z) return z;
+  if (hat === 'review' || hat === 'liability_split' || hat === 'business') return DEFAULT_REVIEW_ZEILE;
+  return '';
+}
+
+function resolveSkr03(row: Record<string, string>, accountName: string): string {
+  const fromRow = (row['SKR Code'] || '').trim();
+  if (fromRow) return fromRow;
+  const chart = loadChartByAccountName();
+  return chart.get(resolveAccountName(accountName)) ?? chart.get(accountName) ?? '';
+}
+
+function eurLabelForZeile(zeile: string): string {
+  if (!zeile) return '';
+  const labels = loadEurLabels();
+  const full = labels[zeile];
+  if (full) return full;
+  const prefix = zeile.length >= 2 ? zeile.slice(0, 2) : zeile;
+  return labels[prefix] ?? '';
+}
+
+function transactionNeedsReview(row: TransactionRow): boolean {
+  if (row.hat === 'review' || row.hat === 'liability_split') return true;
+  if (!row.skr03 || !row.eurZeile) return true;
+  if (!row.suggestedAccount) return true;
+  if (row.confidence === 'low') return true;
+  if (row.eurZeile === DEFAULT_REVIEW_ZEILE && row.hat !== 'income') return true;
+  return false;
+}
+
+function dedupeKey(
+  date: string,
+  withdrawals: number,
+  deposits: number,
+  payee: string,
+  bank: string
+): string {
+  return `${date}|${withdrawals.toFixed(2)}|${deposits.toFixed(2)}|${payee.toLowerCase()}|${bank}`;
+}
+
 function bundledSummaryPath(year: number): string {
   return path.join(BUNDLED_DIR, `euer-summary-${year}.csv`);
 }
 
-function bundledSuggestionsPath(year: number): string | null {
-  const specific = path.join(BUNDLED_DIR, `inbox-ledger-${year}.csv`);
-  if (fs.existsSync(specific)) return specific;
-  const fallback = path.join(BUNDLED_DIR, 'inbox-ledger-2024.csv');
-  return fs.existsSync(fallback) ? fallback : null;
+function loadSuggestionFiles(year: number): string[] {
+  const fromDisk: string[] = [];
+  const dir = taxYearDir(year);
+  if (fs.existsSync(dir)) {
+    fromDisk.push(
+      ...fs
+        .readdirSync(dir)
+        .filter((name) => name.endsWith('-booking-suggestions.csv'))
+        .map((name) => path.join(dir, name))
+    );
+  }
+  if (fromDisk.length > 0) return fromDisk;
+
+  if (fs.existsSync(BUNDLED_DIR)) {
+    const bundled = fs
+      .readdirSync(BUNDLED_DIR)
+      .filter((name) => name.startsWith(`suggestions-${year}-`) && name.endsWith('.csv'))
+      .map((name) => path.join(BUNDLED_DIR, name));
+    if (bundled.length > 0) return bundled;
+    const legacy = path.join(BUNDLED_DIR, `inbox-ledger-${year}.csv`);
+    if (fs.existsSync(legacy)) return [legacy];
+    const fallback = path.join(BUNDLED_DIR, 'inbox-ledger-2024.csv');
+    return fs.existsSync(fallback) ? [fallback] : [];
+  }
+  return [];
+}
+
+function mapSuggestionToTransaction(
+  row: Record<string, string>,
+  bank: string,
+  source: string,
+  withdrawals: number,
+  deposits: number
+): TransactionRow | null {
+  const hat = (row.Hat || '').toLowerCase();
+  if (SKIP_HATS.has(hat)) return null;
+  if (withdrawals <= 0 && deposits <= 0) return null;
+
+  const payee = row.Payee || row.Description || '';
+  const account = row['Suggested Account'] || '';
+  const direction: 'in' | 'out' = deposits > 0 && withdrawals <= 0 ? 'in' : 'out';
+  const amount = withdrawals || deposits;
+  const skr03 = resolveSkr03(row, account);
+  const eurZeile = resolveEurZeile(account, hat);
+  const eurLabel = eurLabelForZeile(eurZeile);
+  const bankName = row['Source Bank Account'] || bank;
+
+  const tx: TransactionRow = {
+    id: dedupeKey(row.Date, withdrawals, deposits, payee, bankName),
+    date: row.Date,
+    payee,
+    direction,
+    amount,
+    hat,
+    suggestedAccount: account,
+    skr03,
+    eurZeile,
+    eurLabel,
+    confidence: row.Confidence || '',
+    bank: bankName,
+    source,
+    needsReview: false,
+  };
+  tx.needsReview = transactionNeedsReview(tx);
+  return tx;
 }
 
 export function getAvailableYears(): number[] {
   const years = new Set<number>();
   if (fs.existsSync(BUNDLED_DIR)) {
     for (const name of fs.readdirSync(BUNDLED_DIR)) {
-      const match = name.match(/^euer-summary-(\d{4})\.csv$/);
-      if (match) years.add(Number(match[1]));
+      const m1 = name.match(/^euer-summary-(\d{4})\.csv$/);
+      const m2 = name.match(/^suggestions-(\d{4})-/);
+      if (m1) years.add(Number(m1[1]));
+      if (m2) years.add(Number(m2[1]));
     }
   }
   const root = dataRoot();
@@ -130,87 +359,64 @@ export function getEurSummary(year: number): EurSummaryRow[] {
   return rows.sort((a, b) => parseInt(a.zeile, 10) - parseInt(b.zeile, 10));
 }
 
-function loadSuggestionFiles(year: number): string[] {
-  const dir = taxYearDir(year);
-  const fromDisk: string[] = [];
-  if (fs.existsSync(dir)) {
-    fromDisk.push(
-      ...fs
-        .readdirSync(dir)
-        .filter((name) => name.endsWith('-booking-suggestions.csv'))
-        .map((name) => path.join(dir, name))
-    );
-  }
-  if (fromDisk.length > 0) return fromDisk;
+export function getTransactionRows(year: number): TransactionRow[] {
+  const seen = new Set<string>();
+  const rows: TransactionRow[] = [];
 
-  const bundled = bundledSuggestionsPath(year);
-  return bundled ? [bundled] : [];
-}
-
-function collectFromSuggestions<T>(
-  year: number,
-  filter: (hat: string) => boolean,
-  mapRow: (
-    row: Record<string, string>,
-    bank: string,
-    source: string,
-    withdrawals: number,
-    deposits: number
-  ) => T | null
-): T[] {
-  const rows: T[] = [];
   for (const filePath of loadSuggestionFiles(year)) {
     const content = fs.readFileSync(filePath, 'utf-8');
     const parsed = parseSemicolonCsv(content);
     const source = path.basename(filePath);
-    const bank = source.replace('-booking-suggestions.csv', '').replace(/^inbox-ledger-/, '');
+    const bank = source
+      .replace('-booking-suggestions.csv', '')
+      .replace(/^suggestions-\d{4}-/, '')
+      .replace(/^inbox-ledger-/, '');
+
     for (const row of parsed) {
-      const hat = (row.Hat || 'review').toLowerCase();
       if (!row.Date?.includes(String(year))) continue;
-      if (!filter(hat)) continue;
       const withdrawals = parseGermanAmount(row.Withdrawals || '0');
       const deposits = parseGermanAmount(row.Deposits || '0');
-      const mapped = mapRow(row, bank, source, withdrawals, deposits);
-      if (mapped) rows.push(mapped);
+      const mapped = mapSuggestionToTransaction(row, bank, source, withdrawals, deposits);
+      if (!mapped || seen.has(mapped.id)) continue;
+      seen.add(mapped.id);
+      rows.push(mapped);
     }
   }
-  return rows;
+
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export function getInboxRows(year: number): InboxRow[] {
-  return collectFromSuggestions<InboxRow>(
-    year,
-    (hat) => hat === 'review' || hat === 'liability_split',
-    (row, bank, source, withdrawals, deposits) => ({
-      date: row.Date,
-      payee: row.Payee || row.Description || '',
-      amount: withdrawals || deposits,
-      hat: (row.Hat || 'review').toLowerCase(),
-      suggestedAccount: row['Suggested Account'] || '',
-      confidence: row.Confidence || '',
-      bank: row['Source Bank Account'] || bank,
-      source,
-    })
-  ).sort((a, b) => a.date.localeCompare(b.date));
+  return getTransactionRows(year)
+    .filter((row) => row.needsReview)
+    .map((row) => ({
+      date: row.date,
+      payee: row.payee,
+      amount: row.amount,
+      hat: row.hat,
+      suggestedAccount: row.suggestedAccount,
+      confidence: row.confidence,
+      bank: row.bank,
+      source: row.source,
+      skr03: row.skr03,
+      eurZeile: row.eurZeile,
+      eurLabel: row.eurLabel,
+    }));
 }
 
 export function getLedgerRows(year: number): LedgerRow[] {
-  return collectFromSuggestions<LedgerRow>(
-    year,
-    (hat) => hat !== 'private' && hat !== 'transfer',
-    (row, bank, _source, withdrawals, deposits) => {
-      if (withdrawals <= 0 && deposits <= 0) return null;
-      return {
-        date: row.Date,
-        payee: row.Payee || row.Description || '',
-        amount: withdrawals || deposits,
-        hat: (row.Hat || '').toLowerCase(),
-        zeileHint: row['SKR Code'] ? `SKR ${row['SKR Code']}` : '',
-        account: row['Suggested Account'] || '',
-        bank: row['Source Bank Account'] || bank,
-      };
-    }
-  ).sort((a, b) => a.date.localeCompare(b.date));
+  return getTransactionRows(year).map((row) => ({
+    date: row.date,
+    payee: row.payee,
+    amount: row.amount,
+    hat: row.hat,
+    suggestedAccount: row.suggestedAccount,
+    skr03: row.skr03,
+    eurZeile: row.eurZeile,
+    eurLabel: row.eurLabel,
+    bank: row.bank,
+    direction: row.direction,
+  }));
 }
 
 export function getPaths() {
@@ -221,5 +427,7 @@ export function getPaths() {
     dataSource: onVercel || !fs.existsSync(root) ? 'bundled' : 'local',
     masterWorkbook: path.join(root, '!!_TAX-ADMIN', '250111_LDW_EÜR-seit2020-m-Vorlage.xlsx'),
     zohoBooks: zohoBooksDir(),
+    accountMap: path.join(zohoBooksDir(), 'zoho-account-eur-map.csv'),
+    chartOfAccounts: path.join(zohoBooksDir(), 'Chart_of_Accounts.csv'),
   };
 }

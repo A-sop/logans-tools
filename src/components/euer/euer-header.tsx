@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const links = [
   { href: '/euer', label: 'Dashboard' },
   { href: '/euer/inbox', label: 'Inbox' },
-  { href: '/euer/ledger', label: 'Ledger' },
+  { href: '/euer/ledger', label: 'Transactions' },
   { href: '/euer/tax', label: 'Tax (EÜR)' },
 ];
 

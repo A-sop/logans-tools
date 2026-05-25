@@ -1,0 +1,29 @@
+zoho_account_name,eur_zeile,notes
+Laufende EDV-Kosten / Software / Lizenzen,56,booking_rules default
+Paid licences,56,
+Telefax u Internetkosten,49,
+Kosten für Steuerberatung/Buchführung,52,
+Betriebsversicherungen/Beiträge/Versicherungen,55,
+Rundfunk-Radio licence,55,
+Bank Fees and Charges,62,Schuldzinsen / bank charges — confirm with SB
+Sonstige Kfz-Kosten,83,
+Kfz-Kosten / Fahrzeugkosten,83,
+Leasingaufwand Kfz,81,
+Consumption Meals and Entertainment,68,confirm business %
+Fortbildungskosten,46,check exact Zeile in EÜR_lists
+DVAG-Provision,11,income — not expense
+Erlöse als Kleinunternehmer nach § 19 Abs. 1 UStG,11,income
+Privatentnahmen - Konsum,,not on EÜR expense lines
+Telephony/Internet,49,alias for Telefax u Internetkosten
+Telefax u Internetkosten,49,
+Wertpapiere,,transfer/investment — skip in EÜR fill
+Sonstige unbeschränkt abziehbare Betriebsausgaben,66,fallback name
+Übrige unbeschränkt abziehbare Betriebsausgaben,66,
+Garage-Rental,46,confirm Zeile — premises
+Miete Geschäftsräume,47,
+Reisekosten Unternehmer,48,
+Werbung,51,
+Beiträge und Spenden,68,confirm business vs private
+Charity/Donations,,private — skip
+Erlöse,11,income
+Provisionen,11,income DVAG

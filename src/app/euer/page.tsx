@@ -5,8 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import {
   getAvailableYears,
   getEurSummary,
-  getInboxRows,
-  getLedgerRows,
+  getTransactionRows,
   getPaths,
 } from '@/lib/ldw-data';
 import { formatEur } from '@/lib/utils';
@@ -18,8 +17,8 @@ export default async function EuerDashboardPage({ searchParams }: PageProps) {
   const years = getAvailableYears();
   const year = params.year ? Number(params.year) : years[0] ?? 2024;
   const summary = getEurSummary(year);
-  const inbox = getInboxRows(year);
-  const ledger = getLedgerRows(year);
+  const transactions = getTransactionRows(year);
+  const inbox = transactions.filter((r) => r.needsReview);
   const totalExpenses = summary.reduce((sum, row) => sum + row.totalNettoAg, 0);
   const paths = getPaths();
 
@@ -67,12 +66,12 @@ export default async function EuerDashboardPage({ searchParams }: PageProps) {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Ledger lines</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Transactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold tabular-nums">{ledger.length}</p>
+            <p className="text-2xl font-bold tabular-nums">{transactions.length}</p>
             <Link href={`/euer/ledger?year=${year}`} className="text-xs text-primary hover:underline">
-              Business + income
+              In / out with SKR03 + EÜR
             </Link>
           </CardContent>
         </Card>
