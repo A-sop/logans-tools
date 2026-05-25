@@ -5,6 +5,8 @@ Logan's tools and projects hub — overview of projects, how I work, and AI tool
 **Domain:** logans.tools (future: subdomains e.g. cm.logans.tools for apps)
 **Board-approval preview:** use `gabc.logans.tools` for the GABC redo until concept approval.
 
+**EÜR bookkeeping UI:** `euer.logans.tools` — LDW Books cockpit (email gate: `inbox@loganwilliams.com`). See `src/docs/project-plans/euer-books-plan.md`.
+
 **Linear:** LT prefix (e.g. A-75)
 
 ---

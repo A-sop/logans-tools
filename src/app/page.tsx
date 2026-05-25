@@ -19,6 +19,13 @@ const OFFBOARDING: string[] = [
 export default async function Home() {
   const h = await headers();
   const host = (h.get('x-forwarded-host') ?? h.get('host') ?? '').toLowerCase();
+  if (host.startsWith('euer.')) {
+    const c = await cookies();
+    const hasPreview = c.get('euer_preview')?.value === '1';
+    if (hasPreview) redirect('/euer');
+    redirect('/euer-access?next=/euer');
+  }
+
   if (host.startsWith('gabc.')) {
     const c = await cookies();
     const hasPreview = c.get('gabc_preview')?.value === '1';
