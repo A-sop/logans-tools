@@ -1,0 +1,2095 @@
+{
+  "year": 2021,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "01.01.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.01.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.01.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.01.2021",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.01.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.01.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.01.2021",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 212.77,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.01.2021",
+      "payee": "KFW | KfW split in Zoho: €56.63 → Private Verbindlichkeiten – KfW Studienkredit (1895); €53.37 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.01.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.01.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "13.01.2021",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 51.69,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "15.01.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.01.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.8,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.01.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2650.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.01.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.01.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 62.99,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.01.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 5003.55,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.01.2021",
+      "payee": "Zentrale Zulagenstelle für Altersvermögen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1028.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.01.2021",
+      "payee": "Deutsche Post AG | vendor:Deutsche Post Dialog Solutions GmbH",
+      "direction": "out",
+      "amount": 1052.35,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "KFW | KfW split in Zoho: €56.77 → Private Verbindlichkeiten – KfW Studienkredit (1895); €53.23 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.02.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.02.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "06.02.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 40.95,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "12.02.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 19.99,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.02.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.4,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.02.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 14.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.02.2021",
+      "payee": "flaschenpost AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.41,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "16.02.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 45.87,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.02.2021",
+      "payee": "Autohaus Rolf Horn GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 891.33,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.02.2021",
+      "payee": "Autohaus Rolf Horn GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 7.67,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.02.2021",
+      "payee": "Manor Lux Branding Agency | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 218.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.02.2021",
+      "payee": "Mari Krõõt Volar",
+      "direction": "in",
+      "amount": 40.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.02.2021",
+      "payee": "Mari Krüüt | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "22.02.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 6215.01,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "KFW | KfW split in Zoho: €56.90 → Private Verbindlichkeiten – KfW Studienkredit (1895); €53.10 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.03.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.03.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "17.03.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 2.08,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.03.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 14.25,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.03.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3252.37,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.03.2021",
+      "payee": "Office | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 900.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.03.2021",
+      "payee": "Thomas Langthaler | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.03.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 46.97,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.03.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "KFW | KfW split in Zoho: €57.04 → Private Verbindlichkeiten – KfW Studienkredit (1895); €52.96 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.04.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "06.04.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "06.04.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "06.04.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "06.04.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 759.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.04.2021",
+      "payee": "Bundeskasse in Trier | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 119.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "14.04.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 30.17,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "16.04.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "16.04.2021",
+      "payee": "Office",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.04.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 2.57,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.04.2021",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 61.07,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "20.04.2021",
+      "payee": "Christiane Zimmer - Privatpraxis CC | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 210.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.04.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.04.2021",
+      "payee": "Office",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.04.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 4076.71,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.04.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.04.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.04.2021",
+      "payee": "Deutsche Post AG | vendor:Deutsche Post Dialog Solutions GmbH",
+      "direction": "out",
+      "amount": 269.81,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.05.2021",
+      "payee": "KFW | KfW split in Zoho: €58.08 → Private Verbindlichkeiten – KfW Studienkredit (1895); €51.92 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.05.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "04.05.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "07.05.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 250.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "07.05.2021",
+      "payee": "Office",
+      "direction": "in",
+      "amount": 250.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "12.05.2021",
+      "payee": "PAYBACK PAY REGISTRIERUNG / PAYMORROW | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "12.05.2021",
+      "payee": "PAYMORROW GMBH",
+      "direction": "in",
+      "amount": 0.01,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "14.05.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 22.65,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.05.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.64,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.05.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.05.2021",
+      "payee": "Office",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.05.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3676.57,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "28.05.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 31.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.05.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2021",
+      "payee": "KFW | KfW split in Zoho: €58.22 → Private Verbindlichkeiten – KfW Studienkredit (1895); €51.78 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.06.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.06.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "11.06.2021",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "in",
+      "amount": 120.75,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "11.06.2021",
+      "payee": "momox GmbH",
+      "direction": "in",
+      "amount": 24.32,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "14.06.2021",
+      "payee": "Büro Bloock Design GmbH",
+      "direction": "in",
+      "amount": 31.54,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.06.2021",
+      "payee": "Generali Vitality GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "14.06.2021",
+      "payee": "Sascha Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 31.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.06.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.06.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3204.29,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.06.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2021",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.07.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "05.07.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "07.07.2021",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 94.62,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "15.07.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "16.07.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.87,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.07.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "20.07.2021",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "in",
+      "amount": 104.64,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.07.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 6010.18,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "27.07.2021",
+      "payee": "Deutsche Post AG | vendor:Deutsche Post Dialog Solutions GmbH",
+      "direction": "out",
+      "amount": 492.31,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.07.2021",
+      "payee": "Enrico Misota | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.07.2021",
+      "payee": "Generali Vitaliy GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 59.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.07.2021",
+      "payee": "PVS rhein-ruhr | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 149.48,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.07.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.07.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.07.2021",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "KFW | KfW split in Zoho: €116.72 → Private Verbindlichkeiten – KfW Studienkredit (1895); €103.28 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 225.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.08.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.08.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.08.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.08.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.99,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.08.2021",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "in",
+      "amount": 86.64,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.08.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3000.17,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.08.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.08.2021",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.09.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.09.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.09.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.09.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 2930.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "06.09.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "07.09.2021",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 115.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.09.2021",
+      "payee": "Generali Deutschland Lebensversicherung AG",
+      "direction": "in",
+      "amount": 758.3,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.09.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.53,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.09.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 32.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3284.9,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "DocMorris Service BV | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 157.04,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 650.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.09.2021",
+      "payee": "Tax Reserves | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 650.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "Deutsche Bahn Connect GmbH",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "KFW | KfW split in Zoho: €58.76 → Private Verbindlichkeiten – KfW Studienkredit (1895); €51.24 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.10.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.5,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "04.10.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "11.10.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.10.2021",
+      "payee": "DZR GmbH - Deutsches Zahnaerztliches Rechenzentrum | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 212.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "12.10.2021",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 73.75,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "22.10.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 998.85,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.11.2021",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.11.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.11.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 20.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.11.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 30.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.11.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.11.2021",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 20.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "03.11.2021",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 30.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.11.2021",
+      "payee": "FUTURE4 GmbH + Co. KG",
+      "direction": "in",
+      "amount": 1.19,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.11.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.91,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.11.2021",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "22.11.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 33.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "22.11.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3645.37,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.11.2021",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.11.2021",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.11.2021",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 1.76,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.11.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.11.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.11.2021",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "KFW | KfW split in Zoho: €117.86 → Private Verbindlichkeiten – KfW Studienkredit (1895); €102.14 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 225.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2021",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.12.2021",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "08.12.2021",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.65,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.12.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.12.2021",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "09.12.2021",
+      "payee": "DEEPL* DP-1196166 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.12.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.12.2021",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "10.12.2021",
+      "payee": "JET-Tankstelle | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 60.57,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "12.12.2021",
+      "payee": "Aral Station 140013004",
+      "direction": "out",
+      "amount": 9.99,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.12.2021",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 10.96,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.12.2021",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 300.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.12.2021",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 300.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "16.12.2021",
+      "payee": "FLETCHERMETHOD.COM | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 264.08,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.12.2021",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.46,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.12.2021",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3919.56,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.12.2021",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.49,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "APPLE STORE R559 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "HAPPY SCRIBE LIMITED | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 12.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "HAPPY SCRIBE LIMITED | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 24.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "JACQUES WEIN-DEPOT 4 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.5,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "Saturn Techno-Markt | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 24.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2021",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.12.2021",
+      "payee": "YOU NEED A BUDGET | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 13.31,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.12.2021",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.12.2021",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 41.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.12.2021",
+      "payee": "CANVA* I03282-0736107",
+      "direction": "out",
+      "amount": 11.45,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.12.2021",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.12.2021",
+      "payee": "HUEL.COM | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 85.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.12.2021",
+      "payee": "BAUHAUS 665 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 43.44,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.12.2021",
+      "payee": "HENG LONG SUPERMARKT | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 24.16,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2021",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2021",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2021",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2021",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.12.2021",
+      "payee": "Mr. Wash Autoservice A",
+      "direction": "out",
+      "amount": 62.43,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.12.2021",
+      "payee": "Mr. Wash Autoservice A",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    }
+  ]
+}

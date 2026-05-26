@@ -40,8 +40,8 @@ export default async function EuerLedgerPage({ searchParams }: PageProps) {
         <CardHeader>
           <CardTitle>{rows.length} lines</CardTitle>
           <CardDescription>
-            {inCount} in · {outCount} out · SKR03 from suggestions; EÜR Zeile from{' '}
-            <code>zoho-account-eur-map.csv</code> + master <code>EÜR_lists</code>
+            {inCount} in · {outCount} out · Bank CSV suggestions merged with master workbook{' '}
+            <code>{year}_EÜR</code> (workbook lines may lack SKR03 until mapped)
           </CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">

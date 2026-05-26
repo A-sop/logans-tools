@@ -1,0 +1,719 @@
+{
+  "year": 2024,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "02.01.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.01.2024",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 58.32,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "18.01.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.62,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.01.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "27.01.2024",
+      "payee": "GOOGLE*GOOGLE PLAY APP | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.01.2024",
+      "payee": "Heribert Haag | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 505.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.02.2024",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2024",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2024",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "20.02.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "26.02.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "28.02.2024",
+      "payee": "Generali Vitaliy GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.02.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 314.38,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.02.2024",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.02.2024",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.03.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.03.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2024",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2024",
+      "payee": "S-mart Lebensmit. GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 12.04,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "07.03.2024",
+      "payee": "Thomas Langthaler | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 13.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.03.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "22.03.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.03.2024",
+      "payee": "UBER   *TRIP",
+      "direction": "out",
+      "amount": 16.91,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.03.2024",
+      "payee": "Trink-Genosse eG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 31.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.04.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.04.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.04.2024",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.04.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.04.2024",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 106.14,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "08.04.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "16.04.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.06,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "02.05.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.05.2024",
+      "payee": "KFW | KfW split in Zoho: €74.12 → Private Verbindlichkeiten – KfW Studienkredit (1895); €244.76 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 323.88,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.05.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.07,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.05.2024",
+      "payee": "Jumbo Lemmer | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 60.52,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2024",
+      "payee": "Apotheek Monnickendam | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.37,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.06.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.06.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.06.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.06.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "04.06.2024",
+      "payee": "The Harbour Market | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 15.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.06.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.23,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.07.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.07.2024",
+      "payee": "KREDITANSTALT FUER WIEDERAUFBAU | KfW split in Zoho: €81.85 → Private Verbindlichkeiten – KfW Studienkredit (1895); €238.15 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split principal vs interest in Zoho",
+      "direction": "out",
+      "amount": 325.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.07.2024",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 103.28,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.07.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.08.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.08.2024",
+      "payee": "KREDITANSTALT FUER WIEDERAUFBAU | KfW split in Zoho: €41.81 → Private Verbindlichkeiten – KfW Studienkredit (1895); €118.19 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split principal vs interest in Zoho",
+      "direction": "out",
+      "amount": 160.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2024",
+      "payee": "KfW Bankengruppe | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 41.12,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "05.08.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.01,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.08.2024",
+      "payee": "Flink SE | Refund/credit – confirm",
+      "direction": "out",
+      "amount": 44.53,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.08.2024",
+      "payee": "BHF EHRENFELD GMBH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 18.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.08.2024",
+      "payee": "LIME*4 RIDES VZHS",
+      "direction": "out",
+      "amount": 17.25,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.08.2024",
+      "payee": "VROOM-REPAIR.DE | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 35.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.08.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 10.25,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "29.08.2024",
+      "payee": "Deutsche Post AG | vendor:Deutsche Post Dialog Solutions GmbH",
+      "direction": "out",
+      "amount": 12.95,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.09.2024",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.09.2024",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.09.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.09.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.10.2024",
+      "payee": "KREDITANSTALT FUER WIEDERAUFBAU | KfW split in Zoho: €84.62 → Private Verbindlichkeiten – KfW Studienkredit (1895); €235.38 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split principal vs interest in Zoho",
+      "direction": "out",
+      "amount": 325.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.10.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.10.2024",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 103.07,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "10.10.2024",
+      "payee": "UBER   *TRIP",
+      "direction": "out",
+      "amount": 12.96,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2024",
+      "payee": "KREDITANSTALT FUER WIEDERAUFBAU | KfW split in Zoho: €54.27 → Private Verbindlichkeiten – KfW Studienkredit (1895); €105.73 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split principal vs interest in Zoho",
+      "direction": "out",
+      "amount": 160.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "05.11.2024",
+      "payee": "Google YouTube Videos | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "05.11.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.01,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.11.2024",
+      "payee": "SP EUROFADE | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 71.1,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.11.2024",
+      "payee": "WAALAXY",
+      "direction": "out",
+      "amount": 576.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 2.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 2.25,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.12.2024",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.12.2024",
+      "payee": "Logan Williams | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 45.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.12.2024",
+      "payee": "Google Play Apps | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "05.12.2024",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.65,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "07.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 3.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "09.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 2.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "09.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 4.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.12.2024",
+      "payee": "LIME*RIDE VZHS",
+      "direction": "out",
+      "amount": 2.25,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.12.2024",
+      "payee": "N26 Bank",
+      "direction": "in",
+      "amount": 71.1,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "30.12.2024",
+      "payee": "Google YouTube Super | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2024",
+      "payee": "LIME*ADD BALANCE VZHS",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    }
+  ]
+}

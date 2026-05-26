@@ -1,0 +1,79 @@
+{
+  "year": 2026,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "02.01.2026",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 16.95,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.01.2026",
+      "payee": "DKB",
+      "direction": "out",
+      "amount": 11.88,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "26.01.2026",
+      "payee": "Deutsche Bank",
+      "direction": "out",
+      "amount": 1.36,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.02.2026",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 16.95,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "16.02.2026",
+      "payee": "Lime",
+      "direction": "out",
+      "amount": 5.89,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.02.2026",
+      "payee": "Lime",
+      "direction": "out",
+      "amount": 4.51,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.02.2026",
+      "payee": "Lime",
+      "direction": "out",
+      "amount": 8.64,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.02.2026",
+      "payee": "Lime",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.03.2026",
+      "payee": "Deutsche Bank",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    }
+  ]
+}

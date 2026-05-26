@@ -1,0 +1,3855 @@
+{
+  "year": 2022,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "01.01.2022",
+      "payee": "AMZNPrime DE*879VT6IT5",
+      "direction": "out",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.01.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.01.2022",
+      "payee": "Audible Gmbh*Z25EL6UP5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "KFW | KfW split in Zoho: €59.21 → Private Verbindlichkeiten – KfW Studienkredit (1895); €50.79 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.01.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "04.01.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "05.01.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.01.2022",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 51.29,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "06.01.2022",
+      "payee": "Prime Video*JH2P60Y35 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.01.2022",
+      "payee": "DEEPL* DP-1282141 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.01.2022",
+      "payee": "Flink SE | Refund/credit – confirm",
+      "direction": "out",
+      "amount": 26.24,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.01.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.76,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.01.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.55,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.01.2022",
+      "payee": "NAME-CHEAP.COM* 2UNC3S",
+      "direction": "out",
+      "amount": 72.75,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "12.01.2022",
+      "payee": "HAPPY SCRIBE LIMITED | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 12.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "16.01.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 46.6,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.01.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.49,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.01.2022",
+      "payee": "S-mart Lebensmit. GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 36.58,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.01.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 4315.78,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.01.2022",
+      "payee": "Gorillas Operations Ge | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 39.58,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "DEEPL* DP-1321148 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 29.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 650.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "Tax Reserves | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 650.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.01.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.01.2022",
+      "payee": "22208487 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.01.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.01.2022",
+      "payee": "YOU NEED A BUDGET | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 13.27,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.01.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.01.2022",
+      "payee": "CANVA* I03313-0996438",
+      "direction": "out",
+      "amount": 11.49,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.01.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.01.2022",
+      "payee": "THOMAS LANGTHALER",
+      "direction": "in",
+      "amount": 90.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "29.01.2022",
+      "payee": "KESSELHAUS SIEGEN | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 38.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.01.2022",
+      "payee": "Aral Station 141698118",
+      "direction": "out",
+      "amount": 71.17,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.01.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2022",
+      "payee": "cambio Rheinland | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Bundesverband Deutscher Vermögensberater e.V. | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "HUEL.COM | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 85.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "KFW | KfW split in Zoho: €59.35 → Private Verbindlichkeiten – KfW Studienkredit (1895); €50.65 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.02.2022",
+      "payee": "AMZNPrime DE*DT4NA9OV5",
+      "direction": "out",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.02.2022",
+      "payee": "Audible Gmbh*5W4V47775",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.02.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 32.53,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.02.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.02.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.02.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.02.2022",
+      "payee": "Audible Gmbh*RU3W776U5",
+      "direction": "out",
+      "amount": 4.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.02.2022",
+      "payee": "Prime Video*LV4HQ5PL5 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.02.2022",
+      "payee": "AMZNPrime DE",
+      "direction": "in",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "09.02.2022",
+      "payee": "DEEPL* DP-1390320 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.02.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.55,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.02.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.76,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.02.2022",
+      "payee": "momox AG",
+      "direction": "in",
+      "amount": 40.65,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "12.02.2022",
+      "payee": "go Asia | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 10.03,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "14.02.2022",
+      "payee": "Flink SE | Refund/credit – confirm",
+      "direction": "out",
+      "amount": 27.64,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.02.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 23.59,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.02.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.93,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "16.02.2022",
+      "payee": "PVS rhein-ruhr | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 183.87,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.02.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "18.02.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3126.89,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.02.2022",
+      "payee": "NAME-CHEAP.COM* PSZZAA",
+      "direction": "out",
+      "amount": 12.48,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.02.2022",
+      "payee": "NAME-CHEAP.COM* VBEY9F",
+      "direction": "out",
+      "amount": 7.93,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "20.02.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 23.99,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "22.02.2022",
+      "payee": "Bundeskasse in Trier | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 119.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "22.02.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "22.02.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "22.02.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 29.46,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.02.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.02.2022",
+      "payee": "Bundeskasse in Trier | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 119.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.02.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.02.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.02.2022",
+      "payee": "CANVA* I03344-0750299",
+      "direction": "out",
+      "amount": 11.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.02.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.02.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 459.83,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.02.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 107.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "KFW | KfW split in Zoho: €59.50 → Private Verbindlichkeiten – KfW Studienkredit (1895); €50.50 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.03.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.03.2022",
+      "payee": "Audible Gmbh*2R3IX3W04",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.03.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 165.3,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.03.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.03.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.03.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.03.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.03.2022",
+      "payee": "22201610 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.03.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.03.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.03.2022",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 100.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "10.03.2022",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "11.03.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.55,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "12.03.2022",
+      "payee": "22201445 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "12.03.2022",
+      "payee": "DEEPL* DP-1484476 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.03.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.03.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.99,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.03.2022",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "in",
+      "amount": 126.26,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.03.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.35,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.03.2022",
+      "payee": "UBER *TRIP HELP.UBER.C",
+      "direction": "out",
+      "amount": 9.84,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "21.03.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3325.05,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.03.2022",
+      "payee": "DRI*Lespeed | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 21.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.03.2022",
+      "payee": "DRI*Lespeed | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 14.05,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.03.2022",
+      "payee": "Le Kiosk | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.03.2022",
+      "payee": "UBER *TRIP HELP.UBER.C",
+      "direction": "out",
+      "amount": 1.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.03.2022",
+      "payee": "Gorillas Operations Ge | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 34.64,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.03.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.03.2022",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.03.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.03.2022",
+      "payee": "UBER *TRIP HELP.UBER.C",
+      "direction": "out",
+      "amount": 1.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.03.2022",
+      "payee": "GOOGLE*GOOGLE STORAGE | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.03.2022",
+      "payee": "UBER   *TRIP",
+      "direction": "out",
+      "amount": 8.15,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.03.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.03.2022",
+      "payee": "CANVA* I03372-0728564",
+      "direction": "out",
+      "amount": 11.79,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.03.2022",
+      "payee": "SumUp  *La Vincailleri | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 20.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.03.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 107.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.03.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.03.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 515.34,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.03.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 18.42,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.03.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Aral Station 201560158",
+      "direction": "out",
+      "amount": 85.54,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "KFW | KfW split in Zoho: €59.64 → Private Verbindlichkeiten – KfW Studienkredit (1895); €50.36 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "KOLN-SULZ | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.04.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.04.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.04.2022",
+      "payee": "Audible Gmbh*294NF05G4",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.04.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "04.04.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "07.04.2022",
+      "payee": "AMZNPrime DE*295OX5U24",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "08.04.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.04.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.04.2022",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "08.04.2022",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 100.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "09.04.2022",
+      "payee": "KOLN-INNENSTADT | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "11.04.2022",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 38.46,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "16.04.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.72,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.04.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.04.2022",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 200.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.04.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2289.11,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.04.2022",
+      "payee": "DEEPL* DP-1589599 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "24.04.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 34.61,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.04.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.04.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.04.2022",
+      "payee": "James Joyce Bonner Str | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 39.2,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.04.2022",
+      "payee": "NAME-CHEAP.COM* AHWI3B",
+      "direction": "out",
+      "amount": 8.34,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "26.04.2022",
+      "payee": "Büro Bloock Design GmbH",
+      "direction": "in",
+      "amount": 257.67,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "26.04.2022",
+      "payee": "Büro Bloock Design GmbH",
+      "direction": "in",
+      "amount": 200.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "26.04.2022",
+      "payee": "HENG LONG SUPERMARKT | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.04.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.04.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 46.32,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.04.2022",
+      "payee": "CANVA* I03403-1050236",
+      "direction": "out",
+      "amount": 12.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.04.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.04.2022",
+      "payee": "NAME-CHEAP.COM* GHLFWM",
+      "direction": "out",
+      "amount": 41.44,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2022",
+      "payee": "NAME-CHEAP.COM* TUEA9X",
+      "direction": "out",
+      "amount": 17.08,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.05.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Audible Gmbh*2P01W1YS4",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Buero Bloock Design GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 515.34,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "momox AG",
+      "direction": "in",
+      "amount": 24.19,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "02.05.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.05.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.05.2022",
+      "payee": "Büro Bloock Design GmbH",
+      "direction": "in",
+      "amount": 515.34,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "09.05.2022",
+      "payee": "22201802 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 170.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.05.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.55,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "11.05.2022",
+      "payee": "AMAZON.DE AMAZON.DE | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 10.22,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.05.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.75,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.05.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.05.2022",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 200.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.05.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2217.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.05.2022",
+      "payee": "DEEPL* DP-1692888 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.05.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.05.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.05.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.05.2022",
+      "payee": "CANVA* I03433-0630665",
+      "direction": "out",
+      "amount": 12.16,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.05.2022",
+      "payee": "Deutsche Post AG | vendor:Deutsche Post Dialog Solutions GmbH",
+      "direction": "out",
+      "amount": 52.11,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.05.2022",
+      "payee": "22201610 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.05.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.05.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.32,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.05.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.16,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.05.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.05.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.05.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "N26 Bank | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.06.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.06.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.06.2022",
+      "payee": "Generali Vitality GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.06.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.06.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.06.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.06.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "16.06.2022",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.91,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.06.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3855.21,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.06.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 33.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "22.06.2022",
+      "payee": "DEEPL* DP-1803449 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.06.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.06.2022",
+      "payee": "NAME-CHEAP.COM* PC4WJY",
+      "direction": "out",
+      "amount": 8.58,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "23.06.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 36.37,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.06.2022",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.06.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.06.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.06.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.06.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.5,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.06.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.06.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.06.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 32.39,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.06.2022",
+      "payee": "CANVA* I03464-0670106",
+      "direction": "out",
+      "amount": 12.34,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.06.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.06.2022",
+      "payee": "eBay Collection OTP | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 7.24,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.06.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 8.67,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.06.2022",
+      "payee": "22201610 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 250.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "KFW | KfW split in Zoho: €171.54 → Private Verbindlichkeiten – KfW Studienkredit (1895); €158.46 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 340.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.07.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.07.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.07.2022",
+      "payee": "Audible Gmbh*2Y8U691E4",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.07.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.07.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "04.07.2022",
+      "payee": "Generali Vitality GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "06.07.2022",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 51.29,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "07.07.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 13.49,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.07.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.25,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "08.07.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.75,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.07.2022",
+      "payee": "DEEPL* DP-1918230 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "13.07.2022",
+      "payee": "AMZNPrime DE*HG55N3P45",
+      "direction": "out",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "13.07.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 15.96,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.07.2022",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.55,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.07.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3192.36,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.07.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.07.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 27.88,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.07.2022",
+      "payee": "GOOGLE *ADS8253060691",
+      "direction": "in",
+      "amount": 14.48,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "25.07.2022",
+      "payee": "Die Direktkontakter GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 500.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.07.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.07.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 500.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.07.2022",
+      "payee": "Tax Reserves",
+      "direction": "in",
+      "amount": 500.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "26.07.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.07.2022",
+      "payee": "CANVA* I03494-0732378",
+      "direction": "out",
+      "amount": 12.81,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.07.2022",
+      "payee": "EasyPark GmbH",
+      "direction": "out",
+      "amount": 7.47,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.07.2022",
+      "payee": "Jonny Turista | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.07.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.07.2022",
+      "payee": "FS *TechSmith | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 48.91,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "29.07.2022",
+      "payee": "FS *TechSmith | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 195.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.07.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "KFW | KfW split in Zoho: €57.61 → Private Verbindlichkeiten – KfW Studienkredit (1895); €52.39 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "LINKMATCH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.08.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.08.2022",
+      "payee": "Audible Gmbh*UU4XG0AG5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.08.2022",
+      "payee": "Generali Vitality GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.08.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.08.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.08.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "07.08.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 26.2,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "08.08.2022",
+      "payee": "DPDHL  *3265663796 | vendor:DHL",
+      "direction": "out",
+      "amount": 85.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.08.2022",
+      "payee": "DEEPL* DP-2035232 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "13.08.2022",
+      "payee": "Aral Station 201560158",
+      "direction": "out",
+      "amount": 65.54,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.08.2022",
+      "payee": "AMZNPRIME DE*RS5QA9Z75",
+      "direction": "out",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.08.2022",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.9,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.08.2022",
+      "payee": "Contipark 09011158602",
+      "direction": "out",
+      "amount": 12.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "19.08.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 14.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "20.08.2022",
+      "payee": "Contipark 09033010602",
+      "direction": "out",
+      "amount": 7.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "21.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.16,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "22.08.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2694.18,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.08.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 55.76,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.43,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.08.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.08.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.08.2022",
+      "payee": "HENG LONG SUPERMARKT | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 30.28,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.35,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.08.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 32.8,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.08.2022",
+      "payee": "BIRGIT SCHMELING | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 210.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.43,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.08.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.08.2022",
+      "payee": "CANVA* I03525-0661995",
+      "direction": "out",
+      "amount": 13.02,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.08.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.16,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.08.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.51,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.08.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.08.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.08.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "KFW | KfW split in Zoho: €57.76 → Private Verbindlichkeiten – KfW Studienkredit (1895); €52.24 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "LINKMATCH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.09.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "Audible Gmbh*7R3CS4RI5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.09.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "05.09.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "08.09.2022",
+      "payee": "Generali Vitality GmbH",
+      "direction": "in",
+      "amount": 35.49,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "09.09.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 9.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.09.2022",
+      "payee": "DEEPL* DP-2150067 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "14.09.2022",
+      "payee": "AMZNPrime DE*S86U740Z5",
+      "direction": "out",
+      "amount": 7.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.09.2022",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.8,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.09.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3313.49,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.09.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.09.2022",
+      "payee": "LIM*RESTORE BALANCE | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.09.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.09.2022",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.09.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.09.2022",
+      "payee": "EasyPark GmbH",
+      "direction": "out",
+      "amount": 1.69,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.09.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "*DEUTSCHE BANK AG",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "BIRGIT SCHMELING | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "Generali Vitaliy GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "James Joyce Bonner Str | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 24.1,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "Stadtkasse Koblenz | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 20.01,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "Uwe Jaekel GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 88.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.09.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.09.2022",
+      "payee": "Aral Station 288194129",
+      "direction": "out",
+      "amount": 46.77,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.09.2022",
+      "payee": "CANVA* I03556-0783372",
+      "direction": "out",
+      "amount": 13.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.09.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.09.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 2.62,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.09.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.16,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2022",
+      "payee": "Deutsche Bahn Connect GmbH",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.09.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.10.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.10.2022",
+      "payee": "Audible Gmbh*M16UI43N5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.10.2022",
+      "payee": "LINKMATCH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.10.2022",
+      "payee": "NNT*DVAG Lizenzportal | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "KFW | KfW split in Zoho: €57.90 → Private Verbindlichkeiten – KfW Studienkredit (1895); €52.10 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.10.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.10.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.10.2022",
+      "payee": "LIM*RIDE COST | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.43,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "07.10.2022",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 51.31,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 2.62,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "17.10.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 3.48,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.10.2022",
+      "payee": "momox AG",
+      "direction": "in",
+      "amount": 18.18,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.10.2022",
+      "payee": "AMZNPrime DE",
+      "direction": "in",
+      "amount": 8.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "21.10.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2738.74,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.10.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.10.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.10.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.10.2022",
+      "payee": "Audible Gmbh*ZG4YJ5TQ5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.10.2022",
+      "payee": "CANVA* I03586-0830467",
+      "direction": "out",
+      "amount": 13.02,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.10.2022",
+      "payee": "22208487 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 200.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.10.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.10.2022",
+      "payee": "MS Kart- & Eventcenter | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 44.5,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.10.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 12.63,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.10.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.10.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.8,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.10.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "KFW | KfW split in Zoho: €41.91 → Private Verbindlichkeiten – KfW Studienkredit (1895); €89.03 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 130.94,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "LINKMATCH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Singhs Mart | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 15.74,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.11.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.11.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.11.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.11.2022",
+      "payee": "Audible Gmbh*IG5I279J5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.11.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.11.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "05.11.2022",
+      "payee": "HELLOFRESH",
+      "direction": "in",
+      "amount": 1.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "08.11.2022",
+      "payee": "Amazon.de | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.11.2022",
+      "payee": "DEEPL* DP-2390370 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.11.2022",
+      "payee": "Main Account | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "09.11.2022",
+      "payee": "Selbstbeteiligungen",
+      "direction": "in",
+      "amount": 100.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "10.11.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "15.11.2022",
+      "payee": "Google Photos | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 3.29,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.11.2022",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.61,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.11.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 2877.9,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.11.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.11.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "25.11.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 6.66,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.11.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 47.9,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.11.2022",
+      "payee": "CANVA* I03617-0632696",
+      "direction": "out",
+      "amount": 12.51,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.11.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 30.05,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.11.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.11.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.11.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 147.42,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "KFW | KfW split in Zoho: €42.09 → Private Verbindlichkeiten – KfW Studienkredit (1895); €88.85 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 130.94,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "LINKMATCH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 11.89,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 180.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.12.2022",
+      "payee": "Universal Inkasso AG | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 240.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.12.2022",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.12.2022",
+      "payee": "Audible Gmbh*1W8PK9L94",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.12.2022",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 130.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.12.2022",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "07.12.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 18.24,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.12.2022",
+      "payee": "N26",
+      "direction": "in",
+      "amount": 0.87,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.12.2022",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "21.12.2022",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 3387.38,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.12.2022",
+      "payee": "DEEPL* DP-2526448 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2022",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.12.2022",
+      "payee": "Selbstbeteiligungen | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "23.12.2022",
+      "payee": "ZOHO-SITES",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.12.2022",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 44.02,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.12.2022",
+      "payee": "Google Payment IE LTD | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "26.12.2022",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 75.27,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.12.2022",
+      "payee": "CANVA* I03647-0628330",
+      "direction": "out",
+      "amount": 12.21,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.12.2022",
+      "payee": "KOLN-INNENSTADT | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 250.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.12.2022",
+      "payee": "Grover Group GmbH | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.12.2022",
+      "payee": "ZALANDO OUTLET | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 16.03,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.12.2022",
+      "payee": "BFS | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 54.23,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.12.2022",
+      "payee": "TOTAL SERVICE STATION | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 17.5,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.12.2022",
+      "payee": "real GmbH 8633 | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 89.52,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    }
+  ]
+}

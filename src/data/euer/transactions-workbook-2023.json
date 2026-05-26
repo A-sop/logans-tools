@@ -1,0 +1,1335 @@
+{
+  "year": 2023,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "01.01.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.01.2023",
+      "payee": "DKB",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.01.2023",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 12.29,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.01.2023",
+      "payee": "LinkMatch",
+      "direction": "out",
+      "amount": 11.98,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.01.2023",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.01.2023",
+      "payee": "KfW Studienkredit - nur Zinsanteil",
+      "direction": "out",
+      "amount": 88.67,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.01.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "11.01.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 70.62,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "11.01.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 70.62,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "16.01.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "16.01.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "01.02.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.02.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 189.06,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.02.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.02.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.02.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.02.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 120.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.02.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.03.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.03.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.03.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.03.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.03.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.03.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.03.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 560.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "25.03.2023",
+      "payee": "Dokumentenerstellung - Reza Ahmadnegad",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.04.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.04.2023",
+      "payee": "DKB",
+      "direction": "out",
+      "amount": 6.08,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.04.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.04.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "16.04.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 300.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "16.04.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 8.45,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.04.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.04.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 240.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.04.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "19.04.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.04.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.05.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.05.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 80.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.05.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "10.05.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 450.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.05.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.05.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.06.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "07.06.2023",
+      "payee": "Namecheap, Inc",
+      "direction": "out",
+      "amount": 13.78,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "10.06.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "21.06.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 330.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.06.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.06.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.06.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.06.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 360.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.07.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 330.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.07.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "15.07.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 80.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.07.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.07.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "23.07.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 1170.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "25.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 43.31,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.07.2023",
+      "payee": "Advocard",
+      "direction": "out",
+      "amount": 33.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "26.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 82.11,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 29.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 90.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "31.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 17.82,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "31.07.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 323.29,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 18.36,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "Netflix",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "01.08.2023",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.08.2023",
+      "payee": "Advocard",
+      "direction": "out",
+      "amount": 27.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 0.58,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.08.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "10.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 3.77,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 4.77,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.08.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.08.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.08.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 80.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "23.08.2023",
+      "payee": "Advocard",
+      "direction": "out",
+      "amount": 3.59,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "23.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 82.11,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "29.08.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "31.08.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 323.29,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 18.36,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "Netflix",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "01.09.2023",
+      "payee": "TargoBank AG",
+      "direction": "out",
+      "amount": 199.3,
+      "eurZeile": "87",
+      "eurLabel": "87 - Nicht abziehbare Beträge (Beispiele siehe Anleitung)"
+    },
+    {
+      "date": "02.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 90.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "04.09.2023",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.09.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.09.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.09.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "18.09.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 80.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.09.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "22.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "23.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "25.09.2023",
+      "payee": "Advocard",
+      "direction": "out",
+      "amount": 33.56,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "26.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 82.11,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "30.09.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 150.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.09.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 0.01,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "Rundfunkbeitrag",
+      "direction": "out",
+      "amount": 18.36,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "Netflix",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.10.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.10.2023",
+      "payee": "sipgate",
+      "direction": "out",
+      "amount": 90.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.10.2023",
+      "payee": "BMW Bank GmbH",
+      "direction": "out",
+      "amount": 323.29,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "02.10.2023",
+      "payee": "DKB",
+      "direction": "out",
+      "amount": 13.02,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "02.10.2023",
+      "payee": "TargoBank AG",
+      "direction": "out",
+      "amount": 207.9,
+      "eurZeile": "87",
+      "eurLabel": "87 - Nicht abziehbare Beträge (Beispiele siehe Anleitung)"
+    },
+    {
+      "date": "03.10.2023",
+      "payee": "Advocard",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.10.2023",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 77.86,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.10.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.10.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "06.10.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "16.10.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.10.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.10.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "22.10.2023",
+      "payee": "Photobucket",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "26.10.2023",
+      "payee": "Deutsche Bank",
+      "direction": "out",
+      "amount": 18.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "31.10.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 475.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "31.10.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "01.11.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.11.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "07.11.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "07.11.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.11.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.11.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "22.11.2023",
+      "payee": "Photobucket",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.11.2023",
+      "payee": "Back Office",
+      "direction": "in",
+      "amount": 450.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.12.2023",
+      "payee": "—",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2023",
+      "payee": "Telekom Lizenzportal",
+      "direction": "out",
+      "amount": 23.54,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.12.2023",
+      "payee": "Mullvad VPN AB",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "05.12.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 5.49,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "08.12.2023",
+      "payee": "Namecheap, Inc",
+      "direction": "out",
+      "amount": 5.16,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "12.12.2023",
+      "payee": "Telekom",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.12.2023",
+      "payee": "Playphraseme - via Patreon",
+      "direction": "out",
+      "amount": 4.17,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "18.12.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.12.2023",
+      "payee": "Dokumentenerstellung - T&T Technology",
+      "direction": "in",
+      "amount": 160.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.12.2023",
+      "payee": "PRO Sitemaps",
+      "direction": "out",
+      "amount": 5.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "22.12.2023",
+      "payee": "Photobucket",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.12.2023",
+      "payee": "Deutsche Bank",
+      "direction": "out",
+      "amount": 0.51,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "29.12.2023",
+      "payee": "DKB",
+      "direction": "out",
+      "amount": 11.57,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "16.01.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "16.01.2023",
+      "payee": "BFBS",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "02.03.2023",
+      "payee": "BMW Bank",
+      "direction": "out",
+      "amount": 323.29,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    }
+  ]
+}

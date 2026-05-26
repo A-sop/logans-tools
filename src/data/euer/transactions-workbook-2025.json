@@ -1,0 +1,2959 @@
+{
+  "year": 2025,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "01.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 14.67,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 14.07,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.46,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 2.4,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.01.2025",
+      "payee": "DHE-MTOR - Garagenmiete",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "46",
+      "eurLabel": "46 - Miete/Pacht für Geschäftsräume und betrieblich genutzte Grundstücke"
+    },
+    {
+      "date": "03.01.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 56.47,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 5.79,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "04.01.2025",
+      "payee": "Reza Ahmadnegad",
+      "direction": "in",
+      "amount": 1020.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "06.01.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "07.01.2025",
+      "payee": "Consulting & More Backoffice",
+      "direction": "in",
+      "amount": 960.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "08.01.2025",
+      "payee": "Consulting & More Backoffice",
+      "direction": "in",
+      "amount": 1560.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "08.01.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "09.01.2025",
+      "payee": "Consulting & More Backoffice",
+      "direction": "in",
+      "amount": 1020.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "13.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 6.35,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "13.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 6.46,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "13.01.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "13.01.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutschland",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "13.01.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 845.04,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "14.01.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 1.25,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.01.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 12.12,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.06.2025",
+      "payee": "50 Jahre DVAG",
+      "direction": "out",
+      "amount": 46.5,
+      "eurZeile": "50",
+      "eurLabel": "50 - Übernachtungs- und Reisenebenkosten bei Geschäftsreisen des Steuerpflichtigen"
+    },
+    {
+      "date": "20.01.2025",
+      "payee": "Colleagues/Teambuilding",
+      "direction": "out",
+      "amount": 93.46,
+      "eurZeile": "67",
+      "eurLabel": "67 - Geschenke"
+    },
+    {
+      "date": "20.01.2025",
+      "payee": "Birgit Schmeling",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "21.01.2025",
+      "payee": "AMAZON EU S.A R.L., NIEDERLASSUNG DEUTSCHLAND",
+      "direction": "out",
+      "amount": 8.42,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "24.01.2025",
+      "payee": "DER VERMOEGENSBERATER  VERLAGS-",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.01.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 870.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "27.01.2025",
+      "payee": "Consulting & More Backoffice",
+      "direction": "in",
+      "amount": 1470.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "28.01.2025",
+      "payee": "Birgit Schmeling",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "28.01.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.01.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "28.01.2025",
+      "payee": "Birgit Schmeling",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "29.01.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 29.99,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 29.99,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.01.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "30.01.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.01.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.01.2025",
+      "payee": "B2 Mobility - ARAL Fuel Card",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.46,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 14.07,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 14.67,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.01.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 58.68,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 67.23,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Generali Engagement Solutions GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 140.84,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "03.02.2025",
+      "payee": "GEDKranken",
+      "direction": "out",
+      "amount": 140.84,
+      "eurZeile": "28",
+      "eurLabel": "28 - Ausgaben für eigenes Personal (z. B. Gehälter, Löhne und Versicherungsbeiträge)"
+    },
+    {
+      "date": "04.02.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.02.2025",
+      "payee": "Colleagues/Teambuilding",
+      "direction": "out",
+      "amount": 25.51,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "05.02.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.02.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 17.16,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "07.02.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "10.02.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "10.02.2025",
+      "payee": "Maximilian Deinert",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "46",
+      "eurLabel": "46 - Miete/Pacht für Geschäftsräume und betrieblich genutzte Grundstücke"
+    },
+    {
+      "date": "10.02.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 8.4,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.02.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 750.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "12.02.2025",
+      "payee": "Birgit Schmeling c/o Business Factory BS",
+      "direction": "out",
+      "amount": 140.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "12.02.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutschland",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "13.02.2025",
+      "payee": "Birgit Schmeling",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "13.02.2025",
+      "payee": "Birgit Schmeling",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "14.02.2025",
+      "payee": "DHL",
+      "direction": "out",
+      "amount": 7.69,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "14.02.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 14.81,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "14.02.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 23.05,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "14.02.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 69.83,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "Mullvad",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 12.12,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 45.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "08.04.2025",
+      "payee": "DVAG Marathon Team",
+      "direction": "out",
+      "amount": 30.23,
+      "eurZeile": "50",
+      "eurLabel": "50 - Übernachtungs- und Reisenebenkosten bei Geschäftsreisen des Steuerpflichtigen"
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 14.81,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "18.02.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 23.05,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "21.02.2025",
+      "payee": "AMAZON EU S.A R.L., NIEDERLASSUNG DEUTSCHLAND",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "21.02.2025",
+      "payee": "LANDESKASSE DUESSELDORF",
+      "direction": "out",
+      "amount": 20.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "22.02.2025",
+      "payee": "Handelshof",
+      "direction": "out",
+      "amount": 21.98,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "25.02.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.02.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 870.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "26.02.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.02.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "28.02.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "28.02.2025",
+      "payee": "Bundesverband Deutscher Vermögensberater e.V.",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "28.02.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 11.76,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 11.9,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "B2 Mobility - ARAL Fuel Card",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "Maximilian Deinert",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "46",
+      "eurLabel": "46 - Miete/Pacht für Geschäftsräume und betrieblich genutzte Grundstücke"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "GEDVers",
+      "direction": "out",
+      "amount": 77.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 102.76,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "Generali Deutschland Versicherung AG",
+      "direction": "out",
+      "amount": 212.43,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.03.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 3.43,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "04.03.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.03.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.03.2025",
+      "payee": "Parkhaus - sonstiges",
+      "direction": "out",
+      "amount": 14.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.03.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.03.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "11.03.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 3.43,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "11.03.2025",
+      "payee": "DVAG Sonstige Gutschriften/Belastungen",
+      "direction": "out",
+      "amount": 21.01,
+      "eurZeile": "51",
+      "eurLabel": "51 - Fortbildungskosten (ohne Reisekosten)"
+    },
+    {
+      "date": "14.03.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "10.04.2025",
+      "payee": "DVAG Sonstige Gutschriften/Belastungen",
+      "direction": "out",
+      "amount": 257.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.03.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 17.16,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "20.03.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 42.02,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "20.03.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 565.5,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "21.03.2025",
+      "payee": "AMAZON EU S.A R.L., NIEDERLASSUNG DEUTSCHLAND",
+      "direction": "out",
+      "amount": 8.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "22.03.2025",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 33.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "24.03.2025",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "24.03.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 4200.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "24.03.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 9.4,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "EasyPark",
+      "direction": "out",
+      "amount": 2.9,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "Mullvad",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 12.12,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "DER VERMOEGENSBERATER  VERLAGS-",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "Logan Williams",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "DER VERMOEGENSBERATER  VERLAGS-",
+      "direction": "out",
+      "amount": 49.61,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 750.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "25.03.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 4240.99,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "26.03.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.03.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 34.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.03.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 34.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.03.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "26.03.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 90.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "27.03.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.03.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 2.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.03.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "28.03.2025",
+      "payee": "PirateSkills",
+      "direction": "out",
+      "amount": 35.7,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.03.2025",
+      "payee": "Clients/Suppliers",
+      "direction": "out",
+      "amount": 37.39,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "B2 Mobility - ARAL Fuel Card",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 51.32,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "31.03.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2025",
+      "payee": "Microsoft",
+      "direction": "out",
+      "amount": 69.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "01.04.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 7.56,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.04.2025",
+      "payee": "Clients/Suppliers",
+      "direction": "out",
+      "amount": 42.24,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "02.04.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 8.47,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "03.04.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 1.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "04.04.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.04.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "04.04.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 420.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "07.04.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "17.01.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 4246.69,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.02.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2684.94,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "11.04.2025",
+      "payee": "EasyPark",
+      "direction": "out",
+      "amount": 3.45,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.04.2025",
+      "payee": "Handelshof",
+      "direction": "out",
+      "amount": 47.94,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "14.04.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 43.88,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.03.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2564.79,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.04.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 660.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.04.2025",
+      "payee": "Clients/Suppliers",
+      "direction": "out",
+      "amount": 35.55,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "25.04.2025",
+      "payee": "DER VERMOEGENSBERATER  VERLAGS-",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.04.2025",
+      "payee": "Stadt Koeln, Stadtkasse",
+      "direction": "out",
+      "amount": 38.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.04.2025",
+      "payee": "Logan Darrius Williams",
+      "direction": "out",
+      "amount": 750.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "25.04.2025",
+      "payee": "GEDVers",
+      "direction": "out",
+      "amount": 191.79,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "25.04.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 8.06,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "26.04.2025",
+      "payee": "Parkhaus - sonstiges",
+      "direction": "out",
+      "amount": 33.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.04.2025",
+      "payee": "Apetito Catering B.V. & Co. KG",
+      "direction": "out",
+      "amount": 15.0,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "28.04.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 1.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.04.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "28.04.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 20.17,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.04.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 1.15,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 8.06,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 12.12,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "DHL",
+      "direction": "out",
+      "amount": 12.5,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2025",
+      "payee": "UNIVERSAL Inkasso AG",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "Parkhaus - sonstiges",
+      "direction": "out",
+      "amount": 24.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 37.03,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.04.2025",
+      "payee": "B2 Mobility - ARAL Fuel Card",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.05.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 6.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.05.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 160.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.05.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "02.05.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 191.41,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.05.2025",
+      "payee": "WiseCleaner",
+      "direction": "out",
+      "amount": 21.19,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.05.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 22.62,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.05.2025",
+      "payee": "Reza Ahmadnegad",
+      "direction": "in",
+      "amount": 1500.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.05.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 1.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.05.2025",
+      "payee": "Mullvad",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.05.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.05.2025",
+      "payee": "AutoPay",
+      "direction": "out",
+      "amount": 1.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "06.05.2025",
+      "payee": "WiseCleaner",
+      "direction": "out",
+      "amount": 25.22,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.05.2025",
+      "payee": "UNIVERSAL Inkasso AG",
+      "direction": "out",
+      "amount": 390.0,
+      "eurZeile": "28",
+      "eurLabel": "28 - Ausgaben für eigenes Personal (z. B. Gehälter, Löhne und Versicherungsbeiträge)"
+    },
+    {
+      "date": "07.05.2025",
+      "payee": "Clients/Suppliers",
+      "direction": "out",
+      "amount": 14.62,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "08.05.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "12.05.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 1.68,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.05.2025",
+      "payee": "Discount Store",
+      "direction": "out",
+      "amount": 6.7,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "14.05.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 50.88,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.05.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 12.12,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.05.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 400.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "16.05.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 320.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.05.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 10.08,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.04.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2377.04,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.05.2025",
+      "payee": "Patreon",
+      "direction": "out",
+      "amount": 5.49,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "21.05.2025",
+      "payee": "Apetito Catering B.V. & Co. KG",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "23.05.2025",
+      "payee": "DER VERMOEGENSBERATER  VERLAGS-",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "27.05.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 1.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.05.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "28.05.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 45.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.05.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 45.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.05.2025",
+      "payee": "GoogleOne",
+      "direction": "out",
+      "amount": 4.89,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.05.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.55,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.05.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "29.05.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 5.04,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "29.05.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "30.05.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.05.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.05.2025",
+      "payee": "B2 Mobility - ARAL Fuel Card",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.05.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 119.18,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.05.2025",
+      "payee": "UNIVERSAL Inkasso AG",
+      "direction": "out",
+      "amount": 395.0,
+      "eurZeile": "28",
+      "eurLabel": "28 - Ausgaben für eigenes Personal (z. B. Gehälter, Löhne und Versicherungsbeiträge)"
+    },
+    {
+      "date": "31.05.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 67.23,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.06.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutsch",
+      "direction": "out",
+      "amount": 175.18,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "02.06.2025",
+      "payee": "Generali Deutschland Versicherung AG",
+      "direction": "out",
+      "amount": 228.23,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.06.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 29.85,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "04.06.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.06.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.06.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "09.06.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 1043.11,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "12.06.2025",
+      "payee": "Generali Deutschland Krankenversicherung AG",
+      "direction": "out",
+      "amount": 1043.11,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "13.06.2025",
+      "payee": "Bundeskasse DO Trier",
+      "direction": "out",
+      "amount": 72.0,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "14.06.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 8.98,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "16.06.2025",
+      "payee": "B2Mobility GmbH FuelsCard",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.06.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 37.56,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "19.05.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2911.22,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.06.2025",
+      "payee": "Reiseportale (Expedia, Booking, etc.)",
+      "direction": "out",
+      "amount": 403.28,
+      "eurZeile": "50",
+      "eurLabel": "50 - Übernachtungs- und Reisenebenkosten bei Geschäftsreisen des Steuerpflichtigen"
+    },
+    {
+      "date": "25.06.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 15.97,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "25.06.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 15.97,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "17.06.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 4063.68,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "28.06.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 45.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.06.2025",
+      "payee": "VilaVita Portugal",
+      "direction": "in",
+      "amount": 1860.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "29.06.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "30.06.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.06.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 67.23,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.07.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 1.35,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "03.07.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 22.62,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "07.07.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 29.9,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "07.07.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 8.08,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "07.07.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 1.7,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.07.2025",
+      "payee": "Reparaturland",
+      "direction": "out",
+      "amount": 109.08,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "15.07.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 4.2,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.07.2025",
+      "payee": "Stellantis&You - Opel Werkstatt",
+      "direction": "out",
+      "amount": 335.96,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.07.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 7.56,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.07.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2600.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.07.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 1.68,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "19.07.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 73.9,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "22.07.2025",
+      "payee": "ReparaturLand",
+      "direction": "out",
+      "amount": 184.79,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "23.07.2025",
+      "payee": "German Australian Business Council GABC",
+      "direction": "out",
+      "amount": 84.03,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "23.07.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 16.18,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "23.07.2025",
+      "payee": "Hauptzollamt Aachen",
+      "direction": "out",
+      "amount": 72.5,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.07.2025",
+      "payee": "—",
+      "direction": "out",
+      "amount": 183.43,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "26.07.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 73.11,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.08.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 37.46,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.08.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 5.04,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.08.2025",
+      "payee": "Handelshof",
+      "direction": "out",
+      "amount": 19.79,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "05.08.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 34.32,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "06.08.2025",
+      "payee": "Tanke - sonstige",
+      "direction": "out",
+      "amount": 71.33,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "09.08.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 44.72,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "09.08.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 14.29,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.08.2025",
+      "payee": "Tanke - sonstige",
+      "direction": "out",
+      "amount": 36.03,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.08.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 626.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.08.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 7.56,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "18.08.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2527.29,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.08.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 2.52,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "25.08.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 32.14,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "29.08.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "30.08.2025",
+      "payee": "Handelshof",
+      "direction": "out",
+      "amount": 83.11,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "31.08.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 53.23,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.08.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 53.23,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "09.09.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 17.06,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "09.09.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 19.96,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "11.09.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 45.87,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.09.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 5803.96,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "19.09.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 8.32,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "22.09.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 42.86,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "23.09.2025",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 472.62,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "25.09.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 67.23,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "26.09.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 54.72,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "26.09.2025",
+      "payee": "Parken - EasyPark",
+      "direction": "out",
+      "amount": 9.38,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.09.2025",
+      "payee": "Schreibwaren - Ortloff",
+      "direction": "out",
+      "amount": 6.38,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.65,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 0.14,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.10.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutschland",
+      "direction": "out",
+      "amount": 208.46,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "03.10.2025",
+      "payee": "Parken - AutoPay",
+      "direction": "out",
+      "amount": 5.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "06.10.2025",
+      "payee": "Kartenstudio",
+      "direction": "out",
+      "amount": 14.15,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "GEDVers",
+      "direction": "out",
+      "amount": 3.42,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "08.10.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 640.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "Tom Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "Maximilian Deinert",
+      "direction": "out",
+      "amount": 75.0,
+      "eurZeile": "46",
+      "eurLabel": "46 - Miete/Pacht für Geschäftsräume und betrieblich genutzte Grundstücke"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "GEDVers",
+      "direction": "out",
+      "amount": 77.0,
+      "eurZeile": "82",
+      "eurLabel": "82 - Steuern, Versicherungen und Maut"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutschland",
+      "direction": "out",
+      "amount": 220.36,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "Lime Ride",
+      "direction": "out",
+      "amount": 1.09,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "04.11.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.11.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "06.11.2025",
+      "payee": "Digital Express",
+      "direction": "out",
+      "amount": 38.57,
+      "eurZeile": "60",
+      "eurLabel": "60 - Werbekosten (z. B. Inserate, Werbespots, Plakate)"
+    },
+    {
+      "date": "09.11.2025",
+      "payee": "Flughafen",
+      "direction": "out",
+      "amount": 9.24,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "10.11.2025",
+      "payee": "Parken - sonstiges",
+      "direction": "out",
+      "amount": 2.35,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "11.11.2025",
+      "payee": "EasyPark",
+      "direction": "out",
+      "amount": 9.66,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.11.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.11.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 50.16,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "17.11.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 2332.12,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.11.2025",
+      "payee": "Lime Ride",
+      "direction": "out",
+      "amount": 3.63,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "21.11.2025",
+      "payee": "ChatGPT",
+      "direction": "out",
+      "amount": 18.48,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "22.11.2025",
+      "payee": "Clients/Suppliers",
+      "direction": "out",
+      "amount": 38.74,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "02.12.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 556.31,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "05.12.2025",
+      "payee": "Colleagues/Teambuilding",
+      "direction": "out",
+      "amount": 24.39,
+      "eurZeile": "68",
+      "eurLabel": "68 - Bewirtungsaufwendungen"
+    },
+    {
+      "date": "10.12.2025",
+      "payee": "Aral",
+      "direction": "out",
+      "amount": 42.02,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "10.12.2025",
+      "payee": "Auto-Waschstrasse",
+      "direction": "out",
+      "amount": 37.82,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.11.2025",
+      "payee": "Lime Ride",
+      "direction": "out",
+      "amount": 0.83,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "02.12.2025",
+      "payee": "WISO-Steuer Buhl",
+      "direction": "out",
+      "amount": 29.15,
+      "eurZeile": "52",
+      "eurLabel": "52 - Kosten für Rechts- und Steuerberatung, Buchführung,"
+    },
+    {
+      "date": "25.11.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "25.11.2025",
+      "payee": "Walaaxy",
+      "direction": "out",
+      "amount": 576.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.11.2025",
+      "payee": "Startplatz",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "51",
+      "eurLabel": "51 - Fortbildungskosten (ohne Reisekosten)"
+    },
+    {
+      "date": "25.11.2025",
+      "payee": "Lime Ride",
+      "direction": "out",
+      "amount": 2.72,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.11.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.12.2025",
+      "payee": "Canva",
+      "direction": "out",
+      "amount": 10.23,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "19.11.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 0.68,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "11.11.2025",
+      "payee": "Parken - EasyPark",
+      "direction": "out",
+      "amount": 9.66,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.11.2025",
+      "payee": "sipgate GmbH",
+      "direction": "out",
+      "amount": 80.0,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "04.11.2025",
+      "payee": "Apple",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 1.36,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.11.2025",
+      "payee": "Stellantis Bank SA Niederlassung Deutschland",
+      "direction": "out",
+      "amount": 220.36,
+      "eurZeile": "81",
+      "eurLabel": "81 - Leasingkosten"
+    },
+    {
+      "date": "28.11.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 0.68,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "10.10.2025",
+      "payee": "NameCheap",
+      "direction": "out",
+      "amount": 18.68,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.10.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 4339.14,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "17.10.2025",
+      "payee": "DVAG-Einbehaltsauszahlung",
+      "direction": "in",
+      "amount": 5.76,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "20.10.2025",
+      "payee": "Startplatz",
+      "direction": "out",
+      "amount": 71.4,
+      "eurZeile": "51",
+      "eurLabel": "51 - Fortbildungskosten (ohne Reisekosten)"
+    },
+    {
+      "date": "23.10.2025",
+      "payee": "Lime Ride",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.10.2025",
+      "payee": "DerVermögensberaterVerlag",
+      "direction": "out",
+      "amount": 26.92,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "25.10.2025",
+      "payee": "Discount Store",
+      "direction": "out",
+      "amount": 4.66,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "27.10.2025",
+      "payee": "SHRS - Fortbildung",
+      "direction": "out",
+      "amount": 630.25,
+      "eurZeile": "51",
+      "eurLabel": "51 - Fortbildungskosten (ohne Reisekosten)"
+    },
+    {
+      "date": "28.10.2025",
+      "payee": "Vodafone West GmbH",
+      "direction": "out",
+      "amount": 35.58,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "29.10.2025",
+      "payee": "ZohoOne",
+      "direction": "out",
+      "amount": 53.33,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.10.2025",
+      "payee": "YouTube",
+      "direction": "out",
+      "amount": 12.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.10.2025",
+      "payee": "ZohoSites",
+      "direction": "out",
+      "amount": 9.52,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.10.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 43.59,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "31.10.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 11.71,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "14.10.2025",
+      "payee": "B2Mobility - ARAL FuelsCard",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "30.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 13.47,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.09.2025",
+      "payee": "DeutscheBank Fees",
+      "direction": "out",
+      "amount": 0.68,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "13.10.2025",
+      "payee": "T&T Technology & Trading Solution",
+      "direction": "in",
+      "amount": 640.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.10.2025",
+      "payee": "DVAG-Provisionsauszahlung",
+      "direction": "in",
+      "amount": 3993.99,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "27.09.2025",
+      "payee": "Schreibwaren - Ortloff",
+      "direction": "out",
+      "amount": 6.38,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    },
+    {
+      "date": "29.09.2025",
+      "payee": "Deutsche Post AG",
+      "direction": "out",
+      "amount": 6.3,
+      "eurZeile": "57",
+      "eurLabel": "57 - Arbeitsmittel (z. B. Bürobedarf, Porto, Fachliteratur)"
+    }
+  ]
+}

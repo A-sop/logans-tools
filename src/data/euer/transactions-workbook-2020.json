@@ -1,0 +1,1887 @@
+{
+  "year": 2020,
+  "exported": "2026-05-26",
+  "source": "C:\\DATA\\20_ADMIN\\!!_TAX-ADMIN\\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx",
+  "rows": [
+    {
+      "date": "01.01.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.01.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.01.2020",
+      "payee": "KFW | KfW split in Zoho: €170.09 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.81 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 227.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.01.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "02.01.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.01.2020",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.01.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.01.2020",
+      "payee": "BM Koeln/Zollstock",
+      "direction": "out",
+      "amount": 57.77,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.01.2020",
+      "payee": "LIM*RIDE COST",
+      "direction": "out",
+      "amount": 2.6,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "06.01.2020",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 7.25,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "08.01.2020",
+      "payee": "Audible Gmbh*2M1AJ9565",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "08.01.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "08.01.2020",
+      "payee": "Intellispine am Neumar",
+      "direction": "out",
+      "amount": 214.2,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "10.01.2020",
+      "payee": "LIM*RIDE COST",
+      "direction": "out",
+      "amount": 1.81,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "14.01.2020",
+      "payee": "Income",
+      "direction": "in",
+      "amount": 0.64,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.01.2020",
+      "payee": "SumUp *MDS Gastro Gmb | Enriched from N26 export. Restaurant",
+      "direction": "out",
+      "amount": 27.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "21.01.2020",
+      "payee": "49001187METRO KOELN",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "21.01.2020",
+      "payee": "KOELN OPERNPASSAGE 115",
+      "direction": "out",
+      "amount": 6.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.01.2020",
+      "payee": "Penny Kwartier Lataeng",
+      "direction": "out",
+      "amount": 2.99,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.01.2020",
+      "payee": "CANVA* 02582-1878040",
+      "direction": "out",
+      "amount": 11.75,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "28.01.2020",
+      "payee": "LIM*RIDE COST",
+      "direction": "out",
+      "amount": 3.02,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.01.2020",
+      "payee": "LIM*RIDE COST",
+      "direction": "out",
+      "amount": 2.81,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.01.2020",
+      "payee": "Parkhaus Carlsplatz",
+      "direction": "out",
+      "amount": 2.5,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.01.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1731.36,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.02.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.02.2020",
+      "payee": "Foncia Immonova Immobilienverwaltungsgesellschaft mbH",
+      "direction": "out",
+      "amount": 430.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.02.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.02.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.02.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "04.02.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.02.2020",
+      "payee": "KFW | KfW split in Zoho: €170.52 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.38 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 227.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.02.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "ALDI SUED SAGT DANKE",
+      "direction": "out",
+      "amount": 4.66,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "AQUALAND KOELN",
+      "direction": "out",
+      "amount": 29.8,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "Oldschool",
+      "direction": "out",
+      "amount": 35.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.02.2020",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 41.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "14.02.2020",
+      "payee": "EasyPark",
+      "direction": "out",
+      "amount": 1.49,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "18.02.2020",
+      "payee": "Income",
+      "direction": "in",
+      "amount": 1.14,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.02.2020",
+      "payee": "LIM*RIDE COST",
+      "direction": "out",
+      "amount": 2.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.02.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1731.36,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.03.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.03.2020",
+      "payee": "Foncia Immonova Immobilienverwaltungsgesellschaft mbH",
+      "direction": "out",
+      "amount": 430.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.03.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.03.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.03.2020",
+      "payee": "KFW | KfW split in Zoho: €170.95 → Private Verbindlichkeiten – KfW Studienkredit (1895); €56.95 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 227.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.03.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 81.5,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 3.49,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "",
+      "payee": "—",
+      "direction": "out",
+      "amount": 1.09,
+      "eurZeile": "",
+      "eurLabel": ""
+    },
+    {
+      "date": "03.03.2020",
+      "payee": "CANVA* 02613-0979719",
+      "direction": "out",
+      "amount": 11.82,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2020",
+      "payee": "DM-Drogerie Markt",
+      "direction": "out",
+      "amount": 28.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2020",
+      "payee": "INGDIBA ATM",
+      "direction": "out",
+      "amount": 160.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2020",
+      "payee": "Oldschool",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.03.2020",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 41.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.03.2020",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.03.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "11.03.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 2.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "14.03.2020",
+      "payee": "Audible Gmbh*NT0XX2QB5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "17.03.2020",
+      "payee": "Income",
+      "direction": "in",
+      "amount": 1.23,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.03.2020",
+      "payee": "ARAL STATION 201728102",
+      "direction": "out",
+      "amount": 3.4,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.03.2020",
+      "payee": "BFT NEUNKIRCHEN",
+      "direction": "out",
+      "amount": 1.67,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.03.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "28.03.2020",
+      "payee": "CANVA* 02642-0867967",
+      "direction": "out",
+      "amount": 11.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.03.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1731.36,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Abschluss: Abrechnung 31.03.2020      siehe AnlageAbrechnung 31.03.2020Information zur AbrechnungKontostand am 31.03.2020                                          486,17 -Abrechnungszeitraum vom 01.01.2020 bis 31.03.2020Zinsen f¿¿r einger¿¿umte Konto¿¿berziehung                              2,22- 7,3400 v.H. Kred-Zins  bis 30.03.2020Abrechnung 31.03.2020                                                2,22-Sollzinss¿¿tze am 30.03.2020 7,3400 v.H. f¿¿r einger¿¿umte Konto¿¿berziehung(aktuell einger¿¿umte Konto¿¿berziehung       1.900,00) 7,3400 v.H. f¿¿r geduldete Konto¿¿berziehung¿¿ber die einger¿¿umte Konto¿¿berziehung hinausEs handelt sich hierbei um eine umsatzsteuerfreie Leistung.Kontostand/Rechnungsabschluss am 31.03.2020                       488,39 -Rechnungsnummer: 20200331-BY111-00078500345",
+      "direction": "out",
+      "amount": 2.22,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Foncia Immonova Immobilienverwaltungsgesellschaft mbH",
+      "direction": "out",
+      "amount": 430.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "KFW | KfW split in Zoho: €171.38 → Private Verbindlichkeiten – KfW Studienkredit (1895); €56.52 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 227.9,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Trading212UK",
+      "direction": "out",
+      "amount": 25.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "01.04.2020",
+      "payee": "ZOHO-ONE",
+      "direction": "out",
+      "amount": 41.65,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.04.2020",
+      "payee": "APPLE.COM/BILL",
+      "direction": "out",
+      "amount": 0.99,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.04.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.04.2020",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 101.37,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "03.04.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "06.04.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "07.04.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "17.04.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "29.04.2020",
+      "payee": "Audible Gmbh*TS85432M5",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "29.04.2020",
+      "payee": "Kreissparkasse Koeln",
+      "direction": "out",
+      "amount": 150.0,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "30.04.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1365.39,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.04.2020",
+      "payee": "Income",
+      "direction": "in",
+      "amount": 0.63,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.05.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.05.2020",
+      "payee": "Foncia Immonova Immobilienverwaltungsgesellschaft mbH",
+      "direction": "out",
+      "amount": 430.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.05.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.05.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "04.05.2020",
+      "payee": "KFW | KfW split in Zoho: €52.06 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.94 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "04.05.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "04.05.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "04.05.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "FONCIA IMMONOVA GMBH",
+      "direction": "out",
+      "amount": 88.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "FONCIA IMMONOVA GMBH",
+      "direction": "out",
+      "amount": 70.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "FONCIA IMMONOVA GMBH",
+      "direction": "out",
+      "amount": 22.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "HANSEATISCHE INKASSO-TREUHAND GMBH",
+      "direction": "out",
+      "amount": 39.7,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "05.05.2020",
+      "payee": "HEILPRAXIS HARTMUT LOHMANN",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "07.05.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "12.05.2020",
+      "payee": "HIPAY",
+      "direction": "out",
+      "amount": 9.39,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.05.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.32,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "29.05.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1633.64,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "KFW | KfW split in Zoho: €52.20 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.80 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.06.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.06.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.06.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "03.06.2020",
+      "payee": "BUHL-DATA-SERVICE GMBH",
+      "direction": "out",
+      "amount": 29.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.06.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "17.06.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.29,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "29.06.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 2246.71,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Abschluss: Abrechnung 30.06.2020      siehe AnlageAbrechnung 30.06.2020Information zur AbrechnungKontostand am 30.06.2020                                        1.750,93 -Abrechnungszeitraum vom 01.04.2020 bis 30.06.2020Zinsen für eingeräumte Kontoüberziehung                             21,69- 7,3400 v.H. Kred-Zins  bis 30.06.2020Abrechnung 30.06.2020                                               21,69-Sollzinssätze am 30.06.2020 7,3400 v.H. für eingeräumte Kontoüberziehung(aktuell eingeräumte Kontoüberziehung       1.900,00) 7,3400 v.H. für geduldete Kontoüberziehungüber die eingeräumte Kontoüberziehung hinausEs handelt sich hierbei um eine umsatzsteuerfreie Leistung.Kontostand/Rechnungsabschluss am 30.06.2020                     1.772,62 -Rechnungsnummer: 20200630-BY111-00085150446",
+      "direction": "out",
+      "amount": 21.69,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 10.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "KFW | KfW split in Zoho: €52.33 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.67 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.07.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.07.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "03.07.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "03.07.2020",
+      "payee": "FONCIA IMMONOVA Immobilien- verwaltungsgesellschaft mb",
+      "direction": "in",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "06.07.2020",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 118.49,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "17.07.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.3,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.07.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1676.43,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.08.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "03.08.2020",
+      "payee": "KFW | KfW split in Zoho: €52.47 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.53 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "03.08.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "03.08.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "04.08.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.08.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "05.08.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "09.08.2020",
+      "payee": "Thomas Langthaler | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 20.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "17.08.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.09,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "18.08.2020",
+      "payee": "ZAHNARZT AM RUDOLFPLATZ",
+      "direction": "out",
+      "amount": 94.12,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "24.08.2020",
+      "payee": "PHILIP MENKE",
+      "direction": "out",
+      "amount": 100.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "27.08.2020",
+      "payee": "mobilcom-debitel | No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 4.18,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "28.08.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1523.53,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.01,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "KFW | KfW split in Zoho: €52.61 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.39 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.09.2020",
+      "payee": "WERTGARANTIE AG",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.09.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.09.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "07.09.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "09.09.2020",
+      "payee": "Universitat zu Koln | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 12.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "14.09.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.09.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.66,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.09.2020",
+      "payee": "N26 Bank",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "29.09.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1507.92,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Abschluss: Abrechnung 30.09.2020      siehe AnlageAbrechnung 30.09.2020Information zur AbrechnungKontostand am 30.09.2020                                        1.658,24 -Abrechnungszeitraum vom 01.07.2020 bis 30.09.2020Zinsen für eingeräumte Kontoüberziehung                             23,01- 7,3400 v.H. Kred-Zins  bis 30.09.2020Abrechnung 30.09.2020                                               23,01-Sollzinssätze am 30.09.2020 7,3400 v.H. für eingeräumte Kontoüberziehung(aktuell eingeräumte Kontoüberziehung       1.900,00) 7,3400 v.H. für geduldete Kontoüberziehungüber die eingeräumte Kontoüberziehung hinausEs handelt sich hierbei um eine umsatzsteuerfreie Leistung.Kontostand/Rechnungsabschluss am 30.09.2020                     1.681,25 -Rechnungsnummer: 20200930-BY111-00089444123",
+      "direction": "out",
+      "amount": 23.01,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "DKV KRANKENVERS. AG",
+      "direction": "out",
+      "amount": 9.9,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "KFW | KfW split in Zoho: €52.74 → Private Verbindlichkeiten – KfW Studienkredit (1895); €57.26 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "N26",
+      "direction": "out",
+      "amount": 115.9,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.10.2020",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.10.2020",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.10.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.10.2020",
+      "payee": "Deutsche Bahn Connect GmbH",
+      "direction": "out",
+      "amount": 3.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "16.10.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 0.34,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "29.10.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 1829.85,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.10.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 452.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.11.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "02.11.2020",
+      "payee": "HDI Global SE | Enriched from N26 export. Insurance premium – confirm business vs private",
+      "direction": "out",
+      "amount": 59.39,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.11.2020",
+      "payee": "KFW | KfW split in Zoho: €56.35 → Private Verbindlichkeiten – KfW Studienkredit (1895); €53.65 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "02.11.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "02.11.2020",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "03.11.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "06.11.2020",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "12.11.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "14.11.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 700.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.11.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 4.02,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.11.2020",
+      "payee": "DR - WALTER Versicherungsmakler GmbH",
+      "direction": "in",
+      "amount": 7009.67,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Audible GmbH",
+      "direction": "out",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "FONCIA IMMONOVA GmbH",
+      "direction": "out",
+      "amount": 476.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 60.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "KFW | KfW split in Zoho: €56.49 → Private Verbindlichkeiten – KfW Studienkredit (1895); €53.51 → Private Sonderausgaben - ESt-relevante Zinsen (1820) | Enriched from N26 export. Split TILG→1895 ZINS→1820 – see Split Hint column",
+      "direction": "out",
+      "amount": 110.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Logan Williams | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 50.0,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Logan Williams",
+      "direction": "in",
+      "amount": 50.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Thomas Geyer",
+      "direction": "out",
+      "amount": 40.0,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "Unitymedia NRW GmbH",
+      "direction": "out",
+      "amount": 42.73,
+      "eurZeile": "49",
+      "eurLabel": "49 - Aufwendungen für Telekommunikation (z. B. Telefon, Internet)"
+    },
+    {
+      "date": "01.12.2020",
+      "payee": "WERTGARANTIE SE",
+      "direction": "out",
+      "amount": 8.0,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.12.2020",
+      "payee": "ADVOCARD Rechtsschutzversicherung AG",
+      "direction": "out",
+      "amount": 26.42,
+      "eurZeile": "55",
+      "eurLabel": "55 - Beiträge, Gebühren, Abgaben und Versicherungen (ohne solche für Gebäude und Kraftfahrzeuge)"
+    },
+    {
+      "date": "02.12.2020",
+      "payee": "AUDIBLE GMBH",
+      "direction": "in",
+      "amount": 9.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "02.12.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 65.15,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "03.12.2020",
+      "payee": "BUHL-DATA-SERVICE GMBH",
+      "direction": "out",
+      "amount": 29.95,
+      "eurZeile": "56",
+      "eurLabel": "56 - Laufende EDV-Kosten (z. B. Beratung, Wartung, Reparatur)"
+    },
+    {
+      "date": "04.12.2020",
+      "payee": "Foncia Immonova GmbH",
+      "direction": "out",
+      "amount": 287.7,
+      "eurZeile": "83",
+      "eurLabel": "83 - Sonstige tatsächliche Fahrtkosten ohne AfA und Zinsen (z. B. Reparaturen, Wartungen, Treibstoff, Kosten für Flugstrecken, Kosten für öffentliche Verkehrsmittel)"
+    },
+    {
+      "date": "15.12.2020",
+      "payee": "Credit Transfer",
+      "direction": "in",
+      "amount": 1.15,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "15.12.2020",
+      "payee": "Deutsche Versicherungsakademie (DVA) GmbH | Enriched from N26 export. No rule matched – categorize manually",
+      "direction": "out",
+      "amount": 117.81,
+      "eurZeile": "66",
+      "eurLabel": "66 - Übrige unbeschränkt abziehbare Betriebsausgaben"
+    },
+    {
+      "date": "19.12.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.08,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "22.12.2020",
+      "payee": "Allfinanz Aktiengesellschaft DVAG",
+      "direction": "in",
+      "amount": 500.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.12.2020",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 1300.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.12.2020",
+      "payee": "Main Account",
+      "direction": "in",
+      "amount": 270.0,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "24.12.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 0.2,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    },
+    {
+      "date": "30.12.2020",
+      "payee": "Abschluss: Abrechnung 30.12.2020      siehe AnlageAbrechnung 30.12.2020Information zur AbrechnungKontostand am 30.12.2020                                        1.881,34 -Abrechnungszeitraum vom 01.10.2020 bis 31.12.2020Zinsen für eingeräumte Kontoüberziehung                             31,43- 7,2500 v.H. Kred-Zins  bis 30.12.2020Abrechnung 31.12.2020                                               31,43-Sollzinssätze am 30.12.2020 7,2500 v.H. für eingeräumte Kontoüberziehung(aktuell eingeräumte Kontoüberziehung       1.900,00) 7,2500 v.H. für geduldete Kontoüberziehungüber die eingeräumte Kontoüberziehung hinausEs handelt sich hierbei um eine umsatzsteuerfreie Leistung.Kontostand/Rechnungsabschluss am 30.12.2020                     1.912,77 -Rechnungsnummer: 20201230-BY111-00094739301",
+      "direction": "out",
+      "amount": 31.43,
+      "eurZeile": "62",
+      "eurLabel": "62 - Übrige Schuldzinsen"
+    },
+    {
+      "date": "31.12.2020",
+      "payee": "Presentment Refund",
+      "direction": "in",
+      "amount": 4.26,
+      "eurZeile": "11",
+      "eurLabel": "11 - Betriebseinnahmen als umsatzsteuerlicher Kleinunternehmer (nach § 19 Abs. 1 UStG)"
+    }
+  ]
+}

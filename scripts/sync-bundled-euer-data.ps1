@@ -33,4 +33,16 @@ Path(r'$dest').joinpath('eur-zeile-labels.json').write_text(json.dumps(labels, e
 print('eur-zeile-labels.json', len(labels), 'zeilen')
 "@
 
+$exportPy = Join-Path $PSScriptRoot 'export-workbook-transactions.py'
+if (Test-Path $exportPy) {
+  python $exportPy --master (Join-Path $srcRoot '!!_TAX-ADMIN\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx') --dest $dest
+}
+
+$zohoBooks = Join-Path $srcRoot '!!_ZOHO-BOOKS'
+foreach ($y in 2020..2026) {
+  python (Join-Path $zohoBooks 'scripts\euer_workbook.py') summarize --year $y 2>$null
+}
+Get-ChildItem (Join-Path $zohoBooks 'logs\zoho-working\euer-summary-*.csv') -ErrorAction SilentlyContinue |
+  Copy-Item -Destination $dest -Force
+
 Write-Host "Bundled EÜR data in $dest"

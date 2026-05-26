@@ -223,9 +223,10 @@ function eurLabelForZeile(zeile: string): string {
 }
 
 function transactionNeedsReview(row: TransactionRow): boolean {
+  const fromWorkbook = row.confidence === 'workbook';
   if (row.hat === 'review' || row.hat === 'liability_split') return true;
-  if (!row.skr03 || !row.eurZeile) return true;
-  if (!row.suggestedAccount) return true;
+  if (!row.eurZeile) return true;
+  if (!fromWorkbook && (!row.skr03 || !row.suggestedAccount)) return true;
   if (row.confidence === 'low') return true;
   if (row.eurZeile === DEFAULT_REVIEW_ZEILE && row.hat !== 'income') return true;
   return false;
@@ -243,6 +244,77 @@ function dedupeKey(
 
 function bundledSummaryPath(year: number): string {
   return path.join(BUNDLED_DIR, `euer-summary-${year}.csv`);
+}
+
+type WorkbookExportRow = {
+  date: string;
+  payee: string;
+  direction: 'in' | 'out';
+  amount: number;
+  eurZeile: string;
+  eurLabel: string;
+};
+
+function masterWorkbookPath(): string {
+  return path.join(dataRoot(), '!!_TAX-ADMIN', '250111_LDW_EÜR-seit2020-m-Vorlage.xlsx');
+}
+
+function workbookTransactionsPaths(year: number): string[] {
+  return [
+    path.join(zohoBooksDir(), 'logs', 'zoho-working', `transactions-workbook-${year}.json`),
+    path.join(BUNDLED_DIR, `transactions-workbook-${year}.json`),
+  ];
+}
+
+function loadWorkbookTransactions(year: number): TransactionRow[] {
+  const jsonPath = workbookTransactionsPaths(year).find((p) => fs.existsSync(p));
+  if (!jsonPath) return [];
+
+  const payload = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as {
+    rows?: WorkbookExportRow[];
+  };
+  const source = path.basename(jsonPath);
+  const rows: TransactionRow[] = [];
+
+  for (const row of payload.rows ?? []) {
+    if (!row.date?.includes(String(year))) continue;
+    const withdrawals = row.direction === 'out' ? row.amount : 0;
+    const deposits = row.direction === 'in' ? row.amount : 0;
+    const hat = row.direction === 'in' ? 'income' : 'business';
+    const account = '';
+    const skr03 = resolveSkr03({}, account);
+    const eurZeile = row.eurZeile || zeileFromLabel(row.eurLabel);
+    const eurLabel = row.eurLabel || eurLabelForZeile(eurZeile);
+
+    const tx: TransactionRow = {
+      id: dedupeKey(row.date, withdrawals, deposits, row.payee, 'EÜR workbook'),
+      date: row.date,
+      payee: row.payee,
+      direction: row.direction,
+      amount: row.amount,
+      hat,
+      suggestedAccount: account,
+      skr03,
+      eurZeile,
+      eurLabel,
+      confidence: 'workbook',
+      bank: 'EÜR workbook',
+      source,
+      needsReview: false,
+    };
+    tx.needsReview = transactionNeedsReview(tx);
+    rows.push(tx);
+  }
+
+  return rows;
+}
+
+function zeileFromLabel(label: string): string {
+  const text = (label || '').trim();
+  if (!text) return '';
+  const head = text.includes(' - ') ? text.split(' - ', 1)[0].trim() : text;
+  const m = head.match(/^(\d{1,3})/);
+  return m ? m[1] : '';
 }
 
 function loadSuggestionFiles(year: number): string[] {
@@ -318,8 +390,10 @@ export function getAvailableYears(): number[] {
     for (const name of fs.readdirSync(BUNDLED_DIR)) {
       const m1 = name.match(/^euer-summary-(\d{4})\.csv$/);
       const m2 = name.match(/^suggestions-(\d{4})-/);
+      const m3 = name.match(/^transactions-workbook-(\d{4})\.json$/);
       if (m1) years.add(Number(m1[1]));
       if (m2) years.add(Number(m2[1]));
+      if (m3) years.add(Number(m3[1]));
     }
   }
   const root = dataRoot();
@@ -363,6 +437,12 @@ export function getTransactionRows(year: number): TransactionRow[] {
   const seen = new Set<string>();
   const rows: TransactionRow[] = [];
 
+  const addRow = (tx: TransactionRow | null) => {
+    if (!tx || seen.has(tx.id)) return;
+    seen.add(tx.id);
+    rows.push(tx);
+  };
+
   for (const filePath of loadSuggestionFiles(year)) {
     const content = fs.readFileSync(filePath, 'utf-8');
     const parsed = parseSemicolonCsv(content);
@@ -376,11 +456,12 @@ export function getTransactionRows(year: number): TransactionRow[] {
       if (!row.Date?.includes(String(year))) continue;
       const withdrawals = parseGermanAmount(row.Withdrawals || '0');
       const deposits = parseGermanAmount(row.Deposits || '0');
-      const mapped = mapSuggestionToTransaction(row, bank, source, withdrawals, deposits);
-      if (!mapped || seen.has(mapped.id)) continue;
-      seen.add(mapped.id);
-      rows.push(mapped);
+      addRow(mapSuggestionToTransaction(row, bank, source, withdrawals, deposits));
     }
+  }
+
+  for (const tx of loadWorkbookTransactions(year)) {
+    addRow(tx);
   }
 
   return rows.sort((a, b) => a.date.localeCompare(b.date));
@@ -425,7 +506,7 @@ export function getPaths() {
   return {
     dataRoot: root,
     dataSource: onVercel || !fs.existsSync(root) ? 'bundled' : 'local',
-    masterWorkbook: path.join(root, '!!_TAX-ADMIN', '250111_LDW_EÜR-seit2020-m-Vorlage.xlsx'),
+    masterWorkbook: masterWorkbookPath(),
     zohoBooks: zohoBooksDir(),
     accountMap: path.join(zohoBooksDir(), 'zoho-account-eur-map.csv'),
     chartOfAccounts: path.join(zohoBooksDir(), 'Chart_of_Accounts.csv'),
