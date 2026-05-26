@@ -19,9 +19,21 @@
 Bundled under `src/data/euer/`:
 
 - `euer-summary-2020.csv` … `euer-summary-2024.csv`
-- `inbox-ledger-2024.csv` (sample inbox/ledger for 2024 on serverless)
+- `suggestions-YYYY-*.csv` — booking-suggestions per bank (merged + deduped in UI)
+- `account-eur-map.csv`, `eur-zeile-labels.json` — EÜR Zeile + labels (no API)
+
+Refresh bundle from PC:
+
+```powershell
+cd C:\Dev\logans-tools
+.\scripts\sync-bundled-euer-data.ps1
+git add src/data/euer && git commit -m "chore(euer): refresh bundled tax data" && git push
+vercel deploy --prod
+```
 
 Local dev with full `C:\DATA\20_ADMIN`: set `LDW_DATA_ROOT` in `.env.local`.
+
+**Transactions UI:** `/euer/ledger` — In/Out, SKR03, EÜR Zeile; excludes `transfer` / `private`. Inbox = lines needing review.
 
 ## Scripts (PC)
 

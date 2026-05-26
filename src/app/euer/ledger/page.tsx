@@ -46,7 +46,11 @@ export default async function EuerLedgerPage({ searchParams }: PageProps) {
         </CardHeader>
         <CardContent className="overflow-x-auto">
           {rows.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No transactions for {year}.</p>
+            <p className="text-sm text-muted-foreground">
+              No transactions for {year}. Run booking suggestions on your PC (
+              <code>run_ldw_booking_year.ps1</code>), then{' '}
+              <code>sync-bundled-euer-data.ps1</code> and push.
+            </p>
           ) : (
             <TransactionsTable rows={rows} />
           )}
