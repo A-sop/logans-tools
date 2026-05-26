@@ -38,6 +38,11 @@ if (Test-Path $exportPy) {
   python $exportPy --master (Join-Path $srcRoot '!!_TAX-ADMIN\250111_LDW_EÜR-seit2020-m-Vorlage.xlsx') --dest $dest
 }
 
+$zohoExportPy = Join-Path $PSScriptRoot 'export-zoho-preview-transactions.py'
+if (Test-Path $zohoExportPy) {
+  python $zohoExportPy --zoho-root (Join-Path $srcRoot '!!_ZOHO-BOOKS') --dest $dest
+}
+
 $zohoBooks = Join-Path $srcRoot '!!_ZOHO-BOOKS'
 foreach ($y in 2020..2026) {
   python (Join-Path $zohoBooks 'scripts\euer_workbook.py') summarize --year $y 2>$null

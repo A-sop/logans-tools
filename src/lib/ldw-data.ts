@@ -312,9 +312,68 @@ function loadWorkbookTransactions(year: number): TransactionRow[] {
 function zeileFromLabel(label: string): string {
   const text = (label || '').trim();
   if (!text) return '';
-  const head = text.includes(' - ') ? text.split(' - ', 1)[0].trim() : text;
+  const head = text.includes(' - ') ? text.split(' - ')[0].trim() : text;
   const m = head.match(/^(\d{1,3})/);
   return m ? m[1] : '';
+}
+
+type ZohoExportRow = {
+  date: string;
+  payee: string;
+  direction: 'in' | 'out';
+  amount: number;
+  hat: string;
+  suggestedAccount: string;
+  skr03: string;
+  bank: string;
+  source: string;
+};
+
+function zohoTransactionsPaths(year: number): string[] {
+  return [
+    path.join(zohoBooksDir(), 'logs', 'zoho-working', `transactions-zoho-${year}.json`),
+    path.join(BUNDLED_DIR, `transactions-zoho-${year}.json`),
+  ];
+}
+
+function loadZohoExportTransactions(year: number): TransactionRow[] {
+  const jsonPath = zohoTransactionsPaths(year).find((p) => fs.existsSync(p));
+  if (!jsonPath) return [];
+
+  const payload = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as { rows?: ZohoExportRow[] };
+  const fileSource = path.basename(jsonPath);
+  const rows: TransactionRow[] = [];
+
+  for (const row of payload.rows ?? []) {
+    if (SKIP_HATS.has(row.hat)) continue;
+    const withdrawals = row.direction === 'out' ? row.amount : 0;
+    const deposits = row.direction === 'in' ? row.amount : 0;
+    const account = row.suggestedAccount || '';
+    const skr03 = row.skr03 || resolveSkr03({}, account);
+    const eurZeile = resolveEurZeile(account, row.hat);
+    const eurLabel = eurLabelForZeile(eurZeile);
+
+    const tx: TransactionRow = {
+      id: dedupeKey(row.date, withdrawals, deposits, row.payee, row.bank),
+      date: row.date,
+      payee: row.payee,
+      direction: row.direction,
+      amount: row.amount,
+      hat: row.hat,
+      suggestedAccount: account,
+      skr03,
+      eurZeile,
+      eurLabel,
+      confidence: 'zoho-export',
+      bank: row.bank,
+      source: row.source || fileSource,
+      needsReview: false,
+    };
+    tx.needsReview = transactionNeedsReview(tx);
+    rows.push(tx);
+  }
+
+  return rows;
 }
 
 function loadSuggestionFiles(year: number): string[] {
@@ -391,9 +450,11 @@ export function getAvailableYears(): number[] {
       const m1 = name.match(/^euer-summary-(\d{4})\.csv$/);
       const m2 = name.match(/^suggestions-(\d{4})-/);
       const m3 = name.match(/^transactions-workbook-(\d{4})\.json$/);
+      const m4 = name.match(/^transactions-zoho-(\d{4})\.json$/);
       if (m1) years.add(Number(m1[1]));
       if (m2) years.add(Number(m2[1]));
       if (m3) years.add(Number(m3[1]));
+      if (m4) years.add(Number(m4[1]));
     }
   }
   const root = dataRoot();
@@ -458,6 +519,10 @@ export function getTransactionRows(year: number): TransactionRow[] {
       const deposits = parseGermanAmount(row.Deposits || '0');
       addRow(mapSuggestionToTransaction(row, bank, source, withdrawals, deposits));
     }
+  }
+
+  for (const tx of loadZohoExportTransactions(year)) {
+    addRow(tx);
   }
 
   for (const tx of loadWorkbookTransactions(year)) {
