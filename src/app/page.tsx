@@ -33,6 +33,10 @@ export default async function Home() {
     redirect('/gabc-access?next=/gabc');
   }
 
+  if (host.startsWith('expat.')) {
+    redirect('/expat');
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:py-20">
       <section className="space-y-4">
@@ -76,6 +80,22 @@ export default async function Home() {
         <p className="text-muted-foreground">
           Practical guides and workflows you can use directly.
         </p>
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
+          <h3 className="text-sm font-medium text-foreground">
+            Expat funnel — STARTPLATZ hackathon (WIP)
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            German-AI-der build log: sprint plan, locked decisions, report mock. Live at{' '}
+            <span className="font-medium text-foreground">expat.logans.tools</span>.
+          </p>
+          <Link
+            href="/expat"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            Open hackathon plan
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
         <div className="rounded-lg border border-border p-4">
           <h3 className="text-sm font-medium text-foreground">
             Android phone backup (USB + LAN)

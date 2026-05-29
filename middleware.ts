@@ -15,6 +15,14 @@ function isGabcPreviewHost(host: string | null | undefined) {
   return host.toLowerCase().startsWith('gabc.');
 }
 
+const MARKETING_LAYOUT_HEADER = 'x-marketing-layout';
+
+function isExpatHost(host: string | null | undefined) {
+  if (!host) return false;
+  const h = host.toLowerCase();
+  return h.startsWith('expat.') || h === 'expat.logans.tools';
+}
+
 export function middleware(request: NextRequest) {
   // Lightweight preview gate for board-approval deployments.
   // Enabled on host `gabc.*` or when explicitly enabled for local testing.
@@ -29,9 +37,21 @@ export function middleware(request: NextRequest) {
     process.env.GABC_PREVIEW_GATE_ENABLED === 'true' ||
     isGabcPreviewHost(host) ||
     hostname.toLowerCase() === 'gabc.logans.tools';
-  if (previewGateEnabled) {
-    const { pathname, search } = request.nextUrl;
 
+  const { pathname, search } = request.nextUrl;
+  const isExpatSubdomain = isExpatHost(host) || hostname.toLowerCase() === 'expat.logans.tools';
+  const isMarketingPath = pathname === '/expat' || pathname.startsWith('/expat/');
+
+  if (isExpatSubdomain && pathname === '/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/expat';
+    url.search = search ?? '';
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(MARKETING_LAYOUT_HEADER, '1');
+    return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+  }
+
+  if (previewGateEnabled) {
     const isAccessPage = pathname === ACCESS_PATH;
     const isAllowedPublicAsset =
       pathname.startsWith('/_next/') ||
@@ -72,6 +92,9 @@ export function middleware(request: NextRequest) {
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(MIDDLEWARE_LOCALE_HEADER, chosen);
+  if (isMarketingPath || isExpatSubdomain) {
+    requestHeaders.set(MARKETING_LAYOUT_HEADER, '1');
+  }
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set('x-gabc-debug-host', debugHost);
