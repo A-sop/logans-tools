@@ -15,6 +15,7 @@ import {
   RATES_2026,
   SPRINT_BLOCKS,
   TECH_STACK,
+  type SprintStatus,
   type TechStackStatus,
 } from '@/data/expat-hackathon-plan';
 
@@ -40,6 +41,12 @@ function stackStatusClass(status: TechStackStatus) {
   if (status === 'live') return 'bg-emerald-100 text-emerald-800';
   if (status === 'fallback') return 'bg-muted text-muted-foreground';
   return 'bg-amber-100 text-amber-800';
+}
+
+function sprintStatusClass(status: SprintStatus) {
+  if (status === 'done') return 'bg-emerald-100 text-emerald-800';
+  if (status === 'in_progress') return 'bg-primary/10 text-primary';
+  return 'bg-muted text-muted-foreground';
 }
 
 function NavLink({ href, children }: { href: string; children: ReactNode }) {
@@ -70,8 +77,8 @@ function ReportMockCard() {
             Full itemised manual — personal walkthrough on call only
           </p>
         </div>
-        <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
-          WIP
+        <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+          Live teaser
         </span>
       </div>
 
@@ -132,8 +139,8 @@ export function ExpatPlanPage() {
             <NavLink href="#stack">Stack</NavLink>
             <NavLink href="#decisions">Decisions</NavLink>
           </nav>
-          <span className="shrink-0 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary">
-            Hackathon WIP
+          <span className="shrink-0 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-2.5 py-1 text-xs font-medium text-emerald-700">
+            MVP live
           </span>
         </div>
       </header>
@@ -273,6 +280,17 @@ export function ExpatPlanPage() {
                 <span className="text-xs font-bold tabular-nums text-primary">{item.step}</span>
                 <h3 className="mt-2 font-semibold">{item.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
+                {'route' in item && item.route ? (
+                  <a
+                    href={`https://${EXPAT_PLAN.productHost}${item.route}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    Open route
+                    <ExternalLink className="size-3" />
+                  </a>
+                ) : null}
               </li>
             ))}
           </ol>
@@ -302,8 +320,13 @@ export function ExpatPlanPage() {
                     <td className="p-4 font-medium tabular-nums text-foreground">{block.time}</td>
                     <td className="p-4 text-muted-foreground">{block.focus}</td>
                     <td className="hidden p-4 sm:table-cell">
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium capitalize">
-                        {block.status}
+                      <span
+                        className={cn(
+                          'rounded-full px-2 py-0.5 text-xs font-medium capitalize',
+                          sprintStatusClass(block.status)
+                        )}
+                      >
+                        {block.status.replace('_', ' ')}
                       </span>
                     </td>
                   </tr>
@@ -445,6 +468,17 @@ export function ExpatPlanPage() {
               <p className="mt-3 text-xs text-muted-foreground">
                 PRD:{' '}
                 <code className="rounded bg-muted px-1 py-0.5 text-[11px]">{EXPAT_PLAN.prdPath}</code>
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Product repo:{' '}
+                <a
+                  href={EXPAT_PLAN.productRepo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  german-financial-planning
+                </a>
               </p>
             </div>
           </div>

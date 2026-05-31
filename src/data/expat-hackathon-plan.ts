@@ -12,7 +12,7 @@ export const EXPAT_PLAN = {
     'Logan Williams is an expat financial coach in Cologne. He moved to Germany, navigated the bureaucracy, and helps international professionals understand subsidies, tax posture, and long-term wealth — without product pitches or jargon.',
   event: 'STARTPLATZ AI Hackathon — May 2026',
   shipTarget: 'Sun 31 May 2026, 12:00',
-  lastUpdated: '2026-05-31T12:00:00+02:00',
+  lastUpdated: '2026-05-31T14:30:00+02:00',
   demoTarget: 'Sun 31 May 2026, 14:00',
   uiReference: 'https://demo-ramp.com/',
   prdPath: 'Atlas/docs/ideas/active/expat-funnel-hackathon-may-2026/PRD.md',
@@ -81,14 +81,32 @@ export const FUNNEL_STEPS = [
   },
 ] as const;
 
-export const SPRINT_BLOCKS = [
-  { time: '10:00–11:00', focus: 'Base44 + calculator-config.json', status: 'planned' as const },
-  { time: '11:00–13:00', focus: 'Sales letter v0 (align with live landing)', status: 'planned' as const },
-  { time: '13:30–15:30', focus: 'Dossier wizard + income bands', status: 'planned' as const },
-  { time: '15:30–17:00', focus: 'Calculator v0 (Kindergeld, Elterngeld, Kita)', status: 'planned' as const },
-  { time: '17:00–18:30', focus: 'Teaser + discovery themes on submit', status: 'planned' as const },
-  { time: '18:30–19:15', focus: 'Admin full manual + Calendly booking', status: 'planned' as const },
-  { time: '19:15–20:00', focus: 'Ship — smoke test + disclaimers', status: 'planned' as const },
+export type SprintStatus = 'planned' | 'done' | 'in_progress';
+
+export const SPRINT_BLOCKS: ReadonlyArray<{
+  time: string;
+  focus: string;
+  status: SprintStatus;
+}> = [
+  {
+    time: '10:00–11:00',
+    focus: 'GFP repo + calculator-config.json + go. subdomain',
+    status: 'done',
+  },
+  {
+    time: '11:00–13:00',
+    focus: 'Sales letter (live at /money-manual)',
+    status: 'done',
+  },
+  { time: '13:30–15:30', focus: 'Dossier wizard + income bands (/start)', status: 'done' },
+  {
+    time: '15:30–17:00',
+    focus: 'Calculator v0 (Kindergeld, Elterngeld, Kita)',
+    status: 'done',
+  },
+  { time: '17:00–18:30', focus: 'Teaser + discovery themes (/teaser)', status: 'done' },
+  { time: '18:30–19:15', focus: 'Admin full manual + Calendly (/book)', status: 'done' },
+  { time: '19:15–20:00', focus: 'Ship — smoke test + disclaimers', status: 'in_progress' },
 ];
 
 export const P0_CHECKLIST = [

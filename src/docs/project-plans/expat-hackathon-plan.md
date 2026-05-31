@@ -3,6 +3,7 @@
 **Product:** [Money Manual](https://go.germanfinancialplanning.de/money-manual)
 **Tagline:** Digital money manual · Personal walkthrough on call
 **Brand:** German Financial Planning
+**Product repo:** [github.com/A-sop/german-financial-planning](https://github.com/A-sop/german-financial-planning)
 **PRD (Atlas):** `Atlas/docs/ideas/active/expat-funnel-hackathon-may-2026/PRD.md`
 **UI reference:** [demo ramp](https://demo-ramp.com/) — report-card hero, numbered pains, process steps, score dimensions.
 
@@ -12,44 +13,42 @@
 
 | URL | Purpose |
 |-----|---------|
-| https://go.germanfinancialplanning.de/money-manual | **Product landing** (live) |
+| https://go.germanfinancialplanning.de/money-manual | **Product landing** |
+| https://go.germanfinancialplanning.de/money-manual/start | Dossier wizard |
+| https://go.germanfinancialplanning.de/money-manual/teaser | Teaser after submit |
+| https://go.germanfinancialplanning.de/money-manual/book | Calendly booking |
 | https://logans.tools/expat | Hackathon build log + sprint plan |
 | https://expat.logans.tools | Same build log (subdomain rewrite) |
 
 ---
 
-## Landing page (source of truth for copy)
+## Shipped stack (GFP repo)
 
-Fetched 2026-05-31 from [go.germanfinancialplanning.de/money-manual](https://go.germanfinancialplanning.de/money-manual):
+| Layer | Tools |
+|-------|--------|
+| App | Next.js 15 · React 19 · TypeScript · Vercel |
+| Host | `go.germanfinancialplanning.de` via `middleware.ts` |
+| Leads | Neon Postgres · optional Attio sync |
+| Calculator | `calculator-config.json` · `calculate-advantages.ts` |
+| Booking | Calendly embed |
+| Admin | `/admin/campaign-leads` |
 
-- **Hero:** Nobody handed you the money manual when you moved to Germany.
-- **CTA:** Get your money manual
-- **Coach:** Logan Williams — expat financial coach in Cologne; subsidies, tax posture, long-term wealth; no product pitches or jargon.
-- **Offer:** Questionnaire → teaser after submit → full manual screen-shared on call.
-- **Discovery themes:** Tax savings · Retirement upside · Government support
-- **Footer:** Money Manual for expats in Germany · German Financial Planning
-
----
-
-## DNS + Vercel (build log subdomain)
-
-1. **Vercel** → project **logans-tools** → Settings → Domains → Add **`expat.logans.tools`**
-2. **DNS** → CNAME `expat` → `cname.vercel-dns.com.`
-3. Product landing stays on **go.germanfinancialplanning.de** (separate host).
+Base44 is hackathon sponsor only — product built in Next.js.
 
 ---
 
 ## Code map
 
-| Path | Role |
-|------|------|
-| `src/app/expat/page.tsx` | Build log route |
-| `src/app/expat/_components/expat-plan-page.tsx` | Sprint plan + mocks |
-| `src/data/expat-hackathon-plan.ts` | Copy, rates, checklist (synced with live landing) |
-| `src/app/page.tsx` | logans.tools homepage — Money Manual above the fold |
+| Repo / path | Role |
+|-------------|------|
+| `german-financial-planning/src/campaigns/set-up-germany/` | Landing, dossier, teaser, book, report templates |
+| `german-financial-planning/src/lib/campaign-leads-repository.ts` | Neon lead storage |
+| `logans-tools/src/app/expat/` | Build log route |
+| `logans-tools/src/data/expat-hackathon-plan.ts` | Copy, rates, checklist (synced with live funnel) |
+| `logans-tools/src/app/page.tsx` | logans.tools homepage — Money Manual above the fold |
 
 ---
 
 ## Ship checklist (Sun 12:00)
 
-Tracked on `/expat` P0 list. Landing is live; questionnaire + calculator + teaser remain on Base44 sprint.
+Tracked on `/expat` P0 list. **MVP funnel is live** on go.germanfinancialplanning.de. Remaining: Impressum/Datenschutz link on campaign host, pitch rehearsal, optional Resend email.
