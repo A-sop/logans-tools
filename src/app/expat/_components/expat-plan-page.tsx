@@ -5,6 +5,8 @@ import { ArrowRight, CheckCircle2, Circle, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
+  CREDITS,
+  DISCOVERY_THEMES,
   EXPAT_PLAN,
   FUNNEL_STEPS,
   P0_CHECKLIST,
@@ -12,6 +14,8 @@ import {
   PREVIEW_SCORES,
   RATES_2026,
   SPRINT_BLOCKS,
+  TECH_STACK,
+  type TechStackStatus,
 } from '@/data/expat-hackathon-plan';
 
 function scoreColor(score: number) {
@@ -24,6 +28,18 @@ function scoreBarColor(score: number) {
   if (score >= 80) return 'bg-emerald-500';
   if (score >= 60) return 'bg-amber-500';
   return 'bg-rose-500';
+}
+
+function stackStatusLabel(status: TechStackStatus) {
+  if (status === 'live') return 'Live';
+  if (status === 'fallback') return 'Fallback';
+  return 'Planned';
+}
+
+function stackStatusClass(status: TechStackStatus) {
+  if (status === 'live') return 'bg-emerald-100 text-emerald-800';
+  if (status === 'fallback') return 'bg-muted text-muted-foreground';
+  return 'bg-amber-100 text-amber-800';
 }
 
 function NavLink({ href, children }: { href: string; children: ReactNode }) {
@@ -47,11 +63,11 @@ function ReportMockCard() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Generic preview report
+            Teaser manual (after submit)
           </p>
-          <p className="mt-1 text-lg font-semibold tracking-tight">May 2026 · Sample persona</p>
+          <p className="mt-1 text-lg font-semibold tracking-tight">Sample · May 2026</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Blue Card couple · 1 child under 14 · NRW illustrative
+            Full itemised manual — personal walkthrough on call only
           </p>
         </div>
         <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
@@ -85,7 +101,8 @@ function ReportMockCard() {
       </ul>
 
       <p className="mt-5 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
-        Full personalized report — sales call only. Not financial advice.
+        Your call unlocks line items and full numbers. Educational illustration only — not
+        financial, tax, or legal advice.
       </p>
     </div>
   );
@@ -100,18 +117,19 @@ export function ExpatPlanPage() {
             <span className="truncate text-sm font-semibold tracking-tight">
               {EXPAT_PLAN.productName}
             </span>
-            <span className="hidden text-muted-foreground sm:inline">·</span>
             <span className="hidden truncate text-xs text-muted-foreground sm:inline">
-              by{' '}
+              {EXPAT_PLAN.brandParent} ·{' '}
               <Link href="https://logans.tools" className="hover:text-foreground">
                 logans.tools
               </Link>
             </span>
           </div>
           <nav className="hidden items-center gap-5 md:flex">
+            <NavLink href="#discovery">Discovery</NavLink>
             <NavLink href="#challenge">Challenge</NavLink>
             <NavLink href="#solution">Solution</NavLink>
             <NavLink href="#sprint">Sprint</NavLink>
+            <NavLink href="#stack">Stack</NavLink>
             <NavLink href="#decisions">Decisions</NavLink>
           </nav>
           <span className="shrink-0 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary">
@@ -123,31 +141,45 @@ export function ExpatPlanPage() {
       <section className="border-b border-border bg-gradient-to-b from-muted/40 to-background">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-12">
           <div className="space-y-6">
-            <p className="text-sm font-medium text-primary">{EXPAT_PLAN.event}</p>
+            <p className="text-sm font-medium text-primary">{EXPAT_PLAN.tagline}</p>
+            <p className="text-xs text-muted-foreground">{EXPAT_PLAN.event}</p>
             <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-              Stop guessing what Germany offers expats.
+              {EXPAT_PLAN.heroHeadline}
             </h1>
             <p className="max-w-xl text-pretty text-base text-muted-foreground sm:text-lg">
-              A long-form funnel that captures qualified leads, delivers an instant{' '}
-              <strong className="font-medium text-foreground">{EXPAT_PLAN.offerTitle}</strong>{' '}
-              preview report, and reserves the full personalized walkthrough for a live call with
-              Logan.
+              {EXPAT_PLAN.heroSubhead}
             </p>
+            <p className="max-w-xl text-sm text-muted-foreground">{EXPAT_PLAN.coachLine}</p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg">
+                <a href={EXPAT_PLAN.landingUrl} target="_blank" rel="noopener noreferrer">
+                  {EXPAT_PLAN.ctaLabel}
+                  <ExternalLink className="size-4" />
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="lg">
                 <a href="#sprint">
                   View sprint plan
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href="#preview">See report mock</a>
+              <Button asChild variant="ghost" size="lg">
+                <a href="#preview">See teaser mock</a>
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Ship target: <strong className="font-medium text-foreground">{EXPAT_PLAN.shipTarget}</strong>
+              Ship target:{' '}
+              <strong className="font-medium text-foreground">{EXPAT_PLAN.shipTarget}</strong>
               {' · '}
               Demo: {EXPAT_PLAN.demoTarget}
+              {' · '}
+              Updated:{' '}
+              {new Date(EXPAT_PLAN.lastUpdated).toLocaleString('en-GB', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                timeZone: 'Europe/Berlin',
+              })}{' '}
+              CET
             </p>
           </div>
           <div id="preview">
@@ -156,10 +188,43 @@ export function ExpatPlanPage() {
         </div>
       </section>
 
+      <section id="discovery" className="border-b border-border py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            {EXPAT_PLAN.offerTitle}
+          </h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Answer a few questions about family, income band, and stay intent. We prepare your
+            personal numbers for a video call. You see a short teaser after submit; the full manual
+            is screen-shared when we meet. Live landing:{' '}
+            <a
+              href={EXPAT_PLAN.landingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              go.germanfinancialplanning.de/money-manual
+            </a>
+            .
+          </p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {DISCOVERY_THEMES.map((theme) => (
+              <article
+                key={theme.title}
+                className="rounded-xl border border-border bg-card p-6 shadow-sm"
+              >
+                <h3 className="text-base font-semibold leading-snug">{theme.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{theme.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="challenge" className="border-b border-border py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Expats run the bureaucracy blind. You only find out after money is left on the table.
+            Three pains the landing page hits before personalisation on the call.
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
             Everything — sales letter, dossier copy, report framing — maps to three core pains.
@@ -184,7 +249,7 @@ export function ExpatPlanPage() {
       <section id="solution" className="border-b border-border bg-muted/30 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            A funnel with two report tiers — preview now, personalization on the call.
+            A funnel with teaser now, full manual on the call.
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
             Inspired by structured report products like{' '}
@@ -268,7 +333,125 @@ export function ExpatPlanPage() {
         </div>
       </section>
 
-      <section id="decisions" className="border-b border-border bg-muted/30 py-16 sm:py-20">
+      <section id="stack" className="border-b border-border bg-muted/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Tech stack &amp; credits</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            What powers Money Manual and this build log. Updated as tools go live during the hackathon.
+          </p>
+
+          <div className="mt-8 overflow-hidden rounded-xl border border-border bg-card">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/50 text-left">
+                  <th className="p-4 font-medium">Layer</th>
+                  <th className="p-4 font-medium">Tools</th>
+                  <th className="hidden p-4 font-medium md:table-cell">Role</th>
+                  <th className="p-4 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {TECH_STACK.map((row) => (
+                  <tr key={row.layer} className="border-b border-border last:border-0">
+                    <td className="p-4 font-medium">{row.layer}</td>
+                    <td className="p-4 text-muted-foreground">
+                      {'href' in row && row.href ? (
+                        <a
+                          href={row.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary hover:underline"
+                        >
+                          {row.tools}
+                        </a>
+                      ) : (
+                        row.tools
+                      )}
+                    </td>
+                    <td className="hidden p-4 text-muted-foreground md:table-cell">{row.role}</td>
+                    <td className="p-4">
+                      <span
+                        className={cn(
+                          'rounded-full px-2 py-0.5 text-xs font-medium capitalize',
+                          stackStatusClass(row.status)
+                        )}
+                      >
+                        {stackStatusLabel(row.status)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold">Team</h3>
+              <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                {CREDITS.team.map((person) => (
+                  <li key={person.name}>
+                    <span className="font-medium text-foreground">{person.name}</span>
+                    <span className="block text-xs">{person.role}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold">Event</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                <a
+                  href={CREDITS.event.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  {CREDITS.event.name}
+                </a>
+                <span className="block text-xs mt-1">{CREDITS.event.when}</span>
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold">Sponsors &amp; learning</h3>
+              <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                {CREDITS.sponsors.map((s) => (
+                  <li key={s.name}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {s.name}
+                    </a>
+                    <span className="block text-xs">{s.note}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold">Brand</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                <a
+                  href={CREDITS.brand.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  {CREDITS.brand.name}
+                </a>
+                <span className="block text-xs mt-1">{EXPAT_PLAN.productName}</span>
+              </p>
+              <p className="mt-3 text-xs text-muted-foreground">
+                PRD:{' '}
+                <code className="rounded bg-muted px-1 py-0.5 text-[11px]">{EXPAT_PLAN.prdPath}</code>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="decisions" className="border-b border-border py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Locked decisions (§16)</h2>
           <p className="mt-3 text-muted-foreground">
@@ -295,32 +478,22 @@ export function ExpatPlanPage() {
             </table>
           </div>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-border bg-card p-5">
-              <h3 className="font-semibold">Stack</h3>
-              <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-                <li>Base44 (primary) · Next.js fallback</li>
-                <li>WhatsApp CTA · no Cal.com gate for MVP</li>
-                <li>Charts: Recharts or Chart.js</li>
-              </ul>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-5">
-              <h3 className="font-semibold">UI reference</h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Look-and-feel from{' '}
-                <a
-                  href={EXPAT_PLAN.uiReference}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-                >
-                  demo ramp
-                  <ExternalLink className="size-3.5" />
-                </a>
-                : hero + report card, numbered pains, process steps, score dimensions, action
-                checklist.
-              </p>
-            </div>
+          <div className="mt-8 rounded-xl border border-border bg-card p-5">
+            <h3 className="font-semibold">UI reference</h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Look-and-feel from{' '}
+              <a
+                href={EXPAT_PLAN.uiReference}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+              >
+                demo ramp
+                <ExternalLink className="size-3.5" />
+              </a>
+              : hero + report card, numbered pains, process steps, score dimensions, action
+              checklist.
+            </p>
           </div>
         </div>
       </section>
@@ -328,9 +501,14 @@ export function ExpatPlanPage() {
       <footer className="py-10">
         <div className="mx-auto max-w-6xl px-4 text-center text-xs text-muted-foreground">
           <p>
-            Work in progress · {EXPAT_PLAN.productName} · {EXPAT_PLAN.event}
+            Work in progress · {EXPAT_PLAN.productName} · {EXPAT_PLAN.brandParent} ·{' '}
+            {EXPAT_PLAN.event}
           </p>
           <p className="mt-2">
+            <Link href={EXPAT_PLAN.landingUrl} className="text-primary hover:underline">
+              {EXPAT_PLAN.landingUrl.replace('https://', '')}
+            </Link>
+            {' · '}
             <Link href="https://logans.tools" className="text-primary hover:underline">
               logans.tools
             </Link>

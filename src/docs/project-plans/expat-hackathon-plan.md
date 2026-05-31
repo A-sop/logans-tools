@@ -1,7 +1,8 @@
-# Expat funnel — hackathon build log (`expat.logans.tools`)
+# Expat funnel — hackathon build log (`logans.tools/expat`)
 
-**Product (working title):** German-AI-der
-**Offer:** Set Yourself Up in Germany
+**Product:** [Money Manual](https://go.germanfinancialplanning.de/money-manual)
+**Tagline:** Digital money manual · Personal walkthrough on call
+**Brand:** German Financial Planning
 **PRD (Atlas):** `Atlas/docs/ideas/active/expat-funnel-hackathon-may-2026/PRD.md`
 **UI reference:** [demo ramp](https://demo-ramp.com/) — report-card hero, numbered pains, process steps, score dimensions.
 
@@ -11,25 +12,30 @@
 
 | URL | Purpose |
 |-----|---------|
-| https://expat.logans.tools | Hackathon WIP plan (this deploy) |
-| https://logans.tools/expat | Same page on apex (no DNS change needed) |
+| https://go.germanfinancialplanning.de/money-manual | **Product landing** (live) |
+| https://logans.tools/expat | Hackathon build log + sprint plan |
+| https://expat.logans.tools | Same build log (subdomain rewrite) |
 
 ---
 
-## DNS + Vercel (one-time)
+## Landing page (source of truth for copy)
+
+Fetched 2026-05-31 from [go.germanfinancialplanning.de/money-manual](https://go.germanfinancialplanning.de/money-manual):
+
+- **Hero:** Nobody handed you the money manual when you moved to Germany.
+- **CTA:** Get your money manual
+- **Coach:** Logan Williams — expat financial coach in Cologne; subsidies, tax posture, long-term wealth; no product pitches or jargon.
+- **Offer:** Questionnaire → teaser after submit → full manual screen-shared on call.
+- **Discovery themes:** Tax savings · Retirement upside · Government support
+- **Footer:** Money Manual for expats in Germany · German Financial Planning
+
+---
+
+## DNS + Vercel (build log subdomain)
 
 1. **Vercel** → project **logans-tools** → Settings → Domains → Add **`expat.logans.tools`**
-2. **Namecheap** (or authoritative DNS for `logans.tools`) → add record:
-
-   | Type | Host | Value |
-   |------|------|-------|
-   | CNAME | `expat` | `cname.vercel-dns.com.` |
-
-   If NS is Vercel DNS, add the domain in Vercel UI only.
-
-3. Wait for cert provisioning, then open https://expat.logans.tools
-
-See also [dns-and-domains-playbook.md](https://github.com/loganwilliams/Atlas/blob/main/docs/troubleshooting/dns-and-domains-playbook.md) in Atlas.
+2. **DNS** → CNAME `expat` → `cname.vercel-dns.com.`
+3. Product landing stays on **go.germanfinancialplanning.de** (separate host).
 
 ---
 
@@ -37,14 +43,13 @@ See also [dns-and-domains-playbook.md](https://github.com/loganwilliams/Atlas/bl
 
 | Path | Role |
 |------|------|
-| `src/app/expat/page.tsx` | Route entry |
-| `src/app/expat/_components/expat-plan-page.tsx` | Marketing WIP page (demo-ramp inspired) |
-| `src/data/expat-hackathon-plan.ts` | Sprint data, rates, checklist |
-| `middleware.ts` | `expat.*` → `/expat` rewrite + marketing layout |
-| `src/app/layout.tsx` | Skips AppShell when `x-marketing-layout` |
+| `src/app/expat/page.tsx` | Build log route |
+| `src/app/expat/_components/expat-plan-page.tsx` | Sprint plan + mocks |
+| `src/data/expat-hackathon-plan.ts` | Copy, rates, checklist (synced with live landing) |
+| `src/app/page.tsx` | logans.tools homepage — Money Manual above the fold |
 
 ---
 
-## Ship checklist (Sat 20:00)
+## Ship checklist (Sun 12:00)
 
-Tracked on the live page P0 list. Product MVP ships on Base44 (or fallback); this subdomain stays the **build log + plan** until product URL is ready.
+Tracked on `/expat` P0 list. Landing is live; questionnaire + calculator + teaser remain on Base44 sprint.

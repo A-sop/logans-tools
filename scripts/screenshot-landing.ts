@@ -1,15 +1,22 @@
 #!/usr/bin/env npx tsx
 /**
- * Screenshot the Concierge landing page and save to public/cm-landing.png.
+ * Screenshot a page and save to public/.
  * Run: npm run screenshot:landing
  *
- * Set LANDING_PAGE_URL in .env.local (default: https://cm.logans.tools)
- * For local: LANDING_PAGE_URL=http://localhost:3000
+ * Env / args:
+ *   LANDING_PAGE_URL — page to capture (default: https://cm.logans.tools)
+ *   SCREENSHOT_OUTPUT — filename under public/ (default: cm-landing.png)
+ *   argv[2] — URL override
+ *   argv[3] — output filename override
+ *
+ * Expat build log: LANDING_PAGE_URL=http://localhost:3000/expat SCREENSHOT_OUTPUT=expat-hackathon.png npm run screenshot:landing
  */
 import fs from 'fs';
 import path from 'path';
 
-const OUTPUT_PATH = path.join(process.cwd(), 'public', 'cm-landing.png');
+const outputFile =
+  process.env.SCREENSHOT_OUTPUT || process.argv[3] || 'cm-landing.png';
+const OUTPUT_PATH = path.join(process.cwd(), 'public', outputFile);
 
 // Load .env.local
 const envPath = path.join(process.cwd(), '.env.local');

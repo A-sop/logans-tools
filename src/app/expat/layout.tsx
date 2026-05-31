@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'German-AI-der — Hackathon build log | expat.logans.tools',
+  title: 'Money Manual — Hackathon build log | logans.tools',
   description:
-    'Work in progress: expat funnel for STARTPLATZ AI Hackathon May 2026 — Set Yourself Up in Germany.',
+    'Work in progress: Money Manual expat funnel for STARTPLATZ AI Hackathon May 2026 — German Financial Planning.',
   robots: { index: false, follow: false },
 };
 
