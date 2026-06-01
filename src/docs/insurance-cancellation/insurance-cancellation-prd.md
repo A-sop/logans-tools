@@ -1,7 +1,7 @@
 # Insurance Cancellation Letter Feature PRD
 
-**Status:** Planning — Awaiting example data structure  
-**Last Updated:** 2025-02-06  
+**Status:** Planning — Awaiting example data structure
+**Last Updated:** 2025-02-06
 **Priority:** High (Founder Request)
 
 ---

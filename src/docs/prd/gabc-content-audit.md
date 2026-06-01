@@ -54,4 +54,3 @@ The canonical site appears to run on WordPress + Enfold theme with multiple plug
   - event registrations/tickets,
   - recurring payments?
 - Which existing pages/URLs must be preserved (redirect map)?
-

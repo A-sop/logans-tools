@@ -1,6 +1,6 @@
 # Webhook Security Guide
 
-**Purpose:** Security implementation for webhook endpoints (lesson 5.5).  
+**Purpose:** Security implementation for webhook endpoints (lesson 5.5).
 **Audience:** Developers implementing and maintaining webhook security.
 
 ---

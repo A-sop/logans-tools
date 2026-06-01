@@ -2,8 +2,8 @@
 
 **Goal:** MVP of loganwilliams.com — published, modern, founder-led feel like [pirateskills.com](https://pirateskills.com/), with regular updates inspired by [Captain's Insights](https://pirateskills.com/insights).
 
-**Current site:** [loganwilliams.com](https://www.loganwilliams.com/)  
-**Target feel:** [pirateskills.com](https://pirateskills.com/) — bold, clear, human, no clutter.  
+**Current site:** [loganwilliams.com](https://www.loganwilliams.com/)
+**Target feel:** [pirateskills.com](https://pirateskills.com/) — bold, clear, human, no clutter.
 **Content inspiration:** [pirateskills.com/insights](https://pirateskills.com/insights) — weekly insights, short reflections, life-in-Germany and life-in-general commentary.
 
 ---

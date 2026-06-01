@@ -114,4 +114,3 @@ export async function sendGabcSuggestion(
 
   return { ok: true, message: 'Sent. Thank you for the feedback.' };
 }
-

@@ -1,7 +1,7 @@
 # Letter Generation Tool (Including Insurance Cancellations)
 
-**Status:** Planning — Awaiting example data structure  
-**Priority:** High (Founder Request)  
+**Status:** Planning — Awaiting example data structure
+**Priority:** High (Founder Request)
 **Note:** This feature has been expanded to a general letter generation tool for family office operations.
 
 ---

@@ -1,6 +1,6 @@
 # GABC — Migration Plan + Time Estimate
 
-**Preview / board approval:** `gabc.logans.tools`  
+**Preview / board approval:** `gabc.logans.tools`
 **Current canonical site:** `https://gabc.eu/`
 
 ## Summary
@@ -115,4 +115,3 @@ This is intentionally conservative; board feedback and content readiness dominat
 - Content rights (logos/photos/testimonials).
 - Payments compliance and webhook security.
 - WERO feasibility; could be blocked by provider constraints.
-

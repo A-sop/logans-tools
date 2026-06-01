@@ -79,11 +79,11 @@ Stages 1–5 of auth-flow PRD. Branch: auth-flow.
 
 ## 5. After you approve
 
-1. **Commit:**  
+1. **Commit:**
    `git add -A` then commit with the message above (or your variant).
-2. **Push:**  
+2. **Push:**
    `git push origin auth-flow`
-3. **Preview:**  
+3. **Preview:**
    Vercel will build a preview deployment for `auth-flow`.
 4. **Do not merge to main** until Lesson 4.6 (preview and production).
 

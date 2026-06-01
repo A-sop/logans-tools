@@ -59,4 +59,3 @@ Who owns ongoing updates?
 - legal approver
 
 If editors are non-technical, pick a headless CMS in Phase 2.
-

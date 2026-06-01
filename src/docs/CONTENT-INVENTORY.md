@@ -2,7 +2,7 @@
 
 Content to reuse or reference when building the new site.
 
-**Do not migrate:** Dandapani post (removed).  
+**Do not migrate:** Dandapani post (removed).
 **See also:** [TOPICS-TO-WRITE.md](./TOPICS-TO-WRITE.md) — Köln Kolleg and Karneval are priority topics.
 
 ---

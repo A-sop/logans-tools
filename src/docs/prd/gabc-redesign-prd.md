@@ -1,7 +1,7 @@
 # PRD — GABC Website Redo (Early Draft)
 
-**Preview domain (board approval):** `gabc.logans.tools`  
-**Canonical current site:** `https://gabc.eu/`  
+**Preview domain (board approval):** `gabc.logans.tools`
+**Canonical current site:** `https://gabc.eu/`
 **Session archive (Cursor plan, chat transcript, closeout):** [`gabc-archive/README.md`](./gabc-archive/README.md)
 
 ## Direct answer (what we’re building)
@@ -144,4 +144,3 @@ WERO (European wallet/instant payments initiative) is a requirement, but feasibi
 - CMS choice (MDX vs headless CMS vs database-backed admin).
 - Payment scope for Phase 2 (tickets + docs first, or membership recurring first).
 - WERO integration path (Stripe-supported vs separate PSP).
-

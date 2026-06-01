@@ -59,10 +59,10 @@
 
 ## Proposed next feature (~1 week)
 
-**Option A — Persist early access emails**  
+**Option A — Persist early access emails**
 Solves a real gap: the form appears to work but does nothing with signups. Add a simple storage layer (JSON file or Supabase) to store emails and optionally sync to a list. Fits the product’s “capture” and “reduce fragmentation” goals.
 
-**Option B — Basic assignment CRUD (add + edit)**  
+**Option B — Basic assignment CRUD (add + edit)**
 Core product value: turn the workspace from read-only into a tool where users can add and edit assignments. Scope to a minimal add form and edit form, wired to the existing JSON data layer. Directly supports “clear, trackable actions” from the concept.
 
 ---

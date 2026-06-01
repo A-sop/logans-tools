@@ -1,7 +1,7 @@
 # Pricing Strategy
 
-**Status:** Draft — In Progress  
-**Last Updated:** 2026-02-09  
+**Status:** Draft — In Progress
+**Last Updated:** 2026-02-09
 **Purpose:** Complete pricing strategy document covering philosophy, tiers, implementation considerations, and communication plan.
 
 ---
@@ -109,7 +109,7 @@ Given:
 
 We anchor the **main operator tier** approximately here:
 
-- **Initial value‑based price range (main CM operator tier):**  
+- **Initial value‑based price range (main CM operator tier):**
   **€79–99 / month per operator (including 1 assistant account)**
 
 This range:
@@ -128,19 +128,19 @@ We have **4 tiers** in scope: Observer (cheaper), Operator (main), Captain/Insti
 
 1. **CM Observer** (Cheaper tier — details TBD) — Price TBD (below Operator). Entry-level / read-only use cases. Planned.
 
-2. **CM Operator** (Main tier)  
-   - **Price target:** **€89 / month** (initial target within the €79–99 band)  
-   - **Who it’s for:**  
-     - A single CM operator (like our blind executive) handling bureaucracy for multiple client households.  
+2. **CM Operator** (Main tier)
+   - **Price target:** **€89 / month** (initial target within the €79–99 band)
+   - **Who it’s for:**
+     - A single CM operator (like our blind executive) handling bureaucracy for multiple client households.
      - Includes **1 assistant seat** who can work inside the system.
    - **Core promise:** Centralize obligations, documents, and workflows so *any* assistant can reliably execute, even if the operator is away.
 
 3. **CM Captain / Instigator** (Premium tier — details TBD) — Special feature implementation. Name and features TBD.
 
-4. **CM Team** (Future – roadmap)  
-   - **Price rough target:** **€179–199 / month**  
-   - **Who it’s for:**  
-     - Small teams (2–3 operators) with multiple assistants and higher document volume.  
+4. **CM Team** (Future – roadmap)
+   - **Price rough target:** **€179–199 / month**
+   - **Who it’s for:**
+     - Small teams (2–3 operators) with multiple assistants and higher document volume.
    - **Status:** Documented as a **roadmap tier**; we won’t block MVP on implementing it, but design now so the pricing story is coherent.
 
 ### 3.1.1 Test discount codes (99% off)
@@ -204,9 +204,9 @@ Create a **99% off** coupon in Clerk Billing / Stripe to test real payment flow 
   - Shared templates and workflows.
   - Simple reporting across operators.
 
-> We do **not** need to fully specify limits yet. For now, it is enough that:  
-> - CM Operator is clearly “single‑operator + 1 assistant”.  
-> - CM Team is “multiple operators + more assistants and volume”, at ~2× Operator price.  
+> We do **not** need to fully specify limits yet. For now, it is enough that:
+> - CM Operator is clearly “single‑operator + 1 assistant”.
+> - CM Team is “multiple operators + more assistants and volume”, at ~2× Operator price.
 > Detailed limits can be tuned once we have real usage data.
 
 ---

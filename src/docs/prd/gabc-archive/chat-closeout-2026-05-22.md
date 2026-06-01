@@ -79,5 +79,5 @@ Todos from that plan (workshop, audit, IA, CMS, codex phasing) were completed in
 
 ## Transcript
 
-Full JSONL: [agent-transcript-2e4f60ff.jsonl](./agent-transcript-2e4f60ff.jsonl)  
+Full JSONL: [agent-transcript-2e4f60ff.jsonl](./agent-transcript-2e4f60ff.jsonl)
 Cursor transcript ID: `2e4f60ff-24b3-4394-b57b-b366bf666ed7`

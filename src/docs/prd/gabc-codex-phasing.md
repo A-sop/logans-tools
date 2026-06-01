@@ -68,4 +68,3 @@ Only after concept approval:
 - **L4 Accounts:** member portal, roles, entitlements
 - **L5 Integrations:** CRM sync, advanced email automation
 - **L6 Monetization:** Stripe recurring membership, tickets, paid docs, WERO feasibility
-

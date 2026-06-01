@@ -329,8 +329,8 @@ After setting up Clerk ↔ Supabase (Clerk Dashboard → Supabase → Activate; 
 
 ### Document & Form Generation Tool (Founder Request)
 
-**Status:** Planning — Awaiting example data structure  
-**PRD:** `src/docs/letter-generation/letter-generation-prd.md`  
+**Status:** Planning — Awaiting example data structure
+**PRD:** `src/docs/letter-generation/letter-generation-prd.md`
 **Legacy PRD:** `src/docs/insurance-cancellation/insurance-cancellation-prd.md` (superseded)
 
 **Overview:** Comprehensive document, letter, and form generation tool for family office / full-service operations. Drafts formal documents on behalf of clients (letters, documents, legal forms like Vollmacht), manages template wording libraries, sends PDFs to clients for signature via WhatsApp or email, and manages complete workflow from draft to signed delivery.

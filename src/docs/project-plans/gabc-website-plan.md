@@ -50,4 +50,3 @@ If/when we write the full PRD, structure it around:
 - the current site (`https://gabc.eu/`) content pillars (events, membership, council/about, patrons, chapters),
 - the Builder Codex roadmap framing in `Atlas/docs/admin/roadmap.md` (Levels 1–6, pillars),
 - and a single primary conversion journey for Phase 1 (membership or events).
-

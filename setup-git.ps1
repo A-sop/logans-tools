@@ -67,13 +67,13 @@ if (Test-Path .gitignore) {
     $gitignoreContent = Get-Content .gitignore -Raw
     $requiredPatterns = @("node_modules", ".next", ".vercel", ".env")
     $missingPatterns = @()
-    
+
     foreach ($pattern in $requiredPatterns) {
         if ($gitignoreContent -notmatch $pattern) {
             $missingPatterns += $pattern
         }
     }
-    
+
     if ($missingPatterns.Count -eq 0) {
         Write-Host "✅ All required patterns found in .gitignore" -ForegroundColor Green
     } else {

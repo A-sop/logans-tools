@@ -2,10 +2,10 @@
 
 **Goal:** MVP of germanfinancialplanning.de — published, authority-style like [pirateskills.com](https://pirateskills.com/), with login, blog, and eventual planner app based on [Builder Codex](https://pirateskills.com/build/codex).
 
-**Current site:** [germanfinancialplanning.de](https://www.germanfinancialplanning.de/)  
-**Target feel:** [pirateskills.com](https://pirateskills.com/) — professional, founder-led, clear value.  
-**Data source:** [Allfinanz Logan Williams](https://www.allfinanz.ag/logan.williams/index.html) — testimonials, services, contact, credentials.  
-**Content inspiration:** [Captain's Insights](https://pirateskills.com/insights) — regular authority blog posts.  
+**Current site:** [germanfinancialplanning.de](https://www.germanfinancialplanning.de/)
+**Target feel:** [pirateskills.com](https://pirateskills.com/) — professional, founder-led, clear value.
+**Data source:** [Allfinanz Logan Williams](https://www.allfinanz.ag/logan.williams/index.html) — testimonials, services, contact, credentials.
+**Content inspiration:** [Captain's Insights](https://pirateskills.com/insights) — regular authority blog posts.
 **Planner app:** Built using [Builder Codex](https://pirateskills.com/build/codex) lesson plans (in `src/docs/builder-codex/`).
 
 ---

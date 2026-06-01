@@ -1,6 +1,6 @@
 # Document & Form Generation Tool
 
-**Status:** Planning — Awaiting example data structure  
+**Status:** Planning — Awaiting example data structure
 **Priority:** High (Founder Request)
 
 ---

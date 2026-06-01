@@ -1,8 +1,8 @@
 # LDW Books (EÜR) — Project Plan
 
-**Preview domain:** `euer.logans.tools`  
-**Repo:** `logans-tools` (same Vercel project as `gabc.logans.tools`)  
-**Routes:** `/euer`, `/euer/inbox`, `/euer/ledger`, `/euer/tax`  
+**Preview domain:** `euer.logans.tools`
+**Repo:** `logans-tools` (same Vercel project as `gabc.logans.tools`)
+**Routes:** `/euer`, `/euer/inbox`, `/euer/ledger`, `/euer/tax`
 **Access:** email gate — `inbox@loganwilliams.com` or any `@loganwilliams.com` (cookie `euer_preview`, 30 days)
 
 ## Deploy checklist
@@ -20,7 +20,9 @@ Bundled under `src/data/euer/`:
 
 - `euer-summary-2020.csv` … `euer-summary-2024.csv`
 - `suggestions-YYYY-*.csv` — booking-suggestions per bank (merged + deduped in UI)
+- `transactions-workbook-YYYY.json` — lines from master `YYYY_EÜR` sheet (2020–2026)
 - `account-eur-map.csv`, `eur-zeile-labels.json` — EÜR Zeile + labels (no API)
+- `euer-summary-2025.csv`, `euer-summary-2026.csv` — Tax tab totals
 
 Refresh bundle from PC:
 

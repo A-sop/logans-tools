@@ -1,0 +1,41 @@
+# App profile — SSOT: DABOS/contrib/pre-commit/.pre-commit-config.app.yaml
+# Decision: DABOS/docs/decisions/2026-05-27-pre-commit-security-scanning.md
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/semgrep/pre-commit
+    rev: v1.163.0
+    hooks:
+      - id: semgrep
+        args: [--config, p/default, --error, --skip-unknown-extensions]
+        files: \.(ts|tsx|js|jsx|mjs|py)$
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.3
+    hooks:
+      - id: bandit
+        pass_filenames: false
+        args: [-r, scripts, -ll, -q]
+        files: ^scripts/.*\.py$
+
+  - repo: local
+    hooks:
+      - id: npm-audit-high
+        name: npm audit (high+)
+        entry: npm audit --audit-level=high
+        language: system
+        pass_filenames: false
+        files: package-lock\.json$

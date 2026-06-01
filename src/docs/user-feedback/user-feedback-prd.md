@@ -1,6 +1,6 @@
 # User Feedback System PRD
 
-**Status:** Active PRD — Implementation in progress (lesson 5.4)  
+**Status:** Active PRD — Implementation in progress (lesson 5.4)
 **Last Updated:** 2025-02-06
 
 ---

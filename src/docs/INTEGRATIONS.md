@@ -1,6 +1,6 @@
 # Integrations & API Keys
 
-**Purpose:** Central reference for external services and secure key storage.  
+**Purpose:** Central reference for external services and secure key storage.
 **Audience:** Developers and AI agents working on this project.
 
 ---
@@ -73,7 +73,7 @@ const apiKey = process.env.OPENAI_API_KEY;
 
 - **Used for:** Feedback processing with AI analysis, workflow automation, third-party integrations.
 - **Env key:** `N8N_FEEDBACK_WEBHOOK_URL` (webhook URL from n8n Webhook Trigger node, lesson 5.4)
-- **Where used:** 
+- **Where used:**
   - `src/app/actions/feedback.ts` — Server Action sends feedback to n8n (outgoing webhook)
   - `src/app/api/webhooks/n8n/feedback/route.ts` — API route receives processed feedback from n8n (incoming webhook)
   - `src/components/feedback-modal.tsx` — Client form component

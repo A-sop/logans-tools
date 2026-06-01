@@ -1,6 +1,6 @@
 # Mobile Responsive Testing Guide
 
-**Purpose:** Step-by-step guide for testing and fixing mobile responsiveness (lesson 5.3).  
+**Purpose:** Step-by-step guide for testing and fixing mobile responsiveness (lesson 5.3).
 **Audience:** Developers testing and fixing responsive design issues.
 
 ---

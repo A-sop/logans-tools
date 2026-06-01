@@ -123,4 +123,3 @@
 - `/legal/impressum`
 - `/legal/privacy`
 - `/legal/cookies`
-

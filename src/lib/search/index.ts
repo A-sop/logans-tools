@@ -59,4 +59,3 @@ export const SEARCH_INDEX: SearchDocument[] = [
     keywords: ['dev', 'test', 'designsystem', 'integration'],
   },
 ];
-

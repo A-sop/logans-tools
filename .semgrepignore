@@ -1,0 +1,8 @@
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.venv/
+logs/
+**/__pycache__/

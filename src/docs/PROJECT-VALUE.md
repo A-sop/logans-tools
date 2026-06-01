@@ -42,7 +42,7 @@ Use **40 EUR/hr** for session value; adjust the rate in this doc if you change i
 - **Junior WPM:** **35 WPM** (typical range for junior devs 30–45; 35 is conservative).
 - **Rate:** **40 EUR/hr**.
 
-**Formula:**  
+**Formula:**
 Words = LOC × (chars per line) ÷ 5 → Time (hours) = Words ÷ (WPM × 60) → **Value = Time × 40 EUR**.
 
 **This project (current numbers):**

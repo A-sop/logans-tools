@@ -28,16 +28,16 @@ If import fails (e.g. node type or version), see **Fallback** at the end.
 
 ## After import: configure
 
-1. **Gmail node**  
+1. **Gmail node**
    - **To** is pre-set to `feedback@logans.tools` (your catchall). Open the node and add your **Gmail OAuth2** credential when ready (Connect account / Sign in with Google).
 
-2. **HTTP Request node**  
-   - URL is set to `https://cm.logans.tools/api/webhooks/n8n/feedback`.  
-   - For local testing, change it to `http://localhost:3000/api/webhooks/n8n/feedback`.  
+2. **HTTP Request node**
+   - URL is set to `https://cm.logans.tools/api/webhooks/n8n/feedback`.
+   - For local testing, change it to `http://localhost:3000/api/webhooks/n8n/feedback`.
    - If you use webhook secret (human-todos 5.5), add a header: **Name** `X-API-Key`, **Value** your `N8N_WEBHOOK_SECRET`.
 
-3. **Activate**  
-   - Turn the workflow **On** (toggle top right).  
+3. **Activate**
+   - Turn the workflow **On** (toggle top right).
    - Open the **Webhook** node and copy the **Test URL** or **Production URL**.
 
 ---

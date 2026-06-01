@@ -6,4 +6,3 @@ export const features = {
     maxResults: 8,
   },
 } as const;
-

@@ -148,11 +148,11 @@ Prefer these values for consistency:
 
 ## Preferred Tailwind Classes
 
-**Layout:** `flex`, `flex-col`, `flex-wrap`, `items-center`, `justify-between`, `gap-*`, `space-y-*`  
-**Sizing:** `w-full`, `min-w-0`, `shrink-0`, `flex-1`  
-**Text:** `text-sm`, `text-muted-foreground`, `font-medium`, `capitalize`  
-**Interactive:** `hover:bg-accent`, `disabled:opacity-50`, `disabled:pointer-events-none`  
-**Transitions:** `transition-colors duration-150` or `duration-200`  
+**Layout:** `flex`, `flex-col`, `flex-wrap`, `items-center`, `justify-between`, `gap-*`, `space-y-*`
+**Sizing:** `w-full`, `min-w-0`, `shrink-0`, `flex-1`
+**Text:** `text-sm`, `text-muted-foreground`, `font-medium`, `capitalize`
+**Interactive:** `hover:bg-accent`, `disabled:opacity-50`, `disabled:pointer-events-none`
+**Transitions:** `transition-colors duration-150` or `duration-200`
 
 **Avoid:** Inline hex/rgb except for design-spec matches; `!important`; arbitrary values unless necessary.
 

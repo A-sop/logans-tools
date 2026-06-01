@@ -1,7 +1,7 @@
 # Document & Form Generation Tool PRD
 
-**Status:** Planning — Awaiting example data structure  
-**Last Updated:** 2025-02-06  
+**Status:** Planning — Awaiting example data structure
+**Last Updated:** 2025-02-06
 **Priority:** High (Founder Request)
 
 ---
@@ -415,8 +415,8 @@ For managing document templates and wording:
 ```
 Vollmacht für {{activity_name}}
 
-Ich, {{grantor_name}}, geb. am {{grantor_birthdate}}, wohnhaft {{grantor_address}}, 
-erteile hiermit {{grantee_name}}, wohnhaft {{grantee_address}}, 
+Ich, {{grantor_name}}, geb. am {{grantor_birthdate}}, wohnhaft {{grantor_address}},
+erteile hiermit {{grantee_name}}, wohnhaft {{grantee_address}},
 eine Vollmacht für folgende Tätigkeiten:
 {{specific_activities_list}}
 

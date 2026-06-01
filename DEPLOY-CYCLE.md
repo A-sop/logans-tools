@@ -6,9 +6,9 @@ This guide walks you through one full cycle: edit → commit → push → watch 
 
 ## 1. Make a small, visible change
 
-**Done for you:** The hero headline was updated from  
-_"Stay Reliable, Compliant, and in Control"_  
-to  
+**Done for you:** The hero headline was updated from
+_"Stay Reliable, Compliant, and in Control"_
+to
 _"Tasks Under Control. You Stay in Control."_
 
 **Where it lives:** `src/app/page.tsx` (around line 37).
@@ -68,7 +68,7 @@ No need to click “Redeploy” — pushing to `main` triggers this automaticall
 3. **Hard refresh** so you don’t see a cached version:
    - **Windows:** Ctrl + F5 or Ctrl + Shift + R
    - **Mac:** Cmd + Shift + R
-4. Check the hero section: the headline should now say  
+4. Check the hero section: the headline should now say
    **"Tasks Under Control. You Stay in Control."**
 
 If you see the new headline, the cycle worked end-to-end.

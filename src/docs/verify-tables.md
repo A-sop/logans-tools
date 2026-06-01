@@ -36,7 +36,7 @@ insert into public.uploads (session_id, filename) values (null, 'test.pdf');
 
 **Should fail (invalid FK):**
 ```sql
-insert into public.task_suggestions (upload_id, session_id, title) 
+insert into public.task_suggestions (upload_id, session_id, title)
 values ('00000000-0000-0000-0000-000000000000'::uuid, 'x', 'Fake');
 -- ERROR: insert or update on table "task_suggestions" violates foreign key constraint
 ```

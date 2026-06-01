@@ -15,4 +15,3 @@ export const enabledLocales: Locale[] = ['en', 'de'];
  * Useful if you want i18n-ready content without exposing a switcher yet.
  */
 export const showLanguageToggle = true;
-

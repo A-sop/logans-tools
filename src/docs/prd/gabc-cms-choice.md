@@ -37,4 +37,3 @@ This decides how events, pages, and posts are edited and published.
 
 - If GABC needs **weekly event updates**, Option B becomes more valuable.
 - If events remain in an external system, Phase 1 can link out and avoid building event CRUD.
-

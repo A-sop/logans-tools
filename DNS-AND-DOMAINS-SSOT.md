@@ -9,4 +9,3 @@ Use that doc for:
 - Standard Vercel apex/`www` mappings
 - Subdomain patterns (project portfolio)
 - Provider-specific gotchas (Vercel wildcard, Zoho binding/SSL, etc.)
-

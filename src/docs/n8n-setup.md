@@ -1,6 +1,6 @@
 # n8n Workflow Setup Guide
 
-**Purpose:** Step-by-step guide for setting up n8n workflows with AI analysis for feedback processing (lesson 5.2).  
+**Purpose:** Step-by-step guide for setting up n8n workflows with AI analysis for feedback processing (lesson 5.2).
 **Audience:** Developers setting up the feedback automation workflow.
 
 ---
@@ -318,7 +318,7 @@ It would be nice to have keyboard shortcuts for common actions. I'm a power user
 
 ## Next Steps
 
-**Lesson 5.3:** Mobile responsive design for feedback form  
+**Lesson 5.3:** Mobile responsive design for feedback form
 **Lesson 5.4:** Replace Chat Trigger with Webhook, connect app to n8n, store feedback in Supabase
 
 ---

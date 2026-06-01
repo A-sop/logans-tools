@@ -14,7 +14,9 @@
     "ahrefs:test": "tsx scripts/ahrefs-test.ts",
     "screenshot:landing": "tsx scripts/screenshot-landing.ts",
     "backup:android": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.config.json",
-    "backup:android:smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.smoke-test.config.json -SnapshotLabel smoke-ok"
+    "backup:android:smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.smoke-test.config.json -SnapshotLabel smoke-ok",
+    "precommit:install": "pre-commit install",
+    "security:scan": "pre-commit run --all-files"
   },
   "dependencies": {
     "@eslint-community/eslint-utils": "^4.9.1",

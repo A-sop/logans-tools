@@ -1,6 +1,6 @@
 # Linear MCP Setup Guide
 
-**Purpose:** Connect Cursor AI to your Linear workspace so I can create issues, update tasks, and manage your project backlog.  
+**Purpose:** Connect Cursor AI to your Linear workspace so I can create issues, update tasks, and manage your project backlog.
 **Audience:** Developers setting up Linear integration with Cursor.
 
 ---
