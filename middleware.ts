@@ -64,7 +64,7 @@ export function middleware(request: NextRequest) {
   const isDabosPath = isDabosAppPath(pathname);
 
   if (
-    isLogansToolsApexHost(hostname) &&
+    isLogansToolsApexHost(normalizeHost(host)) &&
     isDabosPath &&
     !pathname.startsWith('/api/')
   ) {
