@@ -23,6 +23,7 @@ function isGabcPreviewHost(host: string | null | undefined) {
 }
 
 const MARKETING_LAYOUT_HEADER = 'x-marketing-layout';
+const PATHNAME_HEADER = 'x-pathname';
 
 function isExpatHost(host: string | null | undefined) {
   if (!host) return false;
@@ -54,6 +55,7 @@ export function middleware(request: NextRequest) {
 
   function withLocaleHeaders(headers: Headers): Headers {
     headers.set(MIDDLEWARE_LOCALE_HEADER, chosen);
+    headers.set(PATHNAME_HEADER, pathname);
     return headers;
   }
 

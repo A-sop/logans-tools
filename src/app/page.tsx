@@ -53,6 +53,10 @@ export default async function Home() {
     redirect('/expat');
   }
 
+  if (host.startsWith('dabos.')) {
+    redirect('/dabos');
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:py-20">
       <section className="space-y-4">
