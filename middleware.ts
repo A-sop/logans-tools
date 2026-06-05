@@ -62,8 +62,11 @@ export function middleware(request: NextRequest) {
   const isDabosSubdomain = isDabosHost(host, hostname);
   const isDabosPath = isDabosAppPath(pathname);
 
+  const isProd =
+    process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
+
   if (
-    process.env.NODE_ENV === 'production' &&
+    isProd &&
     isLogansToolsApexHost(hostname) &&
     isDabosPath &&
     !pathname.startsWith('/api/')

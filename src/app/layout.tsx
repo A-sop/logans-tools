@@ -24,7 +24,8 @@ export default async function RootLayout({
   const initialLocale = pickLocaleFromMiddlewareHeader(h.get(MIDDLEWARE_LOCALE_HEADER));
   const htmlLang = initialLocale === 'de' ? 'de' : 'en';
   const host = h.get('x-forwarded-host') ?? h.get('host');
-  const pathname = h.get(PATHNAME_HEADER) ?? '';
+  const pathname =
+    h.get(`x-middleware-request-${PATHNAME_HEADER}`) ?? h.get(PATHNAME_HEADER) ?? '';
   const isMarketing = shouldUseMarketingLayout(
     host,
     pathname,
