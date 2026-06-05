@@ -1,6 +1,13 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import {
+  dabosSubdomainPath,
+  isDabosAppPath,
+  isDabosHost,
+  isLogansToolsApexHost,
+  normalizeHost,
+} from './src/lib/dabos/host';
+import {
   LOCALE_COOKIE_NAME,
   MIDDLEWARE_LOCALE_HEADER,
   pickLocaleForMiddleware,
@@ -23,9 +30,16 @@ function isExpatHost(host: string | null | undefined) {
   return h.startsWith('expat.') || h === 'expat.logans.tools';
 }
 
+function isStaticPassthrough(pathname: string): boolean {
+  return (
+    pathname.startsWith('/_next/') ||
+    pathname === '/favicon.ico' ||
+    pathname === '/robots.txt' ||
+    pathname === '/sitemap.xml'
+  );
+}
+
 export function middleware(request: NextRequest) {
-  // Lightweight preview gate for board-approval deployments.
-  // Enabled on host `gabc.*` or when explicitly enabled for local testing.
   const host =
     request.headers.get('x-forwarded-host') ??
     request.headers.get('host') ??
@@ -33,31 +47,70 @@ export function middleware(request: NextRequest) {
   const hostname = request.nextUrl.hostname;
   const debugHost = host ?? '';
   const debugHostname = hostname ?? '';
+  const { pathname, search } = request.nextUrl;
+
+  const cookie = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
+  const chosen = pickLocaleForMiddleware(cookie, request.headers.get('accept-language'));
+
+  function withLocaleHeaders(headers: Headers): Headers {
+    headers.set(MIDDLEWARE_LOCALE_HEADER, chosen);
+    return headers;
+  }
+
+  const isDabosSubdomain = isDabosHost(host, hostname);
+  const isDabosPath = isDabosAppPath(pathname);
+
+  if (
+    process.env.NODE_ENV === 'production' &&
+    isLogansToolsApexHost(hostname) &&
+    isDabosPath &&
+    !pathname.startsWith('/api/')
+  ) {
+    const dest = request.nextUrl.clone();
+    dest.hostname = 'dabos.logans.tools';
+    dest.protocol = 'https:';
+    dest.pathname = dabosSubdomainPath(pathname);
+    return NextResponse.redirect(dest, 308);
+  }
+
+  if (isDabosSubdomain && !pathname.startsWith('/api/') && !isStaticPassthrough(pathname)) {
+    const requestHeaders = withLocaleHeaders(new Headers(request.headers));
+    requestHeaders.set(MARKETING_LAYOUT_HEADER, '1');
+
+    const url = request.nextUrl.clone();
+    if (pathname === '/') {
+      url.pathname = '/dabos';
+      url.search = search ?? '';
+      return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+    }
+
+    if (!pathname.startsWith('/dabos')) {
+      url.pathname = `/dabos${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+      url.search = search ?? '';
+      return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+    }
+  }
+
   const previewGateEnabled =
     process.env.GABC_PREVIEW_GATE_ENABLED === 'true' ||
     isGabcPreviewHost(host) ||
-    hostname.toLowerCase() === 'gabc.logans.tools';
+    normalizeHost(hostname) === 'gabc.logans.tools';
 
-  const { pathname, search } = request.nextUrl;
-  const isExpatSubdomain = isExpatHost(host) || hostname.toLowerCase() === 'expat.logans.tools';
+  const isExpatSubdomain = isExpatHost(host) || normalizeHost(hostname) === 'expat.logans.tools';
   const isMarketingPath = pathname === '/expat' || pathname.startsWith('/expat/');
 
   if (isExpatSubdomain && pathname === '/') {
     const url = request.nextUrl.clone();
     url.pathname = '/expat';
     url.search = search ?? '';
-    const requestHeaders = new Headers(request.headers);
+    const requestHeaders = withLocaleHeaders(new Headers(request.headers));
     requestHeaders.set(MARKETING_LAYOUT_HEADER, '1');
     return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
   }
 
   if (previewGateEnabled) {
     const isAccessPage = pathname === ACCESS_PATH;
-    const isAllowedPublicAsset =
-      pathname.startsWith('/_next/') ||
-      pathname === '/favicon.ico' ||
-      pathname === '/robots.txt' ||
-      pathname === '/sitemap.xml';
+    const isAllowedPublicAsset = isStaticPassthrough(pathname);
 
     if (!isAccessPage && !isAllowedPublicAsset) {
       const hasPreviewCookie = request.cookies.get(PREVIEW_COOKIE_NAME)?.value === '1';
@@ -74,7 +127,6 @@ export function middleware(request: NextRequest) {
       }
     }
 
-    // When accessing the subdomain root, treat it as the board hub entry.
     if (pathname === '/' && request.cookies.get(PREVIEW_COOKIE_NAME)?.value === '1') {
       const url = request.nextUrl.clone();
       url.pathname = DEFAULT_AFTER_ACCESS;
@@ -87,12 +139,8 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const cookie = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
-  const chosen = pickLocaleForMiddleware(cookie, request.headers.get('accept-language'));
-
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set(MIDDLEWARE_LOCALE_HEADER, chosen);
-  if (isMarketingPath || isExpatSubdomain) {
+  const requestHeaders = withLocaleHeaders(new Headers(request.headers));
+  if (isMarketingPath || isExpatSubdomain || isDabosSubdomain || isDabosPath) {
     requestHeaders.set(MARKETING_LAYOUT_HEADER, '1');
   }
 

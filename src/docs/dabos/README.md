@@ -28,7 +28,18 @@
    npm run dev:webpack
    ```
 
-5. Open **`/dabos`**.
+5. Open **`https://dabos.logans.tools`** (production) or **`http://localhost:3001/dabos`** locally — no Logans.Tools header on DABOS routes.
+
+## Production URL
+
+**Canonical:** `https://dabos.logans.tools` (same Vercel project as `logans.tools`).
+
+1. **Push** `main` → Vercel auto-deploy.
+2. **Vercel** → Project → Settings → Domains → Add `dabos.logans.tools`.
+3. **DNS:** `CNAME` `dabos` → `cname.vercel-dns.com.` (or the target Vercel shows).
+4. Production visits to `logans.tools/dabos` redirect to the subdomain.
+
+**Local subdomain test:** add `127.0.0.1 dabos.logans.tools` to hosts, run dev server, open `http://dabos.logans.tools:3001/`.
 
 ## Conditions (v1)
 
