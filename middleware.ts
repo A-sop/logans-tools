@@ -23,7 +23,8 @@ function isGabcPreviewHost(host: string | null | undefined) {
 }
 
 const MARKETING_LAYOUT_HEADER = 'x-marketing-layout';
-const PATHNAME_HEADER = 'x-pathname';
+/** Becomes `x-middleware-request-pathname` on the upstream request. */
+const PATHNAME_HEADER = 'pathname';
 
 function isExpatHost(host: string | null | undefined) {
   if (!host) return false;
@@ -62,20 +63,14 @@ export function middleware(request: NextRequest) {
   const isDabosSubdomain = isDabosHost(host, hostname);
   const isDabosPath = isDabosAppPath(pathname);
 
-  const isProd =
-    process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
-
   if (
-    isProd &&
     isLogansToolsApexHost(hostname) &&
     isDabosPath &&
     !pathname.startsWith('/api/')
   ) {
-    const dest = request.nextUrl.clone();
-    dest.hostname = 'dabos.logans.tools';
-    dest.protocol = 'https:';
-    dest.pathname = dabosSubdomainPath(pathname);
-    return NextResponse.redirect(dest, 308);
+    const target = new URL(dabosSubdomainPath(pathname), 'https://dabos.logans.tools');
+    target.search = search ?? '';
+    return NextResponse.redirect(target, 308);
   }
 
   if (isDabosSubdomain && !pathname.startsWith('/api/') && !isStaticPassthrough(pathname)) {

@@ -8,7 +8,7 @@ import { MIDDLEWARE_LOCALE_HEADER, pickLocaleFromMiddlewareHeader } from '@/lib/
 import { shouldUseMarketingLayout } from '@/lib/marketing-layout';
 
 const MARKETING_LAYOUT_HEADER = 'x-marketing-layout';
-const PATHNAME_HEADER = 'x-pathname';
+const PATHNAME_HEADER = 'pathname';
 
 export const metadata: Metadata = {
   title: 'Logans.Tools',
