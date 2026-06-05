@@ -1,5 +1,5 @@
 #!/bin/sh
-# Security gate — runs pre-commit framework (Semgrep, gitleaks, Bandit, npm audit).
+# Security gate — runs pre-commit framework (Semgrep, detect-secrets, Bandit, npm audit).
 # SSOT: DABOS/contrib/pre-commit/pre-commit
 # Enable with: git config core.hooksPath .githooks
 

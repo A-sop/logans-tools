@@ -16,11 +16,14 @@
     "backup:android": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.config.json",
     "backup:android:smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/android-backup.ps1 -ConfigPath android-backup.smoke-test.config.json -SnapshotLabel smoke-ok",
     "precommit:install": "pre-commit install",
-    "security:scan": "pre-commit run --all-files"
+    "security:scan": "pre-commit run --all-files",
+    "dabos:migrate": "tsx scripts/dabos/migrate.ts",
+    "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts"
   },
   "dependencies": {
     "@eslint-community/eslint-utils": "^4.9.1",
     "@hookform/resolvers": "^5.2.2",
+    "@neondatabase/serverless": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
@@ -37,6 +40,7 @@
     "lucide-react": "^0.468.0",
     "next": "^16.3.0-canary.13",
     "nodemailer": "^7.0.5",
+    "postgres": "^3.4.9",
     "react": "19.2.3",
     "react-day-picker": "^9.13.0",
     "react-dom": "19.2.3",

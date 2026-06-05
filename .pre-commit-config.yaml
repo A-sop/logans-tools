@@ -11,10 +11,13 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=1000]
 
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.2
+  # Windows SAC blocks unsigned gitleaks.exe (WinError 4551). detect-secrets runs via Python in pre-commit's venv.
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
     hooks:
-      - id: gitleaks
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package-lock\.json
 
   - repo: https://github.com/semgrep/pre-commit
     rev: v1.163.0
