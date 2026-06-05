@@ -1,10 +1,6 @@
 import type { NextConfig } from 'next';
 
 const dabosHost = [{ type: 'host' as const, value: 'dabos.logans.tools' }];
-const apexHosts = [
-  { type: 'host' as const, value: 'logans.tools' },
-  { type: 'host' as const, value: 'www.logans.tools' },
-];
 
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
@@ -13,19 +9,17 @@ const nextConfig: NextConfig = {
     '/gabc': ['src/docs/prd/**'],
   },
   async redirects() {
+    const apexRedirect = (source: string, destination: string) =>
+      (['logans.tools', 'www.logans.tools'] as const).map((value) => ({
+        source,
+        has: [{ type: 'host' as const, value }],
+        destination,
+        permanent: true,
+      }));
+
     return [
-      {
-        source: '/dabos',
-        has: apexHosts,
-        destination: 'https://dabos.logans.tools',
-        permanent: true,
-      },
-      {
-        source: '/dabos/:path*',
-        has: apexHosts,
-        destination: 'https://dabos.logans.tools/:path*',
-        permanent: true,
-      },
+      ...apexRedirect('/dabos', 'https://dabos.logans.tools'),
+      ...apexRedirect('/dabos/:path*', 'https://dabos.logans.tools/:path*'),
     ];
   },
   async rewrites() {
