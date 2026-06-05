@@ -31,7 +31,8 @@ const nextConfig: NextConfig = {
           destination: '/dabos',
         },
         {
-          source: '/:path((?!dabos|api|_next|favicon\\.ico|robots\\.txt|sitemap\\.xml).*)',
+          source:
+            '/:path((?!dabos|api|_next|favicon\\.ico|robots\\.txt|sitemap\\.xml|sign-in|sign-up|clerk_).*)',
           has: dabosHost,
           destination: '/dabos/:path',
         },

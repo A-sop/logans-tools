@@ -1,27 +1,8 @@
-import type { ConditionEvaluation, ConditionLabel } from '@/lib/dabos/types';
-
-type Trend = 'up' | 'flat' | 'down';
-
-function trendFromValues(values: number[]): Trend {
-  if (values.length < 2) return 'flat';
-  const mid = Math.floor(values.length / 2);
-  const first = values.slice(0, mid);
-  const second = values.slice(mid);
-  const avg = (arr: number[]) => arr.reduce((sum, v) => sum + v, 0) / arr.length;
-  const avgFirst = avg(first);
-  const avgSecond = avg(second);
-  const delta = avgSecond - avgFirst;
-  const threshold = Math.max(Math.abs(avgFirst) * 0.05, 0.01);
-  if (delta > threshold) return 'up';
-  if (delta < -threshold) return 'down';
-  return 'flat';
-}
-
-function conditionFromTrend(trend: Trend): ConditionLabel {
-  if (trend === 'up') return 'Normal';
-  if (trend === 'down') return 'Danger';
-  return 'Emergency';
-}
+import type { ConditionEvaluation } from '@/lib/dabos/types';
+import {
+  CONDITION_RULE_SUMMARY,
+  conditionFromStatTrend,
+} from '@/lib/dabos/condition-ladder';
 
 export function evaluateConditionFromPoints(
   values: number[],
@@ -37,8 +18,7 @@ export function evaluateConditionFromPoints(
     };
   }
 
-  const trend = trendFromValues(values);
-  const condition = conditionFromTrend(trend);
+  const condition = conditionFromStatTrend(values);
   const confidence = Math.min(0.95, 0.5 + values.length * 0.08);
 
   return {
@@ -47,9 +27,9 @@ export function evaluateConditionFromPoints(
     point_count: values.length,
     basis: {
       ...meta,
-      trend,
       values,
-      rule: 'up=Normal, flat=Emergency, down=Danger',
+      rule: CONDITION_RULE_SUMMARY,
+      ladder: 'Power Change → Power → Affluence → Normal → Emergency → Danger → Non-Existence',
     },
   };
 }

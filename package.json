@@ -18,9 +18,11 @@
     "precommit:install": "pre-commit install",
     "security:scan": "pre-commit run --all-files",
     "dabos:migrate": "tsx scripts/dabos/migrate.ts",
-    "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts"
+    "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts",
+    "dabos:refresh-conditions": "tsx scripts/dabos/refresh-conditions.ts"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.4.3",
     "@eslint-community/eslint-utils": "^4.9.1",
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.1.0",

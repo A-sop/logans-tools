@@ -9,7 +9,11 @@ export function isExpatPath(pathname: string): boolean {
   return pathname === '/expat' || pathname.startsWith('/expat/');
 }
 
-/** Skip Logans.Tools AppShell — DABOS, expat, and other standalone surfaces. */
+export function isAuthPath(pathname: string): boolean {
+  return pathname === '/sign-in' || pathname.startsWith('/sign-in/');
+}
+
+/** Skip Logans.Tools AppShell — DABOS, expat, auth, and other standalone surfaces. */
 export function shouldUseMarketingLayout(
   hostHeader: string | null | undefined,
   pathname: string | null | undefined,
@@ -23,6 +27,7 @@ export function shouldUseMarketingLayout(
   if (pathname) {
     if (isDabosAppPath(pathname)) return true;
     if (isExpatPath(pathname)) return true;
+    if (isAuthPath(pathname)) return true;
   }
 
   return false;

@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
@@ -33,16 +34,18 @@ export default async function RootLayout({
   );
 
   return (
-    <html lang={htmlLang} suppressHydrationWarning>
-      <body className="antialiased">
-        {isMarketing ? (
-          children
-        ) : (
-          <LocaleProvider initialLocale={initialLocale}>
-            <AppShell>{children}</AppShell>
-          </LocaleProvider>
-        )}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={htmlLang} suppressHydrationWarning>
+        <body className="antialiased">
+          {isMarketing ? (
+            children
+          ) : (
+            <LocaleProvider initialLocale={initialLocale}>
+              <AppShell>{children}</AppShell>
+            </LocaleProvider>
+          )}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

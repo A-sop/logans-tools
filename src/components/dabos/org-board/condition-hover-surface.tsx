@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import { conditionHoverLabel } from '@/lib/dabos/condition-display';
+import { conditionDataAttr, conditionHoverLabel } from '@/lib/dabos/condition-display';
 import type { BoardStatSnapshot } from '@/lib/dabos/condition-display';
 import type { ConditionLabel } from '@/lib/dabos/types';
 
@@ -14,13 +14,6 @@ type ConditionHoverSurfaceProps = {
   children: ReactNode;
   href?: string;
 };
-
-function conditionDataAttr(condition: ConditionLabel | null): string {
-  if (condition === 'Normal') return 'Normal';
-  if (condition === 'Emergency') return 'Emergency';
-  if (condition === 'Danger') return 'Danger';
-  return 'none';
-}
 
 export function ConditionHoverSurface({
   condition,

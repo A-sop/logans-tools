@@ -699,19 +699,39 @@
     z-index: 2;
   }
 
-  .dabos-org-board__condition-hover[data-condition='Normal']:hover {
+  .dabos-org-board__condition-hover[data-condition='power-change']:hover {
+    background: rgba(20, 140, 120, 0.32);
+    color: rgb(12, 90, 78);
+  }
+
+  .dabos-org-board__condition-hover[data-condition='power']:hover {
+    background: rgba(34, 120, 70, 0.32);
+    color: rgb(18, 82, 48);
+  }
+
+  .dabos-org-board__condition-hover[data-condition='affluence']:hover {
+    background: rgba(100, 150, 40, 0.28);
+    color: rgb(60, 95, 20);
+  }
+
+  .dabos-org-board__condition-hover[data-condition='normal']:hover {
     background: rgba(34, 120, 70, 0.28);
     color: rgb(18, 82, 48);
   }
 
-  .dabos-org-board__condition-hover[data-condition='Emergency']:hover {
+  .dabos-org-board__condition-hover[data-condition='emergency']:hover {
     background: rgba(180, 120, 20, 0.3);
     color: rgb(120, 78, 8);
   }
 
-  .dabos-org-board__condition-hover[data-condition='Danger']:hover {
+  .dabos-org-board__condition-hover[data-condition='danger']:hover {
     background: rgba(160, 40, 40, 0.28);
     color: rgb(110, 28, 28);
+  }
+
+  .dabos-org-board__condition-hover[data-condition='non-existence']:hover {
+    background: rgba(40, 40, 45, 0.35);
+    color: rgb(28, 28, 32);
   }
 
   .dabos-org-board__condition-hover[data-condition='none']:hover {

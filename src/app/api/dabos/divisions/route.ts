@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { dabosDbUnavailable, requireDabosDb } from '@/lib/dabos/api-utils';
+import { requireDabosAuth } from '@/lib/dabos/clerk-auth';
 import { getDabosSql } from '@/lib/dabos/db';
 import {
   countOpenTasks,
@@ -10,6 +11,9 @@ import {
 } from '@/lib/dabos/queries';
 
 export async function GET() {
+  const authResult = await requireDabosAuth();
+  if ('error' in authResult) return authResult.error;
+
   if (!requireDabosDb()) return dabosDbUnavailable();
 
   const sql = getDabosSql();

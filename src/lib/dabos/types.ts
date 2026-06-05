@@ -1,6 +1,9 @@
 export type TaskStatus = 'todo' | 'doing' | 'blocked' | 'done' | 'cancelled';
 export type TaskType = 'human' | 'agent' | 'approval';
-export type ConditionLabel = 'Normal' | 'Emergency' | 'Danger';
+import type { ConditionLabel } from '@/lib/dabos/condition-ladder';
+
+export type { ConditionLabel };
+export { UPPER_CONDITION_LADDER } from '@/lib/dabos/condition-ladder';
 export type EntityType = 'division' | 'department' | 'workspace' | 'project';
 
 export type DivisionRow = {

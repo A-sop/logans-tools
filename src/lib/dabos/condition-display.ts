@@ -1,4 +1,5 @@
 import type { ConditionEvaluation, ConditionLabel } from '@/lib/dabos/types';
+import { conditionSlug } from '@/lib/dabos/condition-ladder';
 
 export type BoardStatSnapshot = {
   metric_key: string;
@@ -8,10 +9,13 @@ export type BoardStatSnapshot = {
 };
 
 export function conditionCssClass(condition: ConditionLabel | null | undefined): string {
-  if (condition === 'Normal') return 'dabos-org-board__condition--normal';
-  if (condition === 'Emergency') return 'dabos-org-board__condition--emergency';
-  if (condition === 'Danger') return 'dabos-org-board__condition--danger';
-  return 'dabos-org-board__condition--unknown';
+  if (!condition) return 'dabos-org-board__condition--unknown';
+  return `dabos-org-board__condition--${conditionSlug(condition)}`;
+}
+
+export function conditionDataAttr(condition: ConditionLabel | null | undefined): string {
+  if (!condition) return 'none';
+  return conditionSlug(condition);
 }
 
 /** Short label shown on hover (replaces tooltips on the org board). */

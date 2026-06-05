@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { dabosDbUnavailable, jsonError, requireDabosDb } from '@/lib/dabos/api-utils';
+import { requireDabosAuth } from '@/lib/dabos/clerk-auth';
 import { evaluateAndPersistCondition } from '@/lib/dabos/queries';
 
 const evaluateSchema = z.object({
@@ -12,6 +13,9 @@ const evaluateSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const authResult = await requireDabosAuth();
+  if ('error' in authResult) return authResult.error;
+
   if (!requireDabosDb()) return dabosDbUnavailable();
 
   let body: unknown;

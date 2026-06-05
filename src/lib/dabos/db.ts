@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { neon } from '@neondatabase/serverless';
+import { createDabosSql, isNeonUrl } from '@/lib/dabos/dabos-connection';
 import postgres from 'postgres';
 
 function connectionString(): string {
@@ -9,15 +9,6 @@ function connectionString(): string {
     throw new Error('Missing required environment variable: DATABASE_URL');
   }
   return url;
-}
-
-function isNeonUrl(url: string): boolean {
-  try {
-    const host = new URL(url.replace(/^postgresql:/, 'http:')).hostname;
-    return host.includes('neon.tech');
-  } catch {
-    return false;
-  }
 }
 
 const globalForDabos = globalThis as typeof globalThis & {
@@ -30,7 +21,6 @@ function poolMax(): number {
     const n = Number(fromEnv);
     if (Number.isFinite(n) && n >= 1) return Math.floor(n);
   }
-  // Homelab Postgres (ln02): keep tiny — dev HMR must not exhaust max_connections.
   return 2;
 }
 
@@ -50,7 +40,7 @@ export function hasDabosDb(): boolean {
 export function getDabosSql() {
   const url = connectionString();
   if (isNeonUrl(url)) {
-    return neon(url);
+    return createDabosSql(url);
   }
   if (!globalForDabos.__dabosPg) {
     globalForDabos.__dabosPg = createPgClient(url);

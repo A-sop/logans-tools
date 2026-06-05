@@ -1,10 +1,5 @@
 import type { ConditionEvaluation, ConditionLabel } from '@/lib/dabos/types';
-
-const SEVERITY: Record<ConditionLabel, number> = {
-  Danger: 0,
-  Emergency: 1,
-  Normal: 2,
-};
+import { conditionSeverity } from '@/lib/dabos/condition-ladder';
 
 export type ExecutiveRollup = {
   condition: ConditionEvaluation;
@@ -16,7 +11,7 @@ export type ExecutiveRollup = {
 function worstCondition(a: ConditionEvaluation, b: ConditionEvaluation): ConditionEvaluation {
   if (!a.condition) return b;
   if (!b.condition) return a;
-  return SEVERITY[a.condition] <= SEVERITY[b.condition] ? a : b;
+  return conditionSeverity(a.condition) >= conditionSeverity(b.condition) ? a : b;
 }
 
 export function worstWinsRollup(
