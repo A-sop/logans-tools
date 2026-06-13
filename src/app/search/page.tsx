@@ -1,13 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale } from '@/components/providers/locale-provider';
 import { features } from '@/lib/features';
 import { searchDocuments } from '@/lib/search/search';
 
 export default function SearchPage() {
+  return (
+    <Suspense>
+      <SearchPageInner />
+    </Suspense>
+  );
+}
+
+function SearchPageInner() {
   const { t, locale } = useLocale();
   const params = useSearchParams();
   const query = (params.get('q') ?? '').trim();

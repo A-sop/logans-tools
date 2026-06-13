@@ -36,7 +36,7 @@ async function main() {
     console.log(`  ${row.entity_id}: ${row.condition}`);
   }
 
-  if (typeof sql.end === 'function') {
+  if ('end' in sql && typeof sql.end === 'function') {
     await sql.end({ timeout: 5 });
   }
 }

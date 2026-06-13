@@ -6,9 +6,17 @@ import {
   defaultLocale,
   enabledLocales,
   getStoredLocale,
+  LOCALE_COOKIE_NAME,
   persistLocalePreference,
   t as translate,
 } from '@/lib/i18n';
+
+function readLocaleCookie(): Locale | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${LOCALE_COOKIE_NAME}=([^;]*)`));
+  const value = match?.[1];
+  return value && enabledLocales.includes(value as Locale) ? (value as Locale) : null;
+}
 
 type LocaleContextValue = {
   locale: Locale;
@@ -28,9 +36,11 @@ export function LocaleProvider({
 
   useEffect(() => {
     const stored = getStoredLocale();
-    if (stored && enabledLocales.includes(stored) && stored !== initialLocale) {
-      setLocaleState(stored);
-      persistLocalePreference(stored);
+    const fromCookie = readLocaleCookie();
+    const resolved = stored ?? fromCookie;
+    if (resolved && enabledLocales.includes(resolved)) {
+      setLocaleState(resolved);
+      persistLocalePreference(resolved);
     }
   }, [initialLocale]);
 
