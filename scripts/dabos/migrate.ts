@@ -13,10 +13,42 @@ const root = path.join(process.cwd(), 'migrations');
 function loadEnvLocal() {
   const envPath = path.join(process.cwd(), '.env.local');
   if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
-    const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=(.*)$/);
-    if (m) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
+  for (const line of fs.readFileSync(envPath, 'utf8').replace(/^\uFEFF/, '').split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const quoted = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*"(.*)"\s*$/);
+    const plain = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
+    const m = quoted ?? plain;
+    if (m) process.env[m[1]] = m[2].trim();
   }
+}
+
+function resolveDatabaseUrl(): string | undefined {
+  const candidates = [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.POSTGRES_PRISMA_URL,
+    process.env.DABOS_DATABASE_URL,
+  ];
+  for (const raw of candidates) {
+    const url = raw?.trim();
+    if (!url) continue;
+    try {
+      const parsed = new URL(url.replace(/^postgresql:/, 'http:'));
+      if (parsed.hostname && parsed.pathname && parsed.pathname !== '/') return url;
+    } catch {
+      /* try next */
+    }
+  }
+
+  const host = process.env.PGHOST?.trim();
+  const user = process.env.PGUSER?.trim();
+  const pass = process.env.PGPASSWORD?.trim();
+  const db = process.env.PGDATABASE?.trim();
+  if (host && user && pass && db) {
+    return `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${host}/${db}?sslmode=require`;
+  }
+  return undefined;
 }
 
 function isNeonUrl(url: string): boolean {
@@ -30,7 +62,7 @@ function isNeonUrl(url: string): boolean {
 
 async function main() {
   loadEnvLocal();
-  const url = process.env.DATABASE_URL?.trim();
+  const url = resolveDatabaseUrl();
   if (!url) {
     console.error('');
     console.error('DATABASE_URL not set.');

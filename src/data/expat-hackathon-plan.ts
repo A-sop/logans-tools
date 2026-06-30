@@ -174,10 +174,10 @@ export const TECH_STACK = [
   },
   {
     layer: 'Call booking',
-    tools: 'Calendly embed',
+    tools: 'Cal.com embed (migrating from Calendly)',
     role: 'Primary CTA — book walkthrough for full manual',
-    status: 'live' as TechStackStatus,
-    href: 'https://calendly.com',
+    status: 'planned' as TechStackStatus,
+    href: 'https://partners.dub.co/cal',
   },
   {
     layer: 'Hackathon platform',
@@ -198,7 +198,14 @@ export const TECH_STACK = [
     tools: 'Cursor · Claude / GPT agents',
     role: 'Build, copy, calculator logic, this build log',
     status: 'live' as TechStackStatus,
-    href: 'https://cursor.com',
+    href: 'https://cursor.com/referral?code=JN8FVLORFFGY',
+  },
+  {
+    layer: 'Voice input',
+    tools: 'Wispr Flow',
+    role: 'Dictation for brain dumps, triage notes, and agent handoff',
+    status: 'live' as TechStackStatus,
+    href: 'https://wisprflow.ai/r?LOGAN441',
   },
   {
     layer: 'UI reference',

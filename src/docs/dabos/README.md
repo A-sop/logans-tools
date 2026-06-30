@@ -14,11 +14,14 @@
 
 2. Copy the printed **DATABASE_URL** into `C:\Dev\logans-tools\.env.local`.
 
-3. Optional Research via ln02 Ollama:
+3. Research via **ln02** Ollama (workhorse):
 
    ```env
-   OLLAMA_BASE_URL=http://<ln02-tailscale-ip>:11434/v1
+   OLLAMA_BASE_URL=http://100.127.110.57:11434/v1
+   OLLAMA_MODEL=llama3.2:3b
    ```
+
+   After Ollama upgrade (Track C): optional `OLLAMA_MODEL=gemma4:e2b-it-qat`.
 
 4. Migrate and run:
 
@@ -113,7 +116,12 @@ SQL in `migrations/` — `npm run dabos:migrate` (uses `DATABASE_URL` from `.env
 | Variable | Path B default |
 |----------|----------------|
 | `DATABASE_URL` | `postgresql://dabos:…@<ln02-tailscale-ip>:5432/dabos?sslmode=disable` |
-| `OLLAMA_BASE_URL` | `http://<ln02-tailscale-ip>:11434/v1` |
-| `OPENAI_API_KEY` | Optional tier-2 Research |
+| `OLLAMA_BASE_URL` | `http://100.127.110.57:11434/v1` (ln02 workhorse) |
+| `OLLAMA_MODEL` | `llama3.2:3b` or `gemma4:e2b-it-qat` after upgrade |
 
 Neon/cloud Postgres is **not** used on Path B.
+
+## References
+
+- **PRD-004 conditions:** `C:\Dev\DABOS\docs\PRD-004-conditions-memory-governance.md`
+- **UI motion (optional):** [Atlas/docs/reference/animejs.md](../../../../Atlas/docs/reference/animejs.md) — [Anime.js v4](https://animejs.com/documentation/) for org-board/dashboard animation; also GFP, LDW, logans.tools when timelines or scroll-sync beat CSS-only

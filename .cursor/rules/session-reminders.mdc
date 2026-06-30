@@ -8,6 +8,8 @@ alwaysApply: true
 
 **Single reference:** Project root **`CHAT-PRIMER.md`** (context for new chat + "I'm back" reminder + "I'm done for the day" behavior).
 
+**Session timestamps:** Atlas `.cursor/rules/session-timestamps.mdc` — log to `Atlas/docs/admin/session-log.md` via `Atlas/scripts/Log-CursorSession.ps1`.
+
 ## When the user says they're back or starts fresh
 
 If the user says things like **"I'm back"**, **"new chat"**, **"just opened the project"**, or **"remind me what I need to do"**:

@@ -69,5 +69,9 @@ next-env.d.ts
 # private/internal reference (do not commit)
 /private/
 
+# graphify knowledge graph (local build artifacts)
+/graphify-out/
+.graphify_*.json
+
 .vercel
 .env*.local
