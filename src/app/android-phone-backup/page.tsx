@@ -191,7 +191,10 @@ adb pull /sdcard/Documents "D:\\Backups\\Android-Phone\\adb-snapshots\\YYYY-MM-D
           <Link href="/" className="text-primary hover:underline">
             home page
           </Link>
-          .
+          {' · '}
+          <Link href="/stack" className="text-primary hover:underline">
+            tech stack &amp; referrals
+          </Link>
         </p>
       </section>
     </div>

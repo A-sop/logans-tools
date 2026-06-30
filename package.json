@@ -18,6 +18,7 @@
     "precommit:install": "pre-commit install",
     "security:scan": "pre-commit run --all-files",
     "dabos:migrate": "tsx scripts/dabos/migrate.ts",
+    "dabos:smoke": "tsx scripts/dabos/smoke-board.ts",
     "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts",
     "dabos:refresh-conditions": "tsx scripts/dabos/refresh-conditions.ts"
   },

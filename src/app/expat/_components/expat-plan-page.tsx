@@ -408,6 +408,13 @@ export function ExpatPlanPage() {
             </table>
           </div>
 
+          <p className="mt-4 text-sm text-muted-foreground">
+            Portfolio-wide tools &amp; referral research:{' '}
+            <Link href="/stack" className="font-medium text-primary hover:underline">
+              logans.tools/stack
+            </Link>
+          </p>
+
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-xl border border-border bg-card p-5">
               <h3 className="text-sm font-semibold">Team</h3>

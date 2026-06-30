@@ -5,14 +5,19 @@ import Link from 'next/link';
 import { ArrowRight, Cpu, Hammer, Zap } from 'lucide-react';
 
 import { EXPAT_PLAN } from '@/data/expat-hackathon-plan';
+import { PORTFOLIO_STACK } from '@/data/portfolio-stack';
 
-const USING = [
-  'Cursor + AI-assisted development',
-  'Next.js, React, TypeScript',
-  'Tailwind CSS, shadcn/ui',
-  'Linear for task management',
-  'Vercel for deployment',
-];
+/** Core daily-driver tools — full list + referral research at /stack */
+const USING = PORTFOLIO_STACK.filter((t) =>
+  [
+    'Cursor (AI-assisted development)',
+    'Wispr Flow (voice input)',
+    'Next.js, React, TypeScript',
+    'Tailwind CSS, shadcn/ui',
+    'Linear (task management)',
+    'Vercel (deployment)',
+  ].includes(t.label)
+);
 
 const OFFBOARDING: string[] = [
   // Add tools you're moving away from
@@ -164,6 +169,12 @@ export default async function Home() {
             <ArrowRight className="size-4" />
           </Link>
         </div>
+        <p className="text-sm text-muted-foreground">
+          Tools &amp; referral links:{' '}
+          <Link href="/stack" className="font-medium text-primary hover:underline">
+            full tech stack
+          </Link>
+        </p>
       </section>
 
       <section id="how-i-work" className="mt-16 space-y-6">
@@ -175,12 +186,31 @@ export default async function Home() {
           <div>
             <h3 className="text-sm font-medium text-foreground mb-2">Using</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              {USING.map((t) => (
-                <li key={t} className="flex items-center gap-2">
-                  <span className="text-primary">→</span> {t}
+              {USING.map((item) => (
+                <li key={item.label} className="flex items-center gap-2">
+                  <span className="text-primary">→</span>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    item.label
+                  )}
                 </li>
               ))}
             </ul>
+            <Link
+              href="/stack"
+              className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+            >
+              Full stack &amp; referral links
+              <ArrowRight className="size-4" />
+            </Link>
           </div>
           {OFFBOARDING.length > 0 && (
             <div>

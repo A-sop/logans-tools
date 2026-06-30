@@ -8,6 +8,9 @@ const pageDescription =
 export const metadata: Metadata = {
   title: 'Tech stack',
   description: pageDescription,
+  alternates: {
+    canonical: '/stack',
+  },
 };
 
 function referralLabel(status: ReferralStatus | undefined): string {
@@ -161,6 +164,16 @@ export default function StackPage() {
       <Link href="/" className="inline-block text-sm text-primary hover:underline">
         ← Home
       </Link>
+      <p className="text-sm text-muted-foreground">
+        Related:{' '}
+        <Link href="/expat" className="font-medium text-primary hover:underline">
+          Money Manual build log
+        </Link>
+        {' · '}
+        <Link href="/android-phone-backup" className="font-medium text-primary hover:underline">
+          Android backup guide
+        </Link>
+      </p>
     </main>
   );
 }
