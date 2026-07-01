@@ -1,23 +1,9 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import '@/components/dabos/org-board/org-board.css';
-import {
-  deptBridgeLabel,
-  deptNumberLabel,
-  deptRoleLabel,
-  divisionSecretaryLabel,
-} from '@/lib/dabos/org-board-config';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { dabosConfigured, fetchDepartment } from '@/lib/dabos/server-data';
+import { DeptDashboard } from '@/components/dabos/dept-dashboard';
+import { DrilldownShell } from '@/components/dabos/division-drilldown';
+import { deptRoleLabel } from '@/lib/dabos/org-board-config';
+import { dabosConfigured, fetchDepartmentDashboard } from '@/lib/dabos/server-data';
 
 type PageProps = { params: Promise<{ id: string; deptId: string }> };
 
@@ -25,102 +11,89 @@ export default async function DepartmentPage({ params }: PageProps) {
   if (!dabosConfigured()) notFound();
 
   const { id, deptId } = await params;
-  const data = await fetchDepartment(id, deptId);
+  const data = await fetchDepartmentDashboard(id, deptId);
   if (!data) notFound();
 
-  const { division, department, tasks, stats } = data;
+  const { division, department } = data;
   const dept = {
     id: department.id as string,
     legacy_name: department.legacy_name as string,
     operational_name: department.operational_name as string,
+    policy_text: (department.policy_text as string | null) ?? null,
   };
-  const policy = (department.policy_text as string | null)?.trim();
 
   return (
-    <div className="dabos-org-board dabos-org-board--single">
-      <Link href={`/dabos/divisions/${id}`} className="dabos-org-board__back">
-        ← {division.operational_name as string}
-      </Link>
+    <DrilldownShell
+      backHref={`/dabos/divisions/${id}`}
+      backLabel={division.operational_name as string}
+    >
+      <header className="mb-6">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {dept.id}
+        </p>
+        <h1 className="text-2xl font-bold tracking-tight">{deptRoleLabel(dept)}</h1>
+        <p className="text-sm text-muted-foreground">{dept.legacy_name}</p>
+      </header>
 
-      <article className="dabos-org-board__column">
-        <div className="dabos-org-board__column-head">
-          <div className="dabos-org-board__secretary-label">
-            {divisionSecretaryLabel(division.operational_name as string)}
-          </div>
-          <div className="dabos-org-board__division-title">{deptBridgeLabel(dept)}</div>
-          <div className="dabos-org-board__division-subtitle">{deptNumberLabel(deptId)}</div>
-        </div>
-
-        <div className="dabos-org-board__body" style={{ fontSize: '0.65rem', padding: '0.75rem' }}>
-          <p className="dabos-org-board__dept-block-title">{deptRoleLabel(dept)}</p>
-          {policy ? <p className="mt-2">{policy}</p> : null}
-        </div>
-      </article>
-
-      <div className="mt-10 space-y-6 border-t border-border pt-8 font-sans">
-        <section className="space-y-3">
-          <h3 className="text-lg font-semibold">Tasks</h3>
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Agent</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tasks.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={3} className="text-muted-foreground">
-                        No tasks
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    tasks.map((task) => (
-                      <TableRow key={task.id as string}>
-                        <TableCell>
-                          <Link
-                            href={`/dabos/tasks/${task.id}`}
-                            className="font-medium hover:text-primary"
-                          >
-                            {task.title as string}
-                          </Link>
-                        </TableCell>
-                        <TableCell>{task.status as string}</TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {(task.assigned_agent as string | null) ?? '—'}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="space-y-3">
-          <h3 className="text-lg font-semibold">Recent stats</h3>
-          <Card>
-            <CardContent className="space-y-2 p-4 text-sm">
-              {stats.length === 0 ? (
-                <p className="text-muted-foreground">No stats logged</p>
-              ) : (
-                stats.map((s, i) => (
-                  <p key={`${s.metric_key}-${i}`} className="tabular-nums">
-                    {s.metric_key as string}: {s.value as string}{' '}
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(s.recorded_at as string).toLocaleString()}
-                    </span>
-                  </p>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </section>
-      </div>
-    </div>
+      <DeptDashboard
+        divisionId={id}
+        divisionName={division.operational_name as string}
+        department={dept}
+        latest_condition={data.latest_condition}
+        battle_plan={data.battle_plan}
+        metric_key={data.metric_key}
+        last_active={data.last_active}
+        last_role_run={data.last_role_run}
+        workQueue={data.workQueue.map((t) => ({
+          id: t.id as string,
+          title: t.title as string,
+          status: t.status as string,
+          priority: t.priority as number,
+          type: t.type as string,
+          assigned_agent: (t.assigned_agent as string | null) ?? null,
+          created_at: (t.created_at as Date).toISOString(),
+        }))}
+        investigations={data.investigations.map((t) => ({
+          id: t.id as string,
+          title: t.title as string,
+          status: t.status as string,
+          priority: t.priority as number,
+          type: t.type as string,
+          assigned_agent: (t.assigned_agent as string | null) ?? null,
+          created_at: (t.created_at as Date).toISOString(),
+        }))}
+        stats={data.stats.map((s) => ({
+          metric_key: s.metric_key as string,
+          value: s.value as string | number,
+          recorded_at: (s.recorded_at as Date).toISOString(),
+          workspace_id: (s.workspace_id as string | null) ?? null,
+        }))}
+        artifacts={data.artifacts.map((a) => ({
+          id: a.id as string,
+          type: a.type as string,
+          summary: a.summary as string,
+          task_id: (a.task_id as string | null) ?? null,
+          created_by: a.created_by as string,
+          created_at: (a.created_at as Date).toISOString(),
+        }))}
+        investigationArtifacts={data.investigationArtifacts.map((a) => ({
+          id: a.id as string,
+          type: a.type as string,
+          summary: a.summary as string,
+          task_id: (a.task_id as string | null) ?? null,
+          created_by: 'agent',
+          created_at: (a.created_at as Date).toISOString(),
+        }))}
+        receipts={data.receipts.map((r) => ({
+          id: r.id as string,
+          agent_name: r.agent_name as string,
+          cost_eur: r.cost_eur as string | number | null,
+          tokens_input: r.tokens_input as number | null,
+          tokens_output: r.tokens_output as number | null,
+          created_at: (r.created_at as Date).toISOString(),
+          task_title: r.task_title as string,
+        }))}
+      />
+    </DrilldownShell>
   );
 }

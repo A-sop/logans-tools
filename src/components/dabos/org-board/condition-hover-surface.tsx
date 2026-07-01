@@ -10,6 +10,8 @@ import './org-board.css';
 type ConditionHoverSurfaceProps = {
   condition: ConditionLabel | null;
   stat?: BoardStatSnapshot | null;
+  statIndicated?: ConditionLabel | null;
+  climbLag?: boolean;
   className?: string;
   children: ReactNode;
   href?: string;
@@ -18,11 +20,13 @@ type ConditionHoverSurfaceProps = {
 export function ConditionHoverSurface({
   condition,
   stat,
+  statIndicated,
+  climbLag,
   className = '',
   children,
   href,
 }: ConditionHoverSurfaceProps) {
-  const label = conditionHoverLabel(condition, stat);
+  const label = conditionHoverLabel(condition, stat, { statIndicated, climbLag });
   const dataCondition = conditionDataAttr(condition);
   const classes = ['dabos-org-board__condition-hover', className].filter(Boolean).join(' ');
 

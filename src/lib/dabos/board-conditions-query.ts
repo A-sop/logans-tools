@@ -11,6 +11,12 @@ import {
 } from '@/lib/dabos/calendar-week';
 import { evaluateConditionFromPoints } from '@/lib/dabos/conditions';
 import {
+  getEntityConditionState,
+  mergeEvaluationWithWorking,
+  syncEntityConditionFromEvaluation,
+} from '@/lib/dabos/condition-state-queries';
+import { syncWorkingCondition } from '@/lib/dabos/condition-state';
+import {
   emptyCondition,
   type BoardStatSnapshot,
 } from '@/lib/dabos/condition-display';
@@ -96,6 +102,8 @@ function evaluateDivisionFromWeeklyRaw(
     return {
       evaluation: {
         condition: null,
+        stat_indicated_condition: null,
+        working_condition: null,
         confidence: null,
         point_count: weeklyValues.length,
         basis: {
@@ -137,6 +145,24 @@ function evaluateDivisionFromWeeklyRaw(
     evaluation,
     currentPercentile: pctSeries[pctSeries.length - 1] ?? null,
   };
+}
+
+async function mergeBoardEvaluation(
+  sql: DabosSql,
+  entityType: 'division' | 'department',
+  entityId: string,
+  evaluation: ConditionEvaluation
+): Promise<ConditionEvaluation> {
+  try {
+    const existing = await getEntityConditionState(sql, entityType, entityId);
+    const working = syncWorkingCondition(
+      existing?.working_condition ?? null,
+      evaluation.stat_indicated_condition
+    );
+    return mergeEvaluationWithWorking(evaluation, working);
+  } catch {
+    return evaluation;
+  }
 }
 
 export async function evaluateBoardConditionsWithSql(
@@ -213,6 +239,10 @@ export async function evaluateBoardConditionsWithSql(
     );
   }
 
+  for (const [id, evaluation] of divisionConditions) {
+    divisionConditions.set(id, await mergeBoardEvaluation(sql, 'division', id, evaluation));
+  }
+
   const departmentConditions = new Map<string, ConditionEvaluation>();
   const departmentStats = new Map<string, BoardStatSnapshot | null>();
 
@@ -242,6 +272,10 @@ export async function evaluateBoardConditionsWithSql(
       departmentConditions.set(id, divCondition);
       departmentStats.set(id, divisionStats.get(divisionId) ?? snapshot);
     }
+  }
+
+  for (const [id, evaluation] of departmentConditions) {
+    departmentConditions.set(id, await mergeBoardEvaluation(sql, 'department', id, evaluation));
   }
 
   const allDivisionIds = divisions.map((d) => d.id as string);
@@ -277,15 +311,28 @@ async function persistConditionEvaluation(
   entityId: string,
   evaluation: ConditionEvaluation
 ): Promise<boolean> {
-  if (!evaluation.condition) return false;
+  let merged = evaluation;
+  try {
+    merged = await syncEntityConditionFromEvaluation(sql, entityType, entityId, evaluation);
+  } catch {
+    if (evaluation.stat_indicated_condition) {
+      merged = {
+        ...evaluation,
+        working_condition: evaluation.stat_indicated_condition,
+        condition: evaluation.stat_indicated_condition,
+      };
+    }
+  }
+  const label = merged.working_condition ?? merged.stat_indicated_condition;
+  if (!label) return false;
   await sql`
     INSERT INTO conditions (entity_type, entity_id, condition, confidence, basis)
     VALUES (
       ${entityType},
       ${entityId},
-      ${evaluation.condition},
-      ${evaluation.confidence},
-      ${JSON.stringify(evaluation.basis)}::jsonb
+      ${label},
+      ${merged.confidence},
+      ${JSON.stringify(merged.basis)}::jsonb
     )
   `;
   return true;

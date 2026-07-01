@@ -140,9 +140,23 @@ export type ExecutiveBoxProps = {
   label: string;
   condition: ConditionLabel | null;
   variant?: 'director';
+  lastRun?: string | null;
+  lastRunLabel?: string;
 };
 
-export function ExecutiveBox({ href, label, condition, variant }: ExecutiveBoxProps) {
+function formatExecutiveRun(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+export function ExecutiveBox({
+  href,
+  label,
+  condition,
+  variant,
+  lastRun,
+  lastRunLabel = 'last run',
+}: ExecutiveBoxProps) {
   return (
     <ConditionHoverSurface
       condition={condition}
@@ -155,7 +169,12 @@ export function ExecutiveBox({ href, label, condition, variant }: ExecutiveBoxPr
         .join(' ')}
       href={href}
     >
-      {label}
+      <span className="dabos-org-board__box-label">{label}</span>
+      {lastRun ? (
+        <span className="dabos-org-board__box-run">
+          {lastRunLabel}: {formatExecutiveRun(lastRun)}
+        </span>
+      ) : null}
     </ConditionHoverSurface>
   );
 }

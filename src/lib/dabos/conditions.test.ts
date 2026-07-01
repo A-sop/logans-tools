@@ -36,6 +36,7 @@ describe('evaluateConditionFromPoints', () => {
       metric_key: 'test',
       window_days: 7,
     });
+    expect(ev.stat_indicated_condition).toBe('Normal');
     expect(ev.condition).toBe('Normal');
     expect(ev.basis.rule).toContain('PRD-004');
   });

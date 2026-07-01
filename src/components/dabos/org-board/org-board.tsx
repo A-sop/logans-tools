@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+import { BoardCadenceStrip } from '@/components/dabos/dabos-chrome';
+
 import type { BoardChartPeriod, BoardChartPoint } from '@/lib/dabos/board-charts';
 import {
   BOARD_PAGE_SUBTITLE,
@@ -21,6 +23,12 @@ import './org-board.css';
 
 export type OrgBoardExecutive = {
   condition: ConditionLabel | null;
+  last_run?: string | null;
+};
+
+export type OrgBoardCadence = {
+  open_tasks_total: number;
+  divisions_with_work: number;
 };
 
 export type OrgBoardDivision = {
@@ -28,6 +36,8 @@ export type OrgBoardDivision = {
   operational_name: string;
   description: string | null;
   condition: ConditionLabel | null;
+  statIndicated?: ConditionLabel | null;
+  climbLag?: boolean;
   stat: BoardStatSnapshot | null;
   metric_key: string;
   chart_points: BoardChartPoint[];
@@ -42,7 +52,9 @@ type OrgBoardProps = {
     director: OrgBoardExecutive;
     dco: OrgBoardExecutive;
     org: OrgBoardExecutive;
+    week_close_at?: string | null;
   };
+  cadence?: OrgBoardCadence;
   maxWeek: number;
 };
 
@@ -57,6 +69,8 @@ function DivisionsGrid({ byId }: { byId: Map<string, OrgBoardDivision> }) {
         operationalName={div.operational_name}
         description={div.description}
         condition={div.condition}
+        statIndicated={div.statIndicated}
+        climbLag={div.climbLag}
         stat={div.stat}
         metricKey={div.metric_key}
         chartPoints={div.chart_points}
@@ -80,7 +94,7 @@ function DivisionsGrid({ byId }: { byId: Map<string, OrgBoardDivision> }) {
   );
 }
 
-export function OrgBoard({ divisions, week, period, executive, maxWeek }: OrgBoardProps) {
+export function OrgBoard({ divisions, week, period, executive, cadence, maxWeek }: OrgBoardProps) {
   const byId = new Map(divisions.map((d) => [d.id, d]));
 
   return (
@@ -93,12 +107,20 @@ export function OrgBoard({ divisions, week, period, executive, maxWeek }: OrgBoa
           <p className="dabos-org-board__page-subtitle">{BOARD_PAGE_SUBTITLE}</p>
         </div>
 
+        {cadence ? (
+          <BoardCadenceStrip
+            openTasksTotal={cadence.open_tasks_total}
+            divisionsActive={cadence.divisions_with_work}
+          />
+        ) : null}
+
         <div className="dabos-org-board__layout-grid">
           <div className="dabos-org-board__tree-spine">
             <ExecutiveBox
               href={EXECUTIVE_HREFS.director}
               label={EXECUTIVE_LABELS.director}
               condition={executive.director.condition}
+              lastRun={executive.director.last_run}
               variant="director"
             />
             <div className="dabos-org-board__tree-connectors" aria-hidden>
@@ -122,6 +144,8 @@ export function OrgBoard({ divisions, week, period, executive, maxWeek }: OrgBoa
               href={EXECUTIVE_HREFS.orgSecretary}
               label={EXECUTIVE_LABELS.orgSecretary}
               condition={executive.org.condition}
+              lastRun={executive.week_close_at}
+              lastRunLabel="week close"
             />
           </div>
 

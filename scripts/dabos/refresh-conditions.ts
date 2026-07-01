@@ -36,6 +36,19 @@ async function main() {
     console.log(`  ${row.entity_id}: ${row.condition}`);
   }
 
+  try {
+    await sql`
+      INSERT INTO role_runs (role_id, role_type, summary_json)
+      VALUES (
+        'refresh_conditions',
+        'cadence',
+        ${JSON.stringify({ week: result.week.label, persisted: result.persisted })}::jsonb
+      )
+    `;
+  } catch {
+    /* role_runs optional */
+  }
+
   if ('end' in sql && typeof sql.end === 'function') {
     await sql.end({ timeout: 5 });
   }

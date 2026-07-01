@@ -6,7 +6,7 @@
   --ob-line: #0c3556;
   --ob-bridge-row: auto;
   --board-gap: 2.75rem;
-  --board-max-width: 68rem;
+  --board-max-width:  min(96rem, 98vw);
   --board-side-gutter: 1.25rem;
   --board-row-head: 5.25rem;
   --board-row-num: 2.15rem;
@@ -173,6 +173,11 @@
 }
 
 .dabos-org-board__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
   border: 2px solid var(--ob-line);
   background: var(--ob-paper);
   padding: 0.4rem 0.85rem;
@@ -514,12 +519,60 @@
 }
 
 .dabos-org-board__dept-num {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
   font-size: 0.62rem;
   font-weight: 700;
   line-height: 1.2;
   padding: 0.2rem 0;
   letter-spacing: 0.01em;
+}
+
+.dabos-org-board__dept-dot {
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.dabos-org-board__dept-dot--idle {
+  background: #94a3b8;
+}
+
+.dabos-org-board__dept-dot--active {
+  background: #16a34a;
+}
+
+.dabos-org-board__dept-dot--investigating {
+  background: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.25);
+}
+
+.dabos-org-board__dept-task-count {
+  margin-left: 0.15rem;
+  font-size: 0.5rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.dabos-org-board__box-label {
+  display: block;
+}
+
+.dabos-org-board__box-run {
+  display: block;
+  font-size: 0.45rem;
+  font-weight: 400;
+  line-height: 1.2;
+  opacity: 0.85;
+  letter-spacing: 0;
+}
+
+.dabos-org-board__cadence-strip {
+  font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
 .dabos-org-board__body {
@@ -626,8 +679,36 @@
 }
 
 .dabos-org-board--single {
-  max-width: 22rem;
+  max-width: min(72rem, 100%);
   margin: 0 auto;
+}
+
+.dabos-drilldown {
+  width: min(100%, 72rem);
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 1100px) {
+  .dabos-org-board__dept-bridge,
+  .dabos-org-board__dept-title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    white-space: pre-line;
+    text-align: center;
+    line-height: 1.15;
+    font-size: 0.58rem;
+    max-width: 100%;
+    overflow: visible;
+    word-break: break-word;
+    hyphens: manual;
+  }
+
+  .dabos-org-board__dept-title-row .dabos-org-board__dept-cell--title {
+    min-height: 4.5rem;
+    align-items: flex-start;
+    padding-top: 0.35rem;
+  }
 }
 
 .dabos-org-board--single .dabos-org-board__column--single {

@@ -52,6 +52,8 @@ export const DIVISION_BAND_TITLE: Record<BoardDivisionId, string> = {
 export const DEPARTMENT_DISPLAY_OVERRIDES: Partial<
   Record<string, { bridge?: string; role?: string }>
 > = {
+  Dept1: { role: 'Intake\n&\nClassification' },
+  Dept11: { role: 'Implement-\nation' },
   Dept21: { role: 'Office of LDW' },
 };
 

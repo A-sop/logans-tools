@@ -64,6 +64,10 @@ function isStaticPassthrough(pathname: string): boolean {
   );
 }
 
+function isDabosCronPath(pathname: string): boolean {
+  return pathname.startsWith('/api/dabos/cron/');
+}
+
 function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isAuthPublicRoute(request)) return false;
 
@@ -74,6 +78,7 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   const hostname = request.nextUrl.hostname;
   const { pathname } = request.nextUrl;
 
+  if (isDabosCronPath(pathname)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;

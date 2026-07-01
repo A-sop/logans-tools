@@ -4,12 +4,11 @@ import { notFound } from 'next/navigation';
 import { AppendStatForm } from '@/components/dabos/append-stat-form';
 import { CreateTaskForm } from '@/components/dabos/create-task-form';
 import { ConditionBadge } from '@/components/dabos/condition-badge';
-import { DivisionColumn } from '@/components/dabos/org-board/division-column';
-import '@/components/dabos/org-board/org-board.css';
+import { DrilldownShell, DivisionDrilldownHeader } from '@/components/dabos/division-drilldown';
 import { BOARD_PAGE_TITLE, type BoardDivisionId } from '@/lib/dabos/org-board-config';
 import { evaluateBoardConditions } from '@/lib/dabos/queries';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -18,7 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { dabosConfigured, fetchDepartmentsForSelect, fetchDivision } from '@/lib/dabos/server-data';
+import {
+  dabosConfigured,
+  fetchDepartmentsForSelect,
+  fetchDeptActivityMap,
+  fetchDivision,
+  fetchDivisionBattlePlan,
+} from '@/lib/dabos/server-data';
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -32,6 +37,7 @@ export default async function DivisionPage({ params }: PageProps) {
   const { division, departments, tasks, latest_condition } = data;
   const metricKey = (division.primary_metric_key as string | null) ?? 'tasks_completed';
   const boardConditions = await evaluateBoardConditions();
+  const deptActivity = await fetchDeptActivityMap();
   const departmentsForForm = (await fetchDepartmentsForSelect()).map((d) => ({
     id: d.id as string,
     division_id: d.division_id as string,
@@ -49,6 +55,11 @@ export default async function DivisionPage({ params }: PageProps) {
         basis: {},
         reason: 'insufficient_data' as const,
       };
+    const activity = deptActivity.get(deptId) ?? {
+      open_count: 0,
+      doing_agent_count: 0,
+      activity: 'idle' as const,
+    };
     return {
       id: deptId,
       legacy_name: d.legacy_name as string,
@@ -56,41 +67,36 @@ export default async function DivisionPage({ params }: PageProps) {
       policy_text: (d.policy_text as string | null) ?? null,
       condition: ev.condition,
       stat: boardConditions.departmentStats.get(deptId) ?? null,
+      open_task_count: activity.open_count,
+      activity: activity.activity,
     };
   });
 
   const divCondition = boardConditions.divisions.get(id);
-  const divStat = boardConditions.divisionStats.get(id) ?? null;
+  const battlePlan = await fetchDivisionBattlePlan(id);
 
   return (
-    <div className="dabos-org-board dabos-org-board--single">
-      <Link href="/dabos" className="dabos-org-board__back">
-        ← {BOARD_PAGE_TITLE}
-      </Link>
-
-      <DivisionColumn
-        divisionId={id as BoardDivisionId}
+    <DrilldownShell backHref="/dabos" backLabel={BOARD_PAGE_TITLE}>
+      <DivisionDrilldownHeader
+        divisionId={id}
         operationalName={division.operational_name as string}
         description={(division.description as string | null) ?? null}
         condition={divCondition?.condition ?? latest_condition.condition}
-        stat={divStat}
+        metricKey={metricKey}
         departments={boardDepts}
-        single
       />
 
-      <div className="mt-10 space-y-6 border-t border-border pt-8 font-sans">
-        <div className="flex flex-wrap items-center gap-2 font-sans text-sm">
-          <span className="text-muted-foreground">{division.operational_name as string}</span>
-          <ConditionBadge
-            condition={latest_condition.condition}
-            confidence={latest_condition.confidence}
-            reason={latest_condition.reason}
-          />
-          <Badge variant="secondary">{metricKey}</Badge>
-        </div>
+      <div className="mt-8 space-y-6">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Division battle plan</CardTitle>
+            <CardDescription>This week — secretary supervision</CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">{battlePlan}</CardContent>
+        </Card>
 
-        <section className="space-y-3 font-sans">
-          <h3 className="text-lg font-semibold">Tasks</h3>
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold">Tasks</h2>
           <Card>
             <CardContent className="p-0">
               <Table>
@@ -132,9 +138,9 @@ export default async function DivisionPage({ params }: PageProps) {
           </Card>
         </section>
 
-        <AppendStatForm divisionId={id} metricKey={metricKey} />
+        <AppendStatForm divisionId={id as BoardDivisionId} metricKey={metricKey} />
         <CreateTaskForm defaultDivisionId={id} departments={departmentsForForm} />
       </div>
-    </div>
+    </DrilldownShell>
   );
 }

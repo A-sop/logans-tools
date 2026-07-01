@@ -22,7 +22,11 @@ export type OrgBoardDepartment = {
   operational_name: string;
   policy_text: string | null;
   condition: ConditionLabel | null;
+  statIndicated?: ConditionLabel | null;
+  climbLag?: boolean;
   stat: BoardStatSnapshot | null;
+  open_task_count?: number;
+  activity?: 'active' | 'idle' | 'investigating';
 };
 
 type DivisionColumnProps = {
@@ -30,6 +34,8 @@ type DivisionColumnProps = {
   operationalName: string;
   description: string | null;
   condition: ConditionLabel | null;
+  statIndicated?: ConditionLabel | null;
+  climbLag?: boolean;
   stat: BoardStatSnapshot | null;
   metricKey?: string;
   chartPoints?: BoardChartPoint[];
@@ -58,12 +64,21 @@ function DepartmentBridgeCell({
     <ConditionHoverSurface
       condition={dept.condition}
       stat={dept.stat}
+      statIndicated={dept.statIndicated}
+      climbLag={dept.climbLag}
       className="dabos-org-board__dept-cell"
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
     >
       <span className="dabos-org-board__dept-bridge">{deptBridgeLabel(dept)}</span>
     </ConditionHoverSurface>
   );
+}
+
+function deptConditionHover(dept: OrgBoardDepartment) {
+  return {
+    statIndicated: dept.statIndicated,
+    climbLag: dept.climbLag,
+  };
 }
 
 function DepartmentNumCell({
@@ -77,15 +92,28 @@ function DepartmentNumCell({
   linked: boolean;
   shortLabel: boolean;
 }) {
+  const activity = dept.activity ?? 'idle';
+  const dotClass =
+    activity === 'investigating'
+      ? 'dabos-org-board__dept-dot--investigating'
+      : activity === 'active'
+        ? 'dabos-org-board__dept-dot--active'
+        : 'dabos-org-board__dept-dot--idle';
+
   return (
     <ConditionHoverSurface
       condition={dept.condition}
       stat={dept.stat}
+      {...deptConditionHover(dept)}
       className="dabos-org-board__dept-cell"
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
     >
       <span className="dabos-org-board__dept-num">
+        <span className={`dabos-org-board__dept-dot ${dotClass}`} aria-hidden />
         {deptNumberLabel(dept.id, { short: shortLabel })}
+        {(dept.open_task_count ?? 0) > 0 ? (
+          <span className="dabos-org-board__dept-task-count">{dept.open_task_count}</span>
+        ) : null}
       </span>
     </ConditionHoverSurface>
   );
@@ -134,6 +162,7 @@ function DepartmentBody({
     <ConditionHoverSurface
       condition={dept.condition}
       stat={dept.stat}
+      {...deptConditionHover(dept)}
       className={`dabos-org-board__dept-block${linked ? ' dabos-org-board__dept-block--link' : ''}`}
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
     >
@@ -148,6 +177,8 @@ export function DivisionColumn({
   operationalName,
   description,
   condition,
+  statIndicated,
+  climbLag,
   stat,
   metricKey = 'tasks_completed',
   chartPoints = [],
@@ -155,6 +186,7 @@ export function DivisionColumn({
   single = false,
   edgeClass,
 }: DivisionColumnProps) {
+  const divisionHover = { statIndicated, climbLag };
   const bandTitle = DIVISION_BAND_TITLE[divisionId];
   const purpose = description?.trim();
   const linked = !single;
@@ -262,7 +294,7 @@ export function DivisionColumn({
   if (single) {
     return (
       <article className="dabos-org-board__column dabos-org-board__column--single">
-        <ConditionHoverSurface condition={condition} stat={stat}>
+        <ConditionHoverSurface condition={condition} stat={stat} {...divisionHover}>
           {head}
         </ConditionHoverSurface>
         {bridgeRow}
@@ -277,6 +309,7 @@ export function DivisionColumn({
       <ConditionHoverSurface
         condition={condition}
         stat={stat}
+        {...divisionHover}
         className="dabos-org-board__column-head-link block text-inherit no-underline"
         href={`/dabos/divisions/${divisionId}`}
       >

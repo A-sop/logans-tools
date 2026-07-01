@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/dabos/cron/morning-plan",
+      "schedule": "30 5 * * *"
+    },
+    {
+      "path": "/api/dabos/cron/refresh-conditions",
+      "schedule": "0 18 * * *"
+    },
+    {
+      "path": "/api/dabos/cron/week-close",
+      "schedule": "0 14 * * 4"
+    }
+  ]
+}

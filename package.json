@@ -20,7 +20,10 @@
     "dabos:migrate": "tsx scripts/dabos/migrate.ts",
     "dabos:smoke": "tsx scripts/dabos/smoke-board.ts",
     "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts",
-    "dabos:refresh-conditions": "tsx scripts/dabos/refresh-conditions.ts"
+    "dabos:refresh-conditions": "tsx scripts/dabos/refresh-conditions.ts",
+    "dabos:morning-plan": "tsx scripts/dabos/morning-plan.ts",
+    "dabos:week-close": "tsx scripts/dabos/week-close.ts",
+    "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",

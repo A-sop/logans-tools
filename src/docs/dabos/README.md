@@ -107,6 +107,22 @@ Until DNS is correct, use default Clerk hosting (no custom primary domain) or Pr
 - Research: `POST /api/dabos/tasks/[id]/run-research`
 - Conditions: 3+ stat points → badge on org map
 
+## Cadence (PC-off safe)
+
+**Org week:** Thursday **14:00** boundary · stats due **16:00 Europe/Berlin** — countdown on every `/dabos` page (top left).
+
+| Job | Local | Vercel Cron (UTC) |
+|-----|-------|-------------------|
+| Morning plan | `npm run dabos:morning-plan` | `30 5 * * *` (~07:30 Berlin) |
+| Refresh conditions | `npm run dabos:refresh-conditions` | `0 18 * * *` (~20:00 Berlin) |
+| Week close | `npm run dabos:week-close` | `0 14 * * 4` (Thu — tune for CET/CEST) |
+
+**Vercel:** set `DABOS_CRON_SECRET` in Production env. Crons defined in `vercel.json`. Vercel sends `Authorization: Bearer <CRON_SECRET>` automatically when using their cron feature — for manual/ln02 calls use the same header or `x-dabos-cron-secret`.
+
+**ln02 (optional):** `Atlas/scripts/dabos/ln02-run-cadence.sh morning-plan|week-close|refresh-conditions`
+
+**Windows office PC:** `Atlas/scripts/schedule-dabos-cadence.ps1`
+
 ## Migrations
 
 SQL in `migrations/` — `npm run dabos:migrate` (uses `DATABASE_URL` from `.env.local`).
@@ -118,6 +134,7 @@ SQL in `migrations/` — `npm run dabos:migrate` (uses `DATABASE_URL` from `.env
 | `DATABASE_URL` | `postgresql://dabos:…@<ln02-tailscale-ip>:5432/dabos?sslmode=disable` |
 | `OLLAMA_BASE_URL` | `http://100.127.110.57:11434/v1` (ln02 workhorse) |
 | `OLLAMA_MODEL` | `llama3.2:3b` or `gemma4:e2b-it-qat` after upgrade |
+| `DABOS_CRON_SECRET` | Vercel cron + ln02 curl auth (generate random string) |
 
 Neon/cloud Postgres is **not** used on Path B.
 

@@ -52,6 +52,7 @@ export default async function DabosOrgMapPage({ searchParams }: PageProps) {
       week={board.week}
       period={board.period}
       executive={board.executive}
+      cadence={board.cadence}
       maxWeek={weeksInYear(statYear)}
     />
   );

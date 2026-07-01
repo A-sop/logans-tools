@@ -3,7 +3,9 @@ import {
   pickChartSeries,
   type DivisionChartBundle,
 } from '@/lib/dabos/board-charts';
+import { battlePlanForDept, DIVISION_BATTLE_PLAN_WEEKLY } from '@/lib/dabos/battle-plans';
 import { hasDabosDb, getDabosSql } from '@/lib/dabos/db';
+import { getStatCutoffSnapshot, type StatCutoffSnapshot } from '@/lib/dabos/org-week';
 import {
   evaluateAndPersistCondition,
   evaluateBoardConditions,
@@ -14,6 +16,68 @@ import type { ConditionEvaluation } from '@/lib/dabos/types';
 
 export function dabosConfigured() {
   return hasDabosDb();
+}
+
+export type DabosShellData = {
+  cutoff: StatCutoffSnapshot;
+  role_runs: { role_id: string; ran_at: string }[];
+};
+
+export async function fetchDabosShell(): Promise<DabosShellData> {
+  const cutoff = getStatCutoffSnapshot();
+  const sql = getDabosSql();
+  let role_runs: { role_id: string; ran_at: string }[] = [];
+  try {
+    const rows = await sql`
+      SELECT DISTINCT ON (role_id) role_id, ran_at
+      FROM role_runs
+      WHERE role_id IN ('morning_plan', 'week_close', 'refresh_conditions')
+      ORDER BY role_id, ran_at DESC
+    `;
+    role_runs = rows.map((r) => ({
+      role_id: r.role_id as string,
+      ran_at: (r.ran_at as Date).toISOString(),
+    }));
+  } catch {
+    /* role_runs table may be missing on old DB */
+  }
+  return { cutoff, role_runs };
+}
+
+export type DeptActivity = {
+  open_count: number;
+  doing_agent_count: number;
+  activity: 'active' | 'idle' | 'investigating';
+};
+
+export async function fetchDeptActivityMap(): Promise<Map<string, DeptActivity>> {
+  const sql = getDabosSql();
+  const map = new Map<string, DeptActivity>();
+  try {
+    const rows = await sql`
+      SELECT
+        department_id,
+        COUNT(*) FILTER (WHERE status IN ('todo', 'doing', 'blocked'))::int AS open_count,
+        COUNT(*) FILTER (WHERE status = 'doing' AND assigned_agent IS NOT NULL)::int AS doing_agent_count
+      FROM tasks
+      WHERE department_id IS NOT NULL
+      GROUP BY department_id
+    `;
+    for (const row of rows) {
+      const deptId = row.department_id as string;
+      const open = Number(row.open_count) || 0;
+      const doingAgent = Number(row.doing_agent_count) || 0;
+      map.set(deptId, {
+        open_count: open,
+        doing_agent_count: doingAgent,
+        activity:
+          doingAgent > 0 ? 'investigating' : open > 0 ? 'active' : 'idle',
+      });
+    }
+  } catch {
+    /* tasks table */
+  }
+  return map;
 }
 
 export async function fetchOrgMap() {
@@ -86,6 +150,10 @@ export async function fetchDivision(id: string) {
 }
 
 export async function fetchDepartment(divisionId: string, deptId: string) {
+  return fetchDepartmentDashboard(divisionId, deptId);
+}
+
+export async function fetchDepartmentDashboard(divisionId: string, deptId: string) {
   const sql = getDabosSql();
   const departments = await sql`
     SELECT id, division_id, legacy_name, operational_name, policy_text
@@ -95,29 +163,119 @@ export async function fetchDepartment(divisionId: string, deptId: string) {
   if (!department) return null;
 
   const divisionRows = await sql`
-    SELECT operational_name FROM divisions WHERE id = ${divisionId}
+    SELECT id, operational_name, description, primary_metric_key
+    FROM divisions WHERE id = ${divisionId}
   `;
+  const division = divisionRows[0];
+  if (!division) return null;
 
   const tasks = await sql`
-    SELECT id, title, status, priority, type, assigned_agent, created_at
+    SELECT id, title, status, priority, type, assigned_agent, created_at, updated_at, completed_at
     FROM tasks
     WHERE division_id = ${divisionId} AND department_id = ${deptId}
-    ORDER BY created_at DESC
+    ORDER BY
+      CASE status WHEN 'doing' THEN 0 WHEN 'todo' THEN 1 WHEN 'blocked' THEN 2 WHEN 'approval' THEN 3 ELSE 4 END,
+      priority ASC,
+      created_at DESC
+    LIMIT 100
   `;
 
   const stats = await sql`
-    SELECT metric_key, value, recorded_at
+    SELECT metric_key, value, recorded_at, workspace_id
     FROM stats
     WHERE department_id = ${deptId}
     ORDER BY recorded_at DESC
     LIMIT 20
   `;
 
+  const artifacts = await sql`
+    SELECT id, type, summary, task_id, created_by, created_at
+    FROM artifacts
+    WHERE department_id = ${deptId}
+    ORDER BY created_at DESC
+    LIMIT 30
+  `;
+
+  const investigationArtifacts = await sql`
+    SELECT a.id, a.type, a.summary, a.task_id, a.created_at
+    FROM artifacts a
+    INNER JOIN tasks t ON t.id = a.task_id
+    WHERE t.department_id = ${deptId}
+      AND (t.type = 'agent' OR t.assigned_agent IS NOT NULL)
+    ORDER BY a.created_at DESC
+    LIMIT 20
+  `;
+
+  const receipts = await sql`
+    SELECT ce.id, ce.agent_name, ce.cost_eur, ce.tokens_input, ce.tokens_output, ce.created_at, t.title AS task_title
+    FROM cost_events ce
+    INNER JOIN tasks t ON t.id = ce.task_id
+    WHERE t.department_id = ${deptId}
+    ORDER BY ce.created_at DESC
+    LIMIT 15
+  `;
+
+  let last_role_run: string | null = null;
+  try {
+    const runs = await sql`
+      SELECT ran_at FROM role_runs
+      WHERE role_id = ${deptId}
+      ORDER BY ran_at DESC
+      LIMIT 1
+    `;
+    if (runs[0]?.ran_at) {
+      last_role_run = (runs[0].ran_at as Date).toISOString();
+    }
+  } catch {
+    /* optional */
+  }
+
+  const metricKey =
+    (division.primary_metric_key as string | null) ?? 'tasks_completed';
+  const latestCondition = await evaluateAndPersistCondition({
+    entity_type: 'department',
+    entity_id: deptId,
+    metric_key: metricKey,
+    window_days: 7,
+  });
+
+  const battle_plan = battlePlanForDept(deptId, latestCondition.condition);
+
+  let lastActive: string | null = null;
+  for (const t of tasks) {
+    const candidates = [t.updated_at, t.completed_at, t.created_at].filter(Boolean);
+    for (const c of candidates) {
+      const iso = new Date(c as string).toISOString();
+      if (!lastActive || iso > lastActive) lastActive = iso;
+    }
+  }
+  if (stats[0]?.recorded_at) {
+    const iso = new Date(stats[0].recorded_at as string).toISOString();
+    if (!lastActive || iso > lastActive) lastActive = iso;
+  }
+
+  const workQueue = tasks.filter((t) =>
+    ['todo', 'doing', 'blocked', 'approval'].includes(t.status as string)
+  );
+  const investigations = tasks.filter(
+    (t) => t.type === 'agent' || (t.assigned_agent as string | null)
+  );
+
   return {
-    division: { id: divisionId, operational_name: divisionRows[0]?.operational_name as string },
+    division,
     department,
     tasks,
+    workQueue,
+    investigations,
     stats,
+    artifacts,
+    investigationArtifacts,
+    receipts,
+    latest_condition: latestCondition,
+    battle_plan,
+    last_role_run,
+    last_active: lastActive,
+    metric_key: metricKey,
   };
 }
 
@@ -184,6 +342,18 @@ export async function fetchOrgBoardData(input?: {
 
   const conditions = await evaluateBoardConditions(input);
   const { week, executive, divisionStats, departmentStats, divisionCharts } = conditions;
+  const deptActivity = await fetchDeptActivityMap();
+
+  let openTasksTotal = 0;
+  try {
+    const [{ count }] = await sql`
+      SELECT COUNT(*)::int AS count FROM tasks
+      WHERE status IN ('todo', 'doing', 'blocked', 'approval')
+    `;
+    openTasksTotal = Number(count) || 0;
+  } catch {
+    /* */
+  }
 
   const emptyCharts: DivisionChartBundle = {
     week: [],
@@ -227,6 +397,8 @@ export async function fetchOrgBoardData(input?: {
       operational_name: div.operational_name as string,
       description: div.description as string | null,
       condition: divCondition.condition,
+      statIndicated: divCondition.stat_indicated_condition,
+      climbLag: divCondition.climb_lag,
       stat: divStat,
       metric_key: metricKey,
       chart_points: pickChartSeries(chartBundle, period),
@@ -242,6 +414,11 @@ export async function fetchOrgBoardData(input?: {
             reason: 'insufficient_data',
           } satisfies ConditionEvaluation);
         const deptStat = departmentStats.get(deptId) ?? null;
+        const activity = deptActivity.get(deptId) ?? {
+          open_count: 0,
+          doing_agent_count: 0,
+          activity: 'idle' as const,
+        };
 
         return {
           id: deptId,
@@ -249,20 +426,56 @@ export async function fetchOrgBoardData(input?: {
           operational_name: d.operational_name as string,
           policy_text: (d.policy_text as string | null) ?? null,
           condition: deptCondition.condition,
+          statIndicated: deptCondition.stat_indicated_condition,
+          climbLag: deptCondition.climb_lag,
           stat: deptStat,
+          open_task_count: activity.open_count,
+          activity: activity.activity,
         };
       }),
     };
   });
 
+  let roleRuns: { role_id: string; ran_at: string }[] = [];
+  try {
+    const rows = await sql`
+      SELECT DISTINCT ON (role_id) role_id, ran_at
+      FROM role_runs
+      WHERE role_id IN ('morning_plan', 'week_close')
+      ORDER BY role_id, ran_at DESC
+    `;
+    roleRuns = rows.map((r) => ({
+      role_id: r.role_id as string,
+      ran_at: (r.ran_at as Date).toISOString(),
+    }));
+  } catch {
+    /* */
+  }
+
+  const divisionsWithWork = boardDivisions.filter((d) =>
+    d.departments.some((dept) => dept.open_task_count > 0)
+  ).length;
+
   return {
     week,
     period,
     executive: {
-      director: { condition: executive.director.condition.condition },
+      director: {
+        condition: executive.director.condition.condition,
+        last_run: roleRuns.find((r) => r.role_id === 'morning_plan')?.ran_at ?? null,
+      },
       dco: { condition: executive.dco.condition.condition },
       org: { condition: executive.org.condition.condition },
+      week_close_at: roleRuns.find((r) => r.role_id === 'week_close')?.ran_at ?? null,
+    },
+    cadence: {
+      open_tasks_total: openTasksTotal,
+      divisions_with_work: divisionsWithWork,
     },
     divisions: boardDivisions,
   };
+}
+
+export async function fetchDivisionBattlePlan(divisionId: string): Promise<string> {
+  return DIVISION_BATTLE_PLAN_WEEKLY[divisionId] ?? 'Execute division weekly promotion checklist.';
 }

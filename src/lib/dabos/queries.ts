@@ -1,16 +1,74 @@
 import { evaluateConditionFromPoints } from '@/lib/dabos/conditions';
 import { formatConditionTooltip } from '@/lib/dabos/condition-display';
 import {
+  advanceEntityWorkingCondition,
+  getEntityConditionState,
+  recordFormulaCompletion,
+  syncEntityConditionFromEvaluation,
+  upsertEntityConditionState,
+} from '@/lib/dabos/condition-state-queries';
+import type { DangerWhyBasis, FormulaStepNote } from '@/lib/dabos/condition-state';
+import {
   evaluateBoardConditionsWithSql,
   refreshAllConditionsFromBoardWithSql,
   type BoardConditionsResult,
   type BoardWeekContext,
 } from '@/lib/dabos/board-conditions-query';
 import { getDabosSql } from '@/lib/dabos/db';
+import type { EntityType } from '@/lib/dabos/condition-state';
 import type { ConditionEvaluation } from '@/lib/dabos/types';
 
 export type { BoardConditionsResult, BoardWeekContext };
 export { formatConditionTooltip };
+
+export {
+  advanceEntityWorkingCondition,
+  getEntityConditionState,
+  recordFormulaCompletion,
+} from '@/lib/dabos/condition-state-queries';
+
+export async function completeFormulaForEntity(input: {
+  entity_type: EntityType;
+  entity_id: string;
+  condition_label: NonNullable<ConditionEvaluation['condition']>;
+  steps_completed: FormulaStepNote[];
+  probable_why?: string;
+  danger_why_basis?: DangerWhyBasis;
+  attested_by?: string;
+  verified_by?: string;
+  advance?: boolean;
+}) {
+  const sql = getDabosSql();
+  const completion = await recordFormulaCompletion(sql, input);
+
+  if (input.danger_why_basis && input.condition_label === 'Danger') {
+    const state = await getEntityConditionState(sql, input.entity_type, input.entity_id);
+    if (state?.working_condition) {
+      await upsertEntityConditionState(sql, {
+        entity_type: input.entity_type,
+        entity_id: input.entity_id,
+        working_condition: state.working_condition,
+        stat_indicated_condition: state.stat_indicated_condition,
+        danger_why: input.danger_why_basis,
+      });
+    }
+  }
+
+  let advance: { advanced: boolean; working_condition: ConditionEvaluation['condition'] } = {
+    advanced: false,
+    working_condition: null,
+  };
+  if (input.advance && input.verified_by) {
+    advance = await advanceEntityWorkingCondition(sql, input.entity_type, input.entity_id);
+  }
+
+  const state = await getEntityConditionState(sql, input.entity_type, input.entity_id);
+  return {
+    completion,
+    entity_state: state,
+    advance,
+  };
+}
 
 export async function evaluateBoardConditions(input?: {
   year?: number;
@@ -32,19 +90,45 @@ async function persistConditionEvaluation(
   entityId: string,
   evaluation: ConditionEvaluation
 ): Promise<boolean> {
-  if (!evaluation.condition) return false;
+  const label = evaluation.working_condition ?? evaluation.stat_indicated_condition;
+  if (!label) return false;
   const sql = getDabosSql();
   await sql`
     INSERT INTO conditions (entity_type, entity_id, condition, confidence, basis)
     VALUES (
       ${entityType},
       ${entityId},
-      ${evaluation.condition},
+      ${label},
       ${evaluation.confidence},
       ${JSON.stringify(evaluation.basis)}::jsonb
     )
   `;
   return true;
+}
+
+async function evaluatePersistAndSync(
+  entityType: EntityType,
+  entityId: string,
+  evaluation: ConditionEvaluation
+): Promise<ConditionEvaluation> {
+  const sql = getDabosSql();
+  let merged = evaluation;
+  try {
+    merged = await syncEntityConditionFromEvaluation(sql, entityType, entityId, evaluation);
+  } catch {
+    /* entity_condition_state table may be missing before migration 008 */
+    if (evaluation.stat_indicated_condition) {
+      merged = {
+        ...evaluation,
+        working_condition: evaluation.stat_indicated_condition,
+        condition: evaluation.stat_indicated_condition,
+      };
+    }
+  }
+  if (merged.working_condition ?? merged.stat_indicated_condition) {
+    await persistConditionEvaluation(entityType, entityId, merged);
+  }
+  return merged;
 }
 
 export async function evaluateAndPersistCondition(input: {
@@ -85,11 +169,7 @@ export async function evaluateAndPersistCondition(input: {
     window_days: windowDays,
   });
 
-  if (evaluation.condition) {
-    await persistConditionEvaluation(input.entity_type, input.entity_id, evaluation);
-  }
-
-  return evaluation;
+  return evaluatePersistAndSync(input.entity_type, input.entity_id, evaluation);
 }
 
 export async function getLatestCondition(

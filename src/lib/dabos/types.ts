@@ -81,9 +81,18 @@ export type CostEventRow = {
 };
 
 export type ConditionEvaluation = {
+  /** Working rung — use for planning / battle plans (PRD-004 v2). */
   condition: ConditionLabel | null;
+  /** Stat trend suggestion — advisory; may be ahead of working. */
+  stat_indicated_condition: ConditionLabel | null;
+  /** Lowest incomplete formula rung. Same as `condition` after v2 merge. */
+  working_condition: ConditionLabel | null;
   confidence: number | null;
   point_count: number;
   basis: Record<string, unknown>;
   reason?: string;
+  /** Stat suggests healthier rung than working — formulas still required. */
+  climb_lag?: boolean;
 };
+
+export type { DangerWhyBasis, EntityConditionState, FormulaStepNote } from '@/lib/dabos/condition-state';

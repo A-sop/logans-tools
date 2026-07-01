@@ -37,9 +37,16 @@ const RELATIVE_THRESHOLDS: { minRelativeDelta: number; condition: ConditionLabel
   { minRelativeDelta: -0.18, condition: 'Danger' },
 ];
 
+/** Next rung toward Power Change (one step better). Null if already at top. */
+export function nextBetterCondition(label: ConditionLabel): ConditionLabel | null {
+  const idx = conditionSeverity(label);
+  if (idx <= 0) return null;
+  return UPPER_CONDITION_LADDER[idx - 1]!;
+}
+
 /**
- * Map weekly stat trend to PRD-004 upper ladder (3+ points required by caller).
- * Uses relative change between first/second half averages.
+ * Map weekly stat trend to PRD-004 **stat-indicated** upper ladder (3+ points required by caller).
+ * Does not set working condition — see condition-state.ts.
  */
 export function conditionFromStatTrend(values: number[]): ConditionLabel {
   const mid = Math.floor(values.length / 2);
@@ -61,4 +68,4 @@ export function conditionFromStatTrend(values: number[]): ConditionLabel {
 }
 
 export const CONDITION_RULE_SUMMARY =
-  'PRD-004 upper ladder from relative weekly trend (Power Change … Non-Existence)';
+  'PRD-004 stat-indicated ladder from relative weekly trend (Power Change … Non-Existence)';

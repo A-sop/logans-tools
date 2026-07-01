@@ -17,10 +17,14 @@ export function ConditionBadge({
   condition,
   confidence,
   reason,
+  statIndicated,
+  climbLag,
 }: {
   condition: ConditionLabel | null;
   confidence?: number | null;
   reason?: string;
+  statIndicated?: ConditionLabel | null;
+  climbLag?: boolean;
 }) {
   if (!condition) {
     return (
@@ -31,26 +35,44 @@ export function ConditionBadge({
   }
 
   return (
-    <span
-      className={cn(
-        'inline-flex rounded-md px-2 py-0.5 text-xs font-medium tabular-nums',
-        tone[condition]
-      )}
-    >
-      {condition}
-      {confidence != null ? ` · ${Math.round(confidence * 100)}%` : ''}
+    <span className="inline-flex flex-col gap-0.5">
+      <span
+        className={cn(
+          'inline-flex rounded-md px-2 py-0.5 text-xs font-medium tabular-nums',
+          tone[condition]
+        )}
+      >
+        {condition}
+        {confidence != null ? ` · ${Math.round(confidence * 100)}%` : ''}
+      </span>
+      {climbLag && statIndicated && statIndicated !== condition ? (
+        <span className="text-[10px] text-muted-foreground">Stat: {statIndicated}</span>
+      ) : null}
     </span>
   );
 }
 
-export function ActivityBadge({ activity }: { activity: 'active' | 'idle' | 'issue' }) {
-  const label = activity === 'active' ? 'Active' : activity === 'issue' ? 'Issue' : 'Idle';
+export function ActivityBadge({
+  activity,
+}: {
+  activity: 'active' | 'idle' | 'issue' | 'investigating';
+}) {
+  const label =
+    activity === 'investigating'
+      ? 'Investigating'
+      : activity === 'active'
+        ? 'Active'
+        : activity === 'issue'
+          ? 'Issue'
+          : 'Idle';
   const cls =
-    activity === 'active'
-      ? 'bg-primary/10 text-primary'
-      : activity === 'issue'
-        ? 'bg-destructive/15 text-destructive'
-        : 'bg-muted text-muted-foreground';
+    activity === 'investigating'
+      ? 'bg-violet-500/15 text-violet-900 dark:text-violet-300'
+      : activity === 'active'
+        ? 'bg-primary/10 text-primary'
+        : activity === 'issue'
+          ? 'bg-destructive/15 text-destructive'
+          : 'bg-muted text-muted-foreground';
 
   return (
     <span className={cn('inline-flex rounded-md px-2 py-0.5 text-xs font-medium', cls)}>

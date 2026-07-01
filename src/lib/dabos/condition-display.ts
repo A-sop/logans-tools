@@ -21,9 +21,15 @@ export function conditionDataAttr(condition: ConditionLabel | null | undefined):
 /** Short label shown on hover (replaces tooltips on the org board). */
 export function conditionHoverLabel(
   condition: ConditionLabel | null,
-  stat?: BoardStatSnapshot | null
+  stat?: BoardStatSnapshot | null,
+  extras?: { statIndicated?: ConditionLabel | null; climbLag?: boolean }
 ): string {
-  if (condition) return condition;
+  if (condition) {
+    if (extras?.climbLag && extras.statIndicated && extras.statIndicated !== condition) {
+      return `${condition} · stat ${extras.statIndicated}`;
+    }
+    return condition;
+  }
   if (stat && stat.point_count > 0) return 'Insufficient data';
   return 'No data';
 }
@@ -39,11 +45,18 @@ export function formatBoardTooltip(
     }
     return `Condition: No data yet (${ev.point_count} of 3 weekly points)`;
   }
-  if (!ev.condition) {
+  if (!ev.condition && !ev.working_condition) {
     return 'Condition: Unknown';
   }
 
-  const lines = [`Condition: ${ev.condition}`];
+  const working = ev.working_condition ?? ev.condition;
+  const lines = [`Working: ${working}`];
+  if (ev.stat_indicated_condition && ev.stat_indicated_condition !== working) {
+    lines.push(`Stat suggests: ${ev.stat_indicated_condition}`);
+    if (ev.climb_lag) {
+      lines.push('Complete working formula before climbing (no rung skips).');
+    }
+  }
   if (stat) {
     lines.push(
       `Latest: ${stat.metric_key} = ${formatStatValue(stat.value)} (CW ${stat.calendar_week})`
@@ -70,6 +83,8 @@ export function formatConditionTooltip(
 export function emptyCondition(entityId: string, metricKey: string): ConditionEvaluation {
   return {
     condition: null,
+    stat_indicated_condition: null,
+    working_condition: null,
     confidence: null,
     point_count: 0,
     basis: { entity_id: entityId, metric_key: metricKey, window_days: 7 },
