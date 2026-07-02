@@ -28,7 +28,7 @@ async function main() {
   const weekStart = weekBoundaryStart();
   console.log(`# DABOS morning plan`);
   console.log(orgWeekLabel(weekStart));
-  console.log(`Stats due: Thu 16:00 Berlin (${hoursUntilStatsDeadline().toFixed(1)}h)\n`);
+  console.log(`Stats due: Thu 14:00 Berlin (${hoursUntilStatsDeadline().toFixed(1)}h)\n`);
 
   const sql = createDabosSql(url);
 

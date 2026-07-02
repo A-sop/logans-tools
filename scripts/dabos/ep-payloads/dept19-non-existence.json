@@ -1,0 +1,42 @@
+{
+  "entity_type": "department",
+  "entity_id": "Dept19",
+  "condition_label": "Non-Existence",
+  "steps_completed": [
+    {
+      "step": 1,
+      "note": "Comm lines: inbound stats from division secretaries via weekly Thu 14:00 Berlin post; outbound to Dept21 (council brief) and Dept20 (org-board accuracy). Cadence jobs: dabos:refresh-conditions, dabos:week-close."
+    },
+    {
+      "step": 2,
+      "note": "Made known on org board as Conditions · Condition & Planning Loop; policy_text names PRD-004 stat-indicated vs working_condition ownership; Div secretaries know Dept19 coordinates condition assignment."
+    },
+    {
+      "step": 3,
+      "note": "Discovered needs: divisions require working_condition on morning plan (not stat alone); Div3 must post stats before meaningful assignment; climb order = Dept19 → Dept3 → Dept1 per session handoff."
+    },
+    {
+      "step": 4,
+      "note": "Produced: entity_condition_state v2 for all 7 divs + 21 depts; first measurable output = working Non-Existence badges + climb_lag on org board; primary stat anchor plan_completion_rate (STAT-MAP Div7)."
+    },
+    {
+      "step": 5,
+      "note": "Maintain comm lines: Thursday week-close + stats cutoff both at 14:00 Berlin on /dabos; refresh-conditions persists stat-indicated without auto-improving working."
+    },
+    {
+      "step": 6,
+      "note": "Origination: this EP filed to condition_formula_completions; session handoff updated; Logan verified Dept19 visible as condition owner before Div1 activation."
+    },
+    {
+      "step": 7,
+      "note": "Streamlined: Non-Existence scope = activate one division first (Div1/Dept3 next) rather than all 21 departments at once — per role card minimum viable stat."
+    },
+    {
+      "step": 8,
+      "note": "Improved product: sequential climb enforced (formula EP → advance one rung); Dept19 ready to publish weekly rollup artifact after Div3 stats exist."
+    }
+  ],
+  "attested_by": "cursor-agent",
+  "verified_by": "logan",
+  "advance": false
+}

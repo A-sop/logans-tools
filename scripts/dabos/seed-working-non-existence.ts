@@ -5,27 +5,11 @@
  * Usage: npm run dabos:seed-working-non-existence
  * @see DABOS/docs/PRD-004-conditions-memory-governance.md § New post climb
  */
-import fs from 'fs';
-import path from 'path';
-
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
-
-function loadEnvLocal() {
-  const envPath = path.join(process.cwd(), '.env.local');
-  if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
-    const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=(.*)$/);
-    if (m) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
-  }
-}
+import { requireDatabaseUrl } from './load-env';
 
 async function main() {
-  loadEnvLocal();
-  const url = process.env.DATABASE_URL?.trim();
-  if (!url) {
-    console.error('DATABASE_URL is required (.env.local)');
-    process.exit(1);
-  }
+  const url = requireDatabaseUrl();
 
   const sql = createDabosSql(url);
 

@@ -70,7 +70,7 @@ export function StatCutoffCountdown({
         </span>
       </div>
       <p className="text-xs text-muted-foreground">
-        Thu 16:00 {timezone}
+        Thu 14:00 {timezone}
         {pastCurrentDeadline ? ' · next deadline' : ''}
       </p>
       <p className="hidden max-w-md truncate text-[10px] text-muted-foreground/80 sm:block" title={weekLabel}>

@@ -1,12 +1,12 @@
 import 'server-only';
 
-import { createDabosSql, isNeonUrl } from '@/lib/dabos/dabos-connection';
+import { createDabosSql, isNeonUrl, resolveDabosDatabaseUrl } from '@/lib/dabos/dabos-connection';
 import postgres from 'postgres';
 
 function connectionString(): string {
-  const url = process.env.DATABASE_URL?.trim();
+  const url = resolveDabosDatabaseUrl();
   if (!url) {
-    throw new Error('Missing required environment variable: DATABASE_URL');
+    throw new Error('Missing required environment variable: DATABASE_URL (or DATABASE_URL_UNPOOLED)');
   }
   return url;
 }
@@ -34,7 +34,7 @@ function createPgClient(url: string) {
 }
 
 export function hasDabosDb(): boolean {
-  return !!process.env.DATABASE_URL?.trim();
+  return !!resolveDabosDatabaseUrl();
 }
 
 export function getDabosSql() {

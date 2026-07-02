@@ -4,7 +4,7 @@ import type { ConditionLabel } from '@/lib/dabos/types';
 export const DEPT_BATTLE_PLAN_WEEKLY: Record<string, string> = {
   Dept1: 'Clear wiki inbox backlog; org board + hats current; fast intake routing.',
   Dept2: 'Mailings on schedule; internal tickets cleared; policy materials issued.',
-  Dept3: 'Post division graphs; inspection notes; rollup to Div7 by Thu 16:00.',
+  Dept3: 'Post division graphs; inspection notes; rollup to Div7 by Thu 14:00.',
   Dept4: 'Ship one content piece; execute one campaign step.',
   Dept5: 'Verify shelf/stock; fulfillment latency check.',
   Dept6: 'CRM hygiene; warm outreach batch; pipeline scheduled ahead.',

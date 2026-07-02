@@ -1,10 +1,10 @@
 /**
- * Hubbard org week: Thursday 14:00 Europe/Berlin boundary, stats due 16:00.
- * Green Volumes: stat period 1400 Thu → 1400 Thu; DABOS adds 16:00 posting deadline.
+ * Org week: Thursday 14:00 Europe/Berlin boundary and stats cutoff (same instant).
+ * Green Volumes: stat period 14:00 Thu → 14:00 Thu.
  */
 export const ORG_WEEK_TIMEZONE = 'Europe/Berlin';
 export const WEEK_BOUNDARY_HOUR = 14;
-export const STATS_DEADLINE_HOUR = 16;
+export const STATS_DEADLINE_HOUR = 14;
 export const WEEK_BOUNDARY_WEEKDAY = 4; // Thursday (0=Sun)
 
 type BerlinParts = {
@@ -130,7 +130,7 @@ export function hoursUntilStatsDeadline(now: Date = new Date()): number {
   return (deadline.getTime() - now.getTime()) / (1000 * 60 * 60);
 }
 
-/** Next Thursday 16:00 Berlin posting deadline (rolls forward after it passes). */
+/** Next Thursday 14:00 Berlin stats cutoff (rolls forward after it passes). */
 export function nextStatsDeadline(now: Date = new Date()): Date {
   const start = weekBoundaryStart(now);
   let deadline = statsDeadlineForWeek(start);

@@ -40,9 +40,9 @@ async function main() {
   console.log(`# DABOS week close`);
   console.log(label);
   if (pastDeadline) {
-    console.log('Stats deadline: PASSED (Thu 16:00 Berlin)');
+    console.log('Stats deadline: PASSED (Thu 14:00 Berlin)');
   } else {
-    console.log(`Stats deadline: ${hoursLeft.toFixed(1)}h until Thu 16:00 Berlin`);
+    console.log(`Stats deadline: ${hoursLeft.toFixed(1)}h until Thu 14:00 Berlin`);
   }
 
   const sql = createDabosSql(url);

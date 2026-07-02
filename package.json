@@ -22,6 +22,7 @@
     "dabos:seed-stats": "tsx scripts/dabos/seed-ytd-stats.ts",
     "dabos:refresh-conditions": "tsx scripts/dabos/refresh-conditions.ts",
     "dabos:seed-working-non-existence": "tsx scripts/dabos/seed-working-non-existence.ts",
+    "dabos:formula-complete": "tsx scripts/dabos/formula-complete.ts",
     "dabos:morning-plan": "tsx scripts/dabos/morning-plan.ts",
     "dabos:week-close": "tsx scripts/dabos/week-close.ts",
     "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts"

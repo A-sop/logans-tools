@@ -109,7 +109,7 @@ Until DNS is correct, use default Clerk hosting (no custom primary domain) or Pr
 
 ## Cadence (PC-off safe)
 
-**Org week:** Thursday **14:00** boundary · stats due **16:00 Europe/Berlin** — countdown on every `/dabos` page (top left).
+**Org week:** Thursday **14:00** boundary and stats cutoff (**Europe/Berlin**) — countdown on every `/dabos` page (top left).
 
 | Job | Local | Vercel Cron (UTC) |
 |-----|-------|-------------------|
