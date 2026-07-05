@@ -103,8 +103,9 @@ async function main() {
     await sql.end({ timeout: 5 });
   }
 
-  if (rows.length !== 21 || failures > 0 || reported !== 6 || boardFailures > 0 || nonNe.length > 0) {
-    console.error('FAIL: acceptance not met (21 depts, 6 reported, all Non-Existence, 0 failures)');
+  // Floor of 6 = the sprint's initial reported set; the count grows as to-report stats flip (e.g. Dept9 headroom, 2026-07-05).
+  if (rows.length !== 21 || failures > 0 || reported < 6 || boardFailures > 0 || nonNe.length > 0) {
+    console.error('FAIL: acceptance not met (21 depts, >=6 reported, all Non-Existence, 0 failures)');
     process.exit(1);
   }
   console.log('ESTABLISHMENT_OK — every dept shows 4 flags and a stat value or pointer');
