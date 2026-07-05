@@ -10,10 +10,12 @@ import {
 } from '@/lib/dabos/org-board-config';
 import type { BoardChartPoint } from '@/lib/dabos/board-charts';
 import type { BoardStatSnapshot } from '@/lib/dabos/condition-display';
+import type { DeptEstablishment } from '@/lib/dabos/establishment';
 import type { ConditionLabel } from '@/lib/dabos/types';
 
 import { DivisionSparkline } from './division-sparkline';
 import { ConditionHoverSurface } from './condition-hover-surface';
+import { EstablishmentStrip } from './establishment-strip';
 import './org-board.css';
 
 export type OrgBoardDepartment = {
@@ -27,6 +29,7 @@ export type OrgBoardDepartment = {
   stat: BoardStatSnapshot | null;
   open_task_count?: number;
   activity?: 'active' | 'idle' | 'investigating';
+  establishment?: DeptEstablishment | null;
 };
 
 type DivisionColumnProps = {
@@ -168,6 +171,7 @@ function DepartmentBody({
     >
       <div className="dabos-org-board__dept-block-title">{title}</div>
       {policy ? <p>{policy}</p> : null}
+      <EstablishmentStrip establishment={dept.establishment} />
     </ConditionHoverSurface>
   );
 }
@@ -291,6 +295,16 @@ export function DivisionColumn({
     </div>
   );
 
+  const establishmentRow = !single ? (
+    <div className="dabos-org-board__estab-row">
+      {departments.map((dept) => (
+        <div key={dept.id} className="dabos-org-board__dept-cell dabos-org-board__dept-cell--estab">
+          <EstablishmentStrip establishment={dept.establishment} />
+        </div>
+      ))}
+    </div>
+  ) : null;
+
   if (single) {
     return (
       <article className="dabos-org-board__column dabos-org-board__column--single">
@@ -318,6 +332,7 @@ export function DivisionColumn({
 
       {numRow}
       {titleRow}
+      {establishmentRow}
       {purposeRow}
       {chartRow}
     </article>

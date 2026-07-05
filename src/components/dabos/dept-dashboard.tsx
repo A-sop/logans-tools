@@ -1,6 +1,11 @@
 import Link from 'next/link';
 
 import { ActivityBadge, ConditionBadge } from '@/components/dabos/condition-badge';
+import {
+  EstablishmentFlags,
+  EstablishmentStatLine,
+} from '@/components/dabos/establishment-badges';
+import type { DeptEstablishment } from '@/lib/dabos/establishment';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -64,6 +69,7 @@ export type DeptDashboardProps = {
   };
   latest_condition: ConditionEvaluation;
   battle_plan: string;
+  establishment: DeptEstablishment | null;
   metric_key: string;
   last_active: string | null;
   last_role_run: string | null;
@@ -126,6 +132,7 @@ export function DeptDashboard({
   department,
   latest_condition,
   battle_plan,
+  establishment,
   metric_key,
   last_active,
   last_role_run,
@@ -172,6 +179,26 @@ export function DeptDashboard({
           </CardContent>
         </Card>
       ) : null}
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Establishment</CardTitle>
+          <CardDescription>
+            E3 checklist{establishment?.checked_at ? ` — as of ${establishment.checked_at}` : ''}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <EstablishmentFlags establishment={establishment} />
+          <div>
+            <EstablishmentStatLine establishment={establishment} />
+          </div>
+          {establishment?.comm_line ? (
+            <p className="text-xs text-muted-foreground">
+              Comm line: {establishment.comm_line}
+            </p>
+          ) : null}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-1">

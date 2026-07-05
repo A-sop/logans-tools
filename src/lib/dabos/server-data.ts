@@ -4,6 +4,10 @@ import {
   type DivisionChartBundle,
 } from '@/lib/dabos/board-charts';
 import { battlePlanForDept, DIVISION_BATTLE_PLAN_WEEKLY } from '@/lib/dabos/battle-plans';
+import {
+  fetchDeptEstablishment,
+  fetchDeptEstablishmentMap,
+} from '@/lib/dabos/establishment';
 import { hasDabosDb, getDabosSql } from '@/lib/dabos/db';
 import { getStatCutoffSnapshot, type StatCutoffSnapshot } from '@/lib/dabos/org-week';
 import {
@@ -128,6 +132,7 @@ export async function fetchDivision(id: string) {
     SELECT id, legacy_name, operational_name, policy_text
     FROM departments WHERE division_id = ${id} ORDER BY id
   `;
+  const establishment = await fetchDeptEstablishmentMap(sql);
 
   const tasks = await sql`
     SELECT id, title, status, priority, department_id, assigned_agent, created_at
@@ -146,7 +151,7 @@ export async function fetchDivision(id: string) {
     window_days: 7,
   });
 
-  return { division, departments, tasks, latest_condition: latestCondition };
+  return { division, departments, tasks, latest_condition: latestCondition, establishment };
 }
 
 export async function fetchDepartment(divisionId: string, deptId: string) {
@@ -240,6 +245,7 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
   });
 
   const battle_plan = battlePlanForDept(deptId, latestCondition.condition);
+  const establishment = await fetchDeptEstablishment(sql, deptId);
 
   let lastActive: string | null = null;
   for (const t of tasks) {
@@ -273,6 +279,7 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
     receipts,
     latest_condition: latestCondition,
     battle_plan,
+    establishment,
     last_role_run,
     last_active: lastActive,
     metric_key: metricKey,
@@ -343,6 +350,7 @@ export async function fetchOrgBoardData(input?: {
   const conditions = await evaluateBoardConditions(input);
   const { week, executive, divisionStats, departmentStats, divisionCharts } = conditions;
   const deptActivity = await fetchDeptActivityMap();
+  const establishmentMap = await fetchDeptEstablishmentMap(sql);
 
   let openTasksTotal = 0;
   try {
@@ -380,6 +388,8 @@ export async function fetchOrgBoardData(input?: {
       conditions.divisions.get(divId) ??
       ({
         condition: null,
+        stat_indicated_condition: null,
+        working_condition: null,
         confidence: null,
         point_count: 0,
         basis: {},
@@ -408,6 +418,8 @@ export async function fetchOrgBoardData(input?: {
           conditions.departments.get(deptId) ??
           ({
             condition: null,
+            stat_indicated_condition: null,
+            working_condition: null,
             confidence: null,
             point_count: 0,
             basis: {},
@@ -431,6 +443,7 @@ export async function fetchOrgBoardData(input?: {
           stat: deptStat,
           open_task_count: activity.open_count,
           activity: activity.activity,
+          establishment: establishmentMap.get(deptId) ?? null,
         };
       }),
     };

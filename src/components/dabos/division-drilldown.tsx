@@ -4,6 +4,11 @@ import Link from 'next/link';
 
 import { ConditionBadge } from '@/components/dabos/condition-badge';
 import { ActivityBadge } from '@/components/dabos/condition-badge';
+import {
+  EstablishmentFlags,
+  EstablishmentStatLine,
+} from '@/components/dabos/establishment-badges';
+import type { DeptEstablishment } from '@/lib/dabos/establishment';
 import { deptRoleLabel, divisionSecretaryLabel } from '@/lib/dabos/org-board-config';
 import type { ConditionLabel } from '@/lib/dabos/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +21,7 @@ type DeptSummary = {
   condition: ConditionLabel | null;
   open_task_count?: number;
   activity?: 'active' | 'idle' | 'investigating';
+  establishment?: DeptEstablishment | null;
 };
 
 type DivisionDrilldownHeaderProps = {
@@ -61,14 +67,20 @@ export function DivisionDrilldownHeader({
                 </CardTitle>
                 <CardDescription>{dept.legacy_name}</CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-wrap items-center gap-2 pt-0">
-                <ConditionBadge condition={dept.condition} />
-                {dept.activity ? <ActivityBadge activity={dept.activity} /> : null}
-                {(dept.open_task_count ?? 0) > 0 ? (
-                  <span className="text-xs text-muted-foreground">
-                    {dept.open_task_count} open
-                  </span>
-                ) : null}
+              <CardContent className="space-y-2 pt-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <ConditionBadge condition={dept.condition} />
+                  {dept.activity ? <ActivityBadge activity={dept.activity} /> : null}
+                  {(dept.open_task_count ?? 0) > 0 ? (
+                    <span className="text-xs text-muted-foreground">
+                      {dept.open_task_count} open
+                    </span>
+                  ) : null}
+                </div>
+                <EstablishmentFlags establishment={dept.establishment} />
+                <div>
+                  <EstablishmentStatLine establishment={dept.establishment} />
+                </div>
               </CardContent>
             </Card>
           </Link>

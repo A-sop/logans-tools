@@ -22,6 +22,8 @@ export function worstWinsRollup(
 ): ExecutiveRollup {
   let merged: ConditionEvaluation = {
     condition: null,
+    stat_indicated_condition: null,
+    working_condition: null,
     confidence: null,
     point_count: 0,
     basis: { rollup_id: meta.rollup_id, child_ids: childIds },

@@ -11,6 +11,7 @@
   --board-row-head: 5.25rem;
   --board-row-num: 2.15rem;
   --board-row-title-min: 10rem;
+  --board-row-estab-min: 4.5rem;
   --board-row-purpose-min: 3.5rem;
   --board-row-chart: 3.35rem;
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -252,6 +253,7 @@
     var(--board-row-head)
     var(--board-row-num)
     auto
+    minmax(var(--board-row-estab-min), auto)
     minmax(var(--board-row-purpose-min), auto)
     var(--board-row-chart);
   align-items: stretch;
@@ -285,7 +287,7 @@
 
 .dabos-org-board__column {
   display: grid;
-  grid-row: span 5;
+  grid-row: span 6;
   grid-template-rows: subgrid;
   grid-template-columns: 1fr;
   border-right: 1px solid var(--ob-line);
@@ -302,7 +304,8 @@
 
 .dabos-org-board__column > :nth-child(3),
 .dabos-org-board__column > :nth-child(4),
-.dabos-org-board__column > :nth-child(5) {
+.dabos-org-board__column > :nth-child(5),
+.dabos-org-board__column > :nth-child(6) {
   min-height: 0;
   min-width: 0;
   overflow: hidden;
@@ -320,7 +323,8 @@
 }
 
 .dabos-org-board__column > :nth-child(4),
-.dabos-org-board__column > :nth-child(5) {
+.dabos-org-board__column > :nth-child(5),
+.dabos-org-board__column > :nth-child(6) {
   align-self: stretch;
   height: 100%;
 }
@@ -486,6 +490,113 @@
   color: var(--ob-navy);
   text-decoration: none;
   display: block;
+}
+
+/* Establishment row (E3 sprint): four boxes + stat status per department */
+.dabos-org-board__estab-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-width: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ob-line);
+  box-sizing: border-box;
+}
+
+.dabos-org-board__dept-cell--estab {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.3rem 0.12rem;
+  min-height: var(--board-row-estab-min);
+  overflow: hidden;
+}
+
+.dabos-org-board__estab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.22rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.dabos-org-board__estab-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.12rem;
+}
+
+.dabos-org-board__estab-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  border: 1px solid var(--ob-line);
+  padding: 0.08rem 0.14rem;
+  min-width: 1.35rem;
+  line-height: 1;
+}
+
+.dabos-org-board__estab-box-label {
+  font-size: 0.36rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.dabos-org-board__estab-box-mark {
+  font-size: 0.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.dabos-org-board__estab-box--ok .dabos-org-board__estab-box-mark {
+  color: rgb(18, 82, 48);
+}
+
+.dabos-org-board__estab-box--gap {
+  border-style: dashed;
+  background: rgba(160, 40, 40, 0.08);
+}
+
+.dabos-org-board__estab-box--gap .dabos-org-board__estab-box-mark {
+  color: rgb(110, 28, 28);
+}
+
+.dabos-org-board__estab-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dabos-org-board__estab-stat-value {
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dabos-org-board__estab-stat-key {
+  font-size: 0.4rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  word-break: break-word;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.dabos-org-board__estab-pointer {
+  font-size: 0.42rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.25;
+  text-align: center;
+  word-break: break-word;
+  opacity: 0.85;
 }
 
 .dabos-org-board__dept-cell:last-child {
@@ -919,6 +1030,7 @@
       var(--board-row-head)
       var(--board-row-num)
       auto
+      minmax(var(--board-row-estab-min), auto)
       minmax(var(--board-row-purpose-min), auto)
       var(--board-row-chart);
   }
@@ -929,6 +1041,7 @@
       var(--board-row-head)
       var(--board-row-num)
       auto
+      minmax(var(--board-row-estab-min), auto)
       minmax(var(--board-row-purpose-min), auto)
       var(--board-row-chart);
   }

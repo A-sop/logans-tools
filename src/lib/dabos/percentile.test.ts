@@ -17,12 +17,16 @@ describe('percentile', () => {
 describe('executive rollup', () => {
   const normal: ConditionEvaluation = {
     condition: 'Normal',
+    stat_indicated_condition: null,
+    working_condition: null,
     confidence: 0.9,
     point_count: 5,
     basis: {},
   };
   const danger: ConditionEvaluation = {
     condition: 'Danger',
+    stat_indicated_condition: null,
+    working_condition: null,
     confidence: 0.9,
     point_count: 5,
     basis: {},

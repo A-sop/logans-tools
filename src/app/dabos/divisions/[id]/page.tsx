@@ -34,7 +34,7 @@ export default async function DivisionPage({ params }: PageProps) {
   const data = await fetchDivision(id);
   if (!data) notFound();
 
-  const { division, departments, tasks, latest_condition } = data;
+  const { division, departments, tasks, latest_condition, establishment } = data;
   const metricKey = (division.primary_metric_key as string | null) ?? 'tasks_completed';
   const boardConditions = await evaluateBoardConditions();
   const deptActivity = await fetchDeptActivityMap();
@@ -69,6 +69,7 @@ export default async function DivisionPage({ params }: PageProps) {
       stat: boardConditions.departmentStats.get(deptId) ?? null,
       open_task_count: activity.open_count,
       activity: activity.activity,
+      establishment: establishment.get(deptId) ?? null,
     };
   });
 

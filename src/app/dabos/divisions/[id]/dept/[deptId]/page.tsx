@@ -41,6 +41,7 @@ export default async function DepartmentPage({ params }: PageProps) {
         department={dept}
         latest_condition={data.latest_condition}
         battle_plan={data.battle_plan}
+        establishment={data.establishment}
         metric_key={data.metric_key}
         last_active={data.last_active}
         last_role_run={data.last_role_run}
