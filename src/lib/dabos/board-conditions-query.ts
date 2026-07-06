@@ -161,7 +161,11 @@ async function mergeBoardEvaluation(
     );
     return mergeEvaluationWithWorking(evaluation, working);
   } catch {
-    return evaluation;
+    // Never render "No data yet" for a seeded org: fall back to the default
+    // working condition (Non-Existence) so the board shows the honest baseline
+    // even if the condition-state read fails or a stat series is < 3 points.
+    const working = syncWorkingCondition(null, evaluation.stat_indicated_condition);
+    return mergeEvaluationWithWorking(evaluation, working);
   }
 }
 
