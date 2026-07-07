@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 
 import { BoardCadenceStrip } from '@/components/dabos/dabos-chrome';
 
+import { estoRound1ProgressFromDepartments } from '@/lib/dabos/esto-round1-status';
 import type { BoardChartPeriod, BoardChartPoint } from '@/lib/dabos/board-charts';
 import {
   BOARD_PAGE_SUBTITLE,
@@ -96,6 +97,8 @@ function DivisionsGrid({ byId }: { byId: Map<string, OrgBoardDivision> }) {
 
 export function OrgBoard({ divisions, week, period, executive, cadence, maxWeek }: OrgBoardProps) {
   const byId = new Map(divisions.map((d) => [d.id, d]));
+  const allDepts = divisions.flatMap((d) => d.departments);
+  const esto = estoRound1ProgressFromDepartments(allDepts);
 
   return (
     <div className="dabos-org-board">
@@ -106,6 +109,22 @@ export function OrgBoard({ divisions, week, period, executive, cadence, maxWeek 
           </Link>
           <p className="dabos-org-board__page-subtitle">{BOARD_PAGE_SUBTITLE}</p>
         </div>
+
+        <p className="dabos-org-board__esto-legend" aria-label="ESTO Round 1 progress legend">
+          <span className="dabos-org-board__esto-legend-item">
+            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--done" />
+            ESTO riff done ({esto.done}/{esto.total})
+          </span>
+          <span className="dabos-org-board__esto-legend-item">
+            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--next" />
+            Next: {esto.next ?? '—'}
+          </span>
+          <span className="dabos-org-board__esto-legend-item">
+            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--pending" />
+            Not started
+          </span>
+          <span className="dabos-org-board__esto-legend-item">Hover: working condition</span>
+        </p>
 
         {cadence ? (
           <BoardCadenceStrip

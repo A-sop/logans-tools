@@ -5,6 +5,8 @@
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 
+import type { EstoRound1Status } from '@/lib/dabos/esto-round1-status';
+
 export type DeptEstablishment = {
   department_id: string;
   hat_confirmed: boolean;
@@ -18,6 +20,8 @@ export type DeptEstablishment = {
   /** Latest reported value for stat_metric_key; null for to-report rows. */
   stat_value: number | null;
   checked_at: string | null;
+  /** ESTO Round 1 riff progress — Neon SSOT (migration 011). */
+  esto_round1_status: EstoRound1Status;
 };
 
 function mapRow(row: Record<string, unknown>): DeptEstablishment {
@@ -35,6 +39,7 @@ function mapRow(row: Record<string, unknown>): DeptEstablishment {
     checked_at: row.checked_at
       ? new Date(row.checked_at as string).toISOString().slice(0, 10)
       : null,
+    esto_round1_status: (row.esto_round1_status as EstoRound1Status | undefined) ?? 'pending',
   };
 }
 
@@ -56,6 +61,7 @@ export async function fetchDeptEstablishmentMap(
         e.stat_metric_key,
         e.stat_pointer,
         e.checked_at,
+        e.esto_round1_status,
         latest.value AS stat_value
       FROM department_establishment e
       LEFT JOIN LATERAL (

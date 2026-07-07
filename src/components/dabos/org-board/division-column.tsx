@@ -11,6 +11,12 @@ import {
 import type { BoardChartPoint } from '@/lib/dabos/board-charts';
 import type { BoardStatSnapshot } from '@/lib/dabos/condition-display';
 import type { DeptEstablishment } from '@/lib/dabos/establishment';
+import {
+  estoRound1ProgressFromDepartments,
+  estoRound1StatusClass,
+  estoRound1StatusLabel,
+  resolveEstoRound1Status,
+} from '@/lib/dabos/esto-round1-status';
 import type { ConditionLabel } from '@/lib/dabos/types';
 
 import { DivisionSparkline } from './division-sparkline';
@@ -47,6 +53,17 @@ type DivisionColumnProps = {
   edgeClass?: string;
 };
 
+function deptEstoSurfaceClass(dept: OrgBoardDepartment, base: string): string {
+  const status = resolveEstoRound1Status(dept.id, dept.establishment?.esto_round1_status);
+  return [base, estoRound1StatusClass(status)].filter(Boolean).join(' ');
+}
+
+function deptEstoTitle(dept: OrgBoardDepartment): string {
+  return estoRound1StatusLabel(
+    resolveEstoRound1Status(dept.id, dept.establishment?.esto_round1_status)
+  );
+}
+
 function deptColumnTitle(dept: OrgBoardDepartment, short = false): string {
   if (short) {
     return deptRoleLabel(dept);
@@ -69,8 +86,9 @@ function DepartmentBridgeCell({
       stat={dept.stat}
       statIndicated={dept.statIndicated}
       climbLag={dept.climbLag}
-      className="dabos-org-board__dept-cell"
+      className={deptEstoSurfaceClass(dept, 'dabos-org-board__dept-cell')}
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
+      title={deptEstoTitle(dept)}
     >
       <span className="dabos-org-board__dept-bridge">{deptBridgeLabel(dept)}</span>
     </ConditionHoverSurface>
@@ -108,8 +126,9 @@ function DepartmentNumCell({
       condition={dept.condition}
       stat={dept.stat}
       {...deptConditionHover(dept)}
-      className="dabos-org-board__dept-cell"
+      className={deptEstoSurfaceClass(dept, 'dabos-org-board__dept-cell')}
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
+      title={deptEstoTitle(dept)}
     >
       <span className="dabos-org-board__dept-num">
         <span className={`dabos-org-board__dept-dot ${dotClass}`} aria-hidden />
@@ -133,20 +152,28 @@ function DepartmentTitleCell({
   linked: boolean;
   shortLabel: boolean;
 }) {
-  const className = 'dabos-org-board__dept-cell dabos-org-board__dept-cell--title';
+  const className = deptEstoSurfaceClass(
+    dept,
+    'dabos-org-board__dept-cell dabos-org-board__dept-cell--title'
+  );
+  const estoTitle = deptEstoTitle(dept);
   const title = (
     <span className="dabos-org-board__dept-title">{deptColumnTitle(dept, shortLabel)}</span>
   );
 
   if (linked) {
     return (
-      <Link href={`/dabos/divisions/${divisionId}/dept/${dept.id}`} className={className}>
+      <Link href={`/dabos/divisions/${divisionId}/dept/${dept.id}`} className={className} title={estoTitle}>
         {title}
       </Link>
     );
   }
 
-  return <div className={className}>{title}</div>;
+  return (
+    <div className={className} title={estoTitle}>
+      {title}
+    </div>
+  );
 }
 
 function DepartmentBody({
@@ -298,7 +325,14 @@ export function DivisionColumn({
   const establishmentRow = !single ? (
     <div className="dabos-org-board__estab-row">
       {departments.map((dept) => (
-        <div key={dept.id} className="dabos-org-board__dept-cell dabos-org-board__dept-cell--estab">
+        <div
+          key={dept.id}
+          className={deptEstoSurfaceClass(
+            dept,
+            'dabos-org-board__dept-cell dabos-org-board__dept-cell--estab'
+          )}
+          title={deptEstoTitle(dept)}
+        >
           <EstablishmentStrip establishment={dept.establishment} />
         </div>
       ))}

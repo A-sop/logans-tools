@@ -483,6 +483,60 @@
   justify-content: center;
 }
 
+/* ESTO Round 1 sweep tint (temporary — Logan 2026-07-07) */
+.dabos-org-board__dept-cell--esto-done,
+.dabos-org-board__dept-cell--esto-done.dabos-org-board__condition-hover {
+  background: rgba(34, 120, 70, 0.18);
+}
+
+.dabos-org-board__dept-cell--esto-next,
+.dabos-org-board__dept-cell--esto-next.dabos-org-board__condition-hover {
+  background: rgba(202, 138, 4, 0.22);
+}
+
+.dabos-org-board__dept-cell--esto-pending,
+.dabos-org-board__dept-cell--esto-pending.dabos-org-board__condition-hover {
+  background: rgba(185, 28, 28, 0.12);
+}
+
+.dabos-org-board__esto-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin: 0 0 0.75rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ob-navy);
+}
+
+.dabos-org-board__esto-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dabos-org-board__esto-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1px solid var(--ob-line);
+  flex-shrink: 0;
+}
+
+.dabos-org-board__esto-swatch--done {
+  background: rgba(34, 120, 70, 0.35);
+}
+
+.dabos-org-board__esto-swatch--next {
+  background: rgba(202, 138, 4, 0.4);
+}
+
+.dabos-org-board__esto-swatch--pending {
+  background: rgba(185, 28, 28, 0.25);
+}
+
 .dabos-org-board__dept-cell {
   border-right: 1px solid var(--ob-line);
   padding: 0.2rem 0.15rem;

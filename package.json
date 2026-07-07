@@ -26,7 +26,8 @@
     "dabos:morning-plan": "tsx scripts/dabos/morning-plan.ts",
     "dabos:week-close": "tsx scripts/dabos/week-close.ts",
     "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts",
-    "dabos:verify-establishment": "tsx scripts/dabos/verify-establishment.ts"
+    "dabos:verify-establishment": "tsx scripts/dabos/verify-establishment.ts",
+    "dabos:esto-status": "tsx scripts/dabos/update-esto-round1.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
