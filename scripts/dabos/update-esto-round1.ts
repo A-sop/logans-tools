@@ -20,7 +20,7 @@ function loadEnvLocal() {
     const quoted = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*"(.*)"\s*$/);
     const plain = trimmed.match(/^([A-Za-z0-9_]+)\s*=\s*(.*)$/);
     const m = quoted ?? plain;
-    if (m) process.env[m[1]] = m[2].trim();
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim();
   }
 }
 

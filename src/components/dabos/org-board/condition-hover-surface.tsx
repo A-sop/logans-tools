@@ -15,6 +15,8 @@ type ConditionHoverSurfaceProps = {
   className?: string;
   children: ReactNode;
   href?: string;
+  /** Native tooltip (e.g. ESTO Round 1 status on dept cells). */
+  title?: string;
 };
 
 export function ConditionHoverSurface({
@@ -25,6 +27,7 @@ export function ConditionHoverSurface({
   className = '',
   children,
   href,
+  title,
 }: ConditionHoverSurfaceProps) {
   const label = conditionHoverLabel(condition, stat, { statIndicated, climbLag });
   const dataCondition = conditionDataAttr(condition);
@@ -44,6 +47,7 @@ export function ConditionHoverSurface({
         className={classes}
         data-condition={dataCondition}
         aria-label={`${label} condition`}
+        title={title}
       >
         {inner}
       </Link>
@@ -51,7 +55,7 @@ export function ConditionHoverSurface({
   }
 
   return (
-    <div className={classes} data-condition={dataCondition}>
+    <div className={classes} data-condition={dataCondition} title={title}>
       {inner}
     </div>
   );
