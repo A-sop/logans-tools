@@ -68,6 +68,14 @@ function isDabosCronPath(pathname: string): boolean {
   return pathname.startsWith('/api/dabos/cron/');
 }
 
+function isDabosTier0Path(pathname: string): boolean {
+  return pathname.startsWith('/api/dabos/tier0/');
+}
+
+function isDabosSlackPath(pathname: string): boolean {
+  return pathname.startsWith('/api/dabos/slack/');
+}
+
 function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isAuthPublicRoute(request)) return false;
 
@@ -79,6 +87,8 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   const { pathname } = request.nextUrl;
 
   if (isDabosCronPath(pathname)) return false;
+  if (isDabosTier0Path(pathname)) return false;
+  if (isDabosSlackPath(pathname)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;

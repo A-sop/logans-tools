@@ -44,7 +44,16 @@
 
 **Local subdomain test:** add `127.0.0.1 dabos.logans.tools` to hosts, run dev server, open `http://dabos.logans.tools:3001/`.
 
-## Auth (Clerk + Gmail allowlist)
+## Founder comm lines (Tier 0)
+
+| Channel | Where | Runbook |
+|---------|-------|---------|
+| **Slack** (primary target) | Vercel `/api/dabos/slack/events` + `/commands` | [Atlas/docs/admin/dabos-slack-gateway.md](../../../../Atlas/docs/admin/dabos-slack-gateway.md) |
+| **Telegram Inbox** | ln02 `dabos-telegram-capture` | [dabos-telegram-capture.md](../../../../Atlas/docs/admin/dabos-telegram-capture.md) |
+| **Telegram Comm** | ln02 `dabos-telegram-exec` → Tier 0 API | [dabos-telegram-exec.md](../../../../Atlas/docs/admin/dabos-telegram-exec.md) |
+
+Tier 0 API (shared): `/api/dabos/tier0/stats`, `board`, `approvals` — auth via `DABOS_TIER0_SECRET`. Sync: `Atlas/scripts/ln02/Sync-Tier0Secret-Vercel-Ln02.ps1`.
+
 
 `/dabos`, `dabos.logans.tools`, and `/api/dabos/*` require Clerk sign-in. Only emails in `DABOS_ALLOWED_EMAILS` may access the board (default: `logan.d.williams@gmail.com`).
 
