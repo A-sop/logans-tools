@@ -10,13 +10,14 @@ import {
 
 export function tier0HelpText(): string {
   return [
-    'LDW Comm (Tier 0 — no LLM)',
+    'LDW Comm (Tier 0 commands)',
     '/stats — division stats',
     '/board — condition snapshot',
-    '/approvals — pending approval queue',
-    '/approve <id> — approve (short id ok if unique prefix)',
-    '/reject <id> — reject',
+    '/approvals — Approval inbox (pending)',
+    '/approve <id> — Founder gate approve (short id ok)',
+    '/reject <id> — Founder gate reject',
     '/help — this message',
+    'Telegram free text = boss chat when OpenRouter is wired on Comm bot',
   ].join('\n');
 }
 
@@ -91,4 +92,27 @@ export function normalizeSlashCommandText(text: string): string | null {
   if (map[head]) return map[head];
   if (trimmed.startsWith('/')) return trimmed;
   return null;
+}
+
+/** Resolve Slack slash invocation (command name + text arg) to a Tier 0 command string. */
+export function resolveSlackSlashInvocation(command: string, text: string): string | null {
+  const name = command.replace(/^\//, '').trim().toLowerCase();
+  const arg = text.trim();
+
+  if (name === 'dabos') {
+    return normalizeSlashCommandText(arg);
+  }
+
+  const direct: Record<string, string> = {
+    stats: '/stats',
+    board: '/board',
+    approvals: '/approvals',
+    help: '/help',
+    start: '/help',
+  };
+  if (direct[name]) return direct[name];
+  if (name === 'approve') return arg ? `/approve ${arg}` : null;
+  if (name === 'reject') return arg ? `/reject ${arg}` : null;
+
+  return normalizeSlashCommandText(arg || `/${name}`);
 }

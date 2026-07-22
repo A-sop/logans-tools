@@ -27,7 +27,12 @@
     "dabos:week-close": "tsx scripts/dabos/week-close.ts",
     "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts",
     "dabos:verify-establishment": "tsx scripts/dabos/verify-establishment.ts",
-    "dabos:esto-status": "tsx scripts/dabos/update-esto-round1.ts"
+    "dabos:stats-snapshot": "tsx scripts/dabos/query-stats-snapshot.ts",
+    "dabos:esto-status": "tsx scripts/dabos/update-esto-round1.ts",
+    "dabos:seed-open-tasks": "tsx scripts/dabos/seed-production-open-tasks.ts",
+    "dabos:post-gfp-weekly-stats": "tsx scripts/dabos/post-gfp-weekly-stats.ts",
+    "dabos:post-division-weekly-stats": "tsx scripts/dabos/post-division-weekly-stats.ts",
+    "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",

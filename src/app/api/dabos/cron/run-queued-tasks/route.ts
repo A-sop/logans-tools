@@ -46,6 +46,10 @@ export async function GET(request: Request) {
           task_id: outcome.result.task_id,
           capability: outcome.capability,
           provider: outcome.result.provider,
+          workspace_id:
+            outcome.result.provider === 'script' && 'workspace_id' in outcome.result
+              ? outcome.result.workspace_id
+              : undefined,
         })}::jsonb
       )
     `;
@@ -61,5 +65,8 @@ export async function GET(request: Request) {
     artifact_id: outcome.result.artifact_id,
     cost_event_id: outcome.result.cost_event_id,
     provider: outcome.result.provider,
+    ...(outcome.result.provider === 'script' && 'workspace_id' in outcome.result
+      ? { workspace_id: outcome.result.workspace_id }
+      : {}),
   });
 }

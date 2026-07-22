@@ -34,6 +34,7 @@ export type OrgBoardDepartment = {
   climbLag?: boolean;
   stat: BoardStatSnapshot | null;
   open_task_count?: number;
+  doing_count?: number;
   activity?: 'active' | 'idle' | 'investigating';
   establishment?: DeptEstablishment | null;
 };
@@ -114,12 +115,19 @@ function DepartmentNumCell({
   shortLabel: boolean;
 }) {
   const activity = dept.activity ?? 'idle';
+  const doing = dept.doing_count ?? 0;
   const dotClass =
     activity === 'investigating'
       ? 'dabos-org-board__dept-dot--investigating'
       : activity === 'active'
         ? 'dabos-org-board__dept-dot--active'
         : 'dabos-org-board__dept-dot--idle';
+  const statusHint =
+    doing > 0
+      ? ` · ${doing} working now`
+      : (dept.open_task_count ?? 0) > 0
+        ? ` · ${dept.open_task_count} open`
+        : '';
 
   return (
     <ConditionHoverSurface
@@ -128,7 +136,7 @@ function DepartmentNumCell({
       {...deptConditionHover(dept)}
       className={deptEstoSurfaceClass(dept, 'dabos-org-board__dept-cell')}
       href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
-      title={deptEstoTitle(dept)}
+      title={`${deptEstoTitle(dept)}${statusHint}`}
     >
       <span className="dabos-org-board__dept-num">
         <span className={`dabos-org-board__dept-dot ${dotClass}`} aria-hidden />

@@ -4,6 +4,7 @@ import { slackPostMessage } from '@/lib/dabos/slack-client';
 import {
   executeTier0Command,
   normalizeSlashCommandText,
+  resolveSlackSlashInvocation,
   tier0HelpText,
 } from '@/lib/dabos/tier0-commands';
 import {
@@ -75,13 +76,14 @@ export async function handleSlackMessageEvent(event: SlackMessageEvent): Promise
 export async function handleSlackSlashCommand(params: {
   userId: string;
   channelId: string;
+  command: string;
   text: string;
 }): Promise<string> {
   if (!isSlackUserAllowed(params.userId)) {
     return 'Not authorized.';
   }
 
-  const commandText = normalizeSlashCommandText(params.text);
+  const commandText = resolveSlackSlashInvocation(params.command, params.text);
   if (!commandText) {
     return tier0HelpText();
   }

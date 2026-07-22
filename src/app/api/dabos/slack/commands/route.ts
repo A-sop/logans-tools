@@ -31,11 +31,12 @@ export async function POST(request: Request) {
   const params = new URLSearchParams(rawBody);
   const userId = params.get('user_id') ?? '';
   const channelId = params.get('channel_id') ?? '';
+  const command = params.get('command') ?? '/dabos';
   const text = params.get('text') ?? '';
 
   let responseText: string;
   try {
-    responseText = await handleSlackSlashCommand({ userId, channelId, text });
+    responseText = await handleSlackSlashCommand({ userId, channelId, command, text });
   } catch (err) {
     responseText = `Error: ${err instanceof Error ? err.message : String(err)}`;
   }

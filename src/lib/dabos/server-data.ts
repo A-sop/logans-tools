@@ -50,8 +50,21 @@ export async function fetchDabosShell(): Promise<DabosShellData> {
 
 export type DeptActivity = {
   open_count: number;
+  doing_count: number;
   doing_agent_count: number;
   activity: 'active' | 'idle' | 'investigating';
+};
+
+/** Departments with at least one task in status `doing` right now. */
+export type WorkingNowEntry = {
+  department_id: string;
+  division_id: string;
+  operational_name: string;
+  doing_count: number;
+  sample_title: string | null;
+  sample_task_id: string | null;
+  sample_type: string | null;
+  sample_assigned_agent: string | null;
 };
 
 export async function fetchDeptActivityMap(): Promise<Map<string, DeptActivity>> {
@@ -62,6 +75,7 @@ export async function fetchDeptActivityMap(): Promise<Map<string, DeptActivity>>
       SELECT
         department_id,
         COUNT(*) FILTER (WHERE status IN ('todo', 'doing', 'blocked'))::int AS open_count,
+        COUNT(*) FILTER (WHERE status = 'doing')::int AS doing_count,
         COUNT(*) FILTER (WHERE status = 'doing' AND assigned_agent IS NOT NULL)::int AS doing_agent_count
       FROM tasks
       WHERE department_id IS NOT NULL
@@ -70,18 +84,70 @@ export async function fetchDeptActivityMap(): Promise<Map<string, DeptActivity>>
     for (const row of rows) {
       const deptId = row.department_id as string;
       const open = Number(row.open_count) || 0;
+      const doing = Number(row.doing_count) || 0;
       const doingAgent = Number(row.doing_agent_count) || 0;
       map.set(deptId, {
         open_count: open,
+        doing_count: doing,
         doing_agent_count: doingAgent,
-        activity:
-          doingAgent > 0 ? 'investigating' : open > 0 ? 'active' : 'idle',
+        activity: doing > 0 ? 'investigating' : open > 0 ? 'active' : 'idle',
       });
     }
   } catch {
     /* tasks table */
   }
   return map;
+}
+
+export async function fetchWorkingNow(): Promise<WorkingNowEntry[]> {
+  const sql = getDabosSql();
+  try {
+    const rows = await sql`
+      WITH ranked AS (
+        SELECT
+          t.department_id,
+          t.division_id,
+          d.operational_name,
+          t.id::text AS task_id,
+          t.title,
+          t.type,
+          t.assigned_agent,
+          ROW_NUMBER() OVER (
+            PARTITION BY t.department_id
+            ORDER BY t.updated_at DESC NULLS LAST, t.created_at DESC
+          ) AS rn,
+          COUNT(*) OVER (PARTITION BY t.department_id) AS doing_count
+        FROM tasks t
+        INNER JOIN departments d ON d.id = t.department_id
+        WHERE t.status = 'doing'
+          AND t.department_id IS NOT NULL
+      )
+      SELECT
+        department_id,
+        division_id,
+        operational_name,
+        doing_count,
+        title AS sample_title,
+        task_id AS sample_task_id,
+        type AS sample_type,
+        assigned_agent AS sample_assigned_agent
+      FROM ranked
+      WHERE rn = 1
+      ORDER BY division_id, department_id
+    `;
+    return rows.map((row) => ({
+      department_id: row.department_id as string,
+      division_id: row.division_id as string,
+      operational_name: row.operational_name as string,
+      doing_count: Number(row.doing_count) || 0,
+      sample_title: (row.sample_title as string | null) ?? null,
+      sample_task_id: (row.sample_task_id as string | null) ?? null,
+      sample_type: (row.sample_type as string | null) ?? null,
+      sample_assigned_agent: (row.sample_assigned_agent as string | null) ?? null,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchOrgMap() {
@@ -349,8 +415,11 @@ export async function fetchOrgBoardData(input?: {
 
   const conditions = await evaluateBoardConditions(input);
   const { week, executive, divisionStats, departmentStats, divisionCharts } = conditions;
-  const deptActivity = await fetchDeptActivityMap();
-  const establishmentMap = await fetchDeptEstablishmentMap(sql);
+  const [deptActivity, workingNow, establishmentMap] = await Promise.all([
+    fetchDeptActivityMap(),
+    fetchWorkingNow(),
+    fetchDeptEstablishmentMap(sql),
+  ]);
 
   let openTasksTotal = 0;
   try {
@@ -428,6 +497,7 @@ export async function fetchOrgBoardData(input?: {
         const deptStat = departmentStats.get(deptId) ?? null;
         const activity = deptActivity.get(deptId) ?? {
           open_count: 0,
+          doing_count: 0,
           doing_agent_count: 0,
           activity: 'idle' as const,
         };
@@ -442,6 +512,7 @@ export async function fetchOrgBoardData(input?: {
           climbLag: deptCondition.climb_lag,
           stat: deptStat,
           open_task_count: activity.open_count,
+          doing_count: activity.doing_count,
           activity: activity.activity,
           establishment: establishmentMap.get(deptId) ?? null,
         };
@@ -466,7 +537,7 @@ export async function fetchOrgBoardData(input?: {
   }
 
   const divisionsWithWork = boardDivisions.filter((d) =>
-    d.departments.some((dept) => dept.open_task_count > 0)
+    d.departments.some((dept) => (dept.open_task_count ?? 0) > 0)
   ).length;
 
   return {
@@ -484,6 +555,8 @@ export async function fetchOrgBoardData(input?: {
     cadence: {
       open_tasks_total: openTasksTotal,
       divisions_with_work: divisionsWithWork,
+      departments_working: workingNow.length,
+      working_now: workingNow,
     },
     divisions: boardDivisions,
   };

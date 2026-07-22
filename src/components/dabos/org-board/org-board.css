@@ -537,6 +537,11 @@
   background: rgba(185, 28, 28, 0.25);
 }
 
+.dabos-org-board__esto-swatch--working {
+  background: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.25);
+}
+
 .dabos-org-board__dept-cell {
   border-right: 1px solid var(--ob-line);
   padding: 0.2rem 0.15rem;
@@ -738,6 +743,112 @@
 
 .dabos-org-board__cadence-strip {
   font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.dabos-org-board__working-now {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, #7c3aed 28%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, #7c3aed 6%, transparent);
+}
+
+.dabos-org-board__working-now--empty {
+  border-color: color-mix(in srgb, currentColor 12%, transparent);
+  background: color-mix(in srgb, currentColor 3%, transparent);
+}
+
+.dabos-org-board__working-now-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+}
+
+.dabos-org-board__working-now-label {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.dabos-org-board__working-now-empty-text {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  opacity: 0.75;
+}
+
+.dabos-org-board__working-now-empty-text code {
+  font-size: 0.62rem;
+}
+
+.dabos-org-board__working-now-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dabos-org-board__working-now-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.dabos-org-board__working-now-dept {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+}
+
+.dabos-org-board__working-now-dept:hover {
+  text-decoration: underline;
+}
+
+.dabos-org-board__working-now-name {
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.dabos-org-board__working-now-count {
+  font-size: 0.62rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.dabos-org-board__working-now-task {
+  min-width: 0;
+  flex: 1 1 12rem;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.82;
+}
+
+.dabos-org-board__working-now-task:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.dabos-org-board__working-now-kind {
+  display: inline-block;
+  margin-right: 0.35rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.25rem;
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, #7c3aed 18%, transparent);
 }
 
 .dabos-org-board__body {

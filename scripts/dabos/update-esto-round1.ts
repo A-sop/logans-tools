@@ -41,9 +41,12 @@ function parseArgs() {
 
 async function main() {
   loadEnvLocal();
-  const url = process.env.DATABASE_URL?.trim();
+  const url =
+    process.env.DATABASE_URL?.trim() ||
+    process.env.POSTGRES_URL?.trim() ||
+    process.env.DATABASE_URL_UNPOOLED?.trim();
   if (!url) {
-    console.error('DATABASE_URL missing — set in .env.local');
+    console.error('DATABASE_URL missing — set in .env.local (or POSTGRES_URL alias)');
     process.exit(1);
   }
 
@@ -73,10 +76,11 @@ async function main() {
         WHERE department_id = ${next}
       `;
     } else if (status === 'done') {
-      const [{ id }] = await sql<{ id: string }[]>`
+      const nextRows = await sql<{ id: string }[]>`
         SELECT department_id AS id FROM department_establishment
         WHERE esto_round1_status = 'next' LIMIT 1
       `;
+      const id = nextRows[0]?.id;
       if (id) console.log(`Note: next pointer still ${id} — pass --next to advance`);
     }
 

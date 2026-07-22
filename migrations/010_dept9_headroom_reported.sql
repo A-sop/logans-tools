@@ -1,6 +1,6 @@
 -- E3 establishment sprint (T3 wiring): Dept9 flips to-report -> reported.
 -- The T3 script ran 2026-07-05 and produced a real number; source artifact:
--- C:\DATA\dabos-registers\headroom-report-2026-07-05.md (Atlas scripts/dabos/Run-HeadroomBackupReport.ps1).
+-- C:\DATA\10_WORK\dabos-registers\headroom-report-2026-07-05.md (Atlas scripts/dabos/Run-HeadroomBackupReport.ps1).
 -- Value = minimum disk_headroom_pct across the three machines (office-pc 21.6, ln01 88.3, ln02 75)
 -- so the board shows the tightest disk, which is the number Dept9 acts on.
 -- Idempotent: guarded insert + upsert; safe to re-run.

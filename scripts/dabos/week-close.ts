@@ -1,35 +1,25 @@
 /**
- * Thursday week-close: refresh conditions + log role_run.
+ * Thursday week-close: GFP + division weekly posters + refresh conditions + role_run.
  * Run: npm run dabos:week-close
  */
-import fs from 'fs';
-import path from 'path';
-
 import { refreshAllConditionsFromBoardWithSql } from '../../src/lib/dabos/board-conditions-query';
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
+import { postDivisionWeeklyStats } from '../../src/lib/dabos/division-weekly-stats';
+import {
+  postGfpWeeklyStats,
+  resolveGfpIsoWeek,
+} from '../../src/lib/dabos/gfp-weekly-stats';
 import {
   hoursUntilStatsDeadline,
   isPastStatsDeadline,
   orgWeekLabel,
   weekBoundaryStart,
 } from '../../src/lib/dabos/org-week';
-
-function loadEnvLocal() {
-  const envPath = path.join(process.cwd(), '.env.local');
-  if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
-    const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=(.*)$/);
-    if (m) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
-  }
-}
+import { loadEnvLocal, requireDatabaseUrl } from './load-env';
 
 async function main() {
   loadEnvLocal();
-  const url = process.env.DATABASE_URL?.trim();
-  if (!url) {
-    console.error('DATABASE_URL is required (.env.local)');
-    process.exit(1);
-  }
+  const url = requireDatabaseUrl();
 
   const now = new Date();
   const weekStart = weekBoundaryStart(now);
@@ -46,6 +36,54 @@ async function main() {
   }
 
   const sql = createDabosSql(url);
+
+  const gfpUrl = process.env.GFP_DATABASE_URL?.trim() || url;
+  const { year, week } = resolveGfpIsoWeek(now);
+  let gfpPoster: Record<string, unknown> | null = null;
+  try {
+    const gfp = await postGfpWeeklyStats({
+      dabosSql: sql,
+      gfpDatabaseUrl: gfpUrl,
+      year,
+      week,
+    });
+    gfpPoster = {
+      workspace_id: gfp.workspaceId,
+      lead_magnets_shipped: gfp.leadMagnetsShipped,
+      termin_clicks_booked_proxy: gfp.terminClicksBookedProxy,
+      inserted: gfp.inserted,
+      note: 'termin_clicks is Cal booked proxy until PostHog CTA ingest',
+    };
+    console.log(
+      `\nGFP poster ${gfp.workspaceId}: magnets=${gfp.leadMagnetsShipped}, termin_clicks(booked_proxy)=${gfp.terminClicksBookedProxy}`
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    gfpPoster = { error: message };
+    console.log(`\nGFP poster skipped: ${message}`);
+  }
+
+  let divisionPoster: Record<string, unknown> | null = null;
+  try {
+    const div = await postDivisionWeeklyStats({
+      dabosSql: sql,
+      year,
+      week,
+      includeProvisoMonths: 12,
+    });
+    divisionPoster = {
+      workspace_id: div.workspaceId,
+      inserted: div.inserted,
+      notes: div.notes,
+    };
+    console.log(`\nDivision poster ${div.workspaceId}: inserted=${div.inserted.length}`);
+    for (const note of div.notes) console.log(`  ${note}`);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    divisionPoster = { error: message };
+    console.log(`\nDivision poster skipped: ${message}`);
+  }
+
   const result = await refreshAllConditionsFromBoardWithSql(sql);
 
   console.log(`\nConditions (${result.week.label}):`);
@@ -91,6 +129,8 @@ async function main() {
         past_stats_deadline: pastDeadline,
         conditions: result.samples,
         venture_count: ventures.length,
+        gfp_poster: gfpPoster,
+        division_poster: divisionPoster,
       })}::jsonb
     )
   `.catch(() => {

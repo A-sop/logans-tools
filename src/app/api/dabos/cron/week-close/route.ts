@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server';
 import { refreshAllConditionsFromBoardWithSql } from '@/lib/dabos/board-conditions-query';
 import { authorizeDabosCron } from '@/lib/dabos/cron-auth';
 import { createDabosSql } from '@/lib/dabos/dabos-connection';
+import { postDivisionWeeklyStats } from '@/lib/dabos/division-weekly-stats';
+import {
+  postGfpWeeklyStats,
+  resolveGfpIsoWeek,
+} from '@/lib/dabos/gfp-weekly-stats';
 import {
   getStatCutoffSnapshot,
   isPastStatsDeadline,
@@ -11,7 +16,7 @@ import {
 } from '@/lib/dabos/org-week';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function GET(request: Request) {
   const denied = authorizeDabosCron(request);
@@ -25,6 +30,49 @@ export async function GET(request: Request) {
   const now = new Date();
   const weekStart = weekBoundaryStart(now);
   const sql = createDabosSql(url);
+
+  const gfpUrl = process.env.GFP_DATABASE_URL?.trim() || url;
+  const { year, week } = resolveGfpIsoWeek(now);
+  let gfpPoster: Record<string, unknown> | null = null;
+  try {
+    const gfp = await postGfpWeeklyStats({
+      dabosSql: sql,
+      gfpDatabaseUrl: gfpUrl,
+      year,
+      week,
+    });
+    gfpPoster = {
+      workspace_id: gfp.workspaceId,
+      lead_magnets_shipped: gfp.leadMagnetsShipped,
+      termin_clicks_booked_proxy: gfp.terminClicksBookedProxy,
+      inserted: gfp.inserted,
+      note: 'termin_clicks is Cal booked proxy until PostHog CTA ingest',
+    };
+  } catch (err) {
+    gfpPoster = {
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+
+  let divisionPoster: Record<string, unknown> | null = null;
+  try {
+    const div = await postDivisionWeeklyStats({
+      dabosSql: sql,
+      year,
+      week,
+      includeProvisoMonths: 12,
+    });
+    divisionPoster = {
+      workspace_id: div.workspaceId,
+      inserted: div.inserted,
+      notes: div.notes,
+    };
+  } catch (err) {
+    divisionPoster = {
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+
   const result = await refreshAllConditionsFromBoardWithSql(sql);
 
   try {
@@ -38,6 +86,8 @@ export async function GET(request: Request) {
           past_stats_deadline: isPastStatsDeadline(now),
           cutoff: getStatCutoffSnapshot(now),
           conditions: result.samples,
+          gfp_poster: gfpPoster,
+          division_poster: divisionPoster,
         })}::jsonb
       )
     `;
@@ -55,5 +105,7 @@ export async function GET(request: Request) {
     org_week: orgWeekLabel(weekStart),
     week: result.week.label,
     persisted: result.persisted,
+    gfp_poster: gfpPoster,
+    division_poster: divisionPoster,
   });
 }

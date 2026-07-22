@@ -62,7 +62,7 @@ INSERT INTO department_establishment (
   ('Dept5',  TRUE, TRUE, TRUE,  TRUE, 'Dept4/Dept6',                            'to-report', NULL, 'publish log', '2026-07-04'),
   ('Dept6',  TRUE, TRUE, TRUE,  TRUE, 'Dept5/Dept18 boundary',                  'to-report', NULL, 'CRM truth (Block D)', '2026-07-04'),
   ('Dept7',  TRUE, TRUE, TRUE,  TRUE, 'Dept8 + Logan (25th)',                   'to-report', NULL, 'income SSOT, next window 10th/25th', '2026-07-04'),
-  ('Dept8',  TRUE, TRUE, TRUE,  TRUE, 'Logan (payments)',                       'to-report', NULL, 'obligations register C:\DATA\dabos-registers\', '2026-07-04'),
+  ('Dept8',  TRUE, TRUE, TRUE,  TRUE, 'Logan (payments)',                       'to-report', NULL, 'obligations register C:\DATA\10_WORK\dabos-registers\', '2026-07-04'),
   ('Dept9',  TRUE, TRUE, TRUE,  TRUE, 'Dept8 register feed',                    'to-report', NULL, 'disk_headroom_pct script (T3)', '2026-07-04'),
   ('Dept10', TRUE, TRUE, TRUE,  TRUE, 'Dept11 handdown',                        'reported',  'prds_indexed', NULL, '2026-07-04'),
   ('Dept11', TRUE, TRUE, TRUE,  TRUE, 'Dept10/Dept12',                          'to-report', NULL, 'first completions entry (sprint tasks count)', '2026-07-04'),

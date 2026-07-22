@@ -75,14 +75,23 @@ export function DabosChrome({ shell }: DabosChromeProps) {
 export function BoardCadenceStrip({
   openTasksTotal,
   divisionsActive,
+  departmentsWorking = 0,
 }: {
   openTasksTotal: number;
   divisionsActive: number;
+  departmentsWorking?: number;
 }) {
   return (
     <div className="dabos-org-board__cadence-strip mb-3 flex flex-wrap items-center gap-2 font-sans text-xs">
-      <ActivityBadge activity={openTasksTotal > 0 ? 'active' : 'idle'} />
+      <ActivityBadge
+        activity={
+          departmentsWorking > 0 ? 'investigating' : openTasksTotal > 0 ? 'active' : 'idle'
+        }
+      />
       <span className="text-muted-foreground">
+        {departmentsWorking > 0
+          ? `${departmentsWorking} department${departmentsWorking === 1 ? '' : 's'} working now · `
+          : null}
         {openTasksTotal} open task{openTasksTotal === 1 ? '' : 's'} · {divisionsActive} division
         {divisionsActive === 1 ? '' : 's'} with work
       </span>

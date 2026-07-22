@@ -15,11 +15,13 @@ import {
   type BoardDivisionId,
 } from '@/lib/dabos/org-board-config';
 import type { BoardStatSnapshot } from '@/lib/dabos/condition-display';
+import type { WorkingNowEntry } from '@/lib/dabos/server-data';
 import type { ConditionLabel } from '@/lib/dabos/types';
 
 import { DivisionColumn, type OrgBoardDepartment } from './division-column';
 import { OrgBoardPeriodToggles } from './org-board-period-toggles';
 import { ExecutiveBox, OrgBoardWeekSlider } from './org-board-week-slider';
+import { WorkingNowStrip } from './working-now-strip';
 import './org-board.css';
 
 export type OrgBoardExecutive = {
@@ -30,6 +32,8 @@ export type OrgBoardExecutive = {
 export type OrgBoardCadence = {
   open_tasks_total: number;
   divisions_with_work: number;
+  departments_working?: number;
+  working_now?: WorkingNowEntry[];
 };
 
 export type OrgBoardDivision = {
@@ -110,28 +114,44 @@ export function OrgBoard({ divisions, week, period, executive, cadence, maxWeek 
           <p className="dabos-org-board__page-subtitle">{BOARD_PAGE_SUBTITLE}</p>
         </div>
 
-        <p className="dabos-org-board__esto-legend" aria-label="ESTO Round 1 progress legend">
-          <span className="dabos-org-board__esto-legend-item">
-            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--done" />
-            ESTO riff done ({esto.done}/{esto.total})
-          </span>
-          <span className="dabos-org-board__esto-legend-item">
-            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--next" />
-            Next: {esto.next ?? '—'}
-          </span>
-          <span className="dabos-org-board__esto-legend-item">
-            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--pending" />
-            Not started
-          </span>
+        <p className="dabos-org-board__esto-legend" aria-label="Establishment and activity legend">
+          {esto.done >= esto.total ? (
+            <span className="dabos-org-board__esto-legend-item">
+              <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--done" />
+              ESTO complete ({esto.done}/{esto.total})
+            </span>
+          ) : (
+            <>
+              <span className="dabos-org-board__esto-legend-item">
+                <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--done" />
+                ESTO riff done ({esto.done}/{esto.total})
+              </span>
+              <span className="dabos-org-board__esto-legend-item">
+                <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--next" />
+                Next: {esto.next ?? '—'}
+              </span>
+              <span className="dabos-org-board__esto-legend-item">
+                <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--pending" />
+                Not started
+              </span>
+            </>
+          )}
           <span className="dabos-org-board__esto-legend-item">Hover: working condition</span>
+          <span className="dabos-org-board__esto-legend-item">
+            <span className="dabos-org-board__esto-swatch dabos-org-board__esto-swatch--working" />
+            Purple = department executing (<code>doing</code>)
+          </span>
         </p>
 
         {cadence ? (
           <BoardCadenceStrip
             openTasksTotal={cadence.open_tasks_total}
             divisionsActive={cadence.divisions_with_work}
+            departmentsWorking={cadence.departments_working ?? cadence.working_now?.length ?? 0}
           />
         ) : null}
+
+        <WorkingNowStrip workingNow={cadence?.working_now ?? []} />
 
         <div className="dabos-org-board__layout-grid">
           <div className="dabos-org-board__tree-spine">
