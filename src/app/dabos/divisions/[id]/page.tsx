@@ -73,9 +73,6 @@ export default async function DivisionPage({ params }: PageProps) {
   });
 
   const divCondition = boardConditions.divisions.get(id);
-  const divStat = boardConditions.divisionStats.get(id) ?? null;
-  const chartBundle = boardConditions.divisionCharts.get(id);
-  const chartPoints = chartBundle?.year ?? chartBundle?.month ?? chartBundle?.week ?? [];
   const battlePlan = await fetchDivisionBattlePlan(id);
 
   return (
@@ -89,9 +86,6 @@ export default async function DivisionPage({ params }: PageProps) {
         condition={divCondition?.condition ?? latest_condition.condition}
         metricKey={metricKey}
         departments={boardDepts}
-        chartPoints={chartPoints}
-        pointCount={divCondition?.point_count ?? divStat?.point_count}
-        stat={divStat}
       />
 
       <div className="mt-8 space-y-6">

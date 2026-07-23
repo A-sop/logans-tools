@@ -1,0 +1,13 @@
+# Local scratch — never ship to Vercel builds
+**/_tmp*
+scripts/**/_tmp*
+*.traineddata
+_tmp_gfp_db_url.txt
+scripts/atlas-ops/
+src/lib/atlas-ops/
+src/components/atlas-ops/
+src/app/dabos/debt/
+src/app/dabos/dil/
+src/app/dabos/status/
+src/app/dabos/triage/
+src/app/api/dabos/dil/
