@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { dabosDeptHref, type BrowseDept } from '@/lib/dabos/dabos-paths';
 import { deptNumberLabel, deptRoleLabel } from '@/lib/dabos/org-board-config';
 import { cn } from '@/lib/utils';
 
@@ -19,18 +20,31 @@ type DeptSiblingNavProps = {
   divisionId: string;
   currentDeptId: string;
   siblings: DeptSibling[];
+  browse: {
+    index: number;
+    total: number;
+    prev: BrowseDept | null;
+    next: BrowseDept | null;
+  };
 };
+
+function neighborLabel(dept: BrowseDept, currentDivisionId: string): string {
+  const role = deptRoleLabel(dept);
+  if (dept.division_id !== currentDivisionId) {
+    return `${dept.division_id} · ${deptNumberLabel(dept.id, { short: true })} — ${role}`;
+  }
+  return `${deptNumberLabel(dept.id, { short: true })} — ${role}`;
+}
 
 export function DeptSiblingNav({
   divisionId,
   currentDeptId,
   siblings,
+  browse,
 }: DeptSiblingNavProps) {
   const router = useRouter();
-  const index = siblings.findIndex((d) => d.id === currentDeptId);
-  const prev = index > 0 ? siblings[index - 1] : null;
-  const next = index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : null;
-  const current = index >= 0 ? siblings[index] : null;
+  const { prev, next, index, total } = browse;
+  const current = siblings.find((d) => d.id === currentDeptId) ?? null;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -39,18 +53,18 @@ export function DeptSiblingNav({
       }
       if (e.key === 'ArrowLeft' && prev) {
         e.preventDefault();
-        router.push(`/dabos/divisions/${divisionId}/dept/${prev.id}`);
+        router.push(dabosDeptHref(prev.id));
       }
       if (e.key === 'ArrowRight' && next) {
         e.preventDefault();
-        router.push(`/dabos/divisions/${divisionId}/dept/${next.id}`);
+        router.push(dabosDeptHref(next.id));
       }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [divisionId, next, prev, router]);
+  }, [next, prev, router]);
 
-  if (siblings.length < 2) return null;
+  if (total < 2) return null;
 
   return (
     <section
@@ -59,10 +73,10 @@ export function DeptSiblingNav({
     >
       <div className="mb-2 flex items-center justify-between gap-2">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Departments in this division
+          Departments · continues across divisions
         </p>
         <p className="text-xs tabular-nums text-muted-foreground">
-          {index >= 0 ? index + 1 : '—'} / {siblings.length}
+          {index >= 0 ? index + 1 : '—'} / {total}
           <span className="ml-2 hidden sm:inline">← → keys</span>
         </p>
       </div>
@@ -70,10 +84,7 @@ export function DeptSiblingNav({
       <div className="flex items-center gap-2">
         {prev ? (
           <Button variant="outline" size="icon" asChild className="shrink-0">
-            <Link
-              href={`/dabos/divisions/${divisionId}/dept/${prev.id}`}
-              aria-label={`Previous: ${deptRoleLabel(prev)}`}
-            >
+            <Link href={dabosDeptHref(prev.id)} aria-label={`Previous: ${neighborLabel(prev, divisionId)}`}>
               <ChevronLeft className="size-4" />
             </Link>
           </Button>
@@ -89,17 +100,16 @@ export function DeptSiblingNav({
               <p className="truncate text-sm font-semibold">
                 {deptNumberLabel(current.id)} — {deptRoleLabel(current)}
               </p>
-              <p className="truncate text-xs text-muted-foreground">{current.legacy_name}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {divisionId} · {current.legacy_name}
+              </p>
             </>
           ) : null}
         </div>
 
         {next ? (
           <Button variant="outline" size="icon" asChild className="shrink-0">
-            <Link
-              href={`/dabos/divisions/${divisionId}/dept/${next.id}`}
-              aria-label={`Next: ${deptRoleLabel(next)}`}
-            >
+            <Link href={dabosDeptHref(next.id)} aria-label={`Next: ${neighborLabel(next, divisionId)}`}>
               <ChevronRight className="size-4" />
             </Link>
           </Button>
@@ -116,7 +126,7 @@ export function DeptSiblingNav({
           return (
             <Link
               key={dept.id}
-              href={`/dabos/divisions/${divisionId}/dept/${dept.id}`}
+              href={dabosDeptHref(dept.id)}
               className={cn(
                 'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
                 active
@@ -125,7 +135,7 @@ export function DeptSiblingNav({
               )}
               aria-current={active ? 'page' : undefined}
             >
-              {deptNumberLabel(dept.id)}
+              {deptNumberLabel(dept.id, { short: true })}
             </Link>
           );
         })}
@@ -133,8 +143,8 @@ export function DeptSiblingNav({
 
       {(prev || next) && (
         <div className="mt-2 flex justify-between gap-2 text-[11px] text-muted-foreground">
-          <span className="truncate">{prev ? `← ${deptRoleLabel(prev)}` : ''}</span>
-          <span className="truncate text-right">{next ? `${deptRoleLabel(next)} →` : ''}</span>
+          <span className="truncate">{prev ? `← ${neighborLabel(prev, divisionId)}` : ''}</span>
+          <span className="truncate text-right">{next ? `${neighborLabel(next, divisionId)} →` : ''}</span>
         </div>
       )}
     </section>

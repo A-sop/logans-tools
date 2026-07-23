@@ -9,6 +9,7 @@ import {
   EstablishmentStatLine,
 } from '@/components/dabos/establishment-badges';
 import type { DeptEstablishment } from '@/lib/dabos/establishment';
+import { dabosDeptHref } from '@/lib/dabos/dabos-paths';
 import { deptRoleLabel, divisionSecretaryLabel } from '@/lib/dabos/org-board-config';
 import type { ConditionLabel } from '@/lib/dabos/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,7 +60,7 @@ export function DivisionDrilldownHeader({
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {departments.map((dept) => (
-          <Link key={dept.id} href={`/dabos/divisions/${divisionId}/dept/${dept.id}`}>
+          <Link key={dept.id} href={dabosDeptHref(dept.id)}>
             <Card className="h-full transition-colors hover:bg-muted/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-semibold leading-snug">

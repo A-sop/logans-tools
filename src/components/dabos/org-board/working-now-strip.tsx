@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { ActivityBadge } from '@/components/dabos/condition-badge';
+import { dabosDeptHref } from '@/lib/dabos/dabos-paths';
 import { deptNumberLabel } from '@/lib/dabos/org-board-config';
 import type { WorkingNowEntry } from '@/lib/dabos/server-data';
 
@@ -41,7 +42,7 @@ export function WorkingNowStrip({
       </div>
       <ul className="dabos-org-board__working-now-list">
         {workingNow.map((entry) => {
-          const deptHref = `/dabos/divisions/${entry.division_id}/dept/${entry.department_id}`;
+          const deptHref = dabosDeptHref(entry.department_id);
           const taskHref = entry.sample_task_id
             ? `/dabos/tasks/${entry.sample_task_id}`
             : deptHref;

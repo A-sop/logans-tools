@@ -5,6 +5,10 @@ import {
 } from '@/lib/dabos/board-charts';
 import { battlePlanForDept, DIVISION_BATTLE_PLAN_WEEKLY } from '@/lib/dabos/battle-plans';
 import {
+  neighborsInBrowseChain,
+  orderDepartmentsForBrowse,
+} from '@/lib/dabos/dabos-paths';
+import {
   fetchDeptEstablishment,
   fetchDeptEstablishmentMap,
 } from '@/lib/dabos/establishment';
@@ -240,6 +244,16 @@ export async function fetchDepartment(divisionId: string, deptId: string) {
   return fetchDepartmentDashboard(divisionId, deptId);
 }
 
+export async function fetchDepartmentDashboardById(deptId: string) {
+  const sql = getDabosSql();
+  const rows = await sql`
+    SELECT division_id FROM departments WHERE id = ${deptId} LIMIT 1
+  `;
+  const divisionId = rows[0]?.division_id as string | undefined;
+  if (!divisionId) return null;
+  return fetchDepartmentDashboard(divisionId, deptId);
+}
+
 export async function fetchDepartmentDashboard(divisionId: string, deptId: string) {
   const sql = getDabosSql();
   const departments = await sql`
@@ -255,6 +269,21 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
     WHERE division_id = ${divisionId}
     ORDER BY id ASC
   `;
+
+  const browseRows = await sql`
+    SELECT id, division_id, legacy_name, operational_name
+    FROM departments
+  `;
+  const browseChain = orderDepartmentsForBrowse(
+    browseRows.map((row) => ({
+      id: row.id as string,
+      division_id: row.division_id as string,
+      legacy_name: row.legacy_name as string,
+      operational_name: row.operational_name as string,
+    }))
+  );
+  const { index: browseIndex, prev: browsePrev, next: browseNext } =
+    neighborsInBrowseChain(browseChain, deptId);
 
   const divisionRows = await sql`
     SELECT id, operational_name, description, primary_metric_key
@@ -364,6 +393,12 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
       legacy_name: row.legacy_name as string,
       operational_name: row.operational_name as string,
     })),
+    browse: {
+      index: browseIndex,
+      total: browseChain.length,
+      prev: browsePrev,
+      next: browseNext,
+    },
     tasks,
     workQueue,
     investigations,

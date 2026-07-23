@@ -8,6 +8,7 @@ import {
   divisionSecretaryLabel,
   type BoardDivisionId,
 } from '@/lib/dabos/org-board-config';
+import { dabosDeptHref } from '@/lib/dabos/dabos-paths';
 import type { BoardChartPoint } from '@/lib/dabos/board-charts';
 import type { BoardStatSnapshot } from '@/lib/dabos/condition-display';
 import type { DeptEstablishment } from '@/lib/dabos/establishment';
@@ -88,7 +89,7 @@ function DepartmentBridgeCell({
       statIndicated={dept.statIndicated}
       climbLag={dept.climbLag}
       className={deptEstoSurfaceClass(dept, 'dabos-org-board__dept-cell')}
-      href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
+      href={linked ? dabosDeptHref(dept.id) : undefined}
       title={deptEstoTitle(dept)}
     >
       <span className="dabos-org-board__dept-bridge">{deptBridgeLabel(dept)}</span>
@@ -135,7 +136,7 @@ function DepartmentNumCell({
       stat={dept.stat}
       {...deptConditionHover(dept)}
       className={deptEstoSurfaceClass(dept, 'dabos-org-board__dept-cell')}
-      href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
+      href={linked ? dabosDeptHref(dept.id) : undefined}
       title={`${deptEstoTitle(dept)}${statusHint}`}
     >
       <span className="dabos-org-board__dept-num">
@@ -171,7 +172,7 @@ function DepartmentTitleCell({
 
   if (linked) {
     return (
-      <Link href={`/dabos/divisions/${divisionId}/dept/${dept.id}`} className={className} title={estoTitle}>
+      <Link href={dabosDeptHref(dept.id)} className={className} title={estoTitle}>
         {title}
       </Link>
     );
@@ -202,7 +203,7 @@ function DepartmentBody({
       stat={dept.stat}
       {...deptConditionHover(dept)}
       className={`dabos-org-board__dept-block${linked ? ' dabos-org-board__dept-block--link' : ''}`}
-      href={linked ? `/dabos/divisions/${divisionId}/dept/${dept.id}` : undefined}
+      href={linked ? dabosDeptHref(dept.id) : undefined}
     >
       <div className="dabos-org-board__dept-block-title">{title}</div>
       {policy ? <p>{policy}</p> : null}

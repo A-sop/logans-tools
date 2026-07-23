@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
       }));
 
     return [
+      {
+        source: '/dabos/divisions/:divisionId/dept/:deptId',
+        destination: '/dabos/depts/:deptId',
+        permanent: true,
+      },
       ...apexRedirect('/dabos', 'https://dabos.logans.tools'),
       ...apexRedirect('/dabos/:path*', 'https://dabos.logans.tools/:path*'),
     ];
