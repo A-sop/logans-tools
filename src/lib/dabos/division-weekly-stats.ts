@@ -138,8 +138,17 @@ export function readProvisoMonthlyIncome(
 ): ProvisoMonthIncome[] {
   if (!existsSync(dbPath)) return [];
   // Node 22+ built-in SQLite — no native addon; scripts/office only.
+  // Avoid `import('node:sqlite')` types — Vercel/tsc may not have @types for it.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { DatabaseSync } = require('node:sqlite') as typeof import('node:sqlite');
+  const { DatabaseSync } = require('node:sqlite') as {
+    DatabaseSync: new (
+      path: string,
+      opts?: { readOnly?: boolean }
+    ) => {
+      prepare: (sql: string) => { all: (...params: unknown[]) => unknown[] };
+      close: () => void;
+    };
+  };
   const db = new DatabaseSync(dbPath, { readOnly: true });
   try {
     const rows = db

@@ -194,6 +194,12 @@ export async function fetchDivision(id: string) {
   const division = divisions[0];
   if (!division) return null;
 
+  const siblingRows = await sql`
+    SELECT id, operational_name
+    FROM divisions
+    ORDER BY id ASC
+  `;
+
   const departments = await sql`
     SELECT id, legacy_name, operational_name, policy_text
     FROM departments WHERE division_id = ${id} ORDER BY id
@@ -217,7 +223,17 @@ export async function fetchDivision(id: string) {
     window_days: 7,
   });
 
-  return { division, departments, tasks, latest_condition: latestCondition, establishment };
+  return {
+    division,
+    siblings: siblingRows.map((row) => ({
+      id: row.id as string,
+      operational_name: row.operational_name as string,
+    })),
+    departments,
+    tasks,
+    latest_condition: latestCondition,
+    establishment,
+  };
 }
 
 export async function fetchDepartment(divisionId: string, deptId: string) {

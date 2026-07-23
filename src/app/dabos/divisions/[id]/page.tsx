@@ -3,11 +3,10 @@ import { notFound } from 'next/navigation';
 
 import { AppendStatForm } from '@/components/dabos/append-stat-form';
 import { CreateTaskForm } from '@/components/dabos/create-task-form';
-import { ConditionBadge } from '@/components/dabos/condition-badge';
+import { DivSiblingNav } from '@/components/dabos/div-sibling-nav';
 import { DrilldownShell, DivisionDrilldownHeader } from '@/components/dabos/division-drilldown';
 import { BOARD_PAGE_TITLE, type BoardDivisionId } from '@/lib/dabos/org-board-config';
 import { evaluateBoardConditions } from '@/lib/dabos/queries';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -34,7 +33,7 @@ export default async function DivisionPage({ params }: PageProps) {
   const data = await fetchDivision(id);
   if (!data) notFound();
 
-  const { division, departments, tasks, latest_condition, establishment } = data;
+  const { division, siblings, departments, tasks, latest_condition, establishment } = data;
   const metricKey = (division.primary_metric_key as string | null) ?? 'tasks_completed';
   const boardConditions = await evaluateBoardConditions();
   const deptActivity = await fetchDeptActivityMap();
@@ -74,10 +73,15 @@ export default async function DivisionPage({ params }: PageProps) {
   });
 
   const divCondition = boardConditions.divisions.get(id);
+  const divStat = boardConditions.divisionStats.get(id) ?? null;
+  const chartBundle = boardConditions.divisionCharts.get(id);
+  const chartPoints = chartBundle?.year ?? chartBundle?.month ?? chartBundle?.week ?? [];
   const battlePlan = await fetchDivisionBattlePlan(id);
 
   return (
     <DrilldownShell backHref="/dabos" backLabel={BOARD_PAGE_TITLE}>
+      <DivSiblingNav currentDivisionId={id} siblings={siblings} />
+
       <DivisionDrilldownHeader
         divisionId={id}
         operationalName={division.operational_name as string}
@@ -85,6 +89,9 @@ export default async function DivisionPage({ params }: PageProps) {
         condition={divCondition?.condition ?? latest_condition.condition}
         metricKey={metricKey}
         departments={boardDepts}
+        chartPoints={chartPoints}
+        pointCount={divCondition?.point_count ?? divStat?.point_count}
+        stat={divStat}
       />
 
       <div className="mt-8 space-y-6">
