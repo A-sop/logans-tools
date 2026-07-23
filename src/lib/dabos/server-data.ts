@@ -233,6 +233,13 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
   const department = departments[0];
   if (!department) return null;
 
+  const siblingRows = await sql`
+    SELECT id, legacy_name, operational_name
+    FROM departments
+    WHERE division_id = ${divisionId}
+    ORDER BY id ASC
+  `;
+
   const divisionRows = await sql`
     SELECT id, operational_name, description, primary_metric_key
     FROM divisions WHERE id = ${divisionId}
@@ -336,6 +343,11 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
   return {
     division,
     department,
+    siblings: siblingRows.map((row) => ({
+      id: row.id as string,
+      legacy_name: row.legacy_name as string,
+      operational_name: row.operational_name as string,
+    })),
     tasks,
     workQueue,
     investigations,

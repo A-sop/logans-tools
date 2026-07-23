@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { DeptDashboard } from '@/components/dabos/dept-dashboard';
+import { DeptSiblingNav } from '@/components/dabos/dept-sibling-nav';
 import { DrilldownShell } from '@/components/dabos/division-drilldown';
 import { deptRoleLabel } from '@/lib/dabos/org-board-config';
 import { dabosConfigured, fetchDepartmentDashboard } from '@/lib/dabos/server-data';
@@ -14,7 +15,7 @@ export default async function DepartmentPage({ params }: PageProps) {
   const data = await fetchDepartmentDashboard(id, deptId);
   if (!data) notFound();
 
-  const { division, department } = data;
+  const { division, department, siblings } = data;
   const dept = {
     id: department.id as string,
     legacy_name: department.legacy_name as string,
@@ -27,6 +28,8 @@ export default async function DepartmentPage({ params }: PageProps) {
       backHref={`/dabos/divisions/${id}`}
       backLabel={division.operational_name as string}
     >
+      <DeptSiblingNav divisionId={id} currentDeptId={deptId} siblings={siblings} />
+
       <header className="mb-6">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {dept.id}
