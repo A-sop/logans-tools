@@ -1,7 +1,9 @@
 import * as path from 'path';
+import { existsSync } from 'node:fs';
 import type { DebtPaths, DebtSettings } from '@/lib/dabos-ops/debt/debt-types';
 
-const DEFAULT_ROOT = 'C:\\DATA\\10_WORK\\Atlas-Debt';
+const DEFAULT_ROOT = 'C:\\DATA\\10_WORK\\DABOS-Debt';
+const LEGACY_ROOT = 'C:\\DATA\\10_WORK\\Atlas-Debt';
 // Where the original CSV tracker lives (one-time seed source).
 const DEFAULT_SEED_DIR = 'C:\\DATA\\20_ADMIN\\!_FINANCE-TRACKER\\debt';
 
@@ -12,13 +14,28 @@ function readEnv(name: string): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function resolveRoot(): string {
+  const fromEnv = readEnv('DABOS_DEBT_ROOT') ?? readEnv('ATLAS_DEBT_ROOT');
+  if (fromEnv) return fromEnv;
+  if (existsSync(DEFAULT_ROOT)) return DEFAULT_ROOT;
+  if (existsSync(LEGACY_ROOT)) return LEGACY_ROOT;
+  return DEFAULT_ROOT;
+}
+
+function resolveDbPath(root: string): string {
+  const fromEnv = readEnv('DABOS_DEBT_DB_PATH') ?? readEnv('ATLAS_DEBT_DB_PATH');
+  if (fromEnv) return fromEnv;
+  const preferred = path.join(root, 'dabos-debt.db');
+  const legacy = path.join(root, 'atlas-debt.db');
+  if (existsSync(preferred)) return preferred;
+  if (existsSync(legacy)) return legacy;
+  return preferred;
+}
+
 export function getDebtPaths(): DebtPaths {
   // Prefer DABOS_*; ATLAS_* kept as fallback for older .env.local copies.
-  const root = readEnv('DABOS_DEBT_ROOT') ?? readEnv('ATLAS_DEBT_ROOT') ?? DEFAULT_ROOT;
-  const dbPath =
-    readEnv('DABOS_DEBT_DB_PATH') ??
-    readEnv('ATLAS_DEBT_DB_PATH') ??
-    path.join(root, 'atlas-debt.db');
+  const root = resolveRoot();
+  const dbPath = resolveDbPath(root);
   const seedDir = readEnv('DABOS_DEBT_SEED_DIR') ?? readEnv('ATLAS_DEBT_SEED_DIR') ?? DEFAULT_SEED_DIR;
   return { root, dbPath, seedDir };
 }
