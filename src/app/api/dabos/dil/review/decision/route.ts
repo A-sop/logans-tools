@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import type { ReviewApproval } from '@/lib/atlas-ops/document-intake/review-types';
-import { saveReviewDecision } from '@/lib/atlas-ops/document-intake/review-service';
+import type { ReviewApproval } from '@/lib/dabos-ops/document-intake/review-types';
+import { saveReviewDecision } from '@/lib/dabos-ops/document-intake/review-service';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

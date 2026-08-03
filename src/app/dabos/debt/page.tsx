@@ -1,15 +1,15 @@
 import type { ReactNode } from 'react';
 import { existsSync } from 'node:fs';
-import { getDebtPaths } from '@/lib/atlas-ops/debt/debt-config';
-import { DebtIndex } from '@/lib/atlas-ops/debt/debt-index';
-import { computeSummary } from '@/lib/atlas-ops/debt/debt-calc';
-import type { BillRecord, DebtSummary } from '@/lib/atlas-ops/debt/debt-types';
+import { getDebtPaths } from '@/lib/dabos-ops/debt/debt-config';
+import { DebtIndex } from '@/lib/dabos-ops/debt/debt-index';
+import { computeSummary } from '@/lib/dabos-ops/debt/debt-calc';
+import type { BillRecord, DebtSummary } from '@/lib/dabos-ops/debt/debt-types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Debt & Bills — DABOS',
+  title: 'Debt & Bills â€” DABOS',
   description: 'Personal Office debt snapshot (Office of LDW)',
 };
 
@@ -55,7 +55,7 @@ export default function DabosDebtPage() {
       <header className="mb-5">
         <h1 className="text-2xl font-bold text-slate-900">Debt &amp; Bills</h1>
         <p className="text-sm text-slate-500">
-          Snapshot {s.asOf} · strategy: {s.settings.strategy} · source: debt DB (Office of LDW)
+          Snapshot {s.asOf} Â· strategy: {s.settings.strategy} Â· source: debt DB (Office of LDW)
         </p>
       </header>
 
@@ -68,12 +68,12 @@ export default function DabosDebtPage() {
       <div className="mb-5 rounded-lg bg-slate-800 px-4 py-3 text-sm text-slate-100">
         {s.feasible ? (
           <>
-            At {euro(s.settings.monthlyBudget)}/mo: debt-free in <b>~{s.months} months</b> (≈ {s.freeDate}) ·
-            interest ≈ {euro(s.totalInterest ?? 0)}
+            At {euro(s.settings.monthlyBudget)}/mo: debt-free in <b>~{s.months} months</b> (â‰ˆ {s.freeDate}) Â·
+            interest â‰ˆ {euro(s.totalInterest ?? 0)}
           </>
         ) : (
           <span className="text-red-300">
-            Budget {euro(s.settings.monthlyBudget)}/mo is below the {euro(s.totalMinPayments)}/mo minimum —
+            Budget {euro(s.settings.monthlyBudget)}/mo is below the {euro(s.totalMinPayments)}/mo minimum â€”
             increase the budget to project a payoff.
           </span>
         )}
@@ -133,7 +133,7 @@ export default function DabosDebtPage() {
               <tbody>
                 {bills.map((b) => (
                   <tr key={b.id} className="border-t border-slate-100">
-                    <td className="py-1 pr-2 whitespace-nowrap">{b.dueDate ?? '—'}</td>
+                    <td className="py-1 pr-2 whitespace-nowrap">{b.dueDate ?? 'â€”'}</td>
                     <td className="py-1 pr-2">{b.payee}</td>
                     <td className="py-1 text-right">{euro(b.amount)}</td>
                   </tr>

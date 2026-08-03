@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import type { ReviewQueueFilter } from '@/lib/atlas-ops/document-intake/review-types';
+import type { ReviewQueueFilter } from '@/lib/dabos-ops/document-intake/review-types';
 
-import { DIL_REVIEW_UI_BATCH, clampReviewBatch } from '@/lib/atlas-ops/document-intake/review-config';
+import { DIL_REVIEW_UI_BATCH, clampReviewBatch } from '@/lib/dabos-ops/document-intake/review-config';
 
-import { listReviewQueuePage } from '@/lib/atlas-ops/document-intake/review-service';
+import { listReviewQueuePage } from '@/lib/dabos-ops/document-intake/review-service';
 
 
 

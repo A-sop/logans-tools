@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import { NextResponse } from 'next/server';
-import { resolveAllowedDataFile } from '@/lib/atlas-ops/document-intake/review-path-guard';
+import { resolveAllowedDataFile } from '@/lib/dabos-ops/document-intake/review-path-guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

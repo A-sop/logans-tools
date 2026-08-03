@@ -9,5 +9,5 @@ logs/
 
 # Local office filesystem helpers (paths constrained to C:\DATA / configured roots;
 # path-traversal rules fire on every path.join and drown real findings)
-src/lib/atlas-ops/
-scripts/atlas-ops/
+src/lib/dabos-ops/
+scripts/dabos-ops/

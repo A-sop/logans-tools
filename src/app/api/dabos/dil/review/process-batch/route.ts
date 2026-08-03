@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { clampClassifyBatch, DIL_REVIEW_UI_BATCH } from '@/lib/atlas-ops/document-intake/review-config';
+import { clampClassifyBatch, DIL_REVIEW_UI_BATCH } from '@/lib/dabos-ops/document-intake/review-config';
 
-import { processInboxBatch } from '@/lib/atlas-ops/document-intake/review-service';
+import { processInboxBatch } from '@/lib/dabos-ops/document-intake/review-service';
 
 
 

@@ -1,9 +1,9 @@
-import { DilReviewShell } from '@/components/atlas-ops/dil/dil-review-shell';
+import { DilReviewShell } from '@/components/dabos-ops/dil/dil-review-shell';
 
 export const metadata = {
-  title: 'DIL Review — DABOS',
+  title: 'DIL Review â€” DABOS',
   description:
-    'DIL (Document Intake & Lifecycle) — review files and Chrome bookmarks before apply or delete',
+    'DIL (Document Intake & Lifecycle) â€” review files and Chrome bookmarks before apply or delete',
 };
 
 export const dynamic = 'force-dynamic';

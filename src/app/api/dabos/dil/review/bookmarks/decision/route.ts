@@ -4,8 +4,8 @@ import {
   applyBookmarkDecision,
   checkBookmarkById,
   saveBookmarkNotes,
-} from '@/lib/atlas-ops/contact-network/bookmark-review-service';
-import type { BookmarkReviewDecision } from '@/lib/atlas-ops/contact-network/bookmark-review-types';
+} from '@/lib/dabos-ops/contact-network/bookmark-review-service';
+import type { BookmarkReviewDecision } from '@/lib/dabos-ops/contact-network/bookmark-review-types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,7 +35,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     const decision = body.decision as BookmarkReviewDecision;
     if (!DECISIONS.has(decision)) {
-      return NextResponse.json({ error: 'Invalid decision — use keep or delete' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid decision â€” use keep or delete' }, { status: 400 });
     }
 
     const result = await applyBookmarkDecision({

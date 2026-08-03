@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { completeDataPath } from '@/lib/atlas-ops/document-intake/path-complete';
+import { completeDataPath } from '@/lib/dabos-ops/document-intake/path-complete';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

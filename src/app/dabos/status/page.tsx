@@ -1,8 +1,8 @@
-import { StatusDashboard } from '@/components/atlas-ops/status-dashboard';
-import { getAtlasDashboardData } from '@/lib/atlas-ops/status-dashboard';
+import { StatusDashboard } from '@/components/dabos-ops/status-dashboard';
+import { getAtlasDashboardData } from '@/lib/dabos-ops/status-dashboard';
 
 export const metadata = {
-  title: 'Office status — DABOS',
+  title: 'Office status â€” DABOS',
   description: 'Office of LDW status dashboard (former Atlas home)',
 };
 

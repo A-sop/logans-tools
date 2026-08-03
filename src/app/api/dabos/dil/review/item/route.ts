@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getReviewItem } from '@/lib/atlas-ops/document-intake/review-service';
+import { getReviewItem } from '@/lib/dabos-ops/document-intake/review-service';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

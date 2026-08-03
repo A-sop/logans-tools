@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPilotV3Extraction, getPilotV3Meta } from '@/lib/atlas-ops/document-intake/pilot-v3-store';
+import { getPilotV3Extraction, getPilotV3Meta } from '@/lib/dabos-ops/document-intake/pilot-v3-store';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getBookmarkReviewStats } from '@/lib/atlas-ops/contact-network/bookmark-review-service';
+import { getBookmarkReviewStats } from '@/lib/dabos-ops/contact-network/bookmark-review-service';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
-import { BOOKMARK_REVIEW_UI_BATCH } from '@/lib/atlas-ops/contact-network/bookmark-review-constants';
-import { clampReviewBatch } from '@/lib/atlas-ops/document-intake/review-config';
-import { listBookmarkReviewPage } from '@/lib/atlas-ops/contact-network/bookmark-review-service';
-import type { BookmarkReviewFilter } from '@/lib/atlas-ops/contact-network/bookmark-review-types';
+import { BOOKMARK_REVIEW_UI_BATCH } from '@/lib/dabos-ops/contact-network/bookmark-review-constants';
+import { clampReviewBatch } from '@/lib/dabos-ops/document-intake/review-config';
+import { listBookmarkReviewPage } from '@/lib/dabos-ops/contact-network/bookmark-review-service';
+import type { BookmarkReviewFilter } from '@/lib/dabos-ops/contact-network/bookmark-review-types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

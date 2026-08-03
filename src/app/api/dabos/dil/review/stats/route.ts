@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getReviewStats } from '@/lib/atlas-ops/document-intake/review-service';
+import { getReviewStats } from '@/lib/dabos-ops/document-intake/review-service';
 
 
 

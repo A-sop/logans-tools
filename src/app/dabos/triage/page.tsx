@@ -1,8 +1,8 @@
-import { DailyTriageHub } from '@/components/atlas-ops/daily-triage-hub';
-import { getDailyTriageData } from '@/lib/atlas-ops/daily-triage-status';
+import { DailyTriageHub } from '@/components/dabos-ops/daily-triage-hub';
+import { getDailyTriageData } from '@/lib/dabos-ops/daily-triage-status';
 
 export const metadata = {
-  title: 'Daily triage — DABOS',
+  title: 'Daily triage â€” DABOS',
   description: 'Human review queue for DATA inbox and Telegram captures',
 };
 
