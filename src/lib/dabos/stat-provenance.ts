@@ -10,7 +10,10 @@ export function statSourceLabel(workspaceId: string | null | undefined): string 
     return 'GFP funnel weekly poster (lead magnets + booked proxy for termin_clicks)';
   }
   if (workspaceId.startsWith('div-live')) {
-    return 'Division weekly poster (registers + ship-log + Dept13 + establishment)';
+    return 'Division weekly poster (registers + ship-log + Dept13 + establishment + Div1 index)';
+  }
+  if (workspaceId.startsWith('ship-gate-')) {
+    return 'Ship-gate emit (Dept13 PASS → Div4)';
   }
   if (workspaceId.startsWith('proviso-')) {
     return 'Proviso Abrechnung monthly (Diskont-Konto residual)';
@@ -39,7 +42,13 @@ export function statSourceDescription(workspaceId: string | null | undefined): s
     return 'GFP campaign_leads week rollup. termin_clicks value is Cal booked proxy until PostHog CTA ingest.';
   }
   if (workspaceId?.startsWith('div-live')) {
-    return 'Div2 content factory + pipeline; Div4 ship-log Counts=yes; Div5 Dept13 PASS rate; Div7 establishment reported/21. Skips when local sources missing (Vercel-safe).';
+    return 'Div1 artifacts_indexed; Div2 content factory + pipeline; Div4 ship-log Counts=yes; Div5 Dept13 PASS rate; Div7 establishment reported/21. Skips when local sources missing (Vercel-safe — prefer office Good Thursday).';
+  }
+  if (workspaceId?.startsWith('ship-gate-')) {
+    return 'Dept13 PASS ship-gate emit — cumulative shipped_outputs from ship-log Counts=yes.';
+  }
+  if (workspaceId?.startsWith('stat-crawl-')) {
+    return 'Dept3 missing-primary crawl task workspace (not a stat point).';
   }
   if (workspaceId?.startsWith('proviso-')) {
     return 'Sum of Proviso commission_events Diskont-Konto for VB 2106750 that Monat (digitale Abrechnung). Other incomes post as separate workspaces when added.';

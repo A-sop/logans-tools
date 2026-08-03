@@ -75,7 +75,7 @@ export function DivisionSparkline({ points, metricKey, divisionLabel }: Division
           <polyline className="dabos-org-board__sparkline-line" points={geometry.line} />
         </svg>
       ) : (
-        <div className="dabos-org-board__sparkline-empty">No data</div>
+        <div className="dabos-org-board__sparkline-empty">Missing</div>
       )}
     </div>
   );

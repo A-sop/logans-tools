@@ -18,6 +18,12 @@
 /scripts/_tmp-backup-test/
 /_smoke-android-backup-out/
 
+# Agent scratch + OCR models (never commit)
+/_tmp_*
+/scripts/_tmp*
+/scripts/**/_tmp*
+*.traineddata
+
 # next.js
 /.next/
 /out/

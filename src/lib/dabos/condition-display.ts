@@ -24,14 +24,21 @@ export function conditionHoverLabel(
   stat?: BoardStatSnapshot | null,
   extras?: { statIndicated?: ConditionLabel | null; climbLag?: boolean }
 ): string {
+  const n = stat?.point_count ?? 0;
   if (condition) {
-    if (extras?.climbLag && extras.statIndicated && extras.statIndicated !== condition) {
-      return `${condition} · stat ${extras.statIndicated}`;
+    const base =
+      extras?.climbLag && extras.statIndicated && extras.statIndicated !== condition
+        ? `${condition} · stat ${extras.statIndicated}`
+        : condition;
+    if (n > 0 && n < 3) return `${base} · ${n}/3 toward condition`;
+    if (stat && n >= 3) {
+      const zeroNote = stat.value === 0 ? ' · 0 (honest)' : '';
+      return `${base}${zeroNote}`;
     }
-    return condition;
+    return base;
   }
-  if (stat && stat.point_count > 0) return 'Insufficient data';
-  return 'No data';
+  if (n > 0) return `Non-Existence · ${n}/3 toward condition`;
+  return 'Missing · no emit this series';
 }
 
 /** Legacy string formatter (API / detail pages). */
@@ -39,17 +46,25 @@ export function formatBoardTooltip(
   ev: ConditionEvaluation,
   stat?: BoardStatSnapshot | null
 ): string {
-  if (ev.reason === 'insufficient_data' || ev.point_count < 3) {
+  const n = Math.max(ev.point_count, stat?.point_count ?? 0);
+  const working = ev.working_condition ?? ev.condition ?? 'Non-Existence';
+
+  if (ev.reason === 'insufficient_data' || n < 3) {
+    const lines = [`Working: ${working}`, `${n} of 3 weekly points toward condition`];
     if (stat) {
-      return `Condition: Insufficient trend (${stat.point_count} of 3 weeks)\nLatest: ${stat.metric_key} = ${formatStatValue(stat.value)} (CW ${stat.calendar_week})`;
+      lines.push(
+        `Latest: ${stat.metric_key} = ${formatStatValue(stat.value)} (CW ${stat.calendar_week})`
+      );
+      if (stat.value === 0) lines.push('Value 0 with provenance = honest empty (not Missing)');
+    } else {
+      lines.push('Missing emit — Dept3 crawl should open a reason task');
     }
-    return `Condition: No data yet (${ev.point_count} of 3 weekly points)`;
+    return lines.join('\n');
   }
   if (!ev.condition && !ev.working_condition) {
-    return 'Condition: Unknown';
+    return 'Working: Non-Existence';
   }
 
-  const working = ev.working_condition ?? ev.condition;
   const lines = [`Working: ${working}`];
   if (ev.stat_indicated_condition && ev.stat_indicated_condition !== working) {
     lines.push(`Stat suggests: ${ev.stat_indicated_condition}`);
@@ -62,6 +77,7 @@ export function formatBoardTooltip(
       `Latest: ${stat.metric_key} = ${formatStatValue(stat.value)} (CW ${stat.calendar_week})`
     );
     lines.push(`${stat.point_count} weekly points`);
+    if (stat.value === 0) lines.push('Honest zero');
   }
   return lines.join('\n');
 }
@@ -77,6 +93,7 @@ export function formatConditionTooltip(
   ev: ConditionEvaluation,
   extras?: { percentile?: number | null; weekLabel?: string }
 ): string {
+  void extras;
   return formatBoardTooltip(ev);
 }
 

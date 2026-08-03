@@ -37,12 +37,12 @@ async function main() {
         metric_key: 'hat_corrections_shipped',
         value: 1,
         summary:
-          'DATA root XX-only + no-catchall filing: cleaned illegal DATA peers, added 50_TOOLS, flat dabos-registers, Atlas-CRM path, architecture/harness/hat updates. Recurrence prevented via standing orders + architecture SSOT.',
+          'DATA root XX-only + no-catchall filing: cleaned illegal DATA peers, added 50_TOOLS, flat dabos-registers, LDW-CRM path, architecture/harness/hat updates. Recurrence prevented via standing orders + architecture SSOT.',
         evidence: [
           'DABOS/docs/reference/founder-office/flap-2026-07-16-data-root-xx-filing-points.md',
           'Atlas/docs/document-organisation/file-storage-architecture.md',
           'C:\\DATA\\README.txt',
-          'C:\\DATA\\10_WORK\\Atlas-CRM\\',
+          'C:\\DATA\\10_WORK\\LDW-CRM\\',
         ],
         dept3_spot_check: 'pending',
       })}::jsonb

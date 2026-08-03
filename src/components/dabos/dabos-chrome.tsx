@@ -55,17 +55,37 @@ export function DabosChrome({ shell }: DabosChromeProps) {
           </Link>
         )}
       </div>
-      <div className="flex shrink-0 items-center gap-2 self-end sm:self-start">
-        {shell ? (
-          <Link
-            href="/dabos"
-            className={cn(
-              'hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:inline'
-            )}
-          >
-            Board
-          </Link>
-        ) : null}
+      <div className="flex shrink-0 flex-wrap items-center gap-2 self-end sm:self-start">
+        <Link
+          href="/dabos"
+          className={cn('text-sm font-medium text-muted-foreground hover:text-foreground')}
+        >
+          Board
+        </Link>
+        <Link
+          href="/dabos/status"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Status
+        </Link>
+        <Link
+          href="/dabos/triage"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Triage
+        </Link>
+        <Link
+          href="/dabos/dil/review"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          DIL
+        </Link>
+        <Link
+          href="/dabos/debt"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Debt
+        </Link>
         <UserButton />
       </div>
     </header>

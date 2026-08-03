@@ -25,6 +25,8 @@
     "dabos:formula-complete": "tsx scripts/dabos/formula-complete.ts",
     "dabos:morning-plan": "tsx scripts/dabos/morning-plan.ts",
     "dabos:week-close": "tsx scripts/dabos/week-close.ts",
+    "dabos:ship-gate": "tsx scripts/dabos/ship-gate.ts",
+    "dabos:stat-crawl": "tsx scripts/dabos/stat-crawl.ts",
     "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts",
     "dabos:verify-establishment": "tsx scripts/dabos/verify-establishment.ts",
     "dabos:stats-snapshot": "tsx scripts/dabos/query-stats-snapshot.ts",
@@ -32,7 +34,21 @@
     "dabos:seed-open-tasks": "tsx scripts/dabos/seed-production-open-tasks.ts",
     "dabos:post-gfp-weekly-stats": "tsx scripts/dabos/post-gfp-weekly-stats.ts",
     "dabos:post-division-weekly-stats": "tsx scripts/dabos/post-division-weekly-stats.ts",
-    "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts"
+    "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts",
+    "intake:run": "tsx scripts/atlas-ops/run-local-intake.ts",
+    "intake:init": "tsx scripts/atlas-ops/run-local-intake.ts --ensure-only",
+    "intake:preflight": "tsx scripts/atlas-ops/preflight.ts",
+    "dil:process": "tsx scripts/atlas-ops/process-data-inbox.ts --unprocessed-only --limit=350",
+    "dil:process:sample": "tsx scripts/atlas-ops/process-data-inbox.ts --unprocessed-only --limit=50",
+    "dil:process:batch": "tsx scripts/atlas-ops/process-data-inbox.ts --unprocessed-only --limit=350",
+    "dil:process:all": "tsx scripts/atlas-ops/process-data-inbox.ts",
+    "dil:reprocess": "tsx scripts/atlas-ops/reprocess-review-queue.ts",
+    "dil:reprocess:inbox": "tsx scripts/atlas-ops/process-data-inbox.ts --force-reprocess --limit=50",
+    "dil:export-review": "tsx scripts/atlas-ops/export-registry-review.ts",
+    "dil:apply": "tsx scripts/atlas-ops/apply-approved-manifest.ts",
+    "dil:backfill-filing": "tsx scripts/atlas-ops/backfill-review-filing.ts",
+    "dil:import-partner-codes": "tsx scripts/atlas-ops/import-seed-aliases.ts --partner-codes",
+    "scan-inbox": "tsx scripts/atlas-ops/scan-inbox/rename-from-pdf.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
@@ -48,13 +64,17 @@
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
+    "better-sqlite3": "^12.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "file-type": "^21.3.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.468.0",
+    "mime-types": "^3.0.2",
     "next": "^16.3.0-canary.13",
-    "nodemailer": "^7.0.5",
+    "nodemailer": "^9.0.3",
+    "pdf-parse": "^2.4.5",
     "postgres": "^3.4.9",
     "react": "19.2.3",
     "react-day-picker": "^9.13.0",
@@ -62,6 +82,7 @@
     "react-hook-form": "^7.71.1",
     "react-markdown": "^10.1.0",
     "tailwind-merge": "^3.4.0",
+    "tesseract.js": "^7.0.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
@@ -72,6 +93,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
@@ -88,5 +110,8 @@
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
     "vitest": "^4.0.18"
+  },
+  "overrides": {
+    "postcss": "8.5.25"
   }
 }

@@ -25,6 +25,8 @@ repos:
       - id: semgrep
         args: [--config, p/default, --error, --skip-unknown-extensions]
         files: \.(ts|tsx|js|jsx|mjs|py)$
+        # Local office FS helpers: every path.join trips path-traversal; constrained to C:\DATA
+        exclude: ^(src/lib/atlas-ops/|scripts/atlas-ops/)
 
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.3

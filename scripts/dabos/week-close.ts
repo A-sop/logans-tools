@@ -1,6 +1,10 @@
 /**
- * Thursday week-close: GFP + division weekly posters + refresh conditions + role_run.
- * Run: npm run dabos:week-close
+ * Thursday week-close: GFP + division weekly posters + refresh conditions +
+ * Dept3 stat crawl + role_run.
+ * Run on office PC (Good Thursday): npm run dabos:week-close
+ * Soft rehearsal (other days / pre-Thu): DABOS_WEEK_CLOSE_SOFT=1 — same pipeline,
+ * role_run week_close_soft; inserts stay idempotent.
+ * Vercel cron runs cloud-safe GFP only (set by DABOS_WEEK_CLOSE_CLOUD_ONLY / VERCEL).
  */
 import { refreshAllConditionsFromBoardWithSql } from '../../src/lib/dabos/board-conditions-query';
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
@@ -15,7 +19,18 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '../../src/lib/dabos/org-week';
+import { runStatCrawl } from '../../src/lib/dabos/stat-crawl';
 import { loadEnvLocal, requireDatabaseUrl } from './load-env';
+
+function cloudOnly(): boolean {
+  if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '1') return true;
+  if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '0') return false;
+  return Boolean(process.env.VERCEL);
+}
+
+function softClose(): boolean {
+  return process.env.DABOS_WEEK_CLOSE_SOFT === '1';
+}
 
 async function main() {
   loadEnvLocal();
@@ -26,9 +41,18 @@ async function main() {
   const label = orgWeekLabel(weekStart);
   const pastDeadline = isPastStatsDeadline(now);
   const hoursLeft = hoursUntilStatsDeadline(now);
+  const skipLocal = cloudOnly();
+  const soft = softClose();
 
-  console.log(`# DABOS week close`);
+  console.log(soft ? `# DABOS week close (SOFT rehearsal)` : `# DABOS week close`);
   console.log(label);
+  console.log(
+    soft
+      ? 'Mode: SOFT — full office pipeline; idempotent inserts; role_run=week_close_soft'
+      : skipLocal
+        ? 'Mode: cloud-only (GFP + conditions + crawl; local division poster skipped)'
+        : 'Mode: full (office Good Thursday — DATA + Proviso + registers)'
+  );
   if (pastDeadline) {
     console.log('Stats deadline: PASSED (Thu 14:00 Berlin)');
   } else {
@@ -64,24 +88,32 @@ async function main() {
   }
 
   let divisionPoster: Record<string, unknown> | null = null;
-  try {
-    const div = await postDivisionWeeklyStats({
-      dabosSql: sql,
-      year,
-      week,
-      includeProvisoMonths: 12,
-    });
+  if (skipLocal) {
     divisionPoster = {
-      workspace_id: div.workspaceId,
-      inserted: div.inserted,
-      notes: div.notes,
+      skipped: true,
+      reason: 'cloud-only — run office npm run dabos:week-close for Div1–5/7 + Proviso',
     };
-    console.log(`\nDivision poster ${div.workspaceId}: inserted=${div.inserted.length}`);
-    for (const note of div.notes) console.log(`  ${note}`);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    divisionPoster = { error: message };
-    console.log(`\nDivision poster skipped: ${message}`);
+    console.log('\nDivision poster skipped (cloud-only mode)');
+  } else {
+    try {
+      const div = await postDivisionWeeklyStats({
+        dabosSql: sql,
+        year,
+        week,
+        includeProvisoMonths: 12,
+      });
+      divisionPoster = {
+        workspace_id: div.workspaceId,
+        inserted: div.inserted,
+        notes: div.notes,
+      };
+      console.log(`\nDivision poster ${div.workspaceId}: inserted=${div.inserted.length}`);
+      for (const note of div.notes) console.log(`  ${note}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      divisionPoster = { error: message };
+      console.log(`\nDivision poster skipped: ${message}`);
+    }
   }
 
   const result = await refreshAllConditionsFromBoardWithSql(sql);
@@ -92,6 +124,25 @@ async function main() {
   );
   for (const row of result.samples) {
     console.log(`  ${row.entity_id}: ${row.condition}`);
+  }
+
+  let crawl: Record<string, unknown> | null = null;
+  try {
+    const c = await runStatCrawl({ dabosSql: sql, now });
+    crawl = {
+      missing: c.missing,
+      tasks_created: c.tasks_created,
+      reported_pct: c.reported_pct,
+    };
+    console.log(
+      `\nDept3 crawl: reported=${c.reported_pct}% missing=${c.missing.length} tasks=${c.tasks_created.length}`
+    );
+    for (const m of c.missing) {
+      console.log(`  ${m.division_id} ${m.metric_key}: ${m.reason}`);
+    }
+  } catch (err) {
+    crawl = { error: err instanceof Error ? err.message : String(err) };
+    console.log(`\nDept3 crawl skipped: ${crawl.error}`);
   }
 
   let ventures: Array<{
@@ -119,25 +170,29 @@ async function main() {
     }
   }
 
+  const roleId = soft ? 'week_close_soft' : 'week_close';
   await sql`
     INSERT INTO role_runs (role_id, role_type, summary_json)
     VALUES (
-      'week_close',
+      ${roleId},
       'cadence',
       ${JSON.stringify({
+        soft,
         org_week: label,
         past_stats_deadline: pastDeadline,
+        cloud_only: skipLocal,
         conditions: result.samples,
         venture_count: ventures.length,
         gfp_poster: gfpPoster,
         division_poster: divisionPoster,
+        stat_crawl: crawl,
       })}::jsonb
     )
   `.catch(() => {
     console.log('(role_runs not migrated — run npm run dabos:migrate)');
   });
 
-  console.log('\nLogged role_run: week_close');
+  console.log(`\nLogged role_run: ${roleId}`);
 
   if ('end' in sql && typeof sql.end === 'function') {
     await sql.end({ timeout: 5 });

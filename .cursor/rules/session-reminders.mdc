@@ -23,9 +23,9 @@ If the user says things like **"I'm done for the day"**, **"wrapping up"**, or *
 
 1. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
 2. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
-3. **Valuation:** EUR. Benchmark = **German/European average Arbeiterbelastung (Arbeitgeberbelastung)**. Rate from **`private/cost-estimate-reference.md`** (€52/hr there). Floor = 14 EUR/hr. See PROJECT-VALUE.md.
+3. **Valuation:** Three ledgers — see DABOS `PROJECT-VALUE.md` + `cost-estimate-reference.md`. **A** founder attention **€10/hr** provisional (income÷hours). **B** hire-a-dev **€95/hr** (contractor hours for results, not briefing). **C** CapEx avoided on PO register.
 4. **Always include in your reply:**
-   - **This session:** X hrs → Y EUR value.
-   - **Total project value so far:** ~55–70 dev-hours → **~2,860–3,640 EUR** at €52/hr (rate in `private/cost-estimate-reference.md`).
-   - **Savings:** Same as total project value — what they’d have paid a dev to build this. Optionally: add today’s session to the value log in PROJECT-VALUE.md.
+ - **This session (A):** X hrs → Y EUR @ €10.
+ - **Hire-a-dev total (B):** ~€11,400–13,300 @ €95 (~120–140 contractor hours) — bump only if something shipped.
+ - **Budget (C):** any CapEx avoided or none.
 5. One short paragraph; end on a positive note.

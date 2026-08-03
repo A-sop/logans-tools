@@ -14,9 +14,16 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '@/lib/dabos/org-week';
+import { runStatCrawl } from '@/lib/dabos/stat-crawl';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
+
+function cloudOnly(): boolean {
+  if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '1') return true;
+  if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '0') return false;
+  return Boolean(process.env.VERCEL);
+}
 
 export async function GET(request: Request) {
   const denied = authorizeDabosCron(request);
@@ -30,6 +37,7 @@ export async function GET(request: Request) {
   const now = new Date();
   const weekStart = weekBoundaryStart(now);
   const sql = createDabosSql(url);
+  const skipLocal = cloudOnly();
 
   const gfpUrl = process.env.GFP_DATABASE_URL?.trim() || url;
   const { year, week } = resolveGfpIsoWeek(now);
@@ -55,25 +63,44 @@ export async function GET(request: Request) {
   }
 
   let divisionPoster: Record<string, unknown> | null = null;
-  try {
-    const div = await postDivisionWeeklyStats({
-      dabosSql: sql,
-      year,
-      week,
-      includeProvisoMonths: 12,
-    });
+  if (skipLocal) {
     divisionPoster = {
-      workspace_id: div.workspaceId,
-      inserted: div.inserted,
-      notes: div.notes,
+      skipped: true,
+      reason: 'cloud-only — office Good Thursday owns local metrics',
     };
-  } catch (err) {
-    divisionPoster = {
-      error: err instanceof Error ? err.message : String(err),
-    };
+  } else {
+    try {
+      const div = await postDivisionWeeklyStats({
+        dabosSql: sql,
+        year,
+        week,
+        includeProvisoMonths: 12,
+      });
+      divisionPoster = {
+        workspace_id: div.workspaceId,
+        inserted: div.inserted,
+        notes: div.notes,
+      };
+    } catch (err) {
+      divisionPoster = {
+        error: err instanceof Error ? err.message : String(err),
+      };
+    }
   }
 
   const result = await refreshAllConditionsFromBoardWithSql(sql);
+
+  let crawl: Record<string, unknown> | null = null;
+  try {
+    const c = await runStatCrawl({ dabosSql: sql, now });
+    crawl = {
+      missing: c.missing,
+      tasks_created: c.tasks_created,
+      reported_pct: c.reported_pct,
+    };
+  } catch (err) {
+    crawl = { error: err instanceof Error ? err.message : String(err) };
+  }
 
   try {
     await sql`
@@ -84,10 +111,12 @@ export async function GET(request: Request) {
         ${JSON.stringify({
           org_week: orgWeekLabel(weekStart),
           past_stats_deadline: isPastStatsDeadline(now),
+          cloud_only: skipLocal,
           cutoff: getStatCutoffSnapshot(now),
           conditions: result.samples,
           gfp_poster: gfpPoster,
           division_poster: divisionPoster,
+          stat_crawl: crawl,
         })}::jsonb
       )
     `;
@@ -102,10 +131,12 @@ export async function GET(request: Request) {
   return NextResponse.json({
     ok: true,
     job: 'week_close',
+    cloud_only: skipLocal,
     org_week: orgWeekLabel(weekStart),
     week: result.week.label,
     persisted: result.persisted,
     gfp_poster: gfpPoster,
     division_poster: divisionPoster,
+    stat_crawl: crawl,
   });
 }

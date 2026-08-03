@@ -19,20 +19,33 @@ export function ConditionBadge({
   reason,
   statIndicated,
   climbLag,
+  pointCount,
 }: {
   condition: ConditionLabel | null;
   confidence?: number | null;
   reason?: string;
   statIndicated?: ConditionLabel | null;
   climbLag?: boolean;
+  /** Weekly points toward the ≥3 condition gate */
+  pointCount?: number | null;
 }) {
   if (!condition) {
+    const n = pointCount ?? 0;
+    const thinSeries = reason === 'insufficient_data' || n > 0;
+    const label = thinSeries
+      ? n > 0
+        ? `Non-Existence · ${n}/3`
+        : 'Missing'
+      : 'Unknown';
     return (
       <span className="inline-flex rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-        {reason === 'insufficient_data' ? 'No data yet' : 'Unknown'}
+        {label}
       </span>
     );
   }
+
+  const n = pointCount;
+  const showProgress = n != null && n > 0 && n < 3;
 
   return (
     <span className="inline-flex flex-col gap-0.5">
@@ -44,6 +57,7 @@ export function ConditionBadge({
       >
         {condition}
         {confidence != null ? ` · ${Math.round(confidence * 100)}%` : ''}
+        {showProgress ? ` · ${n}/3` : ''}
       </span>
       {climbLag && statIndicated && statIndicated !== condition ? (
         <span className="text-[10px] text-muted-foreground">Stat: {statIndicated}</span>

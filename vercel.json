@@ -11,7 +11,11 @@
     },
     {
       "path": "/api/dabos/cron/week-close",
-      "schedule": "0 14 * * 4"
+      "schedule": "0 12 * * 4"
+    },
+    {
+      "path": "/api/dabos/cron/stat-crawl",
+      "schedule": "30 12 * * 4"
     }
   ]
 }

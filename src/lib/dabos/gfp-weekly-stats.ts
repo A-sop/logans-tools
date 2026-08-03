@@ -3,6 +3,7 @@
  * termin_clicks uses Cal booked count as labelled proxy until PostHog ingest.
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
+import { emitStat } from '@/lib/dabos/stats-emit';
 import { endOfISOWeek, getISOWeek, getISOWeekYear, setISOWeek, startOfYear } from 'date-fns';
 import postgres from 'postgres';
 
@@ -94,19 +95,26 @@ export async function postGfpWeeklyStats(opts: {
 
     const inserted: string[] = [];
     for (const row of inserts) {
-      const res = await dabosSql`
-        insert into stats (workspace_id, division_id, department_id, metric_key, value, recorded_at)
-        select ${workspaceId}, ${row.division_id}, ${row.department_id}, ${row.metric_key}, ${row.value}, ${recordedAt}::timestamptz
-        where not exists (
-          select 1 from stats s
-          where s.workspace_id = ${workspaceId}
-            and s.division_id = ${row.division_id}
-            and s.department_id is not distinct from ${row.department_id}
-            and s.metric_key = ${row.metric_key}
-        )
-        returning metric_key
-      `;
-      if (res[0]?.metric_key) inserted.push(String(res[0].metric_key));
+      const result = await emitStat(dabosSql, {
+        workspaceId,
+        divisionId: row.division_id,
+        departmentId: row.department_id,
+        metricKey: row.metric_key,
+        value: row.value,
+        recordedAt,
+        basis: {
+          source: 'gfp-campaign_leads',
+          note:
+            row.metric_key === 'termin_clicks' || row.metric_key === 'conversions'
+              ? 'Cal booked proxy until PostHog CTA ingest'
+              : 'guide campaign_leads week rollup',
+          year,
+          week,
+        },
+        recordedBy: 'gfp-poster',
+        mode: 'insert_if_absent',
+      });
+      if (result.inserted) inserted.push(row.metric_key);
     }
 
     return {

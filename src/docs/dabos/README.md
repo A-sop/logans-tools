@@ -2,14 +2,14 @@
 
 **Canonical specs:** `C:\Dev\DABOS\docs\`
 
-**Path B (homelab — Postgres on ln02):** [Atlas/docs/admin/dabos-ln02-homelab-setup.md](../../../../Atlas/docs/admin/dabos-ln02-homelab-setup.md)
+**Path B (homelab — Postgres on ln02):** [DABOS dabos-ln02-homelab-setup.md](../../../../DABOS/docs/reference/dept09-assets/dabos-ln02-homelab-setup.md)
 
 ## Quick start (Path B — ln02 Postgres)
 
 1. **On ln02** (from office PC):
 
    ```powershell
-   & C:\Dev\Atlas\scripts\ln02\Run-Install-DabosPostgres-Ln02.ps1
+   & C:\Dev\DABOS\scripts\dept09-assets\ln02\ln02\Run-Install-DabosPostgres-Ln02.ps1
    ```
 
 2. Copy the printed **DATABASE_URL** into `C:\Dev\logans-tools\.env.local`.

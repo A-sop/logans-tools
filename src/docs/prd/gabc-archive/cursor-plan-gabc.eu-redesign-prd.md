@@ -1,6 +1,6 @@
 ---
 name: GABC.eu Redesign PRD
-overview: A product-requirements document outline for a full rebuild of gabc.eu (German Australian Business Council), structured with phases that map to your in-repo Builder Codex roadmap ([Atlas/docs/admin/roadmap.md](C:/Dev/Atlas/docs/admin/roadmap.md)) and Pirate Skills-inspired UX/content patterns from [logans-tools/src/docs/INSPIRATION.md](C:/Dev/logans-tools/src/docs/INSPIRATION.md) and the Calm Builder Funnel SOP.
+overview: A product-requirements document outline for a full rebuild of gabc.eu (German Australian Business Council), structured with phases that map to the Builder / Pirate Codex in DABOS (`DABOS/docs/pirate-codex/`) and Pirate Skills-inspired UX/content patterns from [logans-tools/src/docs/INSPIRATION.md](C:/Dev/logans-tools/src/docs/INSPIRATION.md) and the Calm Builder Funnel SOP.
 archived_from: C:\Users\Logan\.cursor\plans\gabc.eu_redesign_prd_f69b07a6.plan.md
 archived_on: 2026-05-22
 todos:
@@ -28,7 +28,7 @@ isProject: false
 
 ## Where “Builder Codex” comes from in your repos
 
-- **Canonical codex summary:** [C:/Dev/Atlas/docs/admin/roadmap.md](C:/Dev/Atlas/docs/admin/roadmap.md) — Levels 1–6 (idea → feature → data → accounts → integrations → monetization), pillars: Product, Tooling, Design, Systems, Security, Shipping.
+- **Canonical codex summary:** [DABOS pirate-codex](C:/Dev/DABOS/docs/pirate-codex/) — Build/Grow levels and pillars (Product, Tooling, Design, Systems, Security, Shipping).
 - **Design/voice reference:** [C:/Dev/logans-tools/src/docs/INSPIRATION.md](C:/Dev/logans-tools/src/docs/INSPIRATION.md) (Pirate Skills: hero, content hub, single primary CTA).
 - **Acquisition discipline (optional but useful for membership):** [C:/Dev/loganwilliams-website/src/docs/sop-calm-builder-funnel.md](C:/Dev/loganwilliams-website/src/docs/sop-calm-builder-funnel.md) — one channel, one journey, one primary conversion.
 - **Note:** Project plans mention `src/docs/builder-codex/` lesson files (e.g. [german-financial-planning-website-plan.md](C:/Dev/logans-tools/src/docs/project-plans/german-financial-planning-website-plan.md)); that directory is **not** in the current workspace. For execution, treat the **Atlas roadmap** as the phase checklist; pull detailed lessons from Pirate Skills only if you subscribe there.

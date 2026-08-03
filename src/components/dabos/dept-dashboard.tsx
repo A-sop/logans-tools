@@ -5,6 +5,10 @@ import {
   EstablishmentFlags,
   EstablishmentStatLine,
 } from '@/components/dabos/establishment-badges';
+import {
+  chartPointsFromStats,
+  StatTrendChart,
+} from '@/components/dabos/stat-trend-chart';
 import type { DeptEstablishment } from '@/lib/dabos/establishment';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -149,6 +153,7 @@ export function DeptDashboard({
     investigations.some((t) => t.status === 'doing') ? 'investigating' : workQueue.length > 0 ? 'active' : 'idle';
 
   const hasDemoStats = stats.some((s) => isDemoStat(s.workspace_id));
+  const trendPoints = chartPointsFromStats(stats, metric_key);
 
   return (
     <div className="mt-10 space-y-6 border-t border-border pt-8 font-sans">
@@ -162,10 +167,17 @@ export function DeptDashboard({
           reason={latest_condition.reason}
           statIndicated={latest_condition.stat_indicated_condition}
           climbLag={latest_condition.climb_lag}
+          pointCount={latest_condition.point_count}
         />
         <ActivityBadge activity={activity} />
         <Badge variant="outline">{metric_key}</Badge>
       </div>
+
+      <StatTrendChart
+        points={trendPoints}
+        metricKey={metric_key}
+        label={`${dept.id} ${deptRoleLabel(dept)}`}
+      />
 
       {hasDemoStats ? (
         <Card className="border-amber-500/40 bg-amber-500/5">

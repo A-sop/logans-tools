@@ -11,24 +11,21 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Before production deploy: `npm run build` — apex marketing routes should be **○ Static** where possible.
 
-## Atlas workspace routing
+## DABOS foundation routing
 
-This repo follows the Atlas agent harness.
+This repo **ships product code**. The org foundation lives in **DABOS**.
 
-Read first for shared policy, secrets, CLI/MCP access order, and database direction:
-C:\Dev\Atlas\docs\admin\agent-harness.md
+1. Read first: `C:\Dev\DABOS\docs\reference\dept20-organizing\agent-harness.md`
+2. Workspace: open **DABOS + this repo only** (use `DABOS-logans-tools.code-workspace`).
+3. Env: `C:\Dev\DABOS\.env.local` (this repo’s `.env.local` must link there — `Link-DabosEnvLocal.ps1`).
+4. Template (names only): `C:\Dev\DABOS\docs\reference\dept09-assets\homelab-and-api-keys.template.env`
+5. Scripts: `C:\Dev\DABOS\scripts\deptNN-*` — Linear under `dept02-coordination/linear/`.
+6. Hats: `C:\Dev\DABOS\.agents\roles/` when acting as a department.
+7. On changes, declare: **Model**, **Agent**, **Surface**.
+8. Access order: CLI → repo scripts/API → MCP → browser/dashboard.
+9. New online DB: Neon via `DATABASE_URL`. Supabase is legacy only.
+10. DVAG / client / restricted data stay local — never third-party cloud.
 
-Routing rule:
+**Forbidden:** inventing `docs/ops/`, second harness copies, new `private/*keys.env` inventories, catchall folders, or a second org board.
 
-- Atlas = shared policy, canonical secrets inventory, Linear scripts, cross-repo context, second-brain/ops docs.
-- This repo = product code, repo-specific docs, tests, build/deploy config, and local implementation decisions.
-- Do not duplicate Atlas policy here; link to it and keep only repo-specific differences in this file.
-- When working in a multi-root workspace, read Atlas for shared context but edit this repo only for this repo's code/docs.
-
-Agent identity rule: before or when making changes, state Model, Agent, and Surface.
-
-Access rule: CLI first, repo scripts/API second, MCP third, browser/dashboard last.
-
-Database rule: new online DB work uses Neon Postgres via DATABASE_URL. Supabase is legacy/off-boarding unless explicit old-code maintenance requires it.
-
-Repo role: Logan's tools/app repo. Use this repo for shipped tool surfaces, including DABOS implementation code when relevant.
+**Repo role:** Logan's tools / app surface — including DABOS board UI, office status/triage/DIL/debt routes under `/dabos/*`. Do not absorb foundation policy here — link to DABOS.
