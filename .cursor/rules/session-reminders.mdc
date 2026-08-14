@@ -8,7 +8,7 @@ alwaysApply: true
 
 **Single reference:** Project root **`CHAT-PRIMER.md`** (context for new chat + "I'm back" reminder + "I'm done for the day" behavior).
 
-**Session timestamps + git memory:** Follow **`C:\Dev\DABOS\.cursor\rules\session-timestamps.mdc`** (canonical). Log via `DABOS/scripts/dept21-executive-director/Log-CursorSession.ps1` → `DABOS/.../founder-desk/session-log.md`. On open: Start + `git pull` DABOS `main`. On close: End + commit/push allowlisted session memory to DABOS `origin/main`. Do **not** auto-commit this product repo unless Logan asks.
+**Session timestamps + git:** Follow **`C:\Dev\DABOS\.cursor\rules\session-timestamps.mdc`**. On open: Start + pull `main`. On close: End + **commit/push this repo’s real changes** to `origin/main` (and other touched roots); skip secrets.
 
 ## When the user says they're back or starts fresh
 
@@ -22,7 +22,7 @@ If the user says things like **"I'm back"**, **"new chat"**, **"just opened the 
 
 If the user says things like **"I'm done for the day"**, **"wrapping up"**, or **"that's it for today"**:
 
-1. Run DABOS session **End** + commit/push session memory (see session-timestamps rule); show `**Session ended:** …`.
+1. Run DABOS session **End** + **commit/push this repo’s changes** (and other touched roots) per session-timestamps; show `**Session ended:** …`.
 2. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
 3. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
 4. **Valuation:** Three ledgers — see DABOS `PROJECT-VALUE.md` + `cost-estimate-reference.md`. **A** founder attention **€10/hr** provisional (income÷hours). **B** hire-a-dev **€95/hr** (contractor hours for results, not briefing). **C** CapEx avoided on PO register.
