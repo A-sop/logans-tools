@@ -8,24 +8,26 @@ alwaysApply: true
 
 **Single reference:** Project root **`CHAT-PRIMER.md`** (context for new chat + "I'm back" reminder + "I'm done for the day" behavior).
 
-**Session timestamps:** Atlas `.cursor/rules/session-timestamps.mdc` — log to `Atlas/docs/admin/session-log.md` via `Atlas/scripts/Log-CursorSession.ps1`.
+**Session timestamps + git memory:** Follow **`C:\Dev\DABOS\.cursor\rules\session-timestamps.mdc`** (canonical). Log via `DABOS/scripts/dept21-executive-director/Log-CursorSession.ps1` → `DABOS/.../founder-desk/session-log.md`. On open: Start + `git pull` DABOS `main`. On close: End + commit/push allowlisted session memory to DABOS `origin/main`. Do **not** auto-commit this product repo unless Logan asks.
 
 ## When the user says they're back or starts fresh
 
 If the user says things like **"I'm back"**, **"new chat"**, **"just opened the project"**, or **"remind me what I need to do"**:
 
-1. Read **`CHAT-PRIMER.md`** (section **"When you say I'm back / new chat"**).
-2. Give them a **short, friendly ELI5 reminder** (2–4 bullets): Node/deps (`npm install`), env (`.env.local` from `.env.example`), run app (`npm run dev`), human to-dos in `src/docs/human-todos.md`. Don’t paste the whole doc — summarize so they can get going fast.
+1. Run DABOS session **Start** + pull (see session-timestamps rule); show `**Session started:** …`.
+2. Read **`CHAT-PRIMER.md`** (section **"When you say I'm back / new chat"**).
+3. Give them a **short, friendly ELI5 reminder** (2–4 bullets): Node/deps (`npm install`), env (`.env.local` from `.env.example`), run app (`npm run dev`), human to-dos in `src/docs/human-todos.md`. Don’t paste the whole doc — summarize so they can get going fast.
 
 ## When the user says they're done for the day
 
 If the user says things like **"I'm done for the day"**, **"wrapping up"**, or **"that's it for today"**:
 
-1. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
-2. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
-3. **Valuation:** Three ledgers — see DABOS `PROJECT-VALUE.md` + `cost-estimate-reference.md`. **A** founder attention **€10/hr** provisional (income÷hours). **B** hire-a-dev **€95/hr** (contractor hours for results, not briefing). **C** CapEx avoided on PO register.
-4. **Always include in your reply:**
+1. Run DABOS session **End** + commit/push session memory (see session-timestamps rule); show `**Session ended:** …`.
+2. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
+3. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
+4. **Valuation:** Three ledgers — see DABOS `PROJECT-VALUE.md` + `cost-estimate-reference.md`. **A** founder attention **€10/hr** provisional (income÷hours). **B** hire-a-dev **€95/hr** (contractor hours for results, not briefing). **C** CapEx avoided on PO register.
+5. **Always include in your reply:**
  - **This session (A):** X hrs → Y EUR @ €10.
  - **Hire-a-dev total (B):** ~€11,400–13,300 @ €95 (~120–140 contractor hours) — bump only if something shipped.
  - **Budget (C):** any CapEx avoided or none.
-5. One short paragraph; end on a positive note.
+6. One short paragraph; end on a positive note.
