@@ -33,6 +33,21 @@
 
 5. Open **`https://dabos.logans.tools`** (production) or **`http://localhost:3001/dabos`** locally — no Logans.Tools header on DABOS routes.
 
+## Open loops dashboard
+
+Cross-project scan of founder-desk **OPEN-CHAT-BACKLOG** + **SHIP-BOARD** (not the Neon task board).
+
+- **URL:** `https://dabos.logans.tools/open` (nav: **Open**)
+- **Refresh snapshot** (from a machine with DABOS cloned next to this repo, or set `DABOS_ROOT`):
+
+  ```powershell
+  cd C:\Dev\logans-tools
+  $env:DABOS_ROOT = 'C:\Dev\DABOS'
+  npm run dabos:sync-open-loops
+  ```
+
+  Then commit `src/data/dabos-open-loops.json` and deploy. Vercel cannot read the DABOS tree at runtime.
+
 ## Production URL
 
 **Canonical:** `https://dabos.logans.tools` (same Vercel project as `logans.tools`).

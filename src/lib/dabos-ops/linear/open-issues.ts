@@ -64,9 +64,9 @@ export async function fetchLinearOpenIssues(): Promise<LinearOpenIssue[]> {
   let cursor: string | null = null;
 
   for (;;) {
-    const data = await gql<{
+    const data: {
       issues: { nodes: IssueNode[]; pageInfo: { hasNextPage: boolean; endCursor: string } };
-    }>(OPEN_ISSUES_QUERY, { cursor });
+    } = await gql(OPEN_ISSUES_QUERY, { cursor });
     all.push(...data.issues.nodes);
     if (!data.issues.pageInfo.hasNextPage) break;
     cursor = data.issues.pageInfo.endCursor;

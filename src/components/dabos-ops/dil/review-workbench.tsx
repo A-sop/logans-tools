@@ -404,6 +404,7 @@ export function ReviewWorkbench({ className }: { className?: string } = {}) {
           todo: 0,
           admin: 0,
           later: 0,
+          noted: 0,
           yes: 0,
           no: 0,
           flag: 0,

@@ -63,6 +63,12 @@ export function DabosChrome({ shell }: DabosChromeProps) {
           Board
         </Link>
         <Link
+          href="/dabos/open"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Open
+        </Link>
+        <Link
           href="/dabos/status"
           className="text-sm font-medium text-muted-foreground hover:text-foreground"
         >

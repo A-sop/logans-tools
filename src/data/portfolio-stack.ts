@@ -48,7 +48,7 @@ export const PORTFOLIO_STACK: PortfolioTool[] = [
     label: 'Neon Postgres',
     referral: 'partner-only',
     programUrl: 'https://neon.com/programs/open-source',
-    note: 'Portfolio DB target — GFP campaign_leads + DABOS code path. Open-source program has referral payouts; no consumer affiliate.',
+    note: 'Sole online Postgres for logans-tools / GFP / DABOS product paths (A-188 offboard). Open-source program has referral payouts; no consumer affiliate.',
   },
   {
     label: 'Resend (email)',
@@ -67,12 +67,6 @@ export const PORTFOLIO_STACK: PortfolioTool[] = [
     referral: 'apply',
     programUrl: 'https://clerk.com/creators',
     note: 'Creator partnership (free Pro, swag) — not a standard commission affiliate.',
-  },
-  {
-    label: 'Supabase (Postgres)',
-    referral: 'partner-only',
-    programUrl: 'https://supabase.com/partners',
-    note: 'Legacy Atlas/logans-tools migrations — migrate to Neon; no creator referral link.',
   },
   {
     label: 'Stripe (payments)',

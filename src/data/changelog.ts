@@ -11,6 +11,15 @@ export type ChangelogEntry = {
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    date: '2026-08-16',
+    title: 'Supabase → Neon offboard (A-188)',
+    items: [
+      'Database: Neon Postgres is the sole online DB for product paths (DATABASE_URL)',
+      'Scaffolding: archived legacy supabase/ SQL; removed supabase CLI dependency',
+      'Env: SUPABASE_* removed from required checks and Vercel production (GFP + local)',
+    ],
+  },
+  {
     date: '2026-02-12',
     version: '1.0',
     title: 'v1.0 — Consulting & More Workspace Launch',

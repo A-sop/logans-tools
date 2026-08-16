@@ -1,0 +1,551 @@
+{
+  "generated_at": "2026-08-15T22:19:58.964Z",
+  "sources": {
+    "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
+    "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
+    "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
+  },
+  "counts": {
+    "hot": 6,
+    "open": 14,
+    "ship": 16,
+    "still_open": 20,
+    "closed": 40,
+    "total": 36,
+    "by_segment": {
+      "treasury": 2,
+      "assets": 7,
+      "mail": 3,
+      "esto": 3,
+      "gfp": 3,
+      "consulting": 1,
+      "legal": 1,
+      "data": 2,
+      "platform": 2,
+      "growth": 11,
+      "other": 1
+    },
+    "by_dept": {
+      "Dept1": 5,
+      "Dept2": 0,
+      "Dept3": 0,
+      "Dept4": 11,
+      "Dept5": 0,
+      "Dept6": 3,
+      "Dept7": 0,
+      "Dept8": 2,
+      "Dept9": 7,
+      "Dept10": 0,
+      "Dept11": 2,
+      "Dept12": 0,
+      "Dept13": 0,
+      "Dept14": 0,
+      "Dept15": 0,
+      "Dept16": 0,
+      "Dept17": 0,
+      "Dept18": 0,
+      "Dept19": 0,
+      "Dept20": 3,
+      "Dept21": 3
+    }
+  },
+  "last_week": {
+    "window_days": 7,
+    "since": "2026-08-09",
+    "closed": 3,
+    "still_open": 7,
+    "by_dept": {
+      "Dept1": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept2": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept3": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept4": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept5": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept6": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept7": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept8": {
+        "closed": 0,
+        "still_open": 2
+      },
+      "Dept9": {
+        "closed": 3,
+        "still_open": 4
+      },
+      "Dept10": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept11": {
+        "closed": 0,
+        "still_open": 1
+      },
+      "Dept12": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept13": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept14": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept15": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept16": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept17": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept18": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept19": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept20": {
+        "closed": 0,
+        "still_open": 0
+      },
+      "Dept21": {
+        "closed": 0,
+        "still_open": 0
+      }
+    }
+  },
+  "goals": {
+    "closed_share_target": 0.55,
+    "hot_max": 5,
+    "open_max": 12
+  },
+  "segments": [
+    "treasury",
+    "assets",
+    "mail",
+    "esto",
+    "gfp",
+    "consulting",
+    "legal",
+    "data",
+    "platform",
+    "growth",
+    "other"
+  ],
+  "depts": [
+    "Dept1",
+    "Dept2",
+    "Dept3",
+    "Dept4",
+    "Dept5",
+    "Dept6",
+    "Dept7",
+    "Dept8",
+    "Dept9",
+    "Dept10",
+    "Dept11",
+    "Dept12",
+    "Dept13",
+    "Dept14",
+    "Dept15",
+    "Dept16",
+    "Dept17",
+    "Dept18",
+    "Dept19",
+    "Dept20",
+    "Dept21"
+  ],
+  "hot": [
+    {
+      "id": "260814_gnucash-ssot-imbalance-clear",
+      "why": "In progress (founder 2026-08-15)",
+      "canonical": "DATA !_FINANCE-TRACKER/handoff-gnucash-ssot-imbalance-2026-08-14.md",
+      "resume": "GnuCash SSOT",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260810_profit-first-10th-treasury",
+      "why": "Blocked on DKB FinTS (laptop LDW) — same treasury lane",
+      "canonical": "dept08-ledger/plan-treasury-foss-2026-08-10.md",
+      "resume": "GnuCash DKB / treasury FOSS",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260813_reza-off-hzr-cutover",
+      "why": "Surface has tree; Docker engine not running; Paperless-Reza still on HZR",
+      "canonical": "dept09-assets/handover-reza-surface-cutover-2026-08-13.md",
+      "resume": "Reza Surface cutover / start Paperless on Surface",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260815_backups-caught-up",
+      "why": "Catch-up + SSD tasks OK; Tailscale SSH cleared 2026-08-15; residual = SSD free space for monthly image only",
+      "canonical": "dept09-assets/BACKUP-HANDOFF.md",
+      "resume": "monthly images",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260814_media-40-media-plan",
+      "why": "40_MEDIA ~275 GB on C: — after books/taxes",
+      "canonical": "dept09-assets/prd-ln02-media-curation-jellyfin.md",
+      "resume": "40_MEDIA curation",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260807_watch-grind-closeout",
+      "why": "Watch holds — after books/taxes",
+      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md",
+      "resume": "continue Watch grind / triage INBOX",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    }
+  ],
+  "open": [
+    {
+      "id": "260814_vaultwarden-office-resume",
+      "why": "Daily use done — Bitwarden app → self-hosted Vaultwarden on ln02. Tailscale must be on the device; accepted. Temp master file gone.",
+      "canonical": "docs/reference/dept09-assets/handover-vaultwarden-ln02-2026-08-14.md",
+      "resume": "“Zoho Vault import”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260808_paperless-hzr-ra-temp",
+      "why": "!_TEMP_Logan opaque pile → Paperless OCR (RA-TEMP), then Dropbox Akte. HZR hosts Paperless when disk + RAM allow Docker.",
+      "canonical": "",
+      "resume": "“Paperless HZR” / “RA-TEMP consume” / “fire paperless-ngx-hzr”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260807_gfp-migrate-to-neon",
+      "why": "DONE 2026-08-16 A-188: GFP + logans-tools runtime off Supabase; Neon sole online Postgres; supabase/ archived; Vercel SUPABASE_* removed on GFP; local SUPABASE_* commented.",
+      "canonical": "german-financial-planning/src/docs/migrate-to-neon.md · DABOS/docs/reference/dept11-engineering/supabase-offboard-2026-08-16.md",
+      "resume": "closed — see A-188 / supabase-offboard-2026-08-16",
+      "heat": "done",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "260808_drsmile-dispute-procedure",
+      "why": "DrSmile → collections; result not received; company sold. Founder wants performance completed; will sue if needed.",
+      "canonical": "",
+      "resume": "“DrSmile case” / “A-294” / “DrSmile chronology”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "legal",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260808_x-tax-2023-msg-review-drain",
+      "why": "C:\\DATA\\20_ADMIN\\x_TAX-2023-msg-review\\ is a bad dump (likely keyword “2023”, not tax-relevant). Full drain = its own project; gets easier as theme homes exist.",
+      "canonical": "",
+      "resume": "“drain x_TAX-2023” / “tax msg review rescue”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "data",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260807_esto-dept-sandbox-20-admin",
+      "why": "ESTO production-unit wiring (not interviews). Founder insight 2026-08-07 mail/DATA chat.",
+      "canonical": "",
+      "resume": "continue ESTO → pick lane dept sandbox / 20_ADMIN\\DABOS",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
+    {
+      "id": "260806_cm-invoice-factory-sqlite",
+      "why": "Session: Invoice factory grill + MZ fix + T&T Dropbox/SQLite (this chat / HZR52).",
+      "canonical": "",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260804_ronix-fiku-bav-forms",
+      "why": "Session: Ronix FiKu dossier arc + FK Sach notes + scan filing + bAV form hunt (chat 4dc803b0…); intake 2026-08-06 Logistikvertrag + Grundrisse for BHV/DSI.",
+      "canonical": "DABOS/docs/reference/venture-dvag/handover-ronix-fiku-bav-2026-08-04.md",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "consulting",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260803_data-retail-registry-hygiene",
+      "why": "DATA + dual OneDrive retail / DIL triage — not a full re-inventory.",
+      "canonical": "",
+      "resume": "Say “look at the drives” / “manage the files” or paste prompt below. Read DABOS/docs/reference/dept21-executive-director/founder-desk/data-retail-resume.md first.",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "data",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260409_hermes-ln02",
+      "why": "ln02 Hermes + Telegram (DABOS): Ollama logs show POST /v1/chat/completions with pre-truncation prompt ~10k tokens (prompt≈10177); CPU-only inference → very long runs; Hermes/client timeouts → disconnect → Ollama 500 + Telegram “Still working…” / “Operation interrupted”.",
+      "canonical": "",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260610_meta-consent-linear",
+      "why": "Done in chat: DABOS wiki + backlog for consent/CMP (c15t vs consentmanager/Cookiebot/Iubenda), Meta ad account 50703020 restriction context, human appeal guide, Marketing API notes. Written backlog: DABOS/docs/backlog/meta-compliance-closeout.md. Linear ops (keys + repo): docs/reference/dept02-coordination/linear-operations.md. Scripts: DABOS/scripts/linear-create-meta-compliance-issue.ts, shared scripts/lib/load-atlas-env.ts.",
+      "canonical": "",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "260803_esto-catchup-resume",
+      "why": "Session: Mid-Jul ESTO/DATA learnings → Aug 3 repo catch-up (chat 6449f332-7539-4e24-a253-5c50544a2764). Founder closing chat after orientation; pick a lane later.",
+      "canonical": "",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
+    {
+      "id": "260802_proviso-onenote-temp-filing",
+      "why": "Session: Proviso TEMP_Logan filing + CM OneNote Kurznotiz offboard + intensive-section strategy (chat 1f02e5a7-fbce-4ac0-bbd5-aa86886a8937).",
+      "canonical": "",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
+    {
+      "id": "260815_dabos-proper-ci",
+      "why": "No real DABOS / logans-tools CI yet. Only existing GH Action is weekly Concierge landing screenshot. Open-loops JSON is a manual npm run dabos:sync-open-loops + deploy snapshot.",
+      "canonical": "",
+      "resume": "DABOS CI / logans-tools CI / open loops CI",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "platform",
+      "dept": "Dept11"
+    }
+  ],
+  "ship": [
+    {
+      "id": "ship_dabos-logans-tools-proper-ci",
+      "why": "typecheck + build on PR; optional open-loops sync — backlog 260815_dabos-proper-ci · resume DABOS CI",
+      "canonical": "",
+      "resume": "DABOS / logans-tools proper CI",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "platform",
+      "dept": "Dept11"
+    },
+    {
+      "id": "ship_jono-roi-allfinanz-sheets-b2b-sales-learn",
+      "why": "OPEN desk ages · cf-pointers/2026-08-04-google-sheets-allfinanz-roi.md · 3 Sheets links",
+      "canonical": "cf-pointers/2026-08-04-google-sheets-allfinanz-roi.md",
+      "resume": "Jono / ROI Allfinanz sheets (B2B sales learn)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_pirate-lab-recording-watch",
+      "why": "Ben sends recording after labs · keep calendar UID 389 until recording filed · cf-pointers/2026-08-04-pirate-lab-calendar-keep-for-recording.md",
+      "canonical": "cf-pointers/2026-08-04-pirate-lab-calendar-keep-for-recording.md",
+      "resume": "Pirate Lab recording watch",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_ahrefs-alternatives-research",
+      "why": "docs/reference/dept04-content/ahrefs-alternatives-research.md (OSS/repos ≈ Ahrefs; watchers Trash for now)",
+      "canonical": "docs/reference/dept04-content/ahrefs-alternatives-research.md",
+      "resume": "Ahrefs alternatives (research)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_substack-as-venture-channel-research",
+      "why": "docs/reference/dept04-content/substack-as-venture-channel-research.md (existing + future ventures)",
+      "canonical": "docs/reference/dept04-content/substack-as-venture-channel-research.md",
+      "resume": "Substack as venture channel (research)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_open-notebook-research",
+      "why": "self-hosted NotebookLM alt · queued on Dept9 Phase C list local-inference-stack-hm03.md § Research queue #4 · lfnovo/open-notebook",
+      "canonical": "local-inference-stack-hm03.md",
+      "resume": "Open Notebook (research)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "ship_immocation-learn-action",
+      "why": "C:\\DATA\\10_WORK\\reference\\swipe-file\\IMMOCATION-INDEX.md → future DABOS venture:real-estate (founder: ASAP when capacity)",
+      "canonical": "\\DATA\\10_WORK\\reference\\swipe-file\\IMMOCATION-INDEX.md",
+      "resume": "Immocation Learn → action",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_nexxt-change-suchabo-bnm-ventures",
+      "why": "NEXXT-CHANGE-INDEX.md",
+      "canonical": "NEXXT-CHANGE-INDEX.md",
+      "resume": "nexxt-change Suchabo (BnM ventures)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_idea-browser-venture-research",
+      "why": "C:\\DATA\\10_WORK\\reference\\swipe-file\\IDEA-BROWSER-INDEX.md · buy plan vs reverse-engineer (capacity / resources / location)",
+      "canonical": "\\DATA\\10_WORK\\reference\\swipe-file\\IDEA-BROWSER-INDEX.md",
+      "resume": "Idea Browser venture research",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_t1_two-clock-bet-prompt-dabos-reference-fil",
+      "why": "Nate Learn artifact; thesis clock vs runway clock",
+      "canonical": "reference/swipe-file/260803_LDW_Learn_Nate-Jones_TwoClockPrompt.md",
+      "resume": "Two-clock bet prompt → DABOS reference file + run once on #1 live bet",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_t2_insights-triage-json-for-lets-vibe-hackb",
+      "why": "Essay synced; route GFP/DABOS actions",
+      "canonical": "pirate-codex/insights/lets-vibe-hackbase.md",
+      "resume": "Insights triage JSON for lets-vibe-hackbase",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "ship_t3_appsumo-daily-dish-context-pass",
+      "why": "Close eval checklist (ignore / emulate / compete); default no buy",
+      "canonical": "260803_LDW_Swipe_AppSumo_DailyDish.md",
+      "resume": "AppSumo Daily Dish context pass",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_t4_migadu-trash-for-triaged-mails",
+      "why": "Slim Migadu; bodies already on disk where swipe/learn",
+      "canonical": "Nick→Cursor Learn + phishing/Vercel (+ DVAG/Kleinanzeigen/NZ if still INBOX)",
+      "resume": "Migadu Trash for triaged mails",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "ship_t5_continue-mail-triage-batch-1-",
+      "why": "Dual bay: Migadu + Gmail; teach ramp",
+      "canonical": "Migadu INBOX ~2358; Gmail local ~461",
+      "resume": "Continue mail triage (batch 1)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "ship_t6_vendor-akten-backfill",
+      "why": "Promote flat cards → folder+Protokoll; venture counterparties as-we-go",
+      "canonical": "contacts-and-vendors/README.md § Backfill later",
+      "resume": "Vendor Akten backfill",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    },
+    {
+      "id": "ship_t7_experteer-account-delete",
+      "why": "Unsub done; stop all mail needs profile delete",
+      "canonical": "contacts-and-vendors/experteer/ · Mein Account",
+      "resume": "Experteer account delete",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "growth",
+      "dept": "Dept4"
+    }
+  ]
+}

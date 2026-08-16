@@ -1,24 +1,7 @@
-# Landing page screenshot
+﻿# Landing page screenshot — RETIRED
 
-The Concierge section on logans.tools displays a screenshot of the CM landing page.
+**2026-08-16:** Concierge / CM landing auto-screenshot (hackathon / first funnel era) is **retired**.
 
-## First-time setup
-
-```bash
-npx playwright install chromium
-```
-
-## Update the screenshot
-
-**Local:**
-```bash
-npm run screenshot:landing
-```
-Saves to `public/cm-landing.png`. Set `LANDING_PAGE_URL` in `.env.local` to override (default: https://cm.logans.tools).
-
-**GitHub Action (automatic):**
-- Runs every **Sunday at 08:00 UTC**
-- Or trigger manually: Actions → "Screenshot landing page" → Run workflow
-- Commits the new screenshot if it changed (with `[skip ci]` to avoid loops)
-
-**Override URL:** Repo Settings → Secrets and variables → Actions → Variables → add `LANDING_PAGE_URL` (e.g. `http://localhost:3000` for local testing).
+- GitHub Action `.github/workflows/screenshot-landing.yml` **removed** (was failing on push exit 128 weekly).
+- Do not re-enable the Sunday cron.
+- Local script `npm run screenshot:landing` may still exist; ignore unless you intentionally revive CM marketing screenshots.

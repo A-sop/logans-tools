@@ -11,12 +11,10 @@ const envLocalPath = path.join(root, '.env.local');
 
 const required = [
   'OPENAI_API_KEY',
-  'SUPABASE_URL',
-  'SUPABASE_SERVICE_ROLE_KEY',
-  'SUPABASE_ANON_KEY',
   'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
   'CLERK_SECRET_KEY',
 ];
+const requiredDbAnyOf = ['DATABASE_URL', 'DATABASE_URL_UNPOOLED'];
 const optional = [
   'N8N_FEEDBACK_WEBHOOK_URL',
   'N8N_WEBHOOK_SECRET',
@@ -42,8 +40,7 @@ const local = parseEnv(envLocalPath);
 const hasRealValue = (v) =>
   typeof v === 'string' &&
   v.length > 0 &&
-  !/^your_|^your-|^$/.test(v) &&
-  v !== 'https://your-project.supabase.co';
+  !/^your_|^your-|^$/.test(v);
 
 console.log('=== .env.local key check ===\n');
 if (Object.keys(local).length === 0) {
@@ -51,11 +48,15 @@ if (Object.keys(local).length === 0) {
   process.exit(1);
 }
 
-console.log('Required (app auth + Supabase + OpenAI):');
+console.log('Required (app auth + OpenAI + Neon):');
 for (const k of required) {
   const v = local[k];
   console.log('  ' + k + ': ' + (hasRealValue(v) ? 'SET' : 'MISSING or placeholder'));
 }
+const dbSet = requiredDbAnyOf.some((k) => hasRealValue(local[k]));
+console.log(
+  '  DATABASE_URL or DATABASE_URL_UNPOOLED: ' + (dbSet ? 'SET' : 'MISSING or placeholder')
+);
 
 console.log('\nOptional (n8n feedback flow — lessons 5.4, 5.5):');
 for (const k of optional) {
@@ -69,8 +70,9 @@ for (const k of optional) {
 }
 
 const missingRequired = required.filter((k) => !hasRealValue(local[k]));
+if (!dbSet) missingRequired.push('DATABASE_URL|DATABASE_URL_UNPOOLED');
 if (missingRequired.length > 0) {
-  console.log('\n⚠️  Missing required keys: ' + missingRequired.join(', '));
+  console.log('\n⚠  Missing required keys: ' + missingRequired.join(', '));
   process.exit(1);
 }
 console.log('\n✓ All required keys are set.');

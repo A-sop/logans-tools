@@ -96,7 +96,7 @@ export function mergeFilingOverrides(
   const parsed = parseReviewNotes(notes, currentFilename);
 
   // Empty UI fields must not clobber Wispr/notes parsing (?? treats "" and false as set).
-  const keepFilename = explicit.keepFilename === true || parsed.keepFilename;
+  const keepFilename = explicit.keepFilename === true || parsed.keepFilename === true;
   const basenameOverride = (explicit.basenameOverride?.trim() || parsed.basenameOverride || '').trim();
   let relativePathOverride = (explicit.relativePathOverride?.trim() || parsed.relativePathOverride || '').trim();
 

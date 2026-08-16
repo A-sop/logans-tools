@@ -8,7 +8,7 @@ One-time import and configuration for the feedback workflow. One file per workfl
 
 1. **Webhook** — Receives POST from your app (message, userId, firstName, lastName, email, browser, timestamp, url).
 2. **Gmail** — Sends you an email with the feedback (you add your Gmail credential and set the "To" address).
-3. **HTTP Request** — POSTs the same payload to your app's callback so feedback is stored in Supabase (`/api/webhooks/n8n/feedback`).
+3. **HTTP Request** — POSTs the same payload to your app's callback so feedback is stored in Neon / the local app store (`/api/webhooks/n8n/feedback`).
 4. **Respond to Webhook** — Returns `{ "received": true }` to the app.
 
 Optional later: add an AI Agent node between Webhook and Gmail to analyze sentiment/category and include that in the callback body.

@@ -83,6 +83,7 @@ function entryFromClassification(
     displayTitle: enrichment.displayTitle,
     namingConfidence: enrichment.namingConfidence,
     approved: 'pending',
+    reviewNotes: null,
     inventoryPolicy,
     errorMessage,
     processedAtIso: new Date().toISOString(),

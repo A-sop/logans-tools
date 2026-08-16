@@ -51,13 +51,13 @@ Save: original file reference, extracted text, detected language, model output (
 
 ## 5. Persistence (Required for This Lesson)
 
-**Database:** Supabase (pre-login; proper auth later).
+**Database:** Neon Postgres via `DATABASE_URL` (pre-login; proper auth later). Legacy Supabase notes are historical — do not provision Supabase for new work (A-188, 2026-08-16).
 
-- **Server-only DB access** — Call Supabase from Server Actions/API routes using a **service role key** in `.env.local` (never from the client).
+- **Server-only DB access** — Call Neon from Server Actions/API routes using `DATABASE_URL` in `.env.local` (never from the client).
 - **Session identifier:** Generate a random `session_id` (uuid) and store it in an `httpOnly` cookie. Use it on the server to read/write that session’s rows. Don’t expose the key publicly.
-- **No public client yet** — Avoid client-side Supabase calls pre-auth; keep all access on the server to prevent data leaks.
+- **No public client yet** — Avoid client-side DB calls pre-auth; keep all access on the server to prevent data leaks.
 
-**Docs:** [Supabase Next.js Quickstart](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs) · Auth overview (for later) · Security basics
+**Docs:** Neon serverless driver · Clerk server-side `userId` scoping · Security basics
 
 ### Tables (Minimum)
 
