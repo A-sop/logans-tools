@@ -51,23 +51,12 @@ const apiKey = process.env.OPENAI_API_KEY;
 
 ## Current integrations (continued)
 
-### Supabase
+### Neon Postgres
 
-- **Used for:** Document Intake persistence (uploads, task_suggestions). Pre-login session storage.
-- **Env keys (server):** `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
-- **Env keys (client):** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (optional; for Auth/Realtime)
-- **Server client:** `src/lib/supabase-server.ts` — `createSupabaseAdmin()` — use in Server Actions, API routes
-- **Browser client:** `src/lib/supabase-client.ts` — `createSupabaseBrowserClient()` — use in Client Components when needed
-- **Where used:** `src/app/workspace/supabase-actions.ts` (server), Dev test page
-- **Test:** Workspace → Developer tools → Dev test page → "Test Supabase"
-- **Setup guide:** [supabase-setup.md](./supabase-setup.md)
-
-**Security:**
-- **Service role key** → Server only. Never expose. Bypasses RLS.
-- **Publishable key** → Safe for browser. Respects RLS. Use for Auth, Realtime, user-scoped data.
-- **Current usage:** Server-only for DB. Add `NEXT_PUBLIC_*` vars when adding client-side Auth/Realtime.
-
----
+- **Used for:** Online Postgres for logans-tools / DABOS / GFP product paths (`DATABASE_URL`, optional `DATABASE_URL_UNPOOLED`).
+- **Status:** Sole cloud Postgres after A-188. Supabase projects deleted 2026-08-16.
+- **Handoff:** `DABOS/docs/reference/dept11-engineering/supabase-offboard-2026-08-16.md`
+- **Pattern:** server-side only; scope by Clerk `userId` in Server Actions / route handlers.
 
 ### n8n (workflows)
 
@@ -131,20 +120,15 @@ const apiKey = process.env.OPENAI_API_KEY;
 .env.example              — Template: which env vars exist (no secrets)
 .env.local                — Your actual keys (never commit; create from .env.example)
 src/docs/INTEGRATIONS.md  — This file: setup guide and integration list
-src/docs/supabase-setup.md — Supabase project creation, keys, and verification
 src/docs/n8n-setup.md    — n8n workflow setup guide (lesson 5.2)
 src/docs/mobile-responsive-testing.md — Mobile responsive testing guide (lesson 5.3)
 src/docs/mobile-responsive-checklist.md — Quick testing checklist (lesson 5.3)
 src/docs/webhook-security.md — Webhook security guide (lesson 5.5)
 src/docs/payment-security.md — Payment security checklist (Clerk Billing, feature gates)
 src/lib/openai.ts         — OpenAI client (server-only)
-src/lib/supabase-server.ts — Supabase admin client (server-only)
-src/lib/supabase-client.ts — Supabase browser client (client components; needs NEXT_PUBLIC_*)
 src/lib/schemas/feedback.ts — Feedback schemas (form data + structured analysis types)
 src/app/actions/feedback.ts — submitFeedback() server action (sends to n8n)
 src/app/api/webhooks/n8n/feedback/route.ts — Webhook endpoint (receives from n8n)
-src/app/workspace/supabase-actions.ts — testSupabaseConnection() server action
-supabase/migrations/20260206000000_feedback_table.sql — Feedback table migration
 src/app/workspace/actions.ts — testOpenAI() server action
 src/app/workspace/api-test-card.tsx — UI to trigger API test (Workspace page, bottom)
 src/components/feedback-modal.tsx — Feedback form component (lesson 5.1)
