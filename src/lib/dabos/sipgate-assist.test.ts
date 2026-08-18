@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   cleanSipgateWatermark,
+  isSipgateAssistProbeBody,
   normalizeSipgateAssistPayload,
   payloadHasTranscript,
+  sipgateAssistPathToken,
   sipgateIpAllowed,
   stripTranscriptFields,
 } from '@/lib/dabos/sipgate-assist';
@@ -75,6 +77,14 @@ describe('helpers', () => {
     expect(sipgateIpAllowed('217.116.118.254', 'production')).toBe(true);
     expect(sipgateIpAllowed('1.2.3.4', 'production')).toBe(false);
     expect(sipgateIpAllowed('1.2.3.4', 'development')).toBe(true);
+  });
+
+  it('reads path token and treats empty POST as a save probe', () => {
+    expect(sipgateAssistPathToken('/api/dabos/sipgate/assist/abc123')).toBe('abc123');
+    expect(sipgateAssistPathToken('/api/dabos/sipgate/assist')).toBeNull();
+    expect(isSipgateAssistProbeBody('')).toBe(true);
+    expect(isSipgateAssistProbeBody('{}')).toBe(true);
+    expect(isSipgateAssistProbeBody('{"call":{}}')).toBe(false);
   });
 });
 

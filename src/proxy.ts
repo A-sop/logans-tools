@@ -81,9 +81,10 @@ function isDabosIngestPath(pathname: string): boolean {
   return pathname === '/api/dabos/ingest' || pathname.startsWith('/api/dabos/ingest/');
 }
 
-function isDabosSipgateWebhookPost(request: NextRequest): boolean {
+/** Labs may GET/HEAD-probe the URL on Speichern; Clerk must not intercept. */
+function isDabosSipgateWebhookPath(pathname: string): boolean {
   return (
-    request.method === 'POST' && request.nextUrl.pathname === '/api/dabos/sipgate/assist'
+    pathname === '/api/dabos/sipgate/assist' || pathname.startsWith('/api/dabos/sipgate/assist/')
   );
 }
 
@@ -101,7 +102,7 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isDabosTier0Path(pathname)) return false;
   if (isDabosSlackPath(pathname)) return false;
   if (isDabosIngestPath(pathname)) return false;
-  if (isDabosSipgateWebhookPost(request)) return false;
+  if (isDabosSipgateWebhookPath(pathname)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;

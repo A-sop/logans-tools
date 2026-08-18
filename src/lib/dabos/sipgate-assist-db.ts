@@ -83,16 +83,25 @@ export async function pruneExpiredSipgateAssistEvents(): Promise<void> {
 
 export async function listSipgateAssistEvents(limit = 50): Promise<SipgateAssistRow[]> {
   const sql = getDabosSql();
-  const rows = await sql`
-    SELECT
-      id, received_at, consumed_at, call_id, direction, remote_number, local_number,
-      channel_name, started_at, duration_seconds, headline, summary, action_items,
-      has_transcript
-    FROM sipgate_assist_events
-    ORDER BY received_at DESC
-    LIMIT ${limit}
-  `;
-  return rows as SipgateAssistRow[];
+  try {
+    const rows = await sql`
+      SELECT
+        id, received_at, consumed_at, call_id, direction, remote_number, local_number,
+        channel_name, started_at, duration_seconds, headline, summary, action_items,
+        has_transcript
+      FROM sipgate_assist_events
+      ORDER BY received_at DESC
+      LIMIT ${limit}
+    `;
+    return rows as SipgateAssistRow[];
+  } catch (err) {
+    const code = err && typeof err === 'object' && 'code' in err ? String(err.code) : '';
+    if (code === '42P01') {
+      console.error('sipgate_assist_events missing — run npm run dabos:migrate');
+      return [];
+    }
+    throw err;
+  }
 }
 
 export async function markSipgateAssistConsumed(

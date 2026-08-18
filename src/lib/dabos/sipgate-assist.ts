@@ -215,6 +215,31 @@ export function sipgateWebhookSecret(): string | null {
   return secret && secret.length > 0 ? secret : null;
 }
 
+/** Path token: /api/dabos/sipgate/assist/<secret> — Labs URL field often rejects ?k=. */
+export function sipgateAssistPathToken(pathname: string): string | null {
+  const parts = pathname.split('/').filter(Boolean);
+  if (
+    parts.length !== 5 ||
+    parts[0] !== 'api' ||
+    parts[1] !== 'dabos' ||
+    parts[2] !== 'sipgate' ||
+    parts[3] !== 'assist'
+  ) {
+    return null;
+  }
+  try {
+    const token = decodeURIComponent(parts[4] ?? '').trim();
+    return token || null;
+  } catch {
+    return null;
+  }
+}
+
+export function isSipgateAssistProbeBody(text: string): boolean {
+  const trimmed = text.trim();
+  return trimmed.length === 0 || trimmed === '{}' || trimmed === 'null';
+}
+
 export function providedSipgateSecret(request: Request, url: URL): string | null {
   const header =
     request.headers.get('x-sipgate-webhook-secret')?.trim() ||
@@ -222,7 +247,8 @@ export function providedSipgateSecret(request: Request, url: URL): string | null
     '';
   if (header) return header;
   const query = url.searchParams.get('k')?.trim();
-  return query || null;
+  if (query) return query;
+  return sipgateAssistPathToken(url.pathname);
 }
 
 export function storeTranscriptEnabled(): boolean {

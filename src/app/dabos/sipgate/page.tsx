@@ -24,7 +24,14 @@ export default async function SipgateAssistInboxPage() {
     );
   }
 
-  const events = await listSipgateAssistEvents(80);
+  let events: Awaited<ReturnType<typeof listSipgateAssistEvents>> = [];
+  let listError: string | null = null;
+  try {
+    events = await listSipgateAssistEvents(80);
+  } catch (err) {
+    console.error('sipgate assist list failed', err);
+    listError = 'Mailbox table is missing or the database is unreachable. Reload after migrate.';
+  }
   const pending = events.filter((row) => !row.consumed_at);
 
   return (
@@ -37,13 +44,20 @@ export default async function SipgateAssistInboxPage() {
         </p>
       </div>
 
-      {events.length === 0 ? (
+      {listError ? (
+        <Card className="border-dashed">
+          <CardHeader>
+            <CardTitle>Mailbox unavailable</CardTitle>
+            <CardDescription>{listError}</CardDescription>
+          </CardHeader>
+        </Card>
+      ) : events.length === 0 ? (
         <Card>
           <CardHeader>
             <CardTitle>No events yet</CardTitle>
             <CardDescription>
-              Paste the webhook URL with <code>?k=</code> into sipgate Labs → AI Assist Webhooks,
-              then make a shared-channel test call.
+              Paste the webhook URL (path token, no <code>?k=</code>) into sipgate Desktop Labs →
+              AI Assist Webhook, format JSON, then make a shared-channel test call.
             </CardDescription>
           </CardHeader>
         </Card>
