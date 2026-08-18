@@ -3,13 +3,18 @@ import Link from 'next/link';
 import { StatCutoffCountdown } from '@/components/dabos/stat-cutoff-countdown';
 import { UserButton } from '@clerk/nextjs';
 import type { DabosShellData } from '@/lib/dabos/server-data';
-import { cn } from '@/lib/utils';
 
 import { ActivityBadge } from './condition-badge';
 
 type DabosChromeProps = {
   shell: DabosShellData | null;
 };
+
+/** Cloud DABOS surfaces (Neon). Local-office pages (Status, Triage, DIL, Debt) stay at their URLs. */
+const DABOS_CHROME_LINKS = [
+  { href: '/dabos', label: 'Board' },
+  { href: '/dabos/open', label: 'Open' },
+] as const;
 
 function formatLastRun(iso: string | null): string {
   if (!iso) return 'never';
@@ -56,42 +61,15 @@ export function DabosChrome({ shell }: DabosChromeProps) {
         )}
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-2 self-end sm:self-start">
-        <Link
-          href="/dabos"
-          className={cn('text-sm font-medium text-muted-foreground hover:text-foreground')}
-        >
-          Board
-        </Link>
-        <Link
-          href="/dabos/open"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          Open
-        </Link>
-        <Link
-          href="/dabos/status"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          Status
-        </Link>
-        <Link
-          href="/dabos/triage"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          Triage
-        </Link>
-        <Link
-          href="/dabos/dil/review"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          DIL
-        </Link>
-        <Link
-          href="/dabos/debt"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          Debt
-        </Link>
+        {DABOS_CHROME_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            {link.label}
+          </Link>
+        ))}
         <UserButton />
       </div>
     </header>
