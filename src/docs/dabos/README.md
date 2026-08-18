@@ -74,6 +74,7 @@ Cross-project scan of founder-desk **OPEN-CHAT-BACKLOG** + **SHIP-BOARD** (not t
 | Channel | Where | Runbook |
 |---------|-------|---------|
 | **Slack** (primary target) | Vercel `/api/dabos/slack/events` + `/commands` | [Atlas/docs/admin/dabos-slack-gateway.md](../../../../Atlas/docs/admin/dabos-slack-gateway.md) |
+| **sipgate Assist** | `POST /api/dabos/sipgate/assist` · inbox `/dabos/sipgate` | `Proviso/docs/reference/sipgate-webhook-relay.md` |
 | **Telegram Inbox** | ln02 `dabos-telegram-capture` | [dabos-telegram-capture.md](../../../../Atlas/docs/admin/dabos-telegram-capture.md) |
 | **Telegram Comm** | ln02 `dabos-telegram-exec` → Tier 0 API | [dabos-telegram-exec.md](../../../../Atlas/docs/admin/dabos-telegram-exec.md) |
 

@@ -81,6 +81,12 @@ function isDabosIngestPath(pathname: string): boolean {
   return pathname === '/api/dabos/ingest' || pathname.startsWith('/api/dabos/ingest/');
 }
 
+function isDabosSipgateWebhookPost(request: NextRequest): boolean {
+  return (
+    request.method === 'POST' && request.nextUrl.pathname === '/api/dabos/sipgate/assist'
+  );
+}
+
 function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isAuthPublicRoute(request)) return false;
 
@@ -95,6 +101,7 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isDabosTier0Path(pathname)) return false;
   if (isDabosSlackPath(pathname)) return false;
   if (isDabosIngestPath(pathname)) return false;
+  if (isDabosSipgateWebhookPost(request)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;
