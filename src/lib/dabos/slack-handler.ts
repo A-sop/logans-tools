@@ -1,5 +1,6 @@
 import { requireDabosDb } from '@/lib/dabos/api-utils';
 import { getDabosSql } from '@/lib/dabos/db';
+import { ingestCapture } from '@/lib/dabos/ingest';
 import { slackPostMessage } from '@/lib/dabos/slack-client';
 import {
   executeTier0Command,
@@ -20,7 +21,14 @@ type SlackMessageEvent = {
   channel?: string;
   channel_type?: string;
   bot_id?: string;
+  ts?: string;
+  client_msg_id?: string;
 };
+
+function extractUrls(text: string): string[] {
+  const re = /https?:\/\/[^\s<>"')\]]+/gi;
+  return [...new Set((text.match(re) || []).map((u) => u.replace(/[.,;:!?)]+$/, '')))];
+}
 
 export async function handleSlackMessageEvent(event: SlackMessageEvent): Promise<void> {
   if (event.type !== 'message') return;
@@ -46,10 +54,26 @@ export async function handleSlackMessageEvent(event: SlackMessageEvent): Promise
       commandText = text;
     }
   } else {
-    await slackPostMessage(
-      event.channel,
-      'Exec line: commands only. Use `/dabos help` or DM `/stats`. Capture stays on Telegram Inbox for now.'
-    );
+    // I0 mouth: free-text → shared ingest (Neon despatch)
+    try {
+      if (!requireDabosDb()) {
+        await slackPostMessage(event.channel, 'Database not configured.');
+        return;
+      }
+      const external_id = `slack:${event.channel}:${event.client_msg_id || event.ts || Date.now()}`;
+      const result = await ingestCapture(getDabosSql(), {
+        mouth: 'slack',
+        external_id,
+        text,
+        urls: extractUrls(text),
+      });
+      await slackPostMessage(event.channel, result.ack);
+    } catch (err) {
+      await slackPostMessage(
+        event.channel,
+        `Ingest failed: ${err instanceof Error ? err.message : String(err)}`
+      );
+    }
     return;
   }
 

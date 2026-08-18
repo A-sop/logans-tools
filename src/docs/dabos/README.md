@@ -33,6 +33,16 @@
 
 5. Open **`https://dabos.logans.tools`** (production) or **`http://localhost:3001/dabos`** locally — no Logans.Tools header on DABOS routes.
 
+## Shared ingest (I0)
+
+Parallel mouths → one Neon throat (ESTO flap §F).
+
+- **API:** `POST /api/dabos/ingest` (Tier0 Bearer / cron / Clerk)
+- **Doc:** `DABOS/docs/reference/dept02-coordination/shared-ingest-i0.md`
+- **Telegram:** ln02 capture dual-writes when `DABOS_INGEST_URL` + `DABOS_TIER0_SECRET` set
+- **Slack:** free-text in allowed DM/channel → same ingest (commands still `/dabos`)
+- **Buzz:** same POST body when bot exists
+
 ## Open loops dashboard
 
 Cross-project scan of founder-desk **OPEN-CHAT-BACKLOG** + **SHIP-BOARD** (not the Neon task board).

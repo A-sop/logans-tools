@@ -76,6 +76,11 @@ function isDabosSlackPath(pathname: string): boolean {
   return pathname.startsWith('/api/dabos/slack/');
 }
 
+/** Shared ingest throat (I0) — mouths auth with Tier0/cron Bearer, not Clerk. */
+function isDabosIngestPath(pathname: string): boolean {
+  return pathname === '/api/dabos/ingest' || pathname.startsWith('/api/dabos/ingest/');
+}
+
 function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isAuthPublicRoute(request)) return false;
 
@@ -89,6 +94,7 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isDabosCronPath(pathname)) return false;
   if (isDabosTier0Path(pathname)) return false;
   if (isDabosSlackPath(pathname)) return false;
+  if (isDabosIngestPath(pathname)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;
