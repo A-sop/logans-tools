@@ -7,6 +7,8 @@ import { dabosConfigured, fetchArtifact, fetchTask } from '@/lib/dabos/server-da
 
 type PageProps = { params: Promise<{ id: string }> };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ArtifactPage({ params }: PageProps) {
   if (!dabosConfigured()) notFound();
 

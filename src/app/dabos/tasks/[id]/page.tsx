@@ -9,6 +9,8 @@ import { dabosConfigured, fetchTask } from '@/lib/dabos/server-data';
 
 type PageProps = { params: Promise<{ id: string }> };
 
+export const dynamic = 'force-dynamic';
+
 export default async function TaskPage({ params }: PageProps) {
   if (!dabosConfigured()) notFound();
 

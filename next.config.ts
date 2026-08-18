@@ -44,6 +44,18 @@ const nextConfig: NextConfig = {
       ],
     };
   },
+  async headers() {
+    const noStore = [
+      { key: 'Cache-Control', value: 'private, no-store, max-age=0, must-revalidate' },
+      { key: 'CDN-Cache-Control', value: 'private, no-store' },
+      { key: 'Vercel-CDN-Cache-Control', value: 'no-store' },
+    ];
+    return [
+      { source: '/dabos/:path*', headers: noStore },
+      { source: '/tasks/:path*', has: dabosHost, headers: noStore },
+      { source: '/artifacts/:path*', has: dabosHost, headers: noStore },
+    ];
+  },
 };
 
 export default nextConfig;

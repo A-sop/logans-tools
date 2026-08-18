@@ -34,13 +34,14 @@ export type IngestResult = {
 };
 
 const DEPT_RE = /^(?:dept:|#)?(Dept\d{1,2})\b[:\s-]*/i;
-const TASK_PREFIX_RE = /^(?:task|despatch|dispatch)\s*:\s*/i;
+const TASK_PREFIX_RE = /^(?:task|despatch|dispatch|agent)\s*:\s*/i;
 
 export function parseIngestText(raw: string): {
   title: string;
   body: string;
   department_id: string | null;
   is_work: boolean;
+  is_agent: boolean;
 } {
   let text = raw.trim();
   let is_work = false;
@@ -60,7 +61,7 @@ export function parseIngestText(raw: string): {
   const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   const title = (lines[0] || 'Capture').slice(0, 200);
   const body = text || '(empty)';
-  return { title, body, department_id, is_work };
+  return { title, body, department_id, is_work, is_agent: is_work };
 }
 
 export function formatIngestAck(opts: {
@@ -164,9 +165,13 @@ export async function ingestCapture(
     wiki_bundle: input.wiki_bundle ?? null,
     captured_at: input.captured_at ?? new Date().toISOString(),
     is_work: parsed.is_work,
+    is_agent: parsed.is_agent,
   };
 
   const priority = Math.min(5, Math.max(1, input.priority ?? (parsed.is_work ? 2 : 3)));
+  const taskType = parsed.is_agent ? 'agent' : 'human';
+  const assignedTo = parsed.is_agent ? null : 'founder';
+  const assignedAgent = parsed.is_agent ? 'research' : null;
 
   const rows = await sql`
     INSERT INTO tasks (
@@ -179,6 +184,7 @@ export async function ingestCapture(
       status,
       priority,
       assigned_to,
+      assigned_agent,
       basket,
       ingest_source,
       ingest_external_id,
@@ -189,10 +195,11 @@ export async function ingestCapture(
       ${department_id},
       ${parsed.title},
       ${description},
-      ${'human'},
+      ${taskType},
       ${'todo'},
       ${priority},
-      ${'founder'},
+      ${assignedTo},
+      ${assignedAgent},
       ${'in'},
       ${input.mouth},
       ${external_id},

@@ -88,6 +88,14 @@ function isDabosSipgateWebhookPath(pathname: string): boolean {
   );
 }
 
+function withDabosPrivateCache(res: NextResponse, request: NextRequest): NextResponse {
+  if (!isDabosProtectedRequest(request)) return res;
+  res.headers.set('Cache-Control', 'private, no-store, max-age=0, must-revalidate');
+  res.headers.set('CDN-Cache-Control', 'private, no-store');
+  res.headers.set('Vercel-CDN-Cache-Control', 'no-store');
+  return res;
+}
+
 function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isAuthPublicRoute(request)) return false;
 
@@ -268,15 +276,29 @@ function runAppProxy(request: NextRequest): NextResponse {
     });
   }
 
-  return response;
+  return withDabosPrivateCache(response, request);
 }
 
 export default clerkMiddleware(async (auth, request) => {
   if (isDabosProtectedRequest(request)) {
-    await auth.protect();
-
     const { userId } = await auth();
-    if (userId && !(await isDabosEmailAllowlisted(userId))) {
+    if (!userId) {
+      if (request.nextUrl.pathname.startsWith('/api/dabos')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      const url = request.nextUrl.clone();
+      const returnTo = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+      url.pathname = '/sign-in';
+      url.search = '';
+      url.searchParams.set('redirect_url', returnTo);
+      const res = NextResponse.redirect(url);
+      res.headers.set('Cache-Control', 'private, no-store, max-age=0');
+      res.headers.set('CDN-Cache-Control', 'private, no-store');
+      res.headers.set('Vercel-CDN-Cache-Control', 'no-store');
+      return res;
+    }
+
+    if (!(await isDabosEmailAllowlisted(userId))) {
       if (request.nextUrl.pathname.startsWith('/api/dabos')) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }

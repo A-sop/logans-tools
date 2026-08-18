@@ -26,6 +26,13 @@ export function dabosConfigured() {
   return hasDabosDb();
 }
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function isUuid(id: string): boolean {
+  return UUID_RE.test(id);
+}
+
 export type DabosShellData = {
   cutoff: StatCutoffSnapshot;
   role_runs: { role_id: string; ran_at: string }[];
@@ -416,40 +423,50 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
 }
 
 export async function fetchTask(id: string) {
-  const sql = getDabosSql();
-  const tasks = await sql`SELECT * FROM tasks WHERE id = ${id}::uuid`;
-  const task = tasks[0];
-  if (!task) return null;
+  if (!isUuid(id)) return null;
+  try {
+    const sql = getDabosSql();
+    const tasks = await sql`SELECT * FROM tasks WHERE id = ${id}::uuid`;
+    const task = tasks[0];
+    if (!task) return null;
 
-  const artifacts = await sql`
-    SELECT id, type, summary, created_by, created_at
-    FROM artifacts WHERE task_id = ${id}::uuid ORDER BY created_at DESC
-  `;
-
-  const costEvents = await sql`
-    SELECT id, agent_name, provider, tokens_input, tokens_output, cost_eur, created_at
-    FROM cost_events WHERE task_id = ${id}::uuid ORDER BY created_at DESC
-  `;
-
-  const divisionRows = await sql`
-    SELECT operational_name FROM divisions WHERE id = ${task.division_id as string}
-  `;
-
-  let department = null;
-  if (task.department_id) {
-    const deptRows = await sql`
-      SELECT legacy_name, operational_name FROM departments WHERE id = ${task.department_id as string}
+    const artifacts = await sql`
+      SELECT id, type, summary, created_by, created_at
+      FROM artifacts WHERE task_id = ${id}::uuid ORDER BY created_at DESC
     `;
-    department = deptRows[0] ?? null;
-  }
 
-  return { task, artifacts, cost_events: costEvents, division: divisionRows[0], department };
+    const costEvents = await sql`
+      SELECT id, agent_name, provider, tokens_input, tokens_output, cost_eur, created_at
+      FROM cost_events WHERE task_id = ${id}::uuid ORDER BY created_at DESC
+    `;
+
+    const divisionRows = await sql`
+      SELECT operational_name FROM divisions WHERE id = ${task.division_id as string}
+    `;
+
+    let department = null;
+    if (task.department_id) {
+      const deptRows = await sql`
+        SELECT legacy_name, operational_name FROM departments WHERE id = ${task.department_id as string}
+      `;
+      department = deptRows[0] ?? null;
+    }
+
+    return { task, artifacts, cost_events: costEvents, division: divisionRows[0], department };
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchArtifact(id: string) {
-  const sql = getDabosSql();
-  const rows = await sql`SELECT * FROM artifacts WHERE id = ${id}::uuid`;
-  return rows[0] ?? null;
+  if (!isUuid(id)) return null;
+  try {
+    const sql = getDabosSql();
+    const rows = await sql`SELECT * FROM artifacts WHERE id = ${id}::uuid`;
+    return rows[0] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchDepartmentsForSelect() {
