@@ -78,7 +78,9 @@ export default async function SipgateAssistInboxPage() {
                       ))}
                     </ul>
                   ) : null}
-                  <form action={setSipgateAssistConsumed.bind(null, row.id, !row.consumed_at)}>
+                  <form action={setSipgateAssistConsumed}>
+                    <input type="hidden" name="id" value={row.id} />
+                    <input type="hidden" name="consumed" value={row.consumed_at ? '0' : '1'} />
                     <button
                       type="submit"
                       className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
