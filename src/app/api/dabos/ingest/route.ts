@@ -22,7 +22,8 @@ const bodySchema = z.object({
 });
 
 /**
- * Shared ingest throat — mouths POST here (Tier0 / cron / Clerk).
+ * Shared ingest — INs POST here (Tier0 / cron / Clerk).
+ * Wire field `mouth` = which IN.
  * POST /api/dabos/ingest
  */
 export async function POST(request: Request) {

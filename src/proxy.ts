@@ -76,7 +76,7 @@ function isDabosSlackPath(pathname: string): boolean {
   return pathname.startsWith('/api/dabos/slack/');
 }
 
-/** Shared ingest throat (I0) — mouths auth with Tier0/cron Bearer, not Clerk. */
+/** Shared ingest (I0) — INs auth with Tier0/cron Bearer, not Clerk. */
 function isDabosIngestPath(pathname: string): boolean {
   return pathname === '/api/dabos/ingest' || pathname.startsWith('/api/dabos/ingest/');
 }

@@ -35,7 +35,7 @@
 
 ## Shared ingest (I0)
 
-Parallel mouths → one Neon throat (ESTO flap §F).
+Parallel IN-baskets → one Neon comm center (ESTO flap §F).
 
 - **API:** `POST /api/dabos/ingest` (Tier0 Bearer / cron / Clerk)
 - **Doc:** `DABOS/docs/reference/dept02-coordination/shared-ingest-i0.md`

@@ -1,10 +1,11 @@
 /**
- * Shared ingest (I0) — parallel mouths → one Neon despatch throat.
+ * Shared ingest (I0) — parallel IN-baskets → one Neon comm center.
  * ESTO flap §F: Telegram / Slack / Buzz call the same shape.
+ * Wire field `mouth` = which IN (do not teach as org anatomy).
  */
 import type { Sql } from '@/lib/dabos/db';
 
-export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api';
+export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api'; // wire: which IN
 
 export type IngestBasket = 'in' | 'pending' | 'out';
 
@@ -152,7 +153,7 @@ export async function ingestCapture(
       ? `\nAttachments:\n${attachments.map((a) => `- ${a}`).join('\n')}`
       : '',
     input.wiki_bundle ? `\nWiki bundle: ${input.wiki_bundle}` : '',
-    `\nMouth: ${input.mouth} · ${external_id}`,
+    `\nIN: ${input.mouth} · ${external_id}`,
   ]
     .filter(Boolean)
     .join('');

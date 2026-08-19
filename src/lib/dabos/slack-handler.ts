@@ -54,7 +54,7 @@ export async function handleSlackMessageEvent(event: SlackMessageEvent): Promise
       commandText = text;
     }
   } else {
-    // I0 mouth: free-text → shared ingest (Neon despatch)
+    // I0 IN: free-text → shared ingest (Neon comm center)
     try {
       if (!requireDabosDb()) {
         await slackPostMessage(event.channel, 'Database not configured.');
