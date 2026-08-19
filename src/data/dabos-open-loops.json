@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-15T22:19:58.964Z",
+  "generated_at": "2026-08-19T12:49:01.930Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 6,
-    "open": 14,
+    "hot": 8,
+    "open": 15,
     "ship": 16,
-    "still_open": 20,
+    "still_open": 23,
     "closed": 40,
-    "total": 36,
+    "total": 39,
     "by_segment": {
       "treasury": 2,
-      "assets": 7,
+      "assets": 10,
       "mail": 3,
       "esto": 3,
       "gfp": 3,
@@ -34,7 +34,7 @@
       "Dept6": 3,
       "Dept7": 0,
       "Dept8": 2,
-      "Dept9": 7,
+      "Dept9": 10,
       "Dept10": 0,
       "Dept11": 2,
       "Dept12": 0,
@@ -51,9 +51,9 @@
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-08-09",
-    "closed": 3,
-    "still_open": 7,
+    "since": "2026-08-13",
+    "closed": 1,
+    "still_open": 9,
     "by_dept": {
       "Dept1": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 2
+        "still_open": 1
       },
       "Dept9": {
-        "closed": 3,
-        "still_open": 4
+        "closed": 1,
+        "still_open": 7
       },
       "Dept10": {
         "closed": 0,
@@ -185,7 +185,7 @@
   "hot": [
     {
       "id": "260814_gnucash-ssot-imbalance-clear",
-      "why": "In progress (founder 2026-08-15)",
+      "why": "In progress — dry-runs 2021–2026 clear; apply blocked Belege 2020; GnuCash SSOT (not Firefly)",
       "canonical": "DATA !_FINANCE-TRACKER/handoff-gnucash-ssot-imbalance-2026-08-14.md",
       "resume": "GnuCash SSOT",
       "heat": "hot",
@@ -205,9 +205,19 @@
     },
     {
       "id": "260813_reza-off-hzr-cutover",
-      "why": "Surface has tree; Docker engine not running; Paperless-Reza still on HZR",
+      "why": "Surface cupboard live. Christina → A-sop@ now, Reza tailnet later (founder 2026-08-19). Mail still a human talk",
       "canonical": "dept09-assets/handover-reza-surface-cutover-2026-08-13.md",
-      "resume": "Reza Surface cutover / start Paperless on Surface",
+      "resume": "Christina Tailscale",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260819_logan-surface-cursor",
+      "why": "Logan abroad: Cursor lifestack on Surface via separate Windows user — do not take the cupboard box",
+      "canonical": "dept09-assets/reza-surface-cupboard-always-on-2026-08-13.md",
+      "resume": "Logan Surface user",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -242,6 +252,16 @@
       "source": "chat-backlog",
       "segment": "mail",
       "dept": "Dept1"
+    },
+    {
+      "id": "260818_vb-shop-brief-hzr52",
+      "why": "After official Gewerbemeldung HZR 52 (RA+LW), regenerate VB-Shop letter templates",
+      "canonical": "Dropbox BUERO-HZR\\!_Protokoll.md · parked Blankos\\Briefköpfe und Logos\\HOLD-alte-Anschrift_VB-Shop_.docx",
+      "resume": "VB-Shop Briefe / Gewerbemeldung HZR 52",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     }
   ],
   "open": [
@@ -250,6 +270,16 @@
       "why": "Daily use done — Bitwarden app → self-hosted Vaultwarden on ln02. Tailscale must be on the device; accepted. Temp master file gone.",
       "canonical": "docs/reference/dept09-assets/handover-vaultwarden-ln02-2026-08-14.md",
       "resume": "“Zoho Vault import”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260818_reza-02-downloads-sludge",
+      "why": "reza-02 has no Dropbox (on purpose). Downloads is a ~4.9k-file landfill that needs a real sort later — not a backup set, not a second Akte. OneDrive home is done (2026-08-18 evening): folder redirected, Surface canonical has the files, rclone Downloads pull for reza-02 is off.",
+      "canonical": "docs/reference/dept09-assets/reza-interim-two-copy-backup-2026-08-16.md § Parked: reza-02 Downloads sludge",
+      "resume": "“reza-02 Downloads” / “Paperless-Reza Downloads”",
       "heat": "open",
       "source": "chat-backlog",
       "segment": "assets",
@@ -267,10 +297,10 @@
     },
     {
       "id": "260807_gfp-migrate-to-neon",
-      "why": "DONE 2026-08-16 A-188: GFP + logans-tools runtime off Supabase; Neon sole online Postgres; supabase/ archived; Vercel SUPABASE_* removed on GFP; local SUPABASE_* commented.",
-      "canonical": "german-financial-planning/src/docs/migrate-to-neon.md · DABOS/docs/reference/dept11-engineering/supabase-offboard-2026-08-16.md",
-      "resume": "closed — see A-188 / supabase-offboard-2026-08-16",
-      "heat": "done",
+      "why": "Finish GFP data plane off Supabase → Neon (DATABASE_URL / GFP_DATABASE_URL). Campaign leads already on Neon; prospect schema docs + supabase/ migrations + env still Supabase-shaped.",
+      "canonical": "german-financial-planning/src/docs/migrate-to-neon.md · checklist pointer in gfp-stack-setup-checklist.md.",
+      "resume": "“GFP Neon migrate” / “offboard GFP Supabase” / “GABC Supabase freeze”",
+      "heat": "open",
       "source": "chat-backlog",
       "segment": "gfp",
       "dept": "Dept6"
