@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-08-19T12:49:01.930Z",
+  "generated_at": "2026-09-21T21:45:40.729Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 8,
-    "open": 15,
-    "ship": 16,
-    "still_open": 23,
+    "hot": 18,
+    "open": 22,
+    "ship": 20,
+    "still_open": 40,
     "closed": 40,
-    "total": 39,
+    "total": 60,
     "by_segment": {
-      "treasury": 2,
-      "assets": 10,
-      "mail": 3,
-      "esto": 3,
+      "treasury": 5,
+      "assets": 18,
+      "mail": 4,
+      "esto": 5,
       "gfp": 3,
       "consulting": 1,
       "legal": 1,
       "data": 2,
       "platform": 2,
-      "growth": 11,
-      "other": 1
+      "growth": 10,
+      "other": 9
     },
     "by_dept": {
-      "Dept1": 5,
+      "Dept1": 6,
       "Dept2": 0,
       "Dept3": 0,
-      "Dept4": 11,
+      "Dept4": 10,
       "Dept5": 0,
       "Dept6": 3,
       "Dept7": 0,
-      "Dept8": 2,
-      "Dept9": 10,
+      "Dept8": 5,
+      "Dept9": 18,
       "Dept10": 0,
       "Dept11": 2,
       "Dept12": 0,
@@ -45,19 +45,19 @@
       "Dept17": 0,
       "Dept18": 0,
       "Dept19": 0,
-      "Dept20": 3,
-      "Dept21": 3
+      "Dept20": 5,
+      "Dept21": 11
     }
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-08-13",
-    "closed": 1,
-    "still_open": 9,
+    "since": "2026-09-15",
+    "closed": 0,
+    "still_open": 2,
     "by_dept": {
       "Dept1": {
         "closed": 0,
-        "still_open": 0
+        "still_open": 1
       },
       "Dept2": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 0
       },
       "Dept9": {
-        "closed": 1,
-        "still_open": 7
+        "closed": 0,
+        "still_open": 1
       },
       "Dept10": {
         "closed": 0,
@@ -97,7 +97,7 @@
       },
       "Dept11": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 0
       },
       "Dept12": {
         "closed": 0,
@@ -184,10 +184,60 @@
   ],
   "hot": [
     {
+      "id": "260831_gfp-marketing-ae",
+      "why": "Corrected: production ~0; 750 then 401; Dec still fills Jan; Cal.com; lists census; no €60k×N.",
+      "canonical": "dept17-sales/handover-gfp-ae-liability-plan-2026-08-31.md",
+      "resume": "execute GFP AE from October",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "260831_provisional-tax-debt",
+      "why": "Dept8 aware. EÜR trusted→2025; model ~€16.9k Einzel; all-in ~€58k. Parked until GFP cash plan.",
+      "canonical": "dept08-ledger/handover-provisional-tax-debt-2026-08-31.md",
+      "resume": "provisional tax debt (later)",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260831_euer-2021-honesty",
+      "why": "HOT. Gap +€146 looks CLOSE but unmatched books €6,609 (172 Presentments) — fake CLOSE.",
+      "canonical": "dept08-ledger/handover-euer-books-ssot-year-align.md § paste 2021 only",
+      "resume": "2021 EÜR honesty",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260830_euer-pack-proofread",
+      "why": "2021 done. Next = 2022 pack proofread. Do not lock Gewinn.",
+      "canonical": "dept08-ledger/handover-euer-books-ssot-year-align.md",
+      "resume": "2022 pack proofread",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260819_outstanding-debts-hunt",
+      "why": "Openings posted 21 Aug. IHK personal €80 ARREARS. Tax remodel 31 Aug — wait filings + Stadt live. A5 later: pay PPV €74.91.",
+      "canonical": "DATA !_FINANCE-TRACKER/handoff-outstanding-debts-hunt-2026-08-19.md",
+      "resume": "pay PPV (later)",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
       "id": "260814_gnucash-ssot-imbalance-clear",
-      "why": "In progress — dry-runs 2021–2026 clear; apply blocked Belege 2020; GnuCash SSOT (not Firefly)",
+      "why": "2026 bank APPLY next. Parks locked: 2023 €140; 2024 pisp+€1; 2025 MMS. Dry-run ready. Binder until office.",
       "canonical": "DATA !_FINANCE-TRACKER/handoff-gnucash-ssot-imbalance-2026-08-14.md",
-      "resume": "GnuCash SSOT",
+      "resume": "2026 imbalance",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "treasury",
@@ -245,7 +295,7 @@
     },
     {
       "id": "260807_watch-grind-closeout",
-      "why": "Watch holds — after books/taxes",
+      "why": "Pointer only — mail SSOT is the bay, not this backlog",
       "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md",
       "resume": "continue Watch grind / triage INBOX",
       "heat": "hot",
@@ -262,6 +312,56 @@
       "source": "chat-backlog",
       "segment": "assets",
       "dept": "Dept9"
+    },
+    {
+      "id": "260821_mullvad-tailscale-split",
+      "why": "Laptop Mullvad full-tunnel blocks HZR→ldw TCP (ping OK). Need VPN on and Tailscale mesh. Handwritten loops not yet read.",
+      "canonical": "dept09-assets/ldw-ssh-from-hzr52.md · split-tunnel in ln02-remote-backup.md",
+      "resume": "Mullvad split tunnel / handwritten loops",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260828_beleg-2026-binder",
+      "why": "Active: 2026 Prompt F — ❌ 1 DHL Porto €6.19 · 📜 Generali €512.56. Do not lock Gewinn.",
+      "canonical": "!_TAXES-2026/DIGITAL-BELEG-GAP-2026.md",
+      "resume": "2026 binder / Prompt F 2026",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260920_ln02-tailscale-expiry-danger",
+      "why": "HOT. Dept9 Body Danger. Key path handled; EP = leave bypass + backup.",
+      "canonical": "danger-ln02-bypass-reorganize-2026-09-22.md · leave-prep-checklist-2026-09-22.md",
+      "resume": "dept9 danger bypass / leave prep",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260922_dept9-danger-leave-bypass",
+      "why": "HOT. Founder return: vault export, smart plug, backup verify, unpark. Agent: Funnel HZR failover. Away stack park script live.",
+      "canonical": "leave-prep-checklist-2026-09-22.md · A-320",
+      "resume": "leave prep checklist / ln02 away stack",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260922_reza-el-nido-leave-brief",
+      "why": "HOT next chat. Reza leave: hotels + tours decision brief from Logan WA. Draft v0 filed; founder fills done/now/later.",
+      "canonical": "project-plans/reza-el-nido-leave-brief-2026-10.md",
+      "resume": "Reza El Nido brief / Reza leave report",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     }
   ],
   "open": [
@@ -270,6 +370,16 @@
       "why": "Daily use done — Bitwarden app → self-hosted Vaultwarden on ln02. Tailscale must be on the device; accepted. Temp master file gone.",
       "canonical": "docs/reference/dept09-assets/handover-vaultwarden-ln02-2026-08-14.md",
       "resume": "“Zoho Vault import”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260819_acer-downloads-into-onedrive",
+      "why": "Still open 2026-08-21: Acer laptop-at0p33hr offline. Unique backup = Downloads only (Desktop/Docs/Pictures already KFM; Dropbox stays Dropbox). Copy staging !_REZA-AN-ONEDRIVE-BRINGEN\\Downloads into Reza OneDrive Downloads, then install Install-AcerDownloadsWakeTask.ps1 (logon + sleep-resume). Do not add Acer to Surface rclone.",
+      "canonical": "Dropbox BUERO-HZR\\03_Betrieb\\2026-08-19_Reza-Acer-OneDrive-Christina.md",
+      "resume": "Acer Downloads into Reza OneDrive",
       "heat": "open",
       "source": "chat-backlog",
       "segment": "assets",
@@ -406,6 +516,16 @@
       "dept": "Dept20"
     },
     {
+      "id": "260912_400fk-host-gift",
+      "why": "2026-09-12 (continue from 10 Sep handover).",
+      "canonical": "docs/reference/dept17-sales/handover-400fk-host-gift-2026-09-10.md",
+      "resume": "400 FK host-gift",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
       "id": "260815_dabos-proper-ci",
       "why": "No real DABOS / logans-tools CI yet. Only existing GH Action is weekly Concierge landing screenshot. Open-loops JSON is a manual npm run dabos:sync-open-loops + deploy snapshot.",
       "canonical": "",
@@ -414,9 +534,89 @@
       "source": "chat-backlog",
       "segment": "platform",
       "dept": "Dept11"
+    },
+    {
+      "id": "260826_schmeling-2022-scan",
+      "why": "Closed 2026-08-27. All three AT payments have BFBS invoices on disk (incl. Jun–Jul–Aug RE 29+34+39).",
+      "canonical": "!_TAXES-2022/DIGITAL-BELEG-GAP-2022.md",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260827_beleg-2023-binder",
+      "why": "Closed 2026-08-28 (Beleg hunt). ❌ → 0 after founder KA-only rulings (Lespeed/Wise €37.30, KRZ Gewerbemeldung €26, Uber trips €20.45). Still open mechanically: ~65 PDFs in _from-docs_consume_staging\\ to rename/file; AT review / Gewinn not locked per MISSING-GW-GBR-PRIVATE-2023.md.",
+      "canonical": "!_TAXES-2023/DIGITAL-BELEG-GAP-2023.md · Prompt F → 2025 (active 2026-08-28 evening).",
+      "resume": "2024 binder / Prompt F 2024",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260826_amazon-2024-relist",
+      "why": "Closed 2026-08-26 night. Founder split: 302-6852950-4887532 €19 ≈ Privat; 302-7844144-9725906 Jabra Ohrpolster €13.98 Gewerbe ✅ (240729_GW-xx-Betriebsausstattung_AMZN-Jabra-Evolve75-Ohrpolster_319794801.pdf); Gürtelschnalle €9.75 ≈ Privat (page 2 of portal export — not filed).",
+      "canonical": "!_TAXES-2024/DIGITAL-BELEG-GAP-2024.md",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260826_lespeed-2023-invoice",
+      "why": "Closed 2026-08-28. Founder: ≈ Kontoauszug OK — Wise Care / DRILespeed €37.30 (2023-03-11 N26); portal no longer yields 2023 invoice (provider → 2Checkout/WiseCleaner; 2025 BV92653429 only).",
+      "canonical": "!_TAXES-2023/DIGITAL-BELEG-GAP-2023.md ≈ section · prior refs: 210309_…Lespeed-DigitalRiver… (2021) · 240317_…Lespeed-WiseCar… (2024)",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260917_ldw-inbox-truth-collapse",
+      "why": "Why: INBOX triage 12–17 Sep was re-listing bills already on vendor/tax SSOTs (HANDOFF ACTION dump + 09-09 CF + this backlog).",
+      "canonical": "",
+      "resume": "triage INBOX / sipgate Watch",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
     }
   ],
   "ship": [
+    {
+      "id": "ship_dept9-danger-leave-bypass-hot",
+      "why": "founder return: vault export + smart plug + backup verify + unpark; agent: Funnel HZR failover — leave-prep-checklist-2026-09-22.md · resume leave prep checklist",
+      "canonical": "leave-prep-checklist-2026-09-22.md",
+      "resume": "Dept9 Danger leave bypass (HOT)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "ship_reza-el-nido-leave-brief-hot",
+      "why": "draft v0 from WA; founder updates next chat — reza-el-nido-leave-brief-2026-10.md · resume Reza El Nido brief",
+      "canonical": "reza-el-nido-leave-brief-2026-10.md",
+      "resume": "Reza El Nido leave brief (HOT)",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "ship_400-fk-host-gift",
+      "why": "Blatt print + Proviso/EWE first; do not open with bKV — handover-400fk-host-gift-2026-09-10.md · field card host-gift-field-card-2026-09-12.md · resume 400 FK host-gift",
+      "canonical": "handover-400fk-host-gift-2026-09-10.md",
+      "resume": "400 FK host-gift",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
     {
       "id": "ship_dabos-logans-tools-proper-ci",
       "why": "typecheck + build on PR; optional open-loops sync — backlog 260815_dabos-proper-ci · resume DABOS CI",
@@ -429,13 +629,13 @@
     },
     {
       "id": "ship_jono-roi-allfinanz-sheets-b2b-sales-learn",
-      "why": "OPEN desk ages · cf-pointers/2026-08-04-google-sheets-allfinanz-roi.md · 3 Sheets links",
-      "canonical": "cf-pointers/2026-08-04-google-sheets-allfinanz-roi.md",
+      "why": "OPEN until Logan scores the three Sheets in Google · person Akte C:\\DATA\\10_WORK\\LDW-GFP\\prospects\\Birkett-Jonothan\\!_Protokoll.md (cf-pointer file not on HZR52)",
+      "canonical": "_Protokoll.md",
       "resume": "Jono / ROI Allfinanz sheets (B2B sales learn)",
       "heat": "ship",
       "source": "ship-board",
-      "segment": "growth",
-      "dept": "Dept4"
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "ship_pirate-lab-recording-watch",
@@ -508,57 +708,67 @@
       "dept": "Dept4"
     },
     {
-      "id": "ship_t1_two-clock-bet-prompt-dabos-reference-fil",
-      "why": "Nate Learn artifact; thesis clock vs runway clock",
-      "canonical": "reference/swipe-file/260803_LDW_Learn_Nate-Jones_TwoClockPrompt.md",
-      "resume": "Two-clock bet prompt → DABOS reference file + run once on #1 live bet",
+      "id": "ship_t1_dept9-leave-bypass-ep",
+      "why": "End Danger; stop days-blocked abroad",
+      "canonical": "leave-prep-checklist-2026-09-22.md · 260922_dept9-danger-leave-bypass",
+      "resume": "Dept9 leave bypass EP",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "ship_t2_-two-clock-bet-prompt-done-2026-09-17",
+      "why": "Prompt + Proviso SL run filed",
+      "canonical": "two-clock-bet-prompt.md · LDW-Planung\\260917_LDW_Bet_Proviso-SL_TwoClock.md",
+      "resume": "~~Two-clock bet prompt~~ done 2026-09-17",
+      "heat": "ship",
+      "source": "ship-board",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
+    {
+      "id": "ship_t3_-insights-triage-json-done-2026-09-17",
+      "why": "lets-vibe-hackbase routed",
+      "canonical": "insights-triage/2026-08-04-lets-vibe-hackbase.json",
+      "resume": "~~Insights triage JSON~~ done 2026-09-17",
       "heat": "ship",
       "source": "ship-board",
       "segment": "growth",
       "dept": "Dept4"
     },
     {
-      "id": "ship_t2_insights-triage-json-for-lets-vibe-hackb",
-      "why": "Essay synced; route GFP/DABOS actions",
-      "canonical": "pirate-codex/insights/lets-vibe-hackbase.md",
-      "resume": "Insights triage JSON for lets-vibe-hackbase",
-      "heat": "ship",
-      "source": "ship-board",
-      "segment": "gfp",
-      "dept": "Dept6"
-    },
-    {
-      "id": "ship_t3_appsumo-daily-dish-context-pass",
-      "why": "Close eval checklist (ignore / emulate / compete); default no buy",
+      "id": "ship_t4_-appsumo-daily-dish-done-2026-09-17",
+      "why": "No buy; emulate BrandBay→CF only",
       "canonical": "260803_LDW_Swipe_AppSumo_DailyDish.md",
-      "resume": "AppSumo Daily Dish context pass",
+      "resume": "~~AppSumo Daily Dish~~ done 2026-09-17",
       "heat": "ship",
       "source": "ship-board",
       "segment": "growth",
       "dept": "Dept4"
     },
     {
-      "id": "ship_t4_migadu-trash-for-triaged-mails",
-      "why": "Slim Migadu; bodies already on disk where swipe/learn",
-      "canonical": "Nick→Cursor Learn + phishing/Vercel (+ DVAG/Kleinanzeigen/NZ if still INBOX)",
-      "resume": "Migadu Trash for triaged mails",
+      "id": "ship_t5_thursday-trash-purge",
+      "why": "Keep ~14d; purge older Migadu Trash+Junk + folder stats",
+      "canonical": "standing-trash-purge.md · resume Thursday mail trash purge",
+      "resume": "Thursday Trash purge",
       "heat": "ship",
       "source": "ship-board",
       "segment": "mail",
       "dept": "Dept1"
     },
     {
-      "id": "ship_t5_continue-mail-triage-batch-1-",
-      "why": "Dual bay: Migadu + Gmail; teach ramp",
-      "canonical": "Migadu INBOX ~2358; Gmail local ~461",
-      "resume": "Continue mail triage (batch 1)",
+      "id": "ship_t6_continue-mail-triage",
+      "why": "INBOX-first per book; do not copy bill lists here",
+      "canonical": "HANDOFF-ldw-watch.md (counts live there)",
+      "resume": "Continue mail triage",
       "heat": "ship",
       "source": "ship-board",
       "segment": "mail",
       "dept": "Dept1"
     },
     {
-      "id": "ship_t6_vendor-akten-backfill",
+      "id": "ship_t7_vendor-akten-backfill",
       "why": "Promote flat cards → folder+Protokoll; venture counterparties as-we-go",
       "canonical": "contacts-and-vendors/README.md § Backfill later",
       "resume": "Vendor Akten backfill",
@@ -568,7 +778,7 @@
       "dept": "Dept4"
     },
     {
-      "id": "ship_t7_experteer-account-delete",
+      "id": "ship_t8_experteer-account-delete",
       "why": "Unsub done; stop all mail needs profile delete",
       "canonical": "contacts-and-vendors/experteer/ · Mein Account",
       "resume": "Experteer account delete",
