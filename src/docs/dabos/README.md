@@ -73,12 +73,12 @@ Cross-project scan of founder-desk **OPEN-CHAT-BACKLOG** + **SHIP-BOARD** (not t
 
 | Channel | Where | Runbook |
 |---------|-------|---------|
-| **Slack** (primary target) | Vercel `/api/dabos/slack/events` + `/commands` | [Atlas/docs/admin/dabos-slack-gateway.md](../../../../Atlas/docs/admin/dabos-slack-gateway.md) |
+| **Slack** (primary target) | Vercel `/api/dabos/slack/events` + `/commands` | [dabos-slack-gateway.md](../../../../DABOS/docs/reference/dept09-assets/dabos-slack-gateway.md) |
 | **sipgate Assist** | `POST /api/dabos/sipgate/assist` · inbox `/dabos/sipgate` | `Proviso/docs/reference/sipgate-webhook-relay.md` |
-| **Telegram Inbox** | ln02 `dabos-telegram-capture` | [dabos-telegram-capture.md](../../../../Atlas/docs/admin/dabos-telegram-capture.md) |
-| **Telegram Comm** | ln02 `dabos-telegram-exec` → Tier 0 API | [dabos-telegram-exec.md](../../../../Atlas/docs/admin/dabos-telegram-exec.md) |
+| **Telegram Inbox** | ln02 `dabos-telegram-capture` | [dabos-telegram-capture.md](../../../../DABOS/docs/reference/dept09-assets/dabos-telegram-capture.md) |
+| **Telegram Comm** | ln02 `dabos-telegram-exec` → Tier 0 API | [dabos-telegram-exec.md](../../../../DABOS/docs/reference/dept09-assets/dabos-telegram-exec.md) |
 
-Tier 0 API (shared): `/api/dabos/tier0/stats`, `board`, `approvals` — auth via `DABOS_TIER0_SECRET`. Sync: `Atlas/scripts/ln02/Sync-Tier0Secret-Vercel-Ln02.ps1`.
+Tier 0 API (shared): `/api/dabos/tier0/stats`, `board`, `approvals` — auth via `DABOS_TIER0_SECRET`. Sync: `DABOS/scripts/dept09-assets/ln02/Sync-Tier0Secret-Vercel-Ln02.ps1`.
 
 
 `/dabos`, `dabos.logans.tools`, and `/api/dabos/*` require Clerk sign-in. Only emails in `DABOS_ALLOWED_EMAILS` may access the board (default: `logan.d.williams@gmail.com`).
@@ -126,7 +126,7 @@ Until DNS is correct, use default Clerk hosting (no custom primary domain) or Pr
 
 **Practical split:** keep ln02 for homelab dev; provision a Neon project for Vercel Production, run `npm run dabos:migrate` against both when schema changes. Same migrations in `migrations/`.
 
-**Alternative:** run Next.js on ln02 with `DATABASE_URL=...@127.0.0.1:5432/...` and point `dabos.logans.tools` at ln02 via tunnel — see [Atlas/docs/admin/dabos-ln02-homelab-setup.md](../../../../Atlas/docs/admin/dabos-ln02-homelab-setup.md) § Later.
+**Alternative:** run Next.js on ln02 with `DATABASE_URL=...@127.0.0.1:5432/...` and point `dabos.logans.tools` at ln02 via tunnel — see [dabos-ln02-homelab-setup.md](../../../../DABOS/docs/reference/dept09-assets/dabos-ln02-homelab-setup.md) § Later.
 
 ## Conditions (v1)
 
@@ -154,9 +154,9 @@ Until DNS is correct, use default Clerk hosting (no custom primary domain) or Pr
 
 **Vercel:** set `DABOS_CRON_SECRET` in Production env. Crons defined in `vercel.json`. Vercel sends `Authorization: Bearer <CRON_SECRET>` automatically when using their cron feature — for manual/ln02 calls use the same header or `x-dabos-cron-secret`.
 
-**ln02 (optional):** `Atlas/scripts/dabos/ln02-run-cadence.sh morning-plan|week-close|refresh-conditions`
+**ln02 (optional):** `DABOS/scripts/dept02-coordination/dabos/ln02-run-cadence.sh morning-plan|week-close|refresh-conditions`
 
-**Windows office PC:** `Atlas/scripts/schedule-dabos-cadence.ps1`
+**Windows office PC:** `DABOS/scripts/dept02-coordination/dabos/schedule-dabos-cadence.ps1`
 
 ## Migrations
 
@@ -176,4 +176,4 @@ Neon/cloud Postgres is **not** used on Path B.
 ## References
 
 - **PRD-004 conditions:** `C:\Dev\DABOS\docs\PRD-004-conditions-memory-governance.md`
-- **UI motion (optional):** [Atlas/docs/reference/animejs.md](../../../../Atlas/docs/reference/animejs.md) — [Anime.js v4](https://animejs.com/documentation/) for org-board/dashboard animation; also GFP, LDW, logans.tools when timelines or scroll-sync beat CSS-only
+- **UI motion (optional):** [animejs.md](../../../../DABOS/docs/reference/animejs.md) — [Anime.js v4](https://animejs.com/documentation/) for org-board/dashboard animation; also GFP, LDW, logans.tools when timelines or scroll-sync beat CSS-only

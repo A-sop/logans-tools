@@ -1,5 +1,7 @@
 # Chat primer — logans.tools
 
+**Org session SSOT:** `C:\Dev\DABOS\docs\reference\dept21-executive-director\founder-desk\CHAT-PRIMER.md`
+
 Copy into new chat when working on this project.
 
 ---

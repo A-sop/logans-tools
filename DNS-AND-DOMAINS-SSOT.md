@@ -1,8 +1,8 @@
 ## DNS & Domains SSOT
 
-Canonical “DNS & Domains Playbook” lives in the Atlas repo:
+Canonical “DNS & Domains Playbook” lives in DABOS:
 
-- `Atlas/docs/troubleshooting/dns-and-domains-playbook.md`
+- `DABOS/docs/reference/dept11-engineering/troubleshooting/dns-and-domains-playbook.md`
 
 Use that doc for:
 - DNS authority (NS) rules
