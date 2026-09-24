@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import type {
   ContactRecord,
+  ContactSourceInput,
   InteractionInput,
   TaskInput,
   UpsertContactInput,
@@ -18,6 +19,15 @@ type ContactRow = {
   source_system: string | null;
   external_ref: string | null;
   notes: string | null;
+  privacy_class: string;
+  status: string;
+  origin: string;
+  street: string | null;
+  street2: string | null;
+  city: string | null;
+  region: string | null;
+  postal_code: string | null;
+  country: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -45,6 +55,11 @@ export class LocalCrmIndex {
       { key: 'referral', label: 'Referral' },
       { key: 'gfp', label: 'German Financial Planning' },
       { key: 'dvag', label: 'DVAG' },
+      { key: 'family', label: 'Family' },
+      { key: 'student', label: 'Student' },
+      { key: 'acquaintance', label: 'Acquaintance' },
+      { key: 'noise', label: 'Noise' },
+      { key: 'starred', label: 'Starred' },
     ];
 
     const statement = this.db.prepare(`
@@ -94,6 +109,7 @@ export class LocalCrmIndex {
           SELECT id
           FROM contacts
           WHERE email = ?
+            AND IFNULL(source_system, '') != 'dvag'
           LIMIT 1
         `
         )
@@ -227,8 +243,28 @@ export class LocalCrmIndex {
     return null;
   }
 
+  public addContactSource(input: ContactSourceInput): void {
+    const sourceSystem = input.sourceSystem.trim();
+    const externalRef = input.externalRef?.trim() || null;
+    if (!sourceSystem || !externalRef) {
+      throw new Error('sourceSystem and externalRef are required');
+    }
+    this.db
+      .prepare(
+        `
+        INSERT INTO contact_sources (contact_id, source_system, external_ref, raw_label, created_at)
+        VALUES (?, ?, ?, ?, datetime('now'))
+        ON CONFLICT(source_system, external_ref) DO UPDATE SET
+          contact_id = excluded.contact_id,
+          raw_label = COALESCE(excluded.raw_label, contact_sources.raw_label)
+      `
+      )
+      .run(input.contactId, sourceSystem, externalRef, input.rawLabel?.trim() || null);
+  }
+
   public clearContactNetwork(): void {
     this.db.exec(`
+      DELETE FROM contact_sources;
       DELETE FROM contact_tags;
       DELETE FROM interactions;
       DELETE FROM tasks;
@@ -320,7 +356,12 @@ export class LocalCrmIndex {
   public getContactByName(search: string): ContactRecord[] {
     const normalized = `%${search.trim().toLowerCase()}%`;
     const statement = this.db.prepare(`
-      SELECT id, full_name, first_name, last_name, email, phone, company, source_system, external_ref, notes, created_at, updated_at
+      SELECT
+        id, full_name, first_name, last_name, email, phone, company,
+        source_system, external_ref, notes,
+        privacy_class, status, origin,
+        street, street2, city, region, postal_code, country,
+        created_at, updated_at
       FROM contacts
       WHERE lower(full_name) LIKE ?
       ORDER BY full_name ASC
@@ -338,7 +379,12 @@ export class LocalCrmIndex {
     const normalized = Array.from(new Set(tagKeys.map((key) => key.trim().toLowerCase()).filter(Boolean)));
     const placeholders = normalized.map(() => '?').join(', ');
     const statement = this.db.prepare(`
-      SELECT c.id, c.full_name, c.first_name, c.last_name, c.email, c.phone, c.company, c.source_system, c.external_ref, c.notes, c.created_at, c.updated_at
+      SELECT
+        c.id, c.full_name, c.first_name, c.last_name, c.email, c.phone, c.company,
+        c.source_system, c.external_ref, c.notes,
+        c.privacy_class, c.status, c.origin,
+        c.street, c.street2, c.city, c.region, c.postal_code, c.country,
+        c.created_at, c.updated_at
       FROM contacts c
       JOIN contact_tags ct ON ct.contact_id = c.id
       JOIN tags t ON t.id = ct.tag_id
@@ -416,7 +462,12 @@ export class LocalCrmIndex {
 
   private listContactsWithTags(): Array<ContactRecord & { tags: string[] }> {
     const statement = this.db.prepare(`
-      SELECT id, full_name, first_name, last_name, email, phone, company, source_system, external_ref, notes, created_at, updated_at
+      SELECT
+        id, full_name, first_name, last_name, email, phone, company,
+        source_system, external_ref, notes,
+        privacy_class, status, origin,
+        street, street2, city, region, postal_code, country,
+        created_at, updated_at
       FROM contacts
       ORDER BY full_name ASC
     `);
@@ -540,6 +591,49 @@ export class LocalCrmIndex {
 
       CREATE INDEX IF NOT EXISTS idx_tasks_status_due_date
       ON tasks(status, due_date);
+
+      CREATE TABLE IF NOT EXISTS contact_sources (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        contact_id INTEGER NOT NULL,
+        source_system TEXT NOT NULL,
+        external_ref TEXT NOT NULL,
+        raw_label TEXT,
+        created_at TEXT NOT NULL,
+        UNIQUE (source_system, external_ref),
+        FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_contact_sources_contact
+      ON contact_sources(contact_id);
+    `);
+    this.migratePeopleSsotColumns();
+  }
+
+  private migratePeopleSsotColumns(): void {
+    const existing = new Set(
+      (this.db.prepare(`PRAGMA table_info(contacts)`).all() as Array<{ name: string }>).map(
+        (row) => row.name
+      )
+    );
+    const additions: Array<[string, string]> = [
+      ['privacy_class', "TEXT NOT NULL DEFAULT 'unclassified'"],
+      ['status', "TEXT NOT NULL DEFAULT 'active'"],
+      ['origin', "TEXT NOT NULL DEFAULT 'owner'"],
+      ['street', 'TEXT'],
+      ['street2', 'TEXT'],
+      ['city', 'TEXT'],
+      ['region', 'TEXT'],
+      ['postal_code', 'TEXT'],
+      ['country', 'TEXT'],
+    ];
+    for (const [name, spec] of additions) {
+      if (!existing.has(name)) {
+        this.db.exec(`ALTER TABLE contacts ADD COLUMN ${name} ${spec}`);
+      }
+    }
+    this.db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_contacts_privacy_status
+      ON contacts(privacy_class, status);
     `);
   }
 }
@@ -556,6 +650,15 @@ function mapContactRow(row: ContactRow): ContactRecord {
     sourceSystem: row.source_system,
     externalRef: row.external_ref,
     notes: row.notes,
+    privacyClass: row.privacy_class,
+    status: row.status,
+    origin: row.origin,
+    street: row.street,
+    street2: row.street2,
+    city: row.city,
+    region: row.region,
+    postalCode: row.postal_code,
+    country: row.country,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

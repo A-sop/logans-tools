@@ -15,6 +15,15 @@ export interface ContactRecord {
   sourceSystem: string | null;
   externalRef: string | null;
   notes: string | null;
+  privacyClass: string;
+  status: string;
+  origin: string;
+  street: string | null;
+  street2: string | null;
+  city: string | null;
+  region: string | null;
+  postalCode: string | null;
+  country: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -34,6 +43,13 @@ export interface UpsertContactInput {
 export interface UpsertContactOptions {
   /** When false, only match on source_system + external_ref (DVAG Kundennummer). Default true. */
   matchEmail?: boolean;
+}
+
+export interface ContactSourceInput {
+  contactId: number;
+  sourceSystem: string;
+  externalRef?: string | null;
+  rawLabel?: string | null;
 }
 
 export interface InteractionInput {
