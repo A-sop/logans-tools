@@ -14,7 +14,7 @@ export type PortfolioTool = {
   note?: string;
 };
 
-/** Tools Logan uses — homepage "How I work" + referral research (Jun 2026). */
+/** Tools Logan uses — homepage "How I work" + referral research (updated 2026-10-01). */
 export const PORTFOLIO_STACK: PortfolioTool[] = [
   {
     label: 'Cursor (AI-assisted development)',
@@ -115,5 +115,26 @@ export const PORTFOLIO_STACK: PortfolioTool[] = [
     referral: 'partner-only',
     programUrl: 'https://github.com/partners',
     note: 'Technology/services partner tracks — not a developer affiliate link.',
+  },
+  // Personal fitness pipe (DABOS personal:fitness) — watch + scale + training analytics
+  {
+    label: 'Intervals.icu (training analytics)',
+    href: 'https://intervals.icu/',
+    referral: 'none',
+    note: 'Free Garmin/Strava hub for personal:fitness → DABOS sync. No public affiliate; optional $4/mo Supporter.',
+  },
+  {
+    label: 'Garmin (Instinct Solar / Connect)',
+    href: 'https://www.garmin.com/',
+    referral: 'apply',
+    programUrl: 'https://www.garmin.com/en-US/ambassadors-and-affiliates/affiliates/',
+    note: 'Affiliate via CJ (US + EU incl. DE). Apply as publisher → Garmin EU. No personal tracking link until approved.',
+  },
+  {
+    label: 'Renpho (smart scale)',
+    href: 'https://renpho.com/',
+    referral: 'apply',
+    programUrl: 'https://renpho.goaffpro.com/',
+    note: 'GoAffPro affiliate (~5%) or Creator Program (creators@renpho.com). Swap href to your tracking URL after signup.',
   },
 ];
