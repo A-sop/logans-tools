@@ -25,20 +25,15 @@ export type DivisionWeeklyResult = {
   notes: string[];
 };
 
-const REGISTERS = path.join('C:', 'DATA', '10_WORK', 'dabos-registers');
-const SHIP_LOG = path.join('C:', 'Dev', 'DABOS', 'docs', 'registers', 'ship-log.md');
-const VALIDATION = path.join(
-  'C:',
-  'Dev',
-  'DABOS',
-  'docs',
-  'registers',
-  'dept13-validation-checklists.md'
-);
+// Office defaults are Windows paths (C:\DATA, C:\Dev\DABOS). Override on a non-office
+// host (e.g. ln02 reading a Seagate mirror): DABOS_REGISTERS_ROOT, DABOS_REPO_ROOT.
+const REGISTERS =
+  process.env.DABOS_REGISTERS_ROOT?.trim() || path.join('C:', 'DATA', '10_WORK', 'dabos-registers');
+const DABOS_REPO_ROOT = process.env.DABOS_REPO_ROOT?.trim() || path.join('C:', 'Dev', 'DABOS');
+const SHIP_LOG = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'ship-log.md');
+const VALIDATION = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'dept13-validation-checklists.md');
 const ESTABLISHMENT = path.join(
-  'C:',
-  'Dev',
-  'DABOS',
+  DABOS_REPO_ROOT,
   'docs',
   'reference',
   'dept-briefs',
