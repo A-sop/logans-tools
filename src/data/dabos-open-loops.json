@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-10-07T18:20:54.067Z",
+  "generated_at": "2026-10-07T19:15:36.898Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 33,
+    "hot": 37,
     "open": 23,
     "ship": 20,
-    "still_open": 56,
+    "still_open": 60,
     "closed": 40,
-    "total": 76,
+    "total": 80,
     "by_segment": {
-      "treasury": 6,
-      "assets": 25,
-      "mail": 8,
+      "treasury": 7,
+      "assets": 28,
+      "mail": 9,
       "esto": 5,
-      "gfp": 6,
+      "gfp": 5,
       "consulting": 1,
       "legal": 1,
       "data": 2,
@@ -26,15 +26,15 @@
       "other": 10
     },
     "by_dept": {
-      "Dept1": 10,
+      "Dept1": 11,
       "Dept2": 0,
       "Dept3": 0,
       "Dept4": 10,
       "Dept5": 0,
-      "Dept6": 6,
+      "Dept6": 5,
       "Dept7": 0,
-      "Dept8": 6,
-      "Dept9": 25,
+      "Dept8": 7,
+      "Dept9": 28,
       "Dept10": 0,
       "Dept11": 2,
       "Dept12": 0,
@@ -53,11 +53,11 @@
     "window_days": 7,
     "since": "2026-10-01",
     "closed": 0,
-    "still_open": 11,
+    "still_open": 15,
     "by_dept": {
       "Dept1": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 2
       },
       "Dept2": {
         "closed": 0,
@@ -77,7 +77,7 @@
       },
       "Dept6": {
         "closed": 0,
-        "still_open": 2
+        "still_open": 1
       },
       "Dept7": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 2
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 6
+        "still_open": 9
       },
       "Dept10": {
         "closed": 0,
@@ -485,13 +485,33 @@
     },
     {
       "id": "261007_known-desk-leftovers",
-      "why": "Desk leftovers: DKB Postfach unread pass blocked 2026-10-07 (ln02 CDP at login — needs DKB-App approve). Also: Paperless DKB-Postfach dupes, Deinert reply, expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening (Dept9 Danger).",
-      "canonical": "§ 261007_open-loops-triage · dkb_export_cdp.mjs postfach",
-      "resume": "DKB Postfach unread / desk leftovers status",
+      "why": "Desk leftovers: DKB Postfach unread still blocked (ln02 CDP / DKB-App). Also: Paperless DKB-Postfach dupes, Deinert Stellplatz handle (PDFs filed — reply/pay/book), expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening.",
+      "canonical": "§ 261007_known-desk-leftovers · HOUSING Stellplatz dossier",
+      "resume": "DKB Postfach unread / Deinert Stellplatz / desk leftovers status",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "treasury",
       "dept": "Dept8"
+    },
+    {
+      "id": "261007_paperless-hzr-personal-drain",
+      "why": "NEW. Personal Paperless now on HZR52 :8000 (C:\\DATA\\10_WORK\\paperless-ngx). Drain docs missing data_path since ~#2983 / Oct ingest (bank/KK/EDV…). Sep 29 batch #2969–2982 + Medicare filed — do not re-file.",
+      "canonical": "This file § 261007_paperless-hzr-personal-drain · bridge scripts/dept09-assets/paperless/",
+      "resume": "HZR Paperless drain / paperless data_path",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_metzdorf-phv-todesfall",
+      "why": "NEW. #2981 Todesfall Metzdorf / PHV-Aufhebung wrongly under CAREER-DVAG. Propose→Proviso→AF_Customer Akte + brief Protokoll; founder go before move.",
+      "canonical": "This file § 261007_metzdorf-phv-todesfall · Paperless #2981",
+      "resume": "Metzdorf Todesfall / PHV Aufhebung Akte",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "261007_thunderbird-calendar-hygiene",
@@ -512,6 +532,26 @@
       "source": "chat-backlog",
       "segment": "assets",
       "dept": "Dept9"
+    },
+    {
+      "id": "261007_telegram-export-ingest",
+      "why": "NEW. Telegram Desktop DataExport_2026-10-06 filed off Desktop → C:\\DATA\\10_WORK\\dept01-housekeeping\\telegram-exports\\DataExport_2026-10-06\\ (result.json + chats). Ingest links/notes into DABOS Inbox / wiki (same pattern as 2026-06-14 export drain).",
+      "canonical": "That folder · docs/wiki/inbox/ · false-dupe fix may touch same bot",
+      "resume": "telegram export ingest / DataExport 2026-10-06",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261007_dkb-csv-desktop-filed",
+      "why": "Filed 2026-10-07. DKB Giro + Visa Umsatzliste CSVs off Desktop → !_TAXES-2026\\05-10-2026_Umsatzliste_. Ingest = Thu books / FinTS-first; CSV gap-fill only if needed (csv-bank-ingest-runbook.md).",
+      "canonical": "!_TAXES-2026\\ · 260814_gnucash-ssot-imbalance-clear",
+      "resume": "DKB CSV ingest / Thu books",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
     }
   ],
   "open": [
@@ -739,11 +779,11 @@
       "id": "261007_open-loops-triage",
       "why": "Why: Cloud agent bc-7822fd2c + desktop prompts paste + live #1 check. Drained 2026-10-07 — backlog index is SSOT (not the Cursor thread).",
       "canonical": "",
-      "resume": "open loops triage / GABC board ops / sync open loops",
+      "resume": "open loops triage / GABC board ops / sync open loops / HZR Paperless drain",
       "heat": "open",
       "source": "chat-backlog",
-      "segment": "gfp",
-      "dept": "Dept6"
+      "segment": "assets",
+      "dept": "Dept9"
     }
   ],
   "ship": [
