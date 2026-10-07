@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-09-21T21:45:40.729Z",
+  "generated_at": "2026-10-07T16:14:56.749Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 18,
-    "open": 22,
+    "hot": 32,
+    "open": 23,
     "ship": 20,
-    "still_open": 40,
+    "still_open": 55,
     "closed": 40,
-    "total": 60,
+    "total": 75,
     "by_segment": {
-      "treasury": 5,
-      "assets": 18,
-      "mail": 4,
+      "treasury": 6,
+      "assets": 23,
+      "mail": 9,
       "esto": 5,
-      "gfp": 3,
+      "gfp": 6,
       "consulting": 1,
       "legal": 1,
       "data": 2,
       "platform": 2,
       "growth": 10,
-      "other": 9
+      "other": 10
     },
     "by_dept": {
-      "Dept1": 6,
+      "Dept1": 11,
       "Dept2": 0,
       "Dept3": 0,
       "Dept4": 10,
       "Dept5": 0,
-      "Dept6": 3,
+      "Dept6": 6,
       "Dept7": 0,
-      "Dept8": 5,
-      "Dept9": 18,
+      "Dept8": 6,
+      "Dept9": 23,
       "Dept10": 0,
       "Dept11": 2,
       "Dept12": 0,
@@ -46,18 +46,18 @@
       "Dept18": 0,
       "Dept19": 0,
       "Dept20": 5,
-      "Dept21": 11
+      "Dept21": 12
     }
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-09-15",
+    "since": "2026-10-01",
     "closed": 0,
-    "still_open": 2,
+    "still_open": 10,
     "by_dept": {
       "Dept1": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 2
       },
       "Dept2": {
         "closed": 0,
@@ -77,7 +77,7 @@
       },
       "Dept6": {
         "closed": 0,
-        "still_open": 0
+        "still_open": 2
       },
       "Dept7": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 0
+        "still_open": 1
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 4
       },
       "Dept10": {
         "closed": 0,
@@ -137,7 +137,7 @@
       },
       "Dept21": {
         "closed": 0,
-        "still_open": 0
+        "still_open": 1
       }
     }
   },
@@ -354,10 +354,150 @@
       "dept": "Dept9"
     },
     {
+      "id": "261005_dept9-local-tool-link-danger",
+      "why": "HOT. Dept9 Body Danger — Grok Bot lost desktop connection to HZR52/LDW/ln02 overnight. Stacks with Sep 20 Danger.",
+      "canonical": "rush-2026-10-05-local-tool-link-flap.md · receipts/condition-dept09-danger-local-tool-link-2026-10-05.md",
+      "resume": "local-tool restore / desktop agents",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
       "id": "260922_reza-el-nido-leave-brief",
-      "why": "HOT next chat. Reza leave: hotels + tours decision brief from Logan WA. Draft v0 filed; founder fills done/now/later.",
-      "canonical": "project-plans/reza-el-nido-leave-brief-2026-10.md",
-      "resume": "Reza El Nido brief / Reza leave report",
+      "why": "A5 pending. v1 DE handover in Field Journal + project-plans; WA drafted — send only after founder OK.",
+      "canonical": "project-plans/reza-el-nido-leave-brief-2026-10.md · FJ item cmubvfdl00001qf4vq5huqiqc",
+      "resume": "Reza El Nido brief / send Reza leave WA",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260922_people-ssot-cleanup",
+      "why": "Handover 25 Sep night. LinkedIn+WhatsApp in CF. Friends-only Facebook EYI re-requested; zip not here yet. Migadu triage hidden on LDW (not Gmail). Next chat: SSOT personal first, then bKV campaign.",
+      "canonical": "project-plans/people-ssot-handover-2026-09-25.md · canvas cf-people-sources.canvas.tsx · A-321 · bKV PRD docs/backlog/ventures/GFP/PRD-bkv-outbound-operating-system.md",
+      "resume": "people SSOT / Facebook friends zip / bKV campaign",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260925_repo-data-declutter",
+      "why": "Inbox + consume empty. Abort trees deleted. Open = EWE visits + unnamed GFP intake. Atlas hold to 27Q1.",
+      "canonical": "founder-desk/declutter-waves-1-4-receipt-2026-09-24.md · canvas repo-data-declutter.canvas.tsx",
+      "resume": "EWE Neuwied / name GFP intake 2915",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260926_allfinanz-watch-close",
+      "why": "Allfinanz Watch still open at close: LW 70 / RA 156. Deleted audit clean (noise + Kosten PDFs only). File + Protokoll, do not Delete Vertragsrelevante.",
+      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md · Proviso/docs/reference/handover-watchfolder-2026-07-30.md",
+      "resume": "continue Watch grind / Allfinanz Vertragspost",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260929_green-bridge-patrick-murphy",
+      "why": "Appointment done. Blaschke onboarding in progress. Docs → mail@germanfinancialplanning.de. DVAG products parked later.",
+      "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
+      "resume": "Green Bridge Blaschke / Murphy docs GFP mail",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "260930_hzr-ssd-swap-prep",
+      "why": "HOT Fri 2 Oct. Staging + HZR wind-down done 09-30. Paste: hzr52-pre-swap-2026-09-30\\FRI-HANDOVER-PASTE.md. Left: Win11 USB · Dropbox green · parcels → SN7100 install + fresh Win11.",
+      "canonical": "PO-013 · FRI-HANDOVER-PASTE",
+      "resume": "HZR SSD swap / PO-013 Friday",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_gabc-board-ops",
+      "why": "NEW. GABC board paste: Westpac sponsorship unpaid (Manu chase), Austrade ES/FR/DE unclear, webinar/CAT/Henner, Zoom vs Mailjet, Asana cost, KfW Aussie lead, Down Under Film Fest Y/N, outreach AFL breakfast / Munich FC / Rheinland Lions. No DATA GABC cabinet yet.",
+      "canonical": "This file § 261007_open-loops-triage · site code in loganwilliams-website /gabc · venture stub docs/backlog/ventures/au-de-directory/",
+      "resume": "GABC board ops / Westpac Manu",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "261007_client-web-stripe",
+      "why": "NEW. AB Ryan site+CI; MEST + Connect Away → Stripe; Stripe on Logan account for ad-hoc web.",
+      "canonical": "§ 261007_open-loops-triage",
+      "resume": "client web Stripe / AB Ryan CI",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "261007_bridgelife-mail-mvp",
+      "why": "NEW. BridgeLife repo onboard+MVP?; Migadu mailing for GFP/LDW/BridgeLife still open; domain/Gmail-other-Logan from desk list still verify.",
+      "canonical": "§ 261007_open-loops-triage · work-folders-as-ventures.md BridgeLife line",
+      "resume": "BridgeLife MVP / Migadu books",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261007_proviso-ops-bits",
+      "why": "NEW. Sharifi T&N BFO chase; old salon→T&N?; Reza shared model + Proviso bits; sipgate fax; LA40 autofill; Brisbane travel insurance.",
+      "canonical": "§ 261007_open-loops-triage · mail bay / Proviso handovers",
+      "resume": "Sharifi T&N / LA40 autofill",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_hzr-hosts-fritz-backup",
+      "why": "Partial 2026-10-07. /hosts deployed on ln02 Comm bot + hosts-gate + SSH status OK (grok_bot/tailscale). Founder: send /hosts in Telegram to confirm UI. Still open: Fritz plugs order A5; next backup skip CM-Reza-BO\\OneDrive.",
+      "canonical": "runbook telegram-hosts-runbook.md · PO-015 · dabos-backup-excludes.ps1",
+      "resume": "verify /hosts Telegram / order Fritz plugs / Reza OD exclude",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_desk-prompts-remainder",
+      "why": "Desktop prompts #2–#6 still open (relatives addresses, Timeline stack, travel-book venture, Inbox false-dupe, reels). #1 inventory drained into 261007_ rows.",
+      "canonical": "Desktop 261006_cursor-prompts-todo.md · backlog index",
+      "resume": "relatives addresses / Inbox false dupe",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261007_known-desk-leftovers",
+      "why": "Desk leftovers: DKB Postfach unread pass blocked 2026-10-07 (ln02 CDP at login — needs DKB-App approve). Also: Paperless DKB-Postfach dupes, Deinert reply, expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening (Dept9 Danger).",
+      "canonical": "§ 261007_open-loops-triage · dkb_export_cdp.mjs postfach",
+      "resume": "DKB Postfach unread / desk leftovers status",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "261007_thunderbird-calendar-hygiene",
+      "why": "NEW. Reload Thunderbird calendar; confirm 17:00 pitch and 14 Oct link events are gone. Set Calendar → Add invitations to my calendar → When I respond. Leave Allfinanz alone. Drop/unsubscribe Gmail social media calendar on Logan Williams (national-day junk: Moldy Cheese Day, Grouch Day, etc.).",
+      "canonical": "Thunderbird on HZR · this file § 261007_thunderbird-calendar-hygiene",
+      "resume": "Thunderbird calendar hygiene / drop social media calendar",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -584,6 +724,16 @@
       "source": "chat-backlog",
       "segment": "mail",
       "dept": "Dept1"
+    },
+    {
+      "id": "261007_open-loops-triage",
+      "why": "Why: Cloud agent bc-7822fd2c + desktop prompts paste + live #1 check. Drained 2026-10-07 — backlog index is SSOT (not the Cursor thread).",
+      "canonical": "",
+      "resume": "open loops triage / GABC board ops / sync open loops",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "gfp",
+      "dept": "Dept6"
     }
   ],
   "ship": [
