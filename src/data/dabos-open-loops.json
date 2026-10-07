@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-10-07T16:14:56.749Z",
+  "generated_at": "2026-10-07T18:20:54.067Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 32,
+    "hot": 33,
     "open": 23,
     "ship": 20,
-    "still_open": 55,
+    "still_open": 56,
     "closed": 40,
-    "total": 75,
+    "total": 76,
     "by_segment": {
       "treasury": 6,
-      "assets": 23,
-      "mail": 9,
+      "assets": 25,
+      "mail": 8,
       "esto": 5,
       "gfp": 6,
       "consulting": 1,
@@ -26,7 +26,7 @@
       "other": 10
     },
     "by_dept": {
-      "Dept1": 11,
+      "Dept1": 10,
       "Dept2": 0,
       "Dept3": 0,
       "Dept4": 10,
@@ -34,7 +34,7 @@
       "Dept6": 6,
       "Dept7": 0,
       "Dept8": 6,
-      "Dept9": 23,
+      "Dept9": 25,
       "Dept10": 0,
       "Dept11": 2,
       "Dept12": 0,
@@ -53,11 +53,11 @@
     "window_days": 7,
     "since": "2026-10-01",
     "closed": 0,
-    "still_open": 10,
+    "still_open": 11,
     "by_dept": {
       "Dept1": {
         "closed": 0,
-        "still_open": 2
+        "still_open": 1
       },
       "Dept2": {
         "closed": 0,
@@ -89,7 +89,7 @@
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 4
+        "still_open": 6
       },
       "Dept10": {
         "closed": 0,
@@ -215,9 +215,9 @@
     },
     {
       "id": "260830_euer-pack-proofread",
-      "why": "2021 done. Next = 2022 pack proofread. Do not lock Gewinn.",
-      "canonical": "dept08-ledger/handover-euer-books-ssot-year-align.md",
-      "resume": "2022 pack proofread",
+      "why": "2022 AT lift+pack 2026-10-07 — CLOSE −€113 · unmatched €0 · Gewinn 24.706,85 ENTWURF. Founder proofread pack then re-lock.",
+      "canonical": "dept08-ledger/handover-euer-books-ssot-year-align.md · !_TAXES-2022\\Übergabe-Blaschke-2022\\",
+      "resume": "re-lock 2022 / 2022 pack proofread",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "treasury",
@@ -315,9 +315,9 @@
     },
     {
       "id": "260821_mullvad-tailscale-split",
-      "why": "Laptop Mullvad full-tunnel blocks HZR→ldw TCP (ping OK). Need VPN on and Tailscale mesh. Handwritten loops not yet read.",
-      "canonical": "dept09-assets/ldw-ssh-from-hzr52.md · split-tunnel in ln02-remote-backup.md",
-      "resume": "Mullvad split tunnel / handwritten loops",
+      "why": "Mullvad split done 22 Aug (ssh ldw whoami works with VPN on). Handwritten open-loop notes were never pasted.",
+      "canonical": "dept09-assets/ldw-ssh-from-hzr52.md",
+      "resume": "handwritten loops",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -395,9 +395,9 @@
     },
     {
       "id": "260926_allfinanz-watch-close",
-      "why": "Allfinanz Watch still open at close: LW 70 / RA 156. Deleted audit clean (noise + Kosten PDFs only). File + Protokoll, do not Delete Vertragsrelevante.",
-      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md · Proviso/docs/reference/handover-watchfolder-2026-07-30.md",
-      "resume": "continue Watch grind / Allfinanz Vertragspost",
+      "why": "Allfinanz Watch still open. Also 29 Aug parked DISPO (Madadi Inkasso, Meylahn BA, …). File + Protokoll; never Delete Vertragsrelevante.",
+      "canonical": "Proviso/.../handover-watchfolder-2026-07-30.md § Parked todo · dept01-mail-triage\\RESUME.md",
+      "resume": "Outlook DISPO / continue Watch grind",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "mail",
@@ -475,13 +475,13 @@
     },
     {
       "id": "261007_desk-prompts-remainder",
-      "why": "Desktop prompts #2–#6 still open (relatives addresses, Timeline stack, travel-book venture, Inbox false-dupe, reels). #1 inventory drained into 261007_ rows.",
-      "canonical": "Desktop 261006_cursor-prompts-todo.md · backlog index",
-      "resume": "relatives addresses / Inbox false dupe",
+      "why": "Paste-ready Cursor prompts #2–#6 (relatives addresses, Timeline stack, travel-book venture, Inbox false-dupe, reels). #1 + GABC/HZR/loose notes drained into other 261007_ rows. Desktop file removed 2026-10-07.",
+      "canonical": "This file § 261007_desk-prompts-remainder",
+      "resume": "desk prompts remainder / Inbox false dupe",
       "heat": "hot",
       "source": "chat-backlog",
-      "segment": "mail",
-      "dept": "Dept1"
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "261007_known-desk-leftovers",
@@ -498,6 +498,16 @@
       "why": "NEW. Reload Thunderbird calendar; confirm 17:00 pitch and 14 Oct link events are gone. Set Calendar → Add invitations to my calendar → When I respond. Leave Allfinanz alone. Drop/unsubscribe Gmail social media calendar on Logan Williams (national-day junk: Moldy Cheese Day, Grouch Day, etc.).",
       "canonical": "Thunderbird on HZR · this file § 261007_thunderbird-calendar-hygiene",
       "resume": "Thunderbird calendar hygiene / drop social media calendar",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_openmontage-hzr-smoke",
+      "why": "NEW. OpenMontage onboarded on HZR52 (venv, Remotion, Piper, FFmpeg, OPENAI_API_KEY wired). Still open: first smoke render in OpenMontage-only Cursor window; optional free Pexels/Pixabay keys; optional FAL_KEY for AI motion.",
+      "canonical": "dept04-content/openmontage-onboard-2026-08-11.md · C:\\Dev\\OpenMontage",
+      "resume": "OpenMontage smoke / Pexels Pixabay keys / FAL_KEY OpenMontage",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -597,8 +607,8 @@
     },
     {
       "id": "260804_ronix-fiku-bav-forms",
-      "why": "Session: Ronix FiKu dossier arc + FK Sach notes + scan filing + bAV form hunt (chat 4dc803b0…); intake 2026-08-06 Logistikvertrag + Grundrisse for BHV/DSI.",
-      "canonical": "DABOS/docs/reference/venture-dvag/handover-ronix-fiku-bav-2026-08-04.md",
+      "why": "Session: Ronix FiKu dossier + BHV/DSI Anzufordern (chat 4dc803b0…; 2026-08-06 Logistik-DL OCR + print questions; Akte advanced through 2026-10-07).",
+      "canonical": "DABOS/docs/reference/venture-dvag/handover-ronix-fiku-bav-2026-08-04.md (points at Akte).",
       "resume": "",
       "heat": "open",
       "source": "chat-backlog",
