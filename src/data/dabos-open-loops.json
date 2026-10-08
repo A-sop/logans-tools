@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-10-08T17:43:06.845Z",
+  "generated_at": "2026-10-08T20:24:47.393Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 65,
+    "hot": 66,
     "open": 0,
     "ship": 0,
-    "still_open": 65,
+    "still_open": 66,
     "closed": 44,
-    "total": 65,
+    "total": 66,
     "by_segment": {
       "treasury": 7,
-      "assets": 22,
+      "assets": 23,
       "mail": 9,
       "esto": 4,
       "gfp": 6,
@@ -34,7 +34,7 @@
       "Dept6": 6,
       "Dept7": 0,
       "Dept8": 7,
-      "Dept9": 22,
+      "Dept9": 23,
       "Dept10": 0,
       "Dept11": 1,
       "Dept12": 0,
@@ -53,7 +53,7 @@
     "window_days": 7,
     "since": "2026-10-02",
     "closed": 0,
-    "still_open": 14,
+    "still_open": 15,
     "by_dept": {
       "Dept1": {
         "closed": 0,
@@ -89,7 +89,7 @@
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 8
+        "still_open": 9
       },
       "Dept10": {
         "closed": 0,
@@ -183,6 +183,16 @@
     "Dept21"
   ],
   "hot": [
+    {
+      "id": "261008_body-posts-talk",
+      "why": "Look again. Jellyfin map said Seagate; the app scans the SSD. An agent parked the watch on Dept9 and shut out Dept13 and Dept20. Founder: this may be the Body post, and the posts still are not talking to each other. Do not treat tonight’s assignment as settled.",
+      "canonical": "dept09-assets/fleet-connections.md § Jellyfin · dept-briefs/dept09-assets-reserve.md open thread · media-offload-to-ln02-runbook.md library map",
+      "resume": "body posts talking",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
     {
       "id": "260831_gfp-marketing-ae",
       "why": "Corrected: production ~0; 750 then 401; Dec still fills Jan; Cal.com; lists census; no €60k×N.",
