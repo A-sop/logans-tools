@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T20:02:36.159Z",
+  "generated_at": "2026-10-08T17:43:06.845Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
@@ -51,7 +51,7 @@
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-10-01",
+    "since": "2026-10-02",
     "closed": 0,
     "still_open": 14,
     "by_dept": {
@@ -395,7 +395,7 @@
     },
     {
       "id": "260926_allfinanz-watch-close",
-      "why": "Allfinanz Watch still open. Also 29 Aug parked DISPO (Madadi Inkasso, Meylahn BA, …). File + Protokoll; never Delete Vertragsrelevante.",
+      "why": "Allfinanz Watch still open. 29 Aug parked DISPO is in the Akten. File + Protokoll; never Delete Vertragsrelevante.",
       "canonical": "Proviso/.../handover-watchfolder-2026-07-30.md § Parked todo · dept01-mail-triage\\RESUME.md",
       "resume": "Outlook DISPO / continue Watch grind",
       "heat": "hot",
@@ -455,9 +455,9 @@
     },
     {
       "id": "261007_proviso-ops-bits",
-      "why": "NEW. Sharifi T&N BFO chase; old salon→T&N?; Reza shared model + Proviso bits; sipgate fax; LA40 autofill; Brisbane travel insurance.",
+      "why": "NEW. One firm BFO chase; old salon→that firm?; Reza shared model + Proviso bits; sipgate fax; LA40 autofill; Brisbane travel insurance. Substance in the Akte.",
       "canonical": "§ triage map 2026-10-07 · mail bay / Proviso handovers",
-      "resume": "Sharifi T&N / LA40 autofill",
+      "resume": "firm BFO chase / LA40 autofill",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -485,9 +485,9 @@
     },
     {
       "id": "261007_known-desk-leftovers",
-      "why": "Desk leftovers: DKB Postfach unread still blocked (ln02 CDP / DKB-App). Also: Paperless DKB-Postfach dupes, Deinert Stellplatz handle (PDFs filed — reply/pay/book), expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening.",
+      "why": "Desk leftovers: DKB Postfach unread still blocked (ln02 CDP / DKB-App). Also: Paperless DKB-Postfach dupes, Stellplatz landlord handle (PDFs filed — reply/pay/book), expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening.",
       "canonical": "§ 261007_known-desk-leftovers · HOUSING Stellplatz dossier",
-      "resume": "DKB Postfach unread / Deinert Stellplatz / desk leftovers status",
+      "resume": "DKB Postfach unread / Stellplatz landlord / desk leftovers status",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "treasury",
@@ -504,10 +504,10 @@
       "dept": "Dept9"
     },
     {
-      "id": "261007_metzdorf-phv-todesfall",
-      "why": "NEW. #2981 Todesfall Metzdorf / PHV-Aufhebung wrongly under CAREER-DVAG. Propose→Proviso→AF_Customer Akte + brief Protokoll; founder go before move.",
-      "canonical": "This file § 261007_metzdorf-phv-todesfall · Paperless #2981",
-      "resume": "Metzdorf Todesfall / PHV Aufhebung Akte",
+      "id": "261007_phv-todesfall-2981",
+      "why": "NEW. Paperless #2981 PHV-Aufhebung (Todesfall) wrongly under CAREER-DVAG. Propose→Proviso→AF_Customer Akte + brief Protokoll; founder go before move. Names and the policy number stay in the Akte.",
+      "canonical": "This file § 261007_phv-todesfall-2981 · Paperless #2981",
+      "resume": "PHV Aufhebung Akte / Paperless 2981",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
