@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-10-08T20:24:47.393Z",
+  "generated_at": "2026-10-08T20:47:10.167Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 66,
-    "open": 0,
+    "hot": 96,
+    "open": 2,
     "ship": 0,
-    "still_open": 66,
+    "still_open": 98,
     "closed": 44,
-    "total": 66,
+    "total": 98,
     "by_segment": {
-      "treasury": 7,
-      "assets": 23,
+      "treasury": 9,
+      "assets": 55,
       "mail": 9,
       "esto": 4,
       "gfp": 6,
-      "consulting": 2,
+      "consulting": 1,
       "legal": 1,
       "data": 1,
       "platform": 1,
-      "growth": 8,
+      "growth": 7,
       "other": 4
     },
     "by_dept": {
       "Dept1": 10,
       "Dept2": 0,
       "Dept3": 0,
-      "Dept4": 8,
+      "Dept4": 7,
       "Dept5": 0,
       "Dept6": 6,
       "Dept7": 0,
-      "Dept8": 7,
-      "Dept9": 23,
+      "Dept8": 9,
+      "Dept9": 55,
       "Dept10": 0,
       "Dept11": 1,
       "Dept12": 0,
@@ -46,14 +46,14 @@
       "Dept18": 0,
       "Dept19": 0,
       "Dept20": 4,
-      "Dept21": 7
+      "Dept21": 6
     }
   },
   "last_week": {
     "window_days": 7,
     "since": "2026-10-02",
     "closed": 0,
-    "still_open": 15,
+    "still_open": 47,
     "by_dept": {
       "Dept1": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 2
+        "still_open": 4
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 9
+        "still_open": 39
       },
       "Dept10": {
         "closed": 0,
@@ -185,9 +185,19 @@
   "hot": [
     {
       "id": "261008_body-posts-talk",
-      "why": "Look again. Jellyfin map said Seagate; the app scans the SSD. An agent parked the watch on Dept9 and shut out Dept13 and Dept20. Founder: this may be the Body post, and the posts still are not talking to each other. Do not treat tonight’s assignment as settled.",
+      "why": "Look again. Jellyfin map said Seagate; the app scans the SSD. An agent parked the watch on Dept9 and shut out Dept13 and Dept20. Founder: agents do not know the source routing policy. Address later. Do not treat tonight’s assignment as settled.",
       "canonical": "dept09-assets/fleet-connections.md § Jellyfin · dept-briefs/dept09-assets-reserve.md open thread · media-offload-to-ln02-runbook.md library map",
-      "resume": "body posts talking",
+      "resume": "body posts talking / agents don't know policy",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_gfp-ultimate-leadlist-hzr",
+      "why": "HZR migrate drain. Ultimate list on DATA (10.593 unique, bKV-first). Script in DABOS. Canvases LDW-only.",
+      "canonical": "dept17-sales/handover-gfp-ultimate-leadlist-2026-09-01.md",
+      "resume": "GFP ultimate leadlist",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -195,7 +205,7 @@
     },
     {
       "id": "260831_gfp-marketing-ae",
-      "why": "Corrected: production ~0; 750 then 401; Dec still fills Jan; Cal.com; lists census; no €60k×N.",
+      "why": "AE vs ~€58k pile; 750 then 401; Cal.com; no €60k×N. Leadlist built Sep 1 — see 261008_….",
       "canonical": "dept17-sales/handover-gfp-ae-liability-plan-2026-08-31.md",
       "resume": "execute GFP AE from October",
       "heat": "hot",
@@ -285,9 +295,19 @@
     },
     {
       "id": "260815_backups-caught-up",
-      "why": "Catch-up + SSD tasks OK; Tailscale SSH cleared 2026-08-15; residual = SSD free space for monthly image only",
+      "why": "Catch-up OK; residual = SSD free space for monthly image. Layout: Samsung=D: on-site; Seagate=ln02.",
       "canonical": "dept09-assets/BACKUP-HANDOFF.md",
       "resume": "monthly images",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-realtek-cd-samsung-backup",
+      "why": "Drained LDW 2026-10-08. Fake Realtek CD uninstalled; Samsung backup already done. Keep if CD returns after dock plug.",
+      "canonical": "dept09-assets/handover-ldw-realtek-cd-samsung-backup-2026-10-08.md",
+      "resume": "Realtek fake CD / Samsung D backup",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -415,19 +435,69 @@
     },
     {
       "id": "260929_green-bridge-patrick-murphy",
-      "why": "Appointment done. Blaschke onboarding in progress. Docs → mail@germanfinancialplanning.de. DVAG products parked later.",
+      "why": "Appointment done. Detail superseded by 261007_green-bridge-fk-akte-hzr. Client / payroll lane. Docs → mail@germanfinancialplanning.de.",
       "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
-      "resume": "Green Bridge Blaschke / Murphy docs GFP mail",
+      "resume": "Green Bridge Patrick",
       "heat": "hot",
       "source": "chat-backlog",
-      "segment": "gfp",
-      "dept": "Dept6"
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_green-bridge-fk-akte-hzr",
+      "why": "HOT HZR resume. FK Akte + OS fill guide ready; OS forms not saved; Vollmacht Word emailed GFP→Blaschke 07.10 — wet-ink scan / IdNr office still open.",
+      "canonical": "DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\HZR-RESUME-2026-10-07.md · FK AF_Customer\\FK_Green Bridge… · project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md",
+      "resume": "Green Bridge FK OS fill / Blaschke Vollmacht send",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "260930_hzr-ssd-swap-prep",
-      "why": "HOT Fri 2 Oct. Staging + HZR wind-down done 09-30. Paste: hzr52-pre-swap-2026-09-30\\FRI-HANDOVER-PASTE.md. Left: Win11 USB · Dropbox green · parcels → SN7100 install + fresh Win11.",
-      "canonical": "PO-013 · FRI-HANDOVER-PASTE",
-      "resume": "HZR SSD swap / PO-013 Friday",
+      "why": "Hardware done 2026-10-02 (Acronis clone → SN7100). Closeout still open on PO Acceptance. Staging kit kept on LDW.",
+      "canonical": "PO-013 § Closeout · handover-hzr52-desk-migrate-2026-10-08.md",
+      "resume": "PO-013 closeout / HZR SSD Acceptance",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_hzr-desk-migrate",
+      "why": "HOT. Founder migrating desk LDW→HZR. Install-kit audit + next-chat paste in handover. Continue HZR drains on HZR52. Samsung UGREEN cold copy keep until ~2026-10-09.",
+      "canonical": "dept09-assets/handover-hzr52-desk-migrate-2026-10-08.md",
+      "resume": "HZR desk migrate / finish HZR closeout",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_paypal-zoho-reconcile",
+      "why": "NEW 2026-10-08. PayPal API + wallet transfers done (80 posted; USD/AUD unc=0). Next = EUR ~150 vendor review + bank funding→PayPal + books −€5,694.03 vs feed €0.",
+      "canonical": "dept08-ledger/handover-paypal-zoho-reconcile-2026-10-08.md · A-207",
+      "resume": "PayPal Zoho reconcile / PayPal EUR uncategorized",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "261008_ldw-gfp-workspace-hzr",
+      "why": "NEW 2026-10-08. Closed Aug 21 LDW_GFP clone chat. Dual clones + git sync; GFP Neon on main; next chats open the triple workspace on HZR.",
+      "canonical": "founder-desk/handover-ldw-gfp-workspace-hzr-2026-10-08.md · C:\\Dev\\LDW_GFP.code-workspace",
+      "resume": "LDW_GFP on HZR / pull DABOS GFP Proviso",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_dabos-v1-skills-hzr",
+      "why": "NEW 2026-10-08 HZR drain. Specs strong; v1 runtime ~0%. skills.sh = later accelerator. Need Neon + code home + Next-vs-FastAPI before scaffold.",
+      "canonical": "dept11-engineering/handover-dabos-v1-skills-hzr-2026-10-08.md · docs/HANDOVER.md",
+      "resume": "DABOS v1 / scaffold DABOS loop",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -444,8 +514,148 @@
       "dept": "Dept6"
     },
     {
+      "id": "261008_gfp-repo-hygiene-hzr",
+      "why": "NEW 2026-10-08 HZR drain. GFP main clean+pushed. Left: drop stale temp-wip stash; ~18 May draft prospect PRs wait for human triage (not CRM).",
+      "canonical": "dept11-engineering/troubleshooting/handover-gfp-repo-hygiene-hzr-2026-10-08.md · GFP AGENTS.md §11",
+      "resume": "GFP repo hygiene / drop temp-wip stash / triage May draft PRs",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_mst-gmbh-go-live",
+      "why": "NEW 2026-10-08. MST site parked→October go-live. Domain not bought; Migadu+backup+Vercel Pro share; invoice draft €1.500 rev4 not sent. Drain from LDW→HZR.",
+      "canonical": "C:\\Dev\\MST-GmbH\\README.md · dabos-registers\\offer-drafts\\mst-invoice-draft-2026-09.md · this file § 261008_mst-gmbh-go-live",
+      "resume": "MST go-live / mstdevelopment.de / MST invoice",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_abrhein-gmbh-hzr",
+      "why": "NEW 2026-10-08 HZR drain. AB Rhein brochure site live on Vercel; sites.logans.tools alias conflict with MST; ab-rhein.gmbh not bought; align mail to dev@ + info@; commercial = EUR 500 card + EUR 39/mo Betrieb.",
+      "canonical": "C:\\Dev\\ABRhein-gmbh\\README.md · this file § 261008_abrhein-gmbh-hzr",
+      "resume": "AB Rhein HZR / ab-rhein.gmbh / AB Rhein retainer",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_bkv-prospect-sources-kununu-ie",
+      "why": "NEW 2026-10-08 HZR drain. Kununu = another Quelle (not new pipeline / not CF). Warm-ask on AF-DVAG/own. Pending: process _IE_DRW Firmenkunden lists.",
+      "canonical": "GFP src/docs/campaigns/kununu-as-prospect-source.md · DABOS PRD-bkv-outbound-operating-system.md",
+      "resume": "bKV prospect sources / Kununu Quelle / IE_DRW Firmenkunden",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-seo-geo-prepush",
+      "why": "NEW 2026-10-08 HZR. SEO/GEO Cursor rules + optional local pre-push on loganwilliams.com. Enable core.hooksPath=.githooks on HZR clone; smoke seo:gate.",
+      "canonical": "dept11-engineering/handover-ldw-seo-geo-prepush-2026-10-08.md · website .cursor/rules + .githooks",
+      "resume": "LDW SEO GEO prepush / enable loganwilliams hooksPath",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_obsidian-vault-migration",
+      "why": "NEW 2026-10-08 HZR drain. Sidecar sync lives in DABOS (Atlas quarantined). Vault 30_PROJECTS\\LDW_ObsidianVault thin on LDW close — recount + sync/Marker + triage on HZR. DVAG out of scope.",
+      "canonical": "dept01-intake/handover-obsidian-vault-migration-2026-10-08.md · scripts/dept01-intake/obsidian-sync/",
+      "resume": "Obsidian vault migration / obsidian sidecar sync",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-insights-drafts",
+      "why": "NEW 2026-10-08 HZR drain. LDW site topic list located; no formal draft flag. Priority: Köln Kolleg + Karneval expat tip. Live: welcome placeholder + Karneval economy post.",
+      "canonical": "dept11-engineering/handover-ldw-insights-drafts-hzr-2026-10-08.md · LDW src/docs/TOPICS-TO-WRITE.md",
+      "resume": "LDW insights drafts / Köln Kolleg / TOPICS-TO-WRITE",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_5nord-vs-return-generali",
+      "why": "NEW 2026-10-08 HZR drain. GF handed office one original VS after Verlusterklärung path; send to Generali with AG cover letter. Confirm VNR on sheet.",
+      "canonical": "Proviso docs/reference/handover-5nord-vs-return-2026-10-08.md · FK 5Nord",
+      "resume": "5Nord VS return / Versicherungsschein Generali zurück",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_reinhardt-ewe-sterbe-post",
+      "why": "NEW 2026-10-08 HZR drain. Widow Alt-Generali: EWE + Sterbeurkunde letter sent via ePost printer; await return; fix wrong provisional Stammdaten from Akte.",
+      "canonical": "Proviso docs/reference/handover-reinhardt-ewe-sterbe-2026-10-08.md · DVAG OneDrive PK",
+      "resume": "Reinhardt EWE Sterbe / Witwe Einwilligung Sterbeurkunde",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_proxalto-dianatinasab-pack",
+      "why": "NEW 2026-10-08 HZR drain. Proxalto Leben cancel pack filled (260626_); bank/sign/stamp/send + ensure Cursor skills on HZR. Foreign passport → Reisepass + Niederlassungserlaubnis Ausweis.",
+      "canonical": "Proviso docs/reference/handover-proxalto-dianatinasab-2026-10-08.md · leben-kuendigung-verlust-workflow.md",
+      "resume": "Dianatinasab Proxalto / Proxalto Kündigung pack",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_proxalto-kuendigung-hzr",
+      "why": "NEW 2026-10-08 HZR drain. Proxalto PLE SOP + scripts in repo; Talebnasab pack (260623_) still to print/sign/send (IBAN last digits).",
+      "canonical": "Proviso docs/reference/handover-proxalto-kuendigung-hzr-2026-10-08.md · sops/proxalto-kuendigung.md",
+      "resume": "Proxalto Kündigung SOP / Talebnasab Proxalto pack",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_proviso-abrechnung-eigen-multiline",
+      "why": "NEW 2026-10-08 HZR drain. Eigen card must = ∑ Suche lines; collapsing UNIQUE fixed on master. Next: smoke on HZR DB; prognosis payment_rhythm + full history (not 6mo / not 10/12 haircut).",
+      "canonical": "Proviso docs/reference/handover-abrechnung-eigen-multiline-2026-10-08.md",
+      "resume": "Proviso Eigen multiline / prognosis payment_rhythm",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_proviso-document-intelligence",
+      "why": "NEW 2026-10-08 HZR drain. Doc recognise/fill/generate PRD + registry written (Phase 0). Next: Phase 1 classifier / LA40+proof / generators. No real client PII in repo.",
+      "canonical": "Proviso docs/reference/handover-document-intelligence-hzr-2026-10-08.md · PRD-document-intelligence.md",
+      "resume": "document intelligence / LA40 autofill",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_proviso-letter-pingen",
+      "why": "NEW 2026-10-08 HZR drain. DIN/E-POST/Pingen letter lane built; Cowork Pingen keys note in Proviso (not Atlas). Next: fill PINGEN_, smoke, wire PDF upload.",
+      "canonical": "Proviso docs/reference/handover-letter-channels-pingen-2026-10-08.md · COWORK-pingen-handover.md",
+      "resume": "letter channels / Pingen Proviso",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
       "id": "261007_client-web-stripe",
-      "why": "NEW. AB Ryan site+CI; MEST + Connect Away → Stripe; Stripe on Logan account for ad-hoc web.",
+      "why": "NEW. AB Ryan site+CI; MEST + Connect Away → Stripe; Stripe on Logan account for ad-hoc web. (MST is its own row 261008_mst-gmbh-go-live.)",
       "canonical": "§ triage map 2026-10-07",
       "resume": "client web Stripe / AB Ryan CI",
       "heat": "hot",
@@ -462,6 +672,36 @@
       "source": "chat-backlog",
       "segment": "mail",
       "dept": "Dept1"
+    },
+    {
+      "id": "261008_bridgelife-hzr",
+      "why": "NEW 2026-10-08 HZR drain. Product folder handoff: pluggable store/storage/auth (Clerk deferred). Sync tree → HZR; boot dry-run; no real PII. Git not real yet.",
+      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md · A-241",
+      "resume": "BridgeLife HZR boot / bridgelife dry run",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_bridgelife-compiled-hzr",
+      "why": "HZR migrate 2026-10-08. bridgelife_compiled product tree + pluggable store/S3/auth; LDW :3000 verified. No real PII. Distinct from mail-MVP row.",
+      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md",
+      "resume": "BridgeLife HZR / bridgelife dry run",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_icp-logistik-dv-bridgelife",
+      "why": "HZR migrate / on main. ICP locked: Logistik trifecta P0; Heim/BridgeLife later; DV = hedge not fast capital. SOP in Proviso.",
+      "canonical": "venture-dvag/handover-icp-logistik-dv-bridgelife-2026-10-07.md · Proviso sops/bav-direktversicherung-os-apply.md",
+      "resume": "Logistik trifecta outbound / DV Blinkit kit",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "261007_proviso-ops-bits",
@@ -495,19 +735,39 @@
     },
     {
       "id": "261007_known-desk-leftovers",
-      "why": "Desk leftovers: DKB Postfach unread still blocked (ln02 CDP / DKB-App). Also: Paperless DKB-Postfach dupes, Stellplatz landlord handle (PDFs filed — reply/pay/book), expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening.",
-      "canonical": "§ 261007_known-desk-leftovers · HOUSING Stellplatz dossier",
-      "resume": "DKB Postfach unread / Stellplatz landlord / desk leftovers status",
+      "why": "Desk leftovers: DKB Postfach unread still blocked (ln02 CDP / DKB-App). Also: Paperless DKB-Postfach dupes, expatwealthgroup, BridgeLife domain, Gmail other-Logan filter, ln02 hardening. Stellplatz → own row.",
+      "canonical": "§ 261007_known-desk-leftovers",
+      "resume": "DKB Postfach unread / desk leftovers status",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "treasury",
       "dept": "Dept8"
     },
     {
+      "id": "261007_stellplatz-deinert-arrears",
+      "why": "HZR resume (restored to main 08.10). MV €60; paid Deinert €885; gap @€60 = €375 vs claim €635,28. Letter not sent. €75 paid ≠ amend.",
+      "canonical": "DATA !_LIFE-ADMIN\\HOUSING\\Stellplatz-17o-Tiefgarage\\Protokoll.md · vendor contacts-and-vendors\\maximilian-deinert\\",
+      "resume": "Stellplatz Deinert / Deinert arrears letter",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
       "id": "261007_paperless-hzr-personal-drain",
       "why": "NEW. Personal Paperless now on HZR52 :8000 (C:\\DATA\\10_WORK\\paperless-ngx). Drain docs missing data_path since ~#2983 / Oct ingest (bank/KK/EDV…). Sep 29 batch #2969–2982 + Medicare filed — do not re-file.",
       "canonical": "This file § 261007_paperless-hzr-personal-drain · bridge scripts/dept09-assets/paperless/",
       "resume": "HZR Paperless drain / paperless data_path",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ldw-scan-ewe-hzr-migrate",
+      "why": "On main 08.10. Aug drain (Kashani EWE) was wip-only; restored. HZR C:\\LDW_Scan has new Oct 8 Kyocera PDFs.",
+      "canonical": "dept01-intake/handover-ldw-scan-ewe-kashani-2026-08-11.md",
+      "resume": "process LDW_Scan / HZR scan bay",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -544,6 +804,26 @@
       "dept": "Dept9"
     },
     {
+      "id": "261008_eu-ai-act-dept15",
+      "why": "NEW 2026-10-08 HZR drain. EU AI Act brief → Dept15. Intake filed (Part A #7); inventory not started. Art. 50 transparency 2 Aug 2026.",
+      "canonical": "dept15-compliance/EU-AI-Act-Compliance.md · wiki sources/eu-ai-act-compliance-ldw-2026-07-16.md · compliance-register #7",
+      "resume": "EU AI Act inventory / Dept15 AI Act",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_gfp-social-postiz-next",
+      "why": "NEW 2026-10-08 HZR drain. Jul chat: TOFU/MOFU/BOFU doctrine + FB batch-1 scheduled (Jul 27–Aug 5 — past). Next: verify published → batch 2; IG needs media; RT parked. Commit dirty social docs if needed.",
+      "canonical": "dept04-content/handover-gfp-social-tofu-postiz-2026-10-08.md · funnel policy · social-packs/",
+      "resume": "GFP social Postiz next pack / verify GFP Facebook batch-1",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
       "id": "261007_telegram-export-ingest",
       "why": "NEW. Telegram Desktop DataExport_2026-10-06 filed off Desktop → C:\\DATA\\10_WORK\\dept01-housekeeping\\telegram-exports\\DataExport_2026-10-06\\ (result.json + chats). Ingest links/notes into DABOS Inbox / wiki (same pattern as 2026-06-14 export drain).",
       "canonical": "That folder · docs/wiki/inbox/ · false-dupe fix may touch same bot",
@@ -562,6 +842,16 @@
       "source": "chat-backlog",
       "segment": "treasury",
       "dept": "Dept8"
+    },
+    {
+      "id": "261007_ramkhoo-eat-buchwald",
+      "why": "Blaue Karte not issued. Buchwald mail sent 1 Oct. Do not re-file. Was on wip-LDW-20261004 only; restored to main 2026-10-08.",
+      "canonical": "Dropbox KUNDENORDNER\\Ramkhoo, Hamidreza\\!_Protokoll.md",
+      "resume": "Ramkhoo Blaue Karte an Buchwald",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "260819_acer-downloads-into-onedrive",
@@ -595,9 +885,9 @@
     },
     {
       "id": "260807_gfp-migrate-to-neon",
-      "why": "GFP data plane still Supabase-shaped. GABC Supabase stays frozen until this lane.",
+      "why": "DONE GFP product (A-188 + 796aa27). GABC Supabase freeze parked.",
       "canonical": "german-financial-planning/src/docs/migrate-to-neon.md",
-      "resume": "GFP Neon migrate",
+      "resume": "GABC Supabase freeze (later)",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "gfp",
@@ -645,13 +935,13 @@
     },
     {
       "id": "260804_ronix-fiku-bav-forms",
-      "why": "Akte advanced 2026-10-07. Still: Umsatz/BWA, Vorschäden, Inventar Blindeisenweg.",
+      "why": "Akte advanced 2026-10-07. Anzufordern PDF emailed Gmail 2026-08-07. Still: Umsatz/BWA, Vorschäden, Inventar Blindeisenweg; OS Calc on HZR.",
       "canonical": "Dropbox Ronix GmbH\\!_Dossier.md · A-291",
-      "resume": "Ronix FiKu",
+      "resume": "Ronix FiKu / Ronix Calc",
       "heat": "hot",
       "source": "chat-backlog",
-      "segment": "consulting",
-      "dept": "Dept21"
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "260803_data-retail-registry-hygiene",
@@ -765,13 +1055,23 @@
     },
     {
       "id": "260804_ahrefs-alternatives",
-      "why": "Research only, from ship board.",
-      "canonical": "dept04-content/ahrefs-alternatives-research.md",
-      "resume": "Ahrefs alternatives",
+      "why": "Ruling: claude-seo primary; free Ahrefs side-by-side. Execute via A-261 / 261008_gfp-fable-marketing-drain.",
+      "canonical": "dept04-content/ahrefs-alternatives-research.md · A-261",
+      "resume": "A-261 claude-seo",
       "heat": "hot",
       "source": "chat-backlog",
-      "segment": "growth",
-      "dept": "Dept4"
+      "segment": "gfp",
+      "dept": "Dept6"
+    },
+    {
+      "id": "261008_gfp-fable-marketing-drain",
+      "why": "Fable sprint specs+code shipped; human A-253/254/262 + agent A-261 + build A-255…260 open. HZR resume.",
+      "canonical": "dept04-content/handover-gfp-fable-marketing-sprint-2026-07-06.md",
+      "resume": "GFP Fable drain / A-261 claude-seo",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     },
     {
       "id": "260804_substack-venture-channel",
@@ -844,6 +1144,27 @@
       "dept": "Dept4"
     }
   ],
-  "open": [],
+  "open": [
+    {
+      "id": "261008_daily-triage-ensure-server",
+      "why": "LDW→HZR migrate drain. http://localhost:3001/dabos/triage kept opening from Task Scheduler with nothing listening — connection refused. Founder wants the scheduled fire to actually work.",
+      "canonical": "docs/reference/dept21-executive-director/founder-desk/daily-triage.md · scripts under scripts/dept02-coordination/dabos/ (Ensure-LogansToolsDevServer.ps1, Show-DailyTriageReminder.ps1, Run-DailyTriage.ps1) · schedule helper scripts/dept09-assets/backup/schedule-daily-triage.ps1",
+      "resume": "daily triage ensure / DABOS-DailyTriage on HZR",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_zoho-expenses-eur-format",
+      "why": "Zoho Expenses remapped into EÜR-shaped review table (best guess). Founder still needs manual category check + copy/paste into year EÜR — migrating desk to HZR.",
+      "canonical": "dept08-ledger/handover-zoho-expenses-eur-format-2026-10-08.md · DATA C:\\DATA\\20_ADMIN\\!!_ZOHO-BOOKS\\expenses-working-xlsx\\ · script scripts/dept08-ledger/tax/fill_zoho_eur_sheet.py",
+      "resume": "Zoho expenses EÜR format / all-years EÜR guess",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    }
+  ],
   "ship": []
 }
