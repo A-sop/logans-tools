@@ -23,6 +23,11 @@ Bundled under `src/data/euer/`:
 - `transactions-workbook-YYYY.json` — lines from master `YYYY_EÜR` sheet (2020–2026)
 - `account-eur-map.csv`, `eur-zeile-labels.json` — EÜR Zeile + labels (no API)
 - `euer-summary-2025.csv`, `euer-summary-2026.csv` — Tax tab totals
+- `transactions-zoho-YYYY.json` — on-disk Zoho `db-apply-*-preview.csv` + PayPal wrapup (no live API)
+
+**Merge order in UI:** booking-suggestions → Zoho export JSON → workbook JSON (deduped).
+
+**HZR resume:** DABOS `docs/reference/dept08-ledger/handover-ldw-books-euer-ui-hzr-2026-10-08.md` · backlog `261008_ldw-books-euer-ui`.
 
 Refresh bundle from PC:
 
@@ -35,7 +40,7 @@ vercel deploy --prod
 
 Local dev with full `C:\DATA\20_ADMIN`: set `LDW_DATA_ROOT` in `.env.local`.
 
-**Transactions UI:** `/euer/ledger` — In/Out, SKR03, EÜR Zeile; excludes `transfer` / `private`. Inbox = lines needing review.
+**Transactions UI:** `/euer/ledger` — In/Out, SKR03, EÜR Zeile; excludes `transfer` / `private`. Inbox = lines needing review. EÜR workbook is **not** required for raw bank/Zoho lines.
 
 ## Scripts (PC)
 
