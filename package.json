@@ -36,6 +36,7 @@
     "dabos:post-gfp-weekly-stats": "tsx scripts/dabos/post-gfp-weekly-stats.ts",
     "dabos:post-division-weekly-stats": "tsx scripts/dabos/post-division-weekly-stats.ts",
     "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts",
+    "dabos:hat-receipt": "tsx scripts/dabos/hat-receipt.ts",
     "intake:run": "tsx scripts/dabos-ops/run-local-intake.ts",
     "intake:init": "tsx scripts/dabos-ops/run-local-intake.ts --ensure-only",
     "intake:preflight": "tsx scripts/dabos-ops/preflight.ts",
