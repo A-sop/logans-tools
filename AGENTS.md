@@ -24,7 +24,7 @@ This repo **ships product code**. The org foundation lives in **DABOS**.
 3. Env: `C:\Dev\DABOS\.env.local` (this repo’s `.env.local` must link there — `Link-DabosEnvLocal.ps1`).
 4. Template (names only): `C:\Dev\DABOS\docs\reference\dept09-assets\homelab-and-api-keys.template.env`
 5. Scripts: `C:\Dev\DABOS\scripts\deptNN-*` — Linear under `dept02-coordination/linear/`.
-6. Hats: `C:\Dev\DABOS\.agents\roles/` when acting as a department.
+6. Hats: `C:\Dev\DABOS\.agents\roles/` — every session wears one hat (see .cursor/rules/hat-on-post.mdc); files under `_archive/` are superseded and must not be followed.
 7. On changes, declare: **Model**, **Agent**, **Surface**.
 8. Access order: CLI → repo scripts/API → MCP → browser/dashboard.
 9. New online DB: Neon via `DATABASE_URL`. Supabase is legacy only.
