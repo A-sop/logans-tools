@@ -25,9 +25,9 @@ If the user says things like **"I'm done for the day"**, **"wrapping up"**, or *
 1. Run DABOS session **End** + **commit/push this repo’s changes** (and other touched roots) per session-timestamps; show `**Session ended:** …`.
 2. Read **`CHAT-PRIMER.md`** (section **"When you say I'm done for the day"**) and **`src/docs/PROJECT-VALUE.md`** for numbers and currency.
 3. **Session length:** Ask how long they’ve been working if not given. Use the number they give.
-4. **Valuation:** Three ledgers — see DABOS `PROJECT-VALUE.md` + `cost-estimate-reference.md`. **A** founder attention **€10/hr** provisional (income÷hours). **B** hire-a-dev **€95/hr** (contractor hours for results, not briefing). **C** CapEx avoided on PO register.
+4. **Valuation:** Three ledgers — SSOT `C:\Dev\DABOS\docs\reference\dept21-executive-director\founder-desk\cost-estimate-reference.md` (+ `PROJECT-VALUE.md`). **A** founder attention **€93.16/hr**. **B** hire-a-dev **€95/hr**. **C** CapEx avoided on PO register. Do not use retired €10 / €40 / €52 as live rates.
 5. **Always include in your reply:**
- - **This session (A):** X hrs → Y EUR @ €10.
+ - **This session (A):** X hrs → Y EUR @ €93.16.
  - **Hire-a-dev total (B):** ~€11,400–13,300 @ €95 (~120–140 contractor hours) — bump only if something shipped.
  - **Budget (C):** any CapEx avoided or none.
 6. One short paragraph; end on a positive note.
