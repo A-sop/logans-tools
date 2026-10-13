@@ -53,9 +53,15 @@ export async function POST(request: Request) {
     return jsonError('Both sha256 and store_path must be provided together, or neither', 400);
   }
 
+  // DVAG guard: check all free-text fields that reach Neon
   const textMatches = DVAG_KEYWORD_REGEX.test(parsed.data.text);
   const urlsMatch = parsed.data.urls?.some((url) => DVAG_KEYWORD_REGEX.test(url)) ?? false;
-  if (textMatches || urlsMatch) {
+  const titleMatches = parsed.data.title ? DVAG_KEYWORD_REGEX.test(parsed.data.title) : false;
+  const storePathMatches = parsed.data.store_path ? DVAG_KEYWORD_REGEX.test(parsed.data.store_path) : false;
+  const wikiBundleMatches = parsed.data.wiki_bundle ? DVAG_KEYWORD_REGEX.test(parsed.data.wiki_bundle) : false;
+  const attachmentsMatch = parsed.data.attachments?.some((att) => DVAG_KEYWORD_REGEX.test(att)) ?? false;
+  
+  if (textMatches || urlsMatch || titleMatches || storePathMatches || wikiBundleMatches || attachmentsMatch) {
     return jsonError('DVAG keyword detected; capture rejected', 422);
   }
 
