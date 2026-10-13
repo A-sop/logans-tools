@@ -201,4 +201,120 @@ describe('POST /api/dabos/ingest', () => {
     const data = await response.json();
     expect(data.ok).toBe(true);
   });
+
+  it('returns 422 when DVAG keyword is in title', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-title-test',
+        text: 'Some safe text',
+        title: 'Meeting with DVAG representatives',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
+
+  it('returns 422 when DVAG keyword is in store_path (pointer mode)', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-storepath-test',
+        text: 'Some text',
+        title: 'Safe title',
+        sha256: 'a'.repeat(64),
+        store_path: 'docs/clients/proviso-contract-2026.md',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
+
+  it('returns 422 when DVAG keyword is in wiki_bundle', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-wiki-test',
+        text: 'Some text',
+        wiki_bundle: 'allfinanz-docs.zip',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
+
+  it('returns 422 when DVAG keyword is in attachments', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-attachment-test',
+        text: 'Some text',
+        attachments: ['meeting-notes.pdf', 'dvag-contract.pdf', 'report.xlsx'],
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
+
+  it('returns 422 when DVAG keyword matches Vermögensberater in title', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-vermoegen-test',
+        text: 'Safe text',
+        title: 'Call with Vermögensberater Schmidt',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
+
+  it('returns 422 when DVAG keyword is Deutsche Vermögensberatung in wiki_bundle', async () => {
+    const request = new Request('http://localhost/api/dabos/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mouth: 'telegram',
+        external_id: 'tg-deutsche-test',
+        text: 'Safe text',
+        wiki_bundle: 'Deutsche Vermögensberatung-files.zip',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(422);
+    
+    const data = await response.json();
+    expect(data.error).toContain('DVAG keyword detected');
+  });
 });
