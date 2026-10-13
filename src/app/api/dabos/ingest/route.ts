@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { dabosDbUnavailable, jsonError, requireDabosDb } from '@/lib/dabos/api-utils';
 import { getDabosSql } from '@/lib/dabos/db';
-import { ingestCapture } from '@/lib/dabos/ingest';
+import { DVAG_KEYWORD_REGEX, ingestCapture } from '@/lib/dabos/ingest';
 import { authorizeTier0 } from '@/lib/dabos/tier0-auth';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,7 @@ const bodySchema = z.object({
   division_id: z.string().max(20).optional().nullable(),
   priority: z.number().int().min(1).max(5).optional(),
   title: z.string().max(120).optional(),
-  sha256: z.string().regex(/^[0-9a-f]{64}$/).optional(),
+  sha256: z.string().regex(/^[0-9a-fA-F]{64}$/).transform((v) => v.toLowerCase()).optional(),
   store_path: z.string().max(500).optional(),
 });
 
@@ -47,9 +47,14 @@ export async function POST(request: Request) {
     return jsonError(parsed.error.errors.map((e) => e.message).join('; '));
   }
 
-  const dvagRegex = /dvag|deutsche\s+verm(ö|oe)gensberatung|verm(ö|oe)gensberat|proviso|allfinanz/i;
-  const textMatches = dvagRegex.test(parsed.data.text);
-  const urlsMatch = parsed.data.urls?.some((url) => dvagRegex.test(url)) ?? false;
+  const hasSha256 = Boolean(parsed.data.sha256);
+  const hasStorePath = Boolean(parsed.data.store_path);
+  if (hasSha256 !== hasStorePath) {
+    return jsonError('Both sha256 and store_path must be provided together, or neither', 400);
+  }
+
+  const textMatches = DVAG_KEYWORD_REGEX.test(parsed.data.text);
+  const urlsMatch = parsed.data.urls?.some((url) => DVAG_KEYWORD_REGEX.test(url)) ?? false;
   if (textMatches || urlsMatch) {
     return jsonError('DVAG keyword detected; capture rejected', 422);
   }

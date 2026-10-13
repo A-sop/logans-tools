@@ -7,6 +7,13 @@ import type { Sql } from '@/lib/dabos/db';
 
 export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api'; // wire: which IN
 
+/**
+ * DVAG keyword regex — never post captures matching these terms.
+ * Word boundaries prevent false positives (provisorisch, Provisorium, improvisor).
+ * Note: verm(ö|oe)gensberat matches Vermögensberater, Vermögensberatung, etc.
+ */
+export const DVAG_KEYWORD_REGEX = /\b(?:dvag|deutsche\s+verm(?:ö|oe)gensberatung|verm(?:ö|oe)gensberat\w*|proviso|allfinanz)\b/i;
+
 export type IngestBasket = 'in' | 'pending' | 'out';
 
 export type IngestInput = {
@@ -154,16 +161,17 @@ export async function ingestCapture(
   let meta: Record<string, unknown>;
 
   if (isPointerMode) {
+    const sha256 = input.sha256!.toLowerCase();
     title = input.title || 'Capture';
     description = [
       `Pointer: ${input.store_path}`,
-      `sha256: ${input.sha256}`,
+      `sha256: ${sha256}`,
       `IN: ${input.mouth} · ${external_id}`,
     ].join('\n');
     meta = {
       mouth: input.mouth,
       external_id,
-      sha256: input.sha256,
+      sha256,
       store_path: input.store_path,
       wiki_bundle: input.wiki_bundle ?? null,
       pointer: true,
