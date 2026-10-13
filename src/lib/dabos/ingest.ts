@@ -7,6 +7,13 @@ import type { Sql } from '@/lib/dabos/db';
 
 export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api'; // wire: which IN
 
+/**
+ * DVAG keyword regex — never post captures matching these terms.
+ * Word boundaries prevent false positives (provisorisch, Provisorium, improvisor).
+ * Note: verm(ö|oe)gensberat matches Vermögensberater, Vermögensberatung, etc.
+ */
+export const DVAG_KEYWORD_REGEX = /\b(?:dvag|deutsche\s+verm(?:ö|oe)gensberatung|verm(?:ö|oe)gensberat\w*|proviso|allfinanz)\b/i;
+
 export type IngestBasket = 'in' | 'pending' | 'out';
 
 export type IngestInput = {
@@ -21,6 +28,9 @@ export type IngestInput = {
   department_id?: string | null;
   division_id?: string | null;
   priority?: number;
+  title?: string;
+  sha256?: string;
+  store_path?: string;
 };
 
 export type IngestResult = {
@@ -144,30 +154,57 @@ export async function ingestCapture(
     division_id = String((deptRow[0] as { division_id: string }).division_id);
   }
 
-  const urls = input.urls ?? [];
-  const attachments = input.attachments ?? [];
-  const description = [
-    parsed.body,
-    urls.length ? `\nURLs:\n${urls.map((u) => `- ${u}`).join('\n')}` : '',
-    attachments.length
-      ? `\nAttachments:\n${attachments.map((a) => `- ${a}`).join('\n')}`
-      : '',
-    input.wiki_bundle ? `\nWiki bundle: ${input.wiki_bundle}` : '',
-    `\nIN: ${input.mouth} · ${external_id}`,
-  ]
-    .filter(Boolean)
-    .join('');
+  const isPointerMode = Boolean(input.sha256 && input.store_path);
 
-  const meta = {
-    mouth: input.mouth,
-    external_id,
-    urls,
-    attachments,
-    wiki_bundle: input.wiki_bundle ?? null,
-    captured_at: input.captured_at ?? new Date().toISOString(),
-    is_work: parsed.is_work,
-    is_agent: parsed.is_agent,
-  };
+  let title: string;
+  let description: string;
+  let meta: Record<string, unknown>;
+
+  if (isPointerMode) {
+    const sha256 = input.sha256!.toLowerCase();
+    title = input.title || 'Capture';
+    description = [
+      `Pointer: ${input.store_path}`,
+      `sha256: ${sha256}`,
+      `IN: ${input.mouth} · ${external_id}`,
+    ].join('\n');
+    meta = {
+      mouth: input.mouth,
+      external_id,
+      sha256,
+      store_path: input.store_path,
+      wiki_bundle: input.wiki_bundle ?? null,
+      pointer: true,
+      captured_at: input.captured_at ?? new Date().toISOString(),
+      is_work: parsed.is_work,
+      is_agent: parsed.is_agent,
+    };
+  } else {
+    const urls = input.urls ?? [];
+    const attachments = input.attachments ?? [];
+    title = parsed.title;
+    description = [
+      parsed.body,
+      urls.length ? `\nURLs:\n${urls.map((u) => `- ${u}`).join('\n')}` : '',
+      attachments.length
+        ? `\nAttachments:\n${attachments.map((a) => `- ${a}`).join('\n')}`
+        : '',
+      input.wiki_bundle ? `\nWiki bundle: ${input.wiki_bundle}` : '',
+      `\nIN: ${input.mouth} · ${external_id}`,
+    ]
+      .filter(Boolean)
+      .join('');
+    meta = {
+      mouth: input.mouth,
+      external_id,
+      urls,
+      attachments,
+      wiki_bundle: input.wiki_bundle ?? null,
+      captured_at: input.captured_at ?? new Date().toISOString(),
+      is_work: parsed.is_work,
+      is_agent: parsed.is_agent,
+    };
+  }
 
   const priority = Math.min(5, Math.max(1, input.priority ?? (parsed.is_work ? 2 : 3)));
   const taskType = parsed.is_agent ? 'agent' : 'human';
@@ -194,7 +231,7 @@ export async function ingestCapture(
       ${`ingest-${input.mouth}`},
       ${division_id},
       ${department_id},
-      ${parsed.title},
+      ${title},
       ${description},
       ${taskType},
       ${'todo'},
