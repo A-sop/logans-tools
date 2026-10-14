@@ -21,6 +21,9 @@ export function statSourceLabel(workspaceId: string | null | undefined): string 
   if (workspaceId.startsWith('hat-corr-')) {
     return 'Dept1 hat correction (evidence-backed)';
   }
+  if (workspaceId.startsWith('gbp-presence-')) {
+    return 'Dept4 Google Business Profile (monthly email)';
+  }
   return workspaceId;
 }
 
@@ -55,6 +58,9 @@ export function statSourceDescription(workspaceId: string | null | undefined): s
   }
   if (workspaceId?.startsWith('hat-corr-')) {
     return 'Real hat/doc fix cycle for Dept1. Spot-checkable evidence in role_runs + founder-office flap.';
+  }
+  if (workspaceId?.startsWith('gbp-presence-')) {
+    return 'Dept4 presence stat from Google Business Profile monthly email. Views and interactions are sums of the GFP listing and the DVAG advisor listing; the split is in basis.listings. Dept6 is the secondary hat, not the owner.';
   }
   if (!workspaceId) {
     return 'Entered via the board UI or a one-off migration.';
