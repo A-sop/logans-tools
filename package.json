@@ -52,7 +52,8 @@
     "dil:apply": "tsx scripts/dabos-ops/apply-approved-manifest.ts",
     "dil:backfill-filing": "tsx scripts/dabos-ops/backfill-review-filing.ts",
     "dil:import-partner-codes": "tsx scripts/dabos-ops/import-seed-aliases.ts --partner-codes",
-    "scan-inbox": "tsx scripts/dabos-ops/scan-inbox/rename-from-pdf.ts"
+    "scan-inbox": "tsx scripts/dabos-ops/scan-inbox/rename-from-pdf.ts",
+    "hww:build": "tsx scripts/hww/build-hww-summary.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
