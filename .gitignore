@@ -81,3 +81,7 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# HWW local summaries (never commit real health/finance numbers)
+hww-summary*.json
+
