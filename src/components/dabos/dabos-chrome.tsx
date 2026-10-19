@@ -14,6 +14,7 @@ type DabosChromeProps = {
 const DABOS_CHROME_LINKS = [
   { href: '/dabos', label: 'Board' },
   { href: '/dabos/open', label: 'Open' },
+  { href: '/dabos/prompts', label: 'Prompts' },
   { href: '/dabos/sipgate', label: 'sipgate' },
 ] as const;
 
