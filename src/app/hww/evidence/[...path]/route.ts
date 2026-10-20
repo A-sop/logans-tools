@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { requireDabosAuth } from '@/lib/dabos/clerk-auth';
+import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
 import { getHwwDataDir, resolveEvidencePath } from '@/lib/hww/paths';
 
 export const dynamic = 'force-dynamic';
@@ -10,9 +11,15 @@ export async function GET(
   _request: Request,
   ctx: { params: Promise<{ path: string[] }> },
 ) {
-  const auth = await requireDabosAuth();
-  if ('error' in auth) return auth.error;
+  const { userId } = await auth();
+  if (!userId) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+  if (!isHwwClerkUserAllowed(userId)) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
 
+  // Evidence files stay on local DATA only (not synced to Neon).
   if (!getHwwDataDir()) {
     return new NextResponse('Not Found', { status: 404 });
   }

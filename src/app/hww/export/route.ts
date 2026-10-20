@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server';
-import { requireDabosAuth } from '@/lib/dabos/clerk-auth';
-import { getHwwDataDir } from '@/lib/hww/paths';
-import { loadHwwRecords } from '@/lib/hww/load';
+import { auth } from '@clerk/nextjs/server';
+import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
+import { resolveHwwRecords, resolveHwwSummary } from '@/lib/hww/load';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  const auth = await requireDabosAuth();
-  if ('error' in auth) return auth.error;
+  const { userId } = await auth();
+  if (!userId) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+  if (!isHwwClerkUserAllowed(userId)) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
 
-  if (!getHwwDataDir()) {
+  const summary = await resolveHwwSummary();
+  if (!summary) {
     return new NextResponse('Not Found', { status: 404 });
   }
 
@@ -19,7 +25,7 @@ export async function GET(request: Request) {
   const area = url.searchParams.get('area') ?? undefined;
   const kind = url.searchParams.get('kind') ?? undefined;
 
-  let rows = loadHwwRecords();
+  let rows = await resolveHwwRecords(summary);
   if (stat) rows = rows.filter((r) => r.stat === stat);
   if (week) rows = rows.filter((r) => r.stat_week === week);
   if (area) rows = rows.filter((r) => r.area === area);
