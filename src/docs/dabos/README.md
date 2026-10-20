@@ -31,7 +31,7 @@
    npm run dev:webpack
    ```
 
-5. Open **`https://dabos.logans.tools`** (production) or **`http://localhost:3001/dabos`** locally — no Logans.Tools header on DABOS routes.
+5. Open **`https://dabos.logans.tools`** (production) or **`http://localhost:3100/dabos`** locally (`npm run dev` binds **3100** so Twenty CRM can keep **3000**) — no Logans.Tools header on DABOS routes.
 
 ## Shared ingest (I0)
 
@@ -98,7 +98,7 @@ DABOS_ALLOWED_EMAILS=logan.d.williams@gmail.com
 1. Create or reuse a Clerk application for logans-tools.
 2. **Social connections → Google** — enable (see `src/docs/google-sign-in-setup.md`).
 3. **User & Authentication → Restrictions** — optional extra lock: disable sign-ups or restrict to allowlist.
-4. **Domains** — add `dabos.logans.tools`, `logans.tools`, `localhost:3000` (dev).
+4. **Domains** — add `dabos.logans.tools`, `logans.tools`, `localhost:3100` (dev; port 3000 is Twenty on HZR).
 5. **Vercel Production env** — use `pk_live_` / `sk_live_` keys; mirror redirect URLs above.
 
 Unauthenticated visits redirect to `/sign-in`. Wrong Gmail → 403 / access denied.

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { notFound, redirect } from 'next/navigation';
-import { isDabosEmailAllowlisted } from '@/lib/dabos/clerk-auth';
+import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
 import { getHwwDataDir } from '@/lib/hww/paths';
-import { loadHwwRecords, loadHwwSummary, type HwwRecord } from '@/lib/hww/load';
+import { resolveHwwRecords, resolveHwwSummary, type HwwRecord } from '@/lib/hww/load';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const dynamic = 'force-dynamic';
@@ -48,33 +48,32 @@ export default async function HwwPage({ searchParams }: { searchParams: Promise<
   if (!userId) {
     redirect('/sign-in?redirect_url=%2Fhww');
   }
-  if (!(await isDabosEmailAllowlisted(userId))) {
-    redirect('/sign-in?error=access_denied');
-  }
-  if (!getHwwDataDir()) {
+  // Logan-only by Clerk user id (404 for signed-in non-Logan, including other allowlisted DABOS emails).
+  if (!isHwwClerkUserAllowed(userId)) {
     notFound();
   }
 
   const q = await searchParams;
-  const summary = loadHwwSummary();
+  const summary = await resolveHwwSummary();
   if (!summary) {
     return (
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold tracking-tight">HWW</h1>
         <p className="text-sm text-muted-foreground">
-          No summary yet. Run <code className="text-foreground">npm run hww:build</code> locally.
+          No summary yet. Run <code className="text-foreground">npm run hww:build && npm run hww:sync</code>.
         </p>
       </div>
     );
   }
 
-  const records = loadHwwRecords();
+  const records = await resolveHwwRecords(summary);
   const drilled = filterRecords(records, q);
   const wisdomWeeks = (summary.wisdom as { weeks?: { week_ending: string; student_points: number; words_cleared: number; units: number; in_progress?: boolean }[] })
     ?.weeks ?? [];
   const maxPts = Math.max(1, ...wisdomWeeks.map((w) => w.student_points));
   const health = summary.health as Record<string, unknown>;
   const wealth = summary.wealth as Record<string, unknown>;
+  const sourceLabel = getHwwDataDir() ? 'local DATA' : 'Neon';
   const exportQs = new URLSearchParams();
   if (q.stat) exportQs.set('stat', q.stat);
   if (q.week) exportQs.set('week', q.week);
@@ -87,7 +86,7 @@ export default async function HwwPage({ searchParams }: { searchParams: Promise<
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">HWW</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Health · Wealth · Wisdom — local only. Built {String(summary.built_at)}.
+            Health · Wealth · Wisdom — {sourceLabel}. Built {String(summary.built_at)}.
           </p>
         </div>
         <Link
