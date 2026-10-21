@@ -136,28 +136,25 @@ function TaskPopover({
   );
 }
 
-function PrayerDrum({
-  faces,
-  paused,
-}: {
-  faces: { key: string; node: ReactNode }[];
-  paused: boolean;
-}) {
+// Pseudo-3D drum: each face gets its own perspective() transform computed per frame,
+// so no nested preserve-3d (which Android Chrome flattened / z-fought with the rim discs).
+function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }[]; paused: boolean }) {
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const cylRef = useRef<HTMLDivElement | null>(null);
   const faceRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [width, setWidth] = useState(800);
+  const [width, setWidth] = useState(0);
   const st = useRef({ angle: 0, vel: 0, dragging: false, lastX: 0, lastT: 0, moved: 0, idleAt: 0 });
   const pausedRef = useRef(paused);
   pausedRef.current = paused;
   const n = faces.length;
   const step = 360 / n;
-  const faceW = width < 520 ? Math.max(128, Math.min(160, width * 0.4)) : 210;
-  const radius = Math.round((faceW / 2 / Math.tan(Math.PI / n)) * 1.04);
+  const w = width || 800;
+  const faceW = Math.round(Math.min(210, Math.max(118, w * 0.37)));
+  const radius = Math.round(Math.min((faceW / 2 / Math.tan(Math.PI / n)) * 1.02, (w - faceW) / 2));
 
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
+    setWidth(el.clientWidth);
     const ro = new ResizeObserver(([e]) => setWidth(e.contentRect.width));
     ro.observe(el);
     return () => ro.disconnect();
@@ -182,14 +179,20 @@ function PrayerDrum({
         }
       }
       if (pausedRef.current) s.idleAt = t;
-      if (cylRef.current) cylRef.current.style.transform = `translateZ(${-radius}px) rotateY(${s.angle}deg)`;
       faceRefs.current.forEach((f, i) => {
         if (!f) return;
-        const a = ((i * step + s.angle) * Math.PI) / 180;
+        const deg = i * step + s.angle;
+        const a = (deg * Math.PI) / 180;
         const c = Math.cos(a);
-        f.style.opacity = String(Math.max(0, 0.25 + 0.75 * c));
-        f.style.pointerEvents = c > 0.35 ? 'auto' : 'none';
+        const x = radius * Math.sin(a);
+        const z = radius * (c - 1);
+        const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
+        f.style.transform = `translateX(${x}px) perspective(900px) translateZ(${z}px) rotateY(${rot}deg)`;
+        f.style.opacity = c < -0.05 ? '0' : String(0.3 + 0.7 * c);
+        f.style.visibility = c < -0.05 ? 'hidden' : 'visible';
+        f.style.pointerEvents = c > 0.4 ? 'auto' : 'none';
         f.style.zIndex = String(Math.round(c * 100) + 100);
+        f.style.filter = `brightness(${0.75 + 0.25 * c})`;
       });
       raf = requestAnimationFrame(tick);
     };
@@ -197,7 +200,7 @@ function PrayerDrum({
     return () => cancelAnimationFrame(raf);
   }, [radius, step]);
 
-  const degPerPx = 360 / (2 * Math.PI * radius);
+  const degPerPx = 360 / (2 * Math.PI * Math.max(60, radius));
   const onDown = (e: ReactPointerEvent) => {
     const s = st.current;
     s.dragging = true;
@@ -233,11 +236,11 @@ function PrayerDrum({
     st.current.idleAt = performance.now();
   };
 
+  const bodyW = radius * 2 + faceW * 0.15;
   return (
     <div className={styles.drumStage} ref={stageRef}>
       <div
         className={styles.drumView}
-        style={{ height: 'var(--drum-h)' }}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -250,22 +253,22 @@ function PrayerDrum({
           }
         }}
       >
-        <div className={styles.drumCyl} ref={cylRef}>
-          <div className={`${styles.drumRim} ${styles.drumRimTop}`} style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius, transform: `rotateX(90deg)` }} />
-          <div className={`${styles.drumRim} ${styles.drumRimBot}`} style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius, transform: `rotateX(90deg)` }} />
-          {faces.map((f, i) => (
-            <div
-              key={f.key}
-              ref={(el) => {
-                faceRefs.current[i] = el;
-              }}
-              className={styles.drumFace}
-              style={{ width: faceW, marginLeft: -faceW / 2, transform: `rotateY(${-i * step}deg) translateZ(${radius}px)` }}
-            >
-              {f.node}
-            </div>
-          ))}
+        <div className={styles.drumBody} style={{ width: bodyW, marginLeft: -bodyW / 2 }} aria-hidden>
+          <div className={`${styles.drumRim} ${styles.drumRimTop}`} />
+          <div className={`${styles.drumRim} ${styles.drumRimBot}`} />
         </div>
+        {faces.map((f, i) => (
+          <div
+            key={f.key}
+            ref={(el) => {
+              faceRefs.current[i] = el;
+            }}
+            className={styles.drumFace}
+            style={{ width: faceW, marginLeft: -faceW / 2 }}
+          >
+            {f.node}
+          </div>
+        ))}
       </div>
       <div className={styles.drumNav}>
         <button type="button" onClick={() => spinTo(1)} aria-label="Previous division">‹</button>
