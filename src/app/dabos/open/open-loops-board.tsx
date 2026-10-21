@@ -232,11 +232,6 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
     if (performance.now() - s.lastT > 80) s.vel = 0;
     s.dragging = false;
   };
-  const spinTo = (dir: number) => {
-    st.current.vel = 0;
-    st.current.angle = Math.round((st.current.angle - step / 2) / step) * step + step / 2 + dir * step;
-    st.current.idleAt = performance.now();
-  };
 
   const bodyW = Math.min(radius * 2, w);
   return (
@@ -259,7 +254,6 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
           <div className={`${styles.drumRim} ${styles.drumRimTop}`} />
           <div className={`${styles.drumRim} ${styles.drumRimBot}`} />
           <div className={styles.drumFinial} />
-          <div className={styles.drumSpindle} />
         </div>
         {faces.map((f, i) => (
           <div
@@ -273,11 +267,6 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
             {f.node}
           </div>
         ))}
-      </div>
-      <div className={styles.drumNav}>
-        <button type="button" onClick={() => spinTo(1)} aria-label="Previous division">‹</button>
-        <span>Swipe to turn</span>
-        <button type="button" onClick={() => spinTo(-1)} aria-label="Next division">›</button>
       </div>
     </div>
   );
@@ -408,25 +397,30 @@ export function OpenLoopsBoard({
 
       <div className={styles.drumWrap}>
         <div className={styles.boardDrum}>
-          <div className={styles.execRow}>
-            <div className={`${styles.execBox} ${styles.execEd}`}>
-              <span>{EXECUTIVE_LABELS.director}</span>
-              <strong>{total}</strong>
-            </div>
-          </div>
-          <div className={styles.secRow}>
-            <div className={styles.execBox}>
-              <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-              <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-            </div>
-            <div className={styles.execBox}>
-              <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-              <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-            </div>
-          </div>
           <PrayerDrum
             paused={openId !== null}
-            faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
+            faces={[
+              {
+                key: 'exec',
+                node: (
+                  <div className={styles.execFace}>
+                    <div className={`${styles.execBox} ${styles.execEd}`}>
+                      <span>{EXECUTIVE_LABELS.director}</span>
+                      <strong>{total}</strong>
+                    </div>
+                    <div className={styles.execBox}>
+                      <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                      <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+                    </div>
+                    <div className={styles.execBox}>
+                      <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                      <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+                    </div>
+                  </div>
+                ),
+              },
+              ...drumOrder.map((id) => ({ key: id, node: renderDivision(id) })),
+            ]}
           />
           {openDept ? (
             <div

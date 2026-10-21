@@ -55,14 +55,13 @@ body {
 
 /*
  * DABOS canvas ("Anachronistic Authority"): matte cosmic navy #050F26, CSS/SVG starfield,
- * faint gold vector grid. No photo.
+ * glossy sheen and radial glow. No photo.
  */
 body:has(.dabos-standalone) {
   background:
-    linear-gradient(rgb(197 160 89 / 0.07) 1px, transparent 1px) 0 0 / 48px 48px,
-    linear-gradient(90deg, rgb(197 160 89 / 0.07) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(115deg, transparent 0 35%, rgb(255 255 255 / 0.05) 45%, transparent 55%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='12' cy='30' r='.8' opacity='.7'/%3E%3Ccircle cx='70' cy='12' r='.6' opacity='.5'/%3E%3Ccircle cx='130' cy='60' r='1' opacity='.8'/%3E%3Ccircle cx='200' cy='22' r='.7' opacity='.6'/%3E%3Ccircle cx='40' cy='120' r='.6' opacity='.5'/%3E%3Ccircle cx='170' cy='140' r='.9' opacity='.7'/%3E%3Ccircle cx='95' cy='190' r='.7' opacity='.6'/%3E%3Ccircle cx='220' cy='210' r='.6' opacity='.5'/%3E%3Ccircle cx='15' cy='220' r='1' opacity='.8'/%3E%3Ccircle cx='110' cy='110' r='.5' opacity='.4'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 240px 240px,
-    radial-gradient(ellipse at 50% 20%, #0d1f4a 0%, #050f26 60%);
+    radial-gradient(ellipse at 50% 45%, #1a3470 0%, #0b1d4a 30%, #050f26 70%);
   background-color: #050f26;
   background-attachment: fixed;
   min-height: 100vh;
