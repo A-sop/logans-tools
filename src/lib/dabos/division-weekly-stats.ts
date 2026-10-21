@@ -15,7 +15,7 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
-import { endOfISOWeek, setISOWeek, startOfYear } from 'date-fns';
+import { endOfISOWeek, getISOWeek, getISOWeekYear, parseISO, setISOWeek, startOfYear } from 'date-fns';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 
 export type DivisionWeeklyResult = {
@@ -99,12 +99,40 @@ export function countShippedOutputs(shipLogMd: string | null): number {
   }).length;
 }
 
-/** qa_pass_rate = PASS verdicts / (PASS+FAIL) among filled Instance verdicts. */
-export function computeQaPassRate(validationMd: string | null): number | null {
+/**
+ * qa_pass_rate = PASS verdicts / (PASS+FAIL) among filled Instance verdicts.
+ * When year+week are provided (weekly post path), only count instances whose
+ * **Validated on:** date falls in that ISO week — not the all-time register.
+ */
+export function computeQaPassRate(
+  validationMd: string | null,
+  opts?: { year: number; week: number }
+): number | null {
   if (!validationMd) return null;
-  const verdicts = [...validationMd.matchAll(/\*\*Verdict:\s*(PASS|FAIL)/gi)].map((m) =>
-    m[1]!.toUpperCase()
-  );
+
+  const instanceBlocks = validationMd.split(/^## Instance\s+\d+/im).slice(1);
+  const blocks = instanceBlocks.length > 0 ? instanceBlocks : [validationMd];
+
+  const verdicts: string[] = [];
+  for (const block of blocks) {
+    const verdictMatch = block.match(/\*\*Verdict:\s*(PASS|FAIL)\b/i);
+    if (!verdictMatch?.[1]) continue;
+
+    if (opts) {
+      const dateMatch =
+        block.match(/\*\*Validated on:\*\*\s*(\d{4}-\d{2}-\d{2})/i) ??
+        block.match(/Validated on:\s*(\d{4}-\d{2}-\d{2})/i);
+      if (!dateMatch?.[1]) continue;
+      const validated = parseISO(dateMatch[1]);
+      if (Number.isNaN(validated.getTime())) continue;
+      if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
+        continue;
+      }
+    }
+
+    verdicts.push(verdictMatch[1].toUpperCase());
+  }
+
   if (verdicts.length === 0) return null;
   const pass = verdicts.filter((v) => v === 'PASS').length;
   return Math.round((pass / verdicts.length) * 1000) / 10;
@@ -218,7 +246,7 @@ export async function postDivisionWeeklyStats(opts: {
   const contentPieces = countContentPiecesShipped(contentStatus);
   const touchpoints = countPipelineTouchpoints(pipeline);
   const shipped = countShippedOutputs(shipLog);
-  const qaRate = computeQaPassRate(validation);
+  const qaRate = computeQaPassRate(validation, { year, week });
   const planRate = computePlanCompletionRate(checklist);
 
   const rows: Array<{
