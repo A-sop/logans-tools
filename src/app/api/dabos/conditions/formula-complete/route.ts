@@ -13,6 +13,11 @@ const conditionLabel = z.enum([
   'Emergency',
   'Danger',
   'Non-Existence',
+  'Liability',
+  'Doubt',
+  'Enemy',
+  'Treason',
+  'Confusion',
 ]);
 
 const formulaStep = z.object({

@@ -188,7 +188,7 @@ export async function advanceEntityWorkingCondition(
   }
   await sql`
     UPDATE entity_condition_state
-    SET working_condition = ${next}, updated_at = NOW()
+    SET working_condition = ${next}, condition_source = 'formula', updated_at = NOW()
     WHERE entity_type = ${entityType} AND entity_id = ${entityId}
   `;
   return { advanced: true, working_condition: next };

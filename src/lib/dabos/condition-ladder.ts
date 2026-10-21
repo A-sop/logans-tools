@@ -1,5 +1,7 @@
 /**
- * PRD-004 upper condition ladder (best → worst).
+ * PRD-004 full condition scale incl. lower conditions below Non-Existence (ruling 21 Oct 2026).
+ * SSOT: DABOS docs/reference/conditions-ethics-ssot.md
+ * (best → worst).
  * @see DABOS/docs/PRD-004-conditions-memory-governance.md
  */
 export const UPPER_CONDITION_LADDER = [
@@ -10,11 +12,16 @@ export const UPPER_CONDITION_LADDER = [
   'Emergency',
   'Danger',
   'Non-Existence',
+  'Liability',
+  'Doubt',
+  'Enemy',
+  'Treason',
+  'Confusion',
 ] as const;
 
 export type ConditionLabel = (typeof UPPER_CONDITION_LADDER)[number];
 
-/** Ladder index: 0 = best (Power Change), 6 = worst (Non-Existence). Higher = worse. */
+/** Ladder index: 0 = best (Power Change), 11 = worst (Confusion). Higher = worse. Lower conditions (Liability..Confusion) are assigned, never stat-indicated. */
 export function conditionSeverity(label: ConditionLabel): number {
   return UPPER_CONDITION_LADDER.indexOf(label);
 }

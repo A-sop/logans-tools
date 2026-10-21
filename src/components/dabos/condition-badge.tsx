@@ -11,6 +11,11 @@ const tone: Record<ConditionLabel, string> = {
   Emergency: 'bg-amber-500/15 text-amber-800 dark:text-amber-400',
   Danger: 'bg-destructive/15 text-destructive',
   'Non-Existence': 'bg-neutral-800/15 text-neutral-700 dark:text-neutral-300',
+  Liability: 'bg-rose-500/15 text-rose-800 dark:text-rose-300',
+  Doubt: 'bg-rose-600/20 text-rose-900 dark:text-rose-300',
+  Enemy: 'bg-red-700/20 text-red-900 dark:text-red-300',
+  Treason: 'bg-red-900/25 text-red-950 dark:text-red-200',
+  Confusion: 'bg-purple-900/25 text-purple-950 dark:text-purple-200',
 };
 
 export function ConditionBadge({
