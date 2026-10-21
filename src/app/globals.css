@@ -2,8 +2,7 @@
 
 :root {
   /* Brand-aligned (canonical gabc.eu): blue + gold accent on light */
-  /* TEST: pink background — revert after deploy check */
-  --background: 330 100% 92%;
+  --background: 0 0% 100%;
   --foreground: 0 0% 0%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 0%;
@@ -52,4 +51,23 @@ body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
+}
+
+/*
+ * DABOS wallpaper: "Mt Sugarloaf (1238m) by Lake Heron, New Zealand" by Michal Klajban,
+ * CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Mt_Sugarloaf_(1238m)_by_Lake_Heron,_New_Zealand.jpg
+ * Resized to 2560px and converted to WebP (public/dabos-bg-lake-heron.webp).
+ */
+body:has(.dabos-standalone) {
+  background:
+    linear-gradient(rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.18)),
+    url('/dabos-bg-lake-heron.webp') center / cover no-repeat fixed;
+  background-color: #8aa3b5;
+  min-height: 100vh;
+}
+.dark body:has(.dabos-standalone),
+body.dark:has(.dabos-standalone) {
+  background:
+    linear-gradient(rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.45)),
+    url('/dabos-bg-lake-heron.webp') center / cover no-repeat fixed;
 }
