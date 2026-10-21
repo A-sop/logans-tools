@@ -54,14 +54,14 @@ body {
 }
 
 /*
- * DABOS wallpaper: "Mt Sugarloaf (1238m) by Lake Heron, New Zealand" by Michal Klajban,
- * CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Mt_Sugarloaf_(1238m)_by_Lake_Heron,_New_Zealand.jpg
- * Resized to 2560px and converted to WebP (public/dabos-bg-lake-heron.webp).
+ * DABOS wallpaper: "Lake Clearwater, Canterbury, New Zealand 02" by Michal Klajban,
+ * CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Lake_Clearwater,_Canterbury,_New_Zealand_02.jpg
+ * Resized to 2560px and converted to WebP (public/dabos-bg-lake-clearwater.webp).
  */
 body:has(.dabos-standalone) {
   background:
     linear-gradient(rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.18)),
-    url('/dabos-bg-lake-heron.webp') center / cover no-repeat fixed;
+    url('/dabos-bg-lake-clearwater.webp') center / cover no-repeat fixed;
   background-color: #8aa3b5;
   min-height: 100vh;
 }
@@ -69,5 +69,5 @@ body:has(.dabos-standalone) {
 body.dark:has(.dabos-standalone) {
   background:
     linear-gradient(rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.45)),
-    url('/dabos-bg-lake-heron.webp') center / cover no-repeat fixed;
+    url('/dabos-bg-lake-clearwater.webp') center / cover no-repeat fixed;
 }
