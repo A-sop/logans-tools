@@ -148,8 +148,9 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
   const n = faces.length;
   const step = 360 / n;
   const w = width || 800;
-  const faceW = Math.round(Math.min(210, Math.max(118, w * 0.37)));
-  const radius = Math.round(Math.min((faceW / 2 / Math.tan(Math.PI / n)) * 1.02, (w - faceW) / 2));
+  // ~3 faces visible; panel = 78% of the chord between neighbours so they never touch.
+  const radius = Math.round(Math.min(270, w * 0.44));
+  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) * 0.78);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -188,8 +189,8 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
         const z = radius * (c - 1);
         const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
         f.style.transform = `translateX(${x}px) perspective(900px) translateZ(${z}px) rotateY(${rot}deg)`;
-        f.style.opacity = c < -0.05 ? '0' : String(0.3 + 0.7 * c);
-        f.style.visibility = c < -0.05 ? 'hidden' : 'visible';
+        f.style.opacity = c < 0.2 ? '0' : String(Math.min(1, 0.15 + c));
+        f.style.visibility = c < 0.2 ? 'hidden' : 'visible';
         f.style.pointerEvents = c > 0.4 ? 'auto' : 'none';
         f.style.zIndex = String(Math.round(c * 100) + 100);
         f.style.filter = `brightness(${0.75 + 0.25 * c})`;
@@ -236,7 +237,7 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
     st.current.idleAt = performance.now();
   };
 
-  const bodyW = radius * 2 + faceW * 0.15;
+  const bodyW = radius * 2;
   return (
     <div className={styles.drumStage} ref={stageRef}>
       <div
@@ -256,6 +257,8 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
         <div className={styles.drumBody} style={{ width: bodyW, marginLeft: -bodyW / 2 }} aria-hidden>
           <div className={`${styles.drumRim} ${styles.drumRimTop}`} />
           <div className={`${styles.drumRim} ${styles.drumRimBot}`} />
+          <div className={styles.drumFinial} />
+          <div className={styles.drumSpindle} />
         </div>
         {faces.map((f, i) => (
           <div

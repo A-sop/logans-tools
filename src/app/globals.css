@@ -54,20 +54,21 @@ body {
 }
 
 /*
- * DABOS wallpaper: "Lake Clearwater, Canterbury, New Zealand 02" by Michal Klajban,
- * CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Lake_Clearwater,_Canterbury,_New_Zealand_02.jpg
- * Resized to 2560px and converted to WebP (public/dabos-bg-lake-clearwater.webp).
+ * DABOS wallpaper (Space Cowboy): "Sonoran Desert National Monument" (Flickr 26093966604),
+ * saguaros under the Milky Way, by BLM Arizona (Bureau of Land Management). Public domain (US Government work).
+ * https://commons.wikimedia.org/wiki/File:Sonoran_Desert_National_Monument_(26093966604).jpg
+ * Resized to 1920px and converted to WebP (public/dabos-bg-space-cowboy.webp). Dusk tint added via gradient.
  */
 body:has(.dabos-standalone) {
   background:
-    linear-gradient(rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.18)),
-    url('/dabos-bg-lake-clearwater.webp') center / cover no-repeat fixed;
-  background-color: #8aa3b5;
+    linear-gradient(180deg, rgb(13 15 28 / 0.15) 0%, rgb(13 15 28 / 0.05) 45%, rgb(194 65 12 / 0.35) 80%, rgb(94 36 16 / 0.6) 100%),
+    url('/dabos-bg-space-cowboy.webp') center / cover no-repeat fixed;
+  background-color: #0d0f1c;
   min-height: 100vh;
 }
 .dark body:has(.dabos-standalone),
 body.dark:has(.dabos-standalone) {
   background:
-    linear-gradient(rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.45)),
-    url('/dabos-bg-lake-clearwater.webp') center / cover no-repeat fixed;
+    linear-gradient(180deg, rgb(0 0 0 / 0.3) 0%, rgb(94 36 16 / 0.55) 100%),
+    url('/dabos-bg-space-cowboy.webp') center / cover no-repeat fixed;
 }

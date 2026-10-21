@@ -1,4 +1,4 @@
-import { IBM_Plex_Mono, Source_Sans_3, Syne } from 'next/font/google';
+import { Barlow, IBM_Plex_Mono, Rye } from 'next/font/google';
 
 import { OpenLoopsBoard } from './open-loops-board';
 import { getOpenLoopsSnapshot } from '@/lib/dabos/open-loops';
@@ -18,16 +18,16 @@ export const metadata = {
 /** Need Neon for live working conditions on the drum. */
 export const dynamic = 'force-dynamic';
 
-const display = Syne({
+const display = Rye({
   subsets: ['latin'],
-  weight: ['700', '800'],
+  weight: '400',
   variable: '--font-ol-display',
   display: 'swap',
 });
 
-const body = Source_Sans_3({
+const body = Barlow({
   subsets: ['latin'],
-  weight: ['400', '600'],
+  weight: ['400', '600', '700'],
   variable: '--font-ol-body',
   display: 'swap',
 });
