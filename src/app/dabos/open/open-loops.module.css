@@ -258,131 +258,155 @@
   .boardDrum .execEd { font-size: 0.74rem; }
 }
 
-/* ===== Space Cowboy theme (rust, burnt orange, brass, dusty teal, deep-space navy-black) ===== */
+/* ===== Anachronistic Authority theme: cosmic navy, gold rims, ivory marble, crimson lacquer ===== */
 .root {
-  --ol-ink: #2b1a0e;
-  --ol-muted: #6b4a2a;
-  --ol-line: rgba(90, 55, 20, 0.45);
-  --ol-hot: #c2410c;
-  --ol-open: #3f7f86;
-  --ol-ship: #4d8f86;
-  --ol-card: linear-gradient(160deg, #e7c98a, #c9a25a 45%, #a37a36);
-  --sc-night: #0d0f1c;
-  --sc-leather: linear-gradient(160deg, #8a3a1c, #5e2410 60%, #3f170a);
-  --sc-cream: #f6e7c8;
-  --sc-teal: #5f9ea0;
-  --sc-rivets:
-    radial-gradient(circle at 7px 7px, #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
-    radial-gradient(circle at calc(100% - 7px) 7px, #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
-    radial-gradient(circle at 7px calc(100% - 7px), #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
-    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px);
+  --ol-ink: #13203d;
+  --ol-muted: #5b6478;
+  --ol-line: rgba(197, 160, 89, 0.55);
+  --ol-hot: #990000;
+  --ol-open: #1f3a6b;
+  --ol-ship: #2f6b5a;
+  --aa-gold: #c5a059;
+  --aa-gold-hi: #f1dba0;
+  --aa-navy: #050f26;
+  --aa-plate: linear-gradient(180deg, #13285a, #0a1838 60%, #06102a);
+  --aa-cream: #f4ecd8;
+  --aa-marble:
+    linear-gradient(115deg, transparent 0 38%, rgba(150, 140, 125, 0.16) 40%, transparent 43% 70%, rgba(150, 140, 125, 0.12) 72%, transparent 75%),
+    linear-gradient(35deg, transparent 0 55%, rgba(160, 150, 135, 0.14) 57%, transparent 60%),
+    linear-gradient(180deg, #ffffff, #f9f6f0);
+  --ol-card: var(--aa-marble);
+  --ol-display: var(--font-ol-display), Georgia, serif;
 }
 .title {
-  background: rgba(13, 15, 28, 0.85) !important;
-  color: #f08a3c !important;
-  border: 2px solid #c9a25a;
-  text-shadow: 0 2px 0 #5e2410;
-  letter-spacing: 0.04em;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--aa-gold-hi) !important;
+  text-shadow: 0 2px 0 #6b5020, 0 0 18px rgba(197, 160, 89, 0.35);
+  letter-spacing: 0.08em;
+  text-align: center;
 }
 .aimBlock {
-  background: var(--sc-rivets), var(--sc-leather) !important;
-  color: var(--sc-cream);
-  border: 1px solid #c9a25a !important;
+  background: rgba(5, 15, 38, 0.85) !important;
+  color: var(--aa-cream);
+  border: 1px solid var(--aa-gold) !important;
+  border-radius: 2px !important;
 }
-.aimBlock strong, .aimLine { color: var(--sc-cream); }
-.aimMeta { color: #e3c79a !important; }
-.aimTrack { background: rgba(13, 15, 28, 0.6) !important; }
-.aimTarget { background: var(--sc-cream) !important; }
+.aimBlock strong, .aimLine { color: var(--aa-cream); font-family: var(--ol-body); }
+.aimMeta { color: #b9a77c !important; }
+.aimTrack { background: rgba(255, 255, 255, 0.12) !important; }
+.aimTarget { background: var(--aa-gold-hi) !important; }
 .tile {
-  background: var(--sc-rivets), var(--ol-card) !important;
-  border: 1px solid #6b4518 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+  position: relative;
+  background: linear-gradient(180deg, #101c3a, #050f26) !important;
+  border: 1px solid var(--aa-gold) !important;
+  border-radius: 2px !important;
+  color: var(--aa-cream) !important;
+  box-shadow: inset 0 0 0 2px rgba(5, 15, 38, 0.9), inset 0 0 0 3px rgba(197, 160, 89, 0.45);
 }
-.tileActive { outline: 2px solid #f08a3c !important; }
-.execBox {
-  background: var(--sc-rivets), var(--sc-leather) !important;
-  color: var(--sc-cream) !important;
-  border: 1px solid #c9a25a;
-  font-family: var(--ol-display) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
-}
-.divHead {
-  background: var(--sc-leather) !important;
-  color: var(--sc-cream) !important;
-  border: 1px solid #c9a25a;
-}
-.deptCard {
-  background: var(--sc-rivets), var(--ol-card) !important;
-  border: 1px solid #6b4518 !important;
-  color: var(--ol-ink) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.6), inset 0 -2px 4px rgba(60, 35, 10, 0.35);
-}
-.deptEmpty { filter: saturate(0.6) brightness(0.92); }
-.deptActive { outline: 2px solid #f08a3c !important; }
-.popover {
-  background: rgba(13, 15, 28, 0.95) !important;
-  color: var(--sc-cream) !important;
-  border: 1px solid #c9a25a !important;
-  --ol-muted: #d8b98a;
-  --ol-line: rgba(201, 162, 90, 0.35);
-}
-.popTitle { font-family: var(--ol-display); font-weight: 400 !important; color: #f08a3c; }
-
-/* Prayer wheel: embossed brass drum, ornamental bands, finial, spindle */
-.drumStage { padding-top: 2.6rem; }
-.drumBody {
-  background:
-    repeating-linear-gradient(90deg, rgba(60, 30, 5, 0.18) 0 2px, transparent 2px 14px),
-    linear-gradient(90deg, #3f2208, #9c6a26 18%, #e6c27a 48%, #b8862f 62%, #5a3210) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0.6rem !important;
-  border-left: 0 !important;
-  border-right: 0 !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55) !important;
-}
-.drumBody::before, .drumBody::after {
+.tileNum { color: var(--aa-gold-hi) !important; font-family: var(--ol-mono) !important; }
+.tileLabel { color: var(--aa-cream) !important; font-family: var(--ol-body); letter-spacing: 0.08em; text-transform: uppercase; }
+.tile_hot .tileNum { color: #ff6b6b !important; }
+.tile_hot::before {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  height: 1.1rem;
-  background:
-    radial-gradient(circle at 50% 50%, #fff1c8 0 1.6px, transparent 2.4px) 0 0 / 14px 100%,
-    linear-gradient(#5e2410, #c2410c 30%, #f08a3c 50%, #c2410c 70%, #5e2410);
-  border-top: 1px solid #e6c27a;
-  border-bottom: 1px solid #3f2208;
+  top: -6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #cc1a1a, #990000 60%, #5c0000);
+  border: 1px solid var(--aa-gold);
 }
-.drumBody::before { top: 0.9rem; }
-.drumBody::after { bottom: 0.9rem; }
+.tileActive { outline: 2px solid var(--aa-gold-hi) !important; }
+.execBox, .divHead {
+  background: var(--aa-plate) !important;
+  color: var(--aa-cream) !important;
+  border: 1px solid var(--aa-gold) !important;
+  border-radius: 2px !important;
+  box-shadow: inset 0 0 0 2px #06102a, inset 0 0 0 3px rgba(197, 160, 89, 0.4), 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+  font-family: var(--ol-display) !important;
+  letter-spacing: 0.06em;
+}
+.execBox strong, .divCount { color: var(--aa-gold-hi); font-family: var(--ol-mono); }
+.divBand { color: #b9a77c !important; letter-spacing: 0.1em; }
+.divName { font-family: var(--ol-display); }
+.deptCard {
+  background: var(--aa-marble) !important;
+  border: 1px solid var(--aa-gold) !important;
+  border-radius: 2px !important;
+  color: var(--ol-ink) !important;
+  box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3px rgba(197, 160, 89, 0.35), 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+.deptNum { color: var(--ol-muted) !important; font-family: var(--ol-display); letter-spacing: 0.06em; }
+.deptName { font-family: var(--ol-body); font-weight: 700 !important; color: #0b1733 !important; }
+.deptCount { font-family: var(--ol-mono); color: #0b1733; }
+.hotDot { border-radius: 0 !important; transform: rotate(45deg); background: #990000 !important; border: 1px solid var(--aa-gold); }
+.deptEmpty { filter: saturate(0.7); opacity: 0.9; }
+.deptActive { outline: 2px solid var(--aa-gold) !important; }
+.popover {
+  background: var(--aa-marble) !important;
+  border: 1px solid var(--aa-gold) !important;
+  border-radius: 2px !important;
+  color: var(--ol-ink) !important;
+}
+.popTitle { font-family: var(--ol-display); letter-spacing: 0.05em; }
+.popDot_hot { border-radius: 0 !important; transform: rotate(45deg); background: #990000 !important; }
+
+/* Drum: polished gold cylinder, star seal finial, mahogany base */
+.drumStage { padding-top: 2.8rem; --drum-h: 27rem; }
+.drumBody {
+  background: linear-gradient(90deg, rgba(5, 15, 38, 0.95), rgba(28, 46, 92, 0.75) 50%, rgba(5, 15, 38, 0.95)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-left: 2px solid var(--aa-gold) !important;
+  border-right: 2px solid var(--aa-gold) !important;
+  box-shadow: 0 0 40px rgba(197, 160, 89, 0.18) !important;
+}
 .drumRim {
-  border: 2px solid #3f2208 !important;
-  background: linear-gradient(#f3d48a, #a8732c) !important;
-  box-shadow: inset 0 -3px 6px rgba(60, 30, 5, 0.5) !important;
+  left: -0.6rem !important;
+  right: -0.6rem !important;
+  height: 1.7rem !important;
+  border: 1px solid #7a5a1e !important;
+  background: linear-gradient(180deg, #fff3c4, #e2c06e 30%, #a9822f 60%, #f1dba0 85%, #8a6a2a) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
 }
+.drumRimTop { top: -0.85rem !important; }
+.drumRimBot { bottom: -0.85rem !important; }
 .drumFinial {
   position: absolute;
   left: 50%;
-  top: -2.7rem;
-  width: 2.2rem;
-  height: 2.1rem;
-  margin-left: -1.1rem;
-  border-radius: 50% 50% 0.3rem 0.3rem / 70% 70% 0.3rem 0.3rem;
-  background: radial-gradient(circle at 35% 30%, #fff1c8, #c9a25a 40%, #6b4518);
-  box-shadow: 0 -0.9rem 0 -0.6rem #e6c27a;
+  top: -3rem;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -1.5rem;
+  z-index: 250;
+  background: radial-gradient(circle at 40% 35%, #fff6d0, #e2c06e 40%, #8a6a2a 80%);
+  clip-path: polygon(50% 0, 61% 26%, 85% 15%, 74% 39%, 100% 50%, 74% 61%, 85% 85%, 61% 74%, 50% 100%, 39% 74%, 15% 85%, 26% 61%, 0 50%, 26% 39%, 15% 15%, 39% 26%);
+  filter: drop-shadow(0 0 6px rgba(241, 219, 160, 0.8));
 }
 .drumSpindle {
   position: absolute;
-  left: 50%;
-  bottom: -4.2rem;
-  width: 0.9rem;
-  height: 4rem;
-  margin-left: -0.45rem;
-  border-radius: 0 0 0.5rem 0.5rem;
-  background:
-    linear-gradient(90deg, #3f2208, #c9a25a 50%, #3f2208) top / 100% 1.1rem no-repeat,
-    linear-gradient(90deg, #2a1206, #8a3a1c 45%, #2a1206);
+  left: 8%;
+  right: 8%;
+  bottom: -3.4rem;
+  height: 2.4rem;
+  border-radius: 50% / 40%;
+  background: linear-gradient(180deg, #6b2414, #4a170c 55%, #2a0b05);
+  border-top: 2px solid var(--aa-gold);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
 }
-.drumNav { margin-top: 4.6rem !important; }
-.drumNav span { font-family: var(--ol-display); color: #f6e7c8; }
-.drumNav button { background: var(--ol-card) !important; color: #2b1a0e !important; border: 1px solid #6b4518 !important; }
+.drumNav { position: relative; z-index: 260; margin-top: 1.4rem !important; }
+.drumNav span { font-family: var(--ol-display); color: var(--aa-cream); letter-spacing: 0.08em; }
+.drumNav button {
+  background: radial-gradient(circle at 35% 30%, #8ff0b8, #1f8a55 55%, #0b4a2a) !important;
+  color: #fff !important;
+  border: 2px solid var(--aa-gold) !important;
+}
+@media (max-width: 520px) {
+  .drumFace .deptCard { min-height: 4.4rem; padding: 0.45rem 0.5rem; }
+  .drumFace .deptName { font-size: 0.86rem; line-height: 1.15; }
+}

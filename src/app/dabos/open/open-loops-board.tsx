@@ -142,15 +142,16 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
   const stageRef = useRef<HTMLDivElement | null>(null);
   const faceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [width, setWidth] = useState(0);
-  const st = useRef({ angle: 0, vel: 0, dragging: false, lastX: 0, lastT: 0, moved: 0, idleAt: 0 });
+  const st = useRef({ angle: 180 / faces.length, vel: 0, dragging: false, lastX: 0, lastT: 0, moved: 0, idleAt: 0 });
   const pausedRef = useRef(paused);
   pausedRef.current = paused;
   const n = faces.length;
   const step = 360 / n;
   const w = width || 800;
   // ~3 faces visible; panel = 78% of the chord between neighbours so they never touch.
-  const radius = Math.round(Math.min(270, w * 0.44));
-  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) * 0.78);
+  // Two faces across the front (~45% of width each), neighbours keep a gap.
+  const radius = Math.round(Math.min(340, w * 0.6));
+  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) * 0.86);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -189,8 +190,8 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
         const z = radius * (c - 1);
         const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
         f.style.transform = `translateX(${x}px) perspective(900px) translateZ(${z}px) rotateY(${rot}deg)`;
-        f.style.opacity = c < 0.2 ? '0' : String(Math.min(1, 0.15 + c));
-        f.style.visibility = c < 0.2 ? 'hidden' : 'visible';
+        f.style.opacity = c < 0.3 ? '0' : String(Math.min(1, 0.1 + c));
+        f.style.visibility = c < 0.3 ? 'hidden' : 'visible';
         f.style.pointerEvents = c > 0.4 ? 'auto' : 'none';
         f.style.zIndex = String(Math.round(c * 100) + 100);
         f.style.filter = `brightness(${0.75 + 0.25 * c})`;
@@ -233,11 +234,11 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
   };
   const spinTo = (dir: number) => {
     st.current.vel = 0;
-    st.current.angle = Math.round(st.current.angle / step) * step + dir * step;
+    st.current.angle = Math.round((st.current.angle - step / 2) / step) * step + step / 2 + dir * step;
     st.current.idleAt = performance.now();
   };
 
-  const bodyW = radius * 2;
+  const bodyW = Math.min(radius * 2, w);
   return (
     <div className={styles.drumStage} ref={stageRef}>
       <div

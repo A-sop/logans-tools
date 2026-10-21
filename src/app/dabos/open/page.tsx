@@ -1,4 +1,4 @@
-import { Barlow, IBM_Plex_Mono, Rye } from 'next/font/google';
+import { Cinzel, IBM_Plex_Mono, Inter } from 'next/font/google';
 
 import { OpenLoopsBoard } from './open-loops-board';
 import { getOpenLoopsSnapshot } from '@/lib/dabos/open-loops';
@@ -18,14 +18,14 @@ export const metadata = {
 /** Need Neon for live working conditions on the drum. */
 export const dynamic = 'force-dynamic';
 
-const display = Rye({
+const display = Cinzel({
   subsets: ['latin'],
-  weight: '400',
+  weight: ['600', '700'],
   variable: '--font-ol-display',
   display: 'swap',
 });
 
-const body = Barlow({
+const body = Inter({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
   variable: '--font-ol-body',

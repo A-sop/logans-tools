@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Cinzel, Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 import { DabosChrome } from '@/components/dabos/dabos-chrome';
@@ -13,12 +14,15 @@ export const metadata: Metadata = {
 /** Clerk-gated; must not be CDN-cached as a signed-out 404. */
 export const dynamic = 'force-dynamic';
 
+const dabosDisplay = Cinzel({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-dabos-display', display: 'swap' });
+const dabosBody = Inter({ subsets: ['latin'], variable: '--font-dabos-body', display: 'swap' });
+
 export default async function DabosLayout({ children }: { children: ReactNode }) {
   const shell = dabosConfigured() ? await fetchDabosShell() : null;
 
   return (
     <DabosViewProvider>
-      <div className="dabos-standalone mx-auto w-full max-w-none px-3 py-5 sm:px-4 sm:py-6">
+      <div className={`${dabosDisplay.variable} ${dabosBody.variable} dabos-standalone mx-auto w-full max-w-none px-3 py-5 sm:px-4 sm:py-6`}>
         <DabosChrome shell={shell} />
         {children}
       </div>
