@@ -159,8 +159,9 @@ function PrayerDrum({
   const w = width || 800;
   // ~3 faces visible; panel = 78% of the chord between neighbours so they never touch.
   // Two faces across the front (~45% of width each), neighbours keep a gap.
-  const radius = Math.round(Math.min(340, w * 0.6));
-  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) - 3);
+  // Flat panels of a regular N-gon prism: width = 2R·tan(π/N) so neighbours meet with a ~2px seam.
+  const radius = Math.round(Math.min(320, w * 0.5));
+  const faceW = Math.round(2 * radius * Math.tan(Math.PI / n)) - 2;
   const bandStep = 360 / band.length;
   const bandW = Math.round(2 * radius * Math.sin(Math.PI / band.length) - 3);
 
@@ -200,12 +201,16 @@ function PrayerDrum({
         const x = radius * Math.sin(a);
         const z = radius * (c - 1);
         const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
-        f.style.transform = `translateX(${x}px) perspective(900px) translateZ(${z}px) rotateY(${rot}deg)`;
-        f.style.opacity = c < 0.3 ? '0' : String(Math.min(1, 0.1 + c));
-        f.style.visibility = c < 0.3 ? 'hidden' : 'visible';
-        f.style.pointerEvents = c > 0.4 ? 'auto' : 'none';
+        void x;
+        void z;
+        void rot;
+        // Pure rotateY about the drum axis (no skew/scale); perspective per panel = shared camera.
+        f.style.transform = `perspective(1400px) translateZ(${-radius}px) rotateY(${deg}deg) translateZ(${radius}px)`;
+        f.style.opacity = '1';
+        f.style.visibility = c < 0 ? 'hidden' : 'visible';
+        f.style.pointerEvents = c > 0.5 ? 'auto' : 'none';
         f.style.zIndex = String(Math.round(c * 100) + 100);
-        f.style.filter = `brightness(${0.75 + 0.25 * c})`;
+        f.style.filter = `brightness(${0.7 + 0.3 * c})`;
       });
       bandRefs.current.forEach((f, i) => {
         if (!f) return;
@@ -379,16 +384,36 @@ export function OpenLoopsBoard({
       0
     );
   const total = [...byDept.values()].reduce((a, b) => a + b.length, 0);
-  const drumOrder: BoardDivisionId[] = [...DCO_DIVISION_IDS, ...ORG_DIVISION_IDS];
   let openDept: OpenOrgDept | undefined;
   for (const d of org) for (const x of d.departments) if (x.id === openId) openDept = x;
 
+  const drumOrder: BoardDivisionId[] = [...DCO_DIVISION_IDS, ...ORG_DIVISION_IDS];
   const renderDivision = (id: BoardDivisionId) => {
     const div = divById.get(id);
     if (!div) return null;
     const divCount = div.departments.reduce((a, d) => a + (byDept.get(d.id)?.length ?? 0), 0);
     return (
       <div key={id} className={styles.divCol}>
+        <div
+          className={`${styles.execStrip} ${styles.execStripEd} ${id === drumOrder[0] ? styles.execStripFirst : ''} ${id === drumOrder[drumOrder.length - 1] ? styles.execStripLast : ''}`}
+        >
+          <span>{EXECUTIVE_LABELS.director}</span>
+          <strong>{total}</strong>
+        </div>
+        {(() => {
+          const group: readonly string[] = (DCO_DIVISION_IDS as readonly string[]).includes(id)
+            ? DCO_DIVISION_IDS
+            : ORG_DIVISION_IDS;
+          const isDco = group === (DCO_DIVISION_IDS as readonly string[]);
+          return (
+            <div
+              className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
+            >
+              <span>{isDco ? EXECUTIVE_LABELS.dcoSecretary : EXECUTIVE_LABELS.orgSecretary}</span>
+              <strong>{countFor(group)}</strong>
+            </div>
+          );
+        })()}
         <div className={styles.divHead}>
           <span className={styles.divBand}>{DIVISION_BAND_TITLE[id]}</span>
           <span className={styles.divName}>{div.operational_name}</span>
@@ -454,20 +479,7 @@ export function OpenLoopsBoard({
           <PrayerDrum
             paused={openId !== null}
             faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
-            band={[0, 1].flatMap(() => [
-              <div key="dco" className={styles.execBox}>
-                <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-                <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-              </div>,
-              <div key="ed" className={`${styles.execBox} ${styles.execEd}`}>
-                <span>{EXECUTIVE_LABELS.director}</span>
-                <strong>{total}</strong>
-              </div>,
-              <div key="oec" className={styles.execBox}>
-                <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-                <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-              </div>,
-            ])}
+            band={[]}
           />
           {openDept ? (
             <div
