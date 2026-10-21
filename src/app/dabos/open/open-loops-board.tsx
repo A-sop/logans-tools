@@ -138,7 +138,16 @@ function TaskPopover({
 
 // Pseudo-3D drum: each face gets its own perspective() transform computed per frame,
 // so no nested preserve-3d (which Android Chrome flattened / z-fought with the rim discs).
-function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }[]; paused: boolean }) {
+function PrayerDrum({
+  faces,
+  band,
+  paused,
+}: {
+  faces: { key: string; node: ReactNode }[];
+  band: ReactNode[];
+  paused: boolean;
+}) {
+  const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const faceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [width, setWidth] = useState(0);
@@ -151,7 +160,9 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
   // ~3 faces visible; panel = 78% of the chord between neighbours so they never touch.
   // Two faces across the front (~45% of width each), neighbours keep a gap.
   const radius = Math.round(Math.min(340, w * 0.6));
-  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) * 0.86);
+  const faceW = Math.round(2 * radius * Math.sin(Math.PI / n) - 3);
+  const bandStep = 360 / band.length;
+  const bandW = Math.round(2 * radius * Math.sin(Math.PI / band.length) - 3);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -196,11 +207,22 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
         f.style.zIndex = String(Math.round(c * 100) + 100);
         f.style.filter = `brightness(${0.75 + 0.25 * c})`;
       });
+      bandRefs.current.forEach((f, i) => {
+        if (!f) return;
+        const deg = i * bandStep + s.angle;
+        const a = (deg * Math.PI) / 180;
+        const c = Math.cos(a);
+        const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
+        f.style.transform = `translateX(${radius * Math.sin(a)}px) perspective(900px) translateZ(${radius * (c - 1)}px) rotateY(${rot}deg)`;
+        f.style.opacity = c < 0.3 ? '0' : String(Math.min(1, 0.1 + c));
+        f.style.visibility = c < 0.3 ? 'hidden' : 'visible';
+        f.style.zIndex = String(Math.round(c * 100) + 100);
+      });
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [radius, step]);
+  }, [radius, step, bandStep]);
 
   const degPerPx = 360 / (2 * Math.PI * Math.max(60, radius));
   const onDown = (e: ReactPointerEvent) => {
@@ -253,8 +275,40 @@ function PrayerDrum({ faces, paused }: { faces: { key: string; node: ReactNode }
         <div className={styles.drumBody} style={{ width: bodyW, marginLeft: -bodyW / 2 }} aria-hidden>
           <div className={`${styles.drumRim} ${styles.drumRimTop}`} />
           <div className={`${styles.drumRim} ${styles.drumRimBot}`} />
-          <div className={styles.drumFinial} />
+          <svg className={styles.drumFinial} viewBox="0 0 100 150" aria-hidden>
+            <defs>
+              <linearGradient id="sbGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#fffbe6" />
+                <stop offset="0.35" stopColor="#f3d27a" />
+                <stop offset="0.65" stopColor="#b8862f" />
+                <stop offset="1" stopColor="#fff0b8" />
+              </linearGradient>
+            </defs>
+            <g stroke="#f6dc8c" strokeWidth="0.8" opacity="0.85">
+              <line x1="50" y1="75" x2="14" y2="38" />
+              <line x1="50" y1="75" x2="86" y2="38" />
+              <line x1="50" y1="75" x2="14" y2="112" />
+              <line x1="50" y1="75" x2="86" y2="112" />
+              <line x1="50" y1="75" x2="30" y2="10" />
+              <line x1="50" y1="75" x2="70" y2="10" />
+            </g>
+            <polygon points="50,0 57,68 96,75 57,82 50,150 43,82 4,75 43,68" fill="url(#sbGold)" stroke="#8a6420" strokeWidth="0.6" />
+            <polygon points="50,6 53,70 50,75" fill="#fff" opacity="0.8" />
+            <circle cx="50" cy="75" r="5" fill="#fffbe6" />
+          </svg>
         </div>
+        {band.map((node, i) => (
+          <div
+            key={`band-${i}`}
+            ref={(el) => {
+              bandRefs.current[i] = el;
+            }}
+            className={styles.drumBand}
+            style={{ width: bandW, marginLeft: -bandW / 2 }}
+          >
+            {node}
+          </div>
+        ))}
         {faces.map((f, i) => (
           <div
             key={f.key}
@@ -399,28 +453,21 @@ export function OpenLoopsBoard({
         <div className={styles.boardDrum}>
           <PrayerDrum
             paused={openId !== null}
-            faces={[
-              {
-                key: 'exec',
-                node: (
-                  <div className={styles.execFace}>
-                    <div className={`${styles.execBox} ${styles.execEd}`}>
-                      <span>{EXECUTIVE_LABELS.director}</span>
-                      <strong>{total}</strong>
-                    </div>
-                    <div className={styles.execBox}>
-                      <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-                      <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-                    </div>
-                    <div className={styles.execBox}>
-                      <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-                      <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-                    </div>
-                  </div>
-                ),
-              },
-              ...drumOrder.map((id) => ({ key: id, node: renderDivision(id) })),
-            ]}
+            faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
+            band={[0, 1].flatMap(() => [
+              <div key="dco" className={styles.execBox}>
+                <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+              </div>,
+              <div key="ed" className={`${styles.execBox} ${styles.execEd}`}>
+                <span>{EXECUTIVE_LABELS.director}</span>
+                <strong>{total}</strong>
+              </div>,
+              <div key="oec" className={styles.execBox}>
+                <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+              </div>,
+            ])}
           />
           {openDept ? (
             <div

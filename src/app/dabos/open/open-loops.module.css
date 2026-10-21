@@ -454,3 +454,58 @@
 .execFace .execBox { display: flex; justify-content: space-between; align-items: center; min-height: 4.4rem; font-size: 0.78rem; line-height: 1.2; }
 .execFace .execEd { min-height: 5rem; font-size: 0.86rem; }
 .title { text-align: left; }
+
+/* ===== PR21: exec band ring, wide columns, starburst finial, thick gold rings ===== */
+.drumStage { --drum-h: 30rem; --band-h: 3.6rem; }
+.drumFace { top: calc(1.6rem + var(--band-h)) !important; padding: 0 !important; }
+.drumBand {
+  position: absolute;
+  top: 1.3rem;
+  left: 50%;
+  height: calc(var(--band-h) - 0.5rem);
+  will-change: transform, opacity;
+}
+.drumBand .execBox {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  line-height: 1.15;
+  padding: 0.3rem 0.55rem;
+}
+.drumBand .execEd { font-size: 0.8rem; }
+.drumFace .divHead { width: 100%; box-sizing: border-box; min-height: 3rem; align-items: center; }
+.drumRim {
+  height: 1.6rem !important;
+  background: radial-gradient(ellipse at 50% 35%, #fffbe6 0%, #f6dc8c 25%, #c99a3a 60%, #8a6420 100%) !important;
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(90, 60, 10, 0.7),
+    0 4px 0 #b88a34,
+    0 8px 0 #8a6420,
+    0 11px 0 #5e4214,
+    0 14px 18px rgba(0, 0, 0, 0.6),
+    0 0 26px rgba(255, 220, 140, 0.35) !important;
+}
+.drumRimTop { top: -1.1rem !important; z-index: 2; }
+.drumRimBot { bottom: -0.4rem !important; }
+.drumFinial {
+  position: absolute;
+  left: 50%;
+  top: -5.4rem;
+  width: 4.4rem;
+  height: 6.4rem;
+  margin-left: -2.2rem;
+  z-index: 250;
+  pointer-events: none;
+  background: none !important;
+  clip-path: none !important;
+  filter: drop-shadow(0 0 8px rgba(255, 230, 160, 0.85));
+}
+.drumStage { padding-top: 4.6rem !important; }
+@media (max-width: 520px) {
+  .drumFace .deptName { font-size: 0.95rem; }
+}
