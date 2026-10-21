@@ -35,11 +35,6 @@ type Stage = {
   items: OpenLoopItem[];
 };
 
-function HeatStamp({ heat }: { heat: OpenLoopItem['heat'] }) {
-  const label = heat === 'hot' ? 'HOT' : heat === 'ship' ? 'SHIP' : 'OPEN';
-  return <span className={`${styles.stamp} ${styles[`stamp_${heat}`]}`}>{label}</span>;
-}
-
 function cardWorkingLabel(
   dept: OpenLoopDept,
   items: OpenLoopItem[],
@@ -51,27 +46,6 @@ function cardWorkingLabel(
   if (items.some((i) => i.heat === 'hot')) return 'Hot';
   if (items.some((i) => i.heat === 'open')) return 'Open';
   return 'Ship';
-}
-
-function LoopTicket({ item, index }: { item: OpenLoopItem; index: number }) {
-  return (
-    <article
-      className={`${styles.ticket} ${styles[`rail_${item.heat}`]} ${styles.ticketStage}`}
-      style={{ animationDelay: `${Math.min(index, 8) * 55}ms` }}
-    >
-      <div className={styles.ticketHead}>
-        <HeatStamp heat={item.heat} />
-        <code className={styles.ticketId}>{item.id}</code>
-      </div>
-      <p className={styles.ticketWhy}>{item.why}</p>
-      {item.resume ? (
-        <p className={styles.ticketResume}>
-          <span className={styles.resumeLabel}>Say</span> {item.resume}
-        </p>
-      ) : null}
-      {item.canonical ? <p className={styles.ticketPath}>{item.canonical}</p> : null}
-    </article>
-  );
 }
 
 function AimMeter({ data }: { data: OpenLoopsSnapshot }) {
@@ -133,6 +107,13 @@ function AimMeter({ data }: { data: OpenLoopsSnapshot }) {
   );
 }
 
+function ageLabel(iso: string): string {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 864e5);
+  if (days < 1) return 'today';
+  if (days < 60) return `${days}d`;
+  return `${Math.round(days / 30)}mo`;
+}
+
 function faceFromRotation(rotation: number, n: number): number {
   if (n <= 0) return 0;
   const step = 360 / n;
@@ -151,19 +132,16 @@ function formatLastWeekFace(closed: number, still: number): string {
   return `↓${closed} · ${still} open`;
 }
 
-function formatLastWeekPanel(closed: number, still: number, since?: string): string {
-  const window = since ? `since ${since}` : 'last 7 days';
-  if (closed === 0 && still === 0) return `last week (${window}): nothing dated`;
-  return `last week (${window}): ↓${closed} closed · ${still} still open`;
-}
-
 export function OpenLoopsBoard({
   data,
+  live = false,
   workingConditions,
 }: {
   data: OpenLoopsSnapshot;
+  live?: boolean;
   workingConditions?: Record<string, ConditionLabel | null>;
 }) {
+  const [popOpen, setPopOpen] = useState(false);
   const [heat, setHeat] = useState<HeatFilter>('all');
   const [rotation, setRotation] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -195,6 +173,10 @@ export function OpenLoopsBoard({
 
   const safeFace = faceFromRotation(rotation, n);
   const current = stages[safeFace] ?? null;
+
+  useEffect(() => {
+    setPopOpen(false);
+  }, [safeFace]);
 
   const paintCylinder = useCallback(
     (deg: number) => {
@@ -342,7 +324,7 @@ export function OpenLoopsBoard({
         </div>
 
         <div className={styles.metaRow}>
-          <span>Snapshot {generated}</span>
+          <span>{live ? `Live from tasks · ${generated}` : `Snapshot ${generated}`}</span>
           <span className={styles.metaSep}>·</span>
           <span className={styles.keyHint}>drag · ← →</span>
         </div>
@@ -359,6 +341,9 @@ export function OpenLoopsBoard({
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
+            onPointerLeave={(e) => {
+              if (e.pointerType === 'mouse') setPopOpen(false);
+            }}
             role="group"
             aria-label="Department cylinder — drag to roll"
           >
@@ -385,8 +370,13 @@ export function OpenLoopsBoard({
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setRot(snapRotationForFace(i, n), true);
+                      if (front) setPopOpen((v) => !v);
+                      else setRot(snapRotationForFace(i, n), true);
                     }}
+                    onPointerEnter={(e) => {
+                      if (front && e.pointerType === 'mouse' && !dragging) setPopOpen(true);
+                    }}
+                    aria-expanded={front ? popOpen : undefined}
                     aria-current={front ? 'true' : undefined}
                     aria-label={`${s.short} ${s.label}, ${cardWorkingLabel(s.dept, s.items, workingConditions)}, ${s.items.length} loops`}
                   >
@@ -426,44 +416,47 @@ export function OpenLoopsBoard({
                 );
               })}
             </div>
+            {popOpen && current ? (
+              <div
+                className={styles.popover}
+                role="dialog"
+                aria-label={`${current.short} open tasks`}
+                onPointerDown={(e) => e.stopPropagation()}
+                onPointerMove={(e) => e.stopPropagation()}
+                onPointerUp={(e) => e.stopPropagation()}
+              >
+                <div className={styles.popHead}>
+                  <span className={styles.popDept}>{current.short}</span>
+                  <span className={styles.popTitle}>{current.label}</span>
+                  <span className={styles.popCount}>{current.items.length}</span>
+                  <button type="button" className={styles.popClose} onClick={() => setPopOpen(false)} aria-label="Close">
+                    ×
+                  </button>
+                </div>
+                {current.items.length === 0 ? (
+                  <p className={styles.popEmpty}>Nothing open.</p>
+                ) : (
+                  <ul className={styles.popList}>
+                    {current.items.map((item) => (
+                      <li key={item.id} className={styles.popItem}>
+                        <span className={`${styles.popDot} ${styles[`popDot_${item.heat}`]}`} aria-hidden />
+                        <span className={styles.popText}>{item.why}</span>
+                        <span className={styles.popMeta}>
+                          {item.status ?? item.heat}
+                          {item.priority != null ? ` · P${item.priority}` : ''}
+                          {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ) : null}
             <div className={styles.sceneHint} aria-hidden>
               roll ↔
             </div>
           </div>
 
-          {current ? (
-            <section key={current.dept} className={styles.frontPanel} aria-live="polite">
-              <div className={styles.frontChrome}>
-                <p className={styles.stageDept}>{current.short}</p>
-                <p className={styles.stagePos}>
-                  dept {safeFace + 1} <span aria-hidden>/</span> {n}
-                </p>
-              </div>
-              <h2 className={styles.stageTitle}>{current.label}</h2>
-              <p className={styles.stageCondition}>
-                {cardWorkingLabel(current.dept, current.items, workingConditions)}
-              </p>
-              <p className={styles.stageCount}>
-                {current.items.length === 0
-                  ? 'Clear — nothing open on this hat'
-                  : `${current.items.length} loop${current.items.length === 1 ? '' : 's'} on this dept`}
-                {' · '}
-                {(() => {
-                  const lw = lastWeekForDept(data, current.dept);
-                  return formatLastWeekPanel(lw.closed, lw.still_open, data.last_week?.since);
-                })()}
-              </p>
-              <div className={styles.stageWall}>
-                {current.items.length === 0 ? (
-                  <p className={styles.emptyFace}>No open loops for {current.short}.</p>
-                ) : (
-                  current.items.map((item, i) => (
-                    <LoopTicket key={item.id} item={item} index={i} />
-                  ))
-                )}
-              </div>
-            </section>
-          ) : null}
         </>
       )}
     </div>

@@ -2,6 +2,7 @@ import { IBM_Plex_Mono, Source_Sans_3, Syne } from 'next/font/google';
 
 import { OpenLoopsBoard } from './open-loops-board';
 import { getOpenLoopsSnapshot } from '@/lib/dabos/open-loops';
+import { getLiveOpenLoops } from '@/lib/dabos/open-loops-live';
 import { dabosConfigured } from '@/lib/dabos/server-data';
 import { evaluateBoardConditions } from '@/lib/dabos/queries';
 import type { ConditionLabel } from '@/lib/dabos/types';
@@ -55,12 +56,17 @@ async function loadWorkingConditions(): Promise<Record<string, ConditionLabel | 
 }
 
 export default async function DabosOpenLoopsPage() {
-  const data = getOpenLoopsSnapshot();
+  let data: Awaited<ReturnType<typeof getLiveOpenLoops>>;
+  try {
+    data = await getLiveOpenLoops();
+  } catch {
+    data = { ...getOpenLoopsSnapshot(), live: false };
+  }
   const workingConditions = await loadWorkingConditions();
 
   return (
     <main className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <OpenLoopsBoard data={data} workingConditions={workingConditions} />
+      <OpenLoopsBoard data={data} live={data.live} workingConditions={workingConditions} />
     </main>
   );
 }

@@ -165,6 +165,10 @@ export type OpenLoopItem = {
   segment: OpenLoopSegment;
   dept: OpenLoopDept;
   source: OpenLoopSource;
+  /** Live task fields (Neon tasks). */
+  status?: string;
+  priority?: number | null;
+  created_at?: string;
 };
 
 export type OpenLoopsGoals = {
