@@ -257,3 +257,132 @@
   .boardDrum .execBox { font-size: 0.64rem; padding: 0.4rem 0.5rem; gap: 0.35rem; min-width: 0; max-width: 100%; letter-spacing: 0.02em; }
   .boardDrum .execEd { font-size: 0.74rem; }
 }
+
+/* ===== Space Cowboy theme (rust, burnt orange, brass, dusty teal, deep-space navy-black) ===== */
+.root {
+  --ol-ink: #2b1a0e;
+  --ol-muted: #6b4a2a;
+  --ol-line: rgba(90, 55, 20, 0.45);
+  --ol-hot: #c2410c;
+  --ol-open: #3f7f86;
+  --ol-ship: #4d8f86;
+  --ol-card: linear-gradient(160deg, #e7c98a, #c9a25a 45%, #a37a36);
+  --sc-night: #0d0f1c;
+  --sc-leather: linear-gradient(160deg, #8a3a1c, #5e2410 60%, #3f170a);
+  --sc-cream: #f6e7c8;
+  --sc-teal: #5f9ea0;
+  --sc-rivets:
+    radial-gradient(circle at 7px 7px, #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 7px) 7px, #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
+    radial-gradient(circle at 7px calc(100% - 7px), #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #fff1c8 0 1.2px, #6b4518 1.8px, transparent 2.8px);
+}
+.title {
+  background: rgba(13, 15, 28, 0.85) !important;
+  color: #f08a3c !important;
+  border: 2px solid #c9a25a;
+  text-shadow: 0 2px 0 #5e2410;
+  letter-spacing: 0.04em;
+}
+.aimBlock {
+  background: var(--sc-rivets), var(--sc-leather) !important;
+  color: var(--sc-cream);
+  border: 1px solid #c9a25a !important;
+}
+.aimBlock strong, .aimLine { color: var(--sc-cream); }
+.aimMeta { color: #e3c79a !important; }
+.aimTrack { background: rgba(13, 15, 28, 0.6) !important; }
+.aimTarget { background: var(--sc-cream) !important; }
+.tile {
+  background: var(--sc-rivets), var(--ol-card) !important;
+  border: 1px solid #6b4518 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+.tileActive { outline: 2px solid #f08a3c !important; }
+.execBox {
+  background: var(--sc-rivets), var(--sc-leather) !important;
+  color: var(--sc-cream) !important;
+  border: 1px solid #c9a25a;
+  font-family: var(--ol-display) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+.divHead {
+  background: var(--sc-leather) !important;
+  color: var(--sc-cream) !important;
+  border: 1px solid #c9a25a;
+}
+.deptCard {
+  background: var(--sc-rivets), var(--ol-card) !important;
+  border: 1px solid #6b4518 !important;
+  color: var(--ol-ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.6), inset 0 -2px 4px rgba(60, 35, 10, 0.35);
+}
+.deptEmpty { filter: saturate(0.6) brightness(0.92); }
+.deptActive { outline: 2px solid #f08a3c !important; }
+.popover {
+  background: rgba(13, 15, 28, 0.95) !important;
+  color: var(--sc-cream) !important;
+  border: 1px solid #c9a25a !important;
+  --ol-muted: #d8b98a;
+  --ol-line: rgba(201, 162, 90, 0.35);
+}
+.popTitle { font-family: var(--ol-display); font-weight: 400 !important; color: #f08a3c; }
+
+/* Prayer wheel: embossed brass drum, ornamental bands, finial, spindle */
+.drumStage { padding-top: 2.6rem; }
+.drumBody {
+  background:
+    repeating-linear-gradient(90deg, rgba(60, 30, 5, 0.18) 0 2px, transparent 2px 14px),
+    linear-gradient(90deg, #3f2208, #9c6a26 18%, #e6c27a 48%, #b8862f 62%, #5a3210) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0.6rem !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55) !important;
+}
+.drumBody::before, .drumBody::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.1rem;
+  background:
+    radial-gradient(circle at 50% 50%, #fff1c8 0 1.6px, transparent 2.4px) 0 0 / 14px 100%,
+    linear-gradient(#5e2410, #c2410c 30%, #f08a3c 50%, #c2410c 70%, #5e2410);
+  border-top: 1px solid #e6c27a;
+  border-bottom: 1px solid #3f2208;
+}
+.drumBody::before { top: 0.9rem; }
+.drumBody::after { bottom: 0.9rem; }
+.drumRim {
+  border: 2px solid #3f2208 !important;
+  background: linear-gradient(#f3d48a, #a8732c) !important;
+  box-shadow: inset 0 -3px 6px rgba(60, 30, 5, 0.5) !important;
+}
+.drumFinial {
+  position: absolute;
+  left: 50%;
+  top: -2.7rem;
+  width: 2.2rem;
+  height: 2.1rem;
+  margin-left: -1.1rem;
+  border-radius: 50% 50% 0.3rem 0.3rem / 70% 70% 0.3rem 0.3rem;
+  background: radial-gradient(circle at 35% 30%, #fff1c8, #c9a25a 40%, #6b4518);
+  box-shadow: 0 -0.9rem 0 -0.6rem #e6c27a;
+}
+.drumSpindle {
+  position: absolute;
+  left: 50%;
+  bottom: -4.2rem;
+  width: 0.9rem;
+  height: 4rem;
+  margin-left: -0.45rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background:
+    linear-gradient(90deg, #3f2208, #c9a25a 50%, #3f2208) top / 100% 1.1rem no-repeat,
+    linear-gradient(90deg, #2a1206, #8a3a1c 45%, #2a1206);
+}
+.drumNav { margin-top: 4.6rem !important; }
+.drumNav span { font-family: var(--ol-display); color: #f6e7c8; }
+.drumNav button { background: var(--ol-card) !important; color: #2b1a0e !important; border: 1px solid #6b4518 !important; }
