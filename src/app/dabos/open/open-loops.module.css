@@ -509,3 +509,30 @@
 @media (max-width: 520px) {
   .drumFace .deptName { font-size: 0.95rem; }
 }
+
+/* ===== PR22: true-cylinder faces, touching seams, exec strips over their divisions ===== */
+.drumStage { --band-h: 1rem; --drum-h: 36rem; }
+.drumFace { backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-origin: 50% 50%; }
+.drumFace .divCol { gap: 4px; }
+.execStrip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.45rem;
+  background: linear-gradient(180deg, #13285a, #0a1838 60%, #06102a);
+  color: #f4ecd8;
+  border-top: 1px solid #c5a059;
+  border-bottom: 1px solid #c5a059;
+  font-family: var(--ol-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.execStrip strong { font-family: var(--ol-mono); color: #f1dba0; }
+.execStripEd { font-size: 0.66rem; }
+.execStripFirst { border-left: 1px solid #c5a059; }
+.execStripLast { border-right: 1px solid #c5a059; }
+@media (max-width: 520px) { .drumStage { --drum-h: 34rem; } }
