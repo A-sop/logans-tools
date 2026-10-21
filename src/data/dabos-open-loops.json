@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-10-08T20:47:10.167Z",
+  "generated_at": "2026-10-21T19:20:57.720Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 96,
-    "open": 2,
+    "hot": 144,
+    "open": 11,
     "ship": 0,
-    "still_open": 98,
+    "still_open": 155,
     "closed": 44,
-    "total": 98,
+    "total": 155,
     "by_segment": {
-      "treasury": 9,
-      "assets": 55,
-      "mail": 9,
-      "esto": 4,
+      "treasury": 13,
+      "assets": 97,
+      "mail": 13,
+      "esto": 5,
       "gfp": 6,
-      "consulting": 1,
+      "consulting": 3,
       "legal": 1,
       "data": 1,
       "platform": 1,
       "growth": 7,
-      "other": 4
+      "other": 8
     },
     "by_dept": {
-      "Dept1": 10,
+      "Dept1": 14,
       "Dept2": 0,
       "Dept3": 0,
       "Dept4": 7,
       "Dept5": 0,
       "Dept6": 6,
       "Dept7": 0,
-      "Dept8": 9,
-      "Dept9": 55,
+      "Dept8": 13,
+      "Dept9": 97,
       "Dept10": 0,
       "Dept11": 1,
       "Dept12": 0,
@@ -45,19 +45,19 @@
       "Dept17": 0,
       "Dept18": 0,
       "Dept19": 0,
-      "Dept20": 4,
-      "Dept21": 6
+      "Dept20": 5,
+      "Dept21": 12
     }
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-10-02",
+    "since": "2026-10-15",
     "closed": 0,
-    "still_open": 47,
+    "still_open": 1,
     "by_dept": {
       "Dept1": {
         "closed": 0,
-        "still_open": 2
+        "still_open": 0
       },
       "Dept2": {
         "closed": 0,
@@ -77,7 +77,7 @@
       },
       "Dept6": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 0
       },
       "Dept7": {
         "closed": 0,
@@ -85,11 +85,11 @@
       },
       "Dept8": {
         "closed": 0,
-        "still_open": 4
+        "still_open": 0
       },
       "Dept9": {
         "closed": 0,
-        "still_open": 39
+        "still_open": 0
       },
       "Dept10": {
         "closed": 0,
@@ -133,11 +133,11 @@
       },
       "Dept20": {
         "closed": 0,
-        "still_open": 0
+        "still_open": 1
       },
       "Dept21": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 0
       }
     }
   },
@@ -385,9 +385,9 @@
     },
     {
       "id": "261005_dept9-local-tool-link-danger",
-      "why": "HOT. Dept9 Body Danger — Grok Bot lost desktop connection to HZR52/LDW/ln02 overnight. Stacks with Sep 20 Danger.",
+      "why": "HOT. Dept9 Body Danger — screensaver/lock blocked Grok Bot desktop access. HZR52 configured 8 Oct (screensaver/display-off/sleep disabled, founder approved); LDW/ln02 pending reconnect. Stacks with Sep 20 Danger.",
       "canonical": "rush-2026-10-05-local-tool-link-flap.md · receipts/condition-dept09-danger-local-tool-link-2026-10-05.md",
-      "resume": "local-tool restore / desktop agents",
+      "resume": "configure LDW/ln02 / CONSOLELOCK admin",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -415,7 +415,7 @@
     },
     {
       "id": "260925_repo-data-declutter",
-      "why": "Inbox + consume empty. Abort trees deleted. Open = EWE visits + unnamed GFP intake. Atlas hold to 27Q1.",
+      "why": "Inbox + consume empty. Abort trees deleted. Open = EWE visits + unnamed GFP intake. Dabos hold to 27Q1.",
       "canonical": "founder-desk/declutter-waves-1-4-receipt-2026-09-24.md · canvas repo-data-declutter.canvas.tsx",
       "resume": "EWE Neuwied / name GFP intake 2915",
       "heat": "hot",
@@ -434,6 +434,16 @@
       "dept": "Dept1"
     },
     {
+      "id": "261016_vertragspost-triage-blend",
+      "why": "Doctrine folded 16 Oct. Next: LW Vertragspost blend (COM + Unerledigt Treffer; remind Erledigen; learn Aufgabe/Info on the go). OS UI/checkmarks human-only.",
+      "canonical": "Proviso/.../sops/dvag-os-vertragspost-triage-blend-plan.md · handover-vertragspost-triage-blend-learning-2026-10-16.md",
+      "resume": "LW Vertragspost blend / Aufgabe vs Info",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "esto",
+      "dept": "Dept20"
+    },
+    {
       "id": "260929_green-bridge-patrick-murphy",
       "why": "Appointment done. Detail superseded by 261007_green-bridge-fk-akte-hzr. Client / payroll lane. Docs → mail@germanfinancialplanning.de.",
       "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
@@ -445,8 +455,8 @@
     },
     {
       "id": "261007_green-bridge-fk-akte-hzr",
-      "why": "HOT HZR resume. FK Akte + OS fill guide ready; OS forms not saved; Vollmacht Word emailed GFP→Blaschke 07.10 — wet-ink scan / IdNr office still open.",
-      "canonical": "DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\HZR-RESUME-2026-10-07.md · FK AF_Customer\\FK_Green Bridge… · project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md",
+      "why": "12.10. Sach OS-Calc sheet, Blaschke gap list, and two unsent drafts are in the DATA Akte. OS still not typed. Wet-ink Vollmacht scan still missing. FK folder not on this HZR OneDrive.",
+      "canonical": "project-plans/green-bridge-europe-hzr-resume-2026-10-07.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
       "resume": "Green Bridge FK OS fill / Blaschke Vollmacht send",
       "heat": "hot",
       "source": "chat-backlog",
@@ -474,6 +484,226 @@
       "dept": "Dept9"
     },
     {
+      "id": "261008_yealink-sipgate-xsi",
+      "why": "OPEN. T46G SIPgate Registered; LCD XSI incomplete = BroadSoft network call log still on. Kill-XSI unfinished after reboot.",
+      "canonical": "dept09-assets/handover-yealink-t46g-sipgate-xsi-2026-10-08.md",
+      "resume": "Yealink XSI / SIPgate T46G History",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-sedcard-modeling",
+      "why": "HZR. /sedcard shipped (direct booking; EP photos interim; Konfektion 52–54, shoes 43–44). Polish / new photos / deploy next.",
+      "canonical": "dept11-engineering/handover-ldw-sedcard-modeling-hzr-2026-10-08.md",
+      "resume": "LDW sedcard / modeling page",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_zoho-books-full-reconcile",
+      "why": "HOT HZR. Full Zoho Books≈Feed 2020–2026. Prior LDW agent proved Income phantoms; categorize/bulk-delete failed. Next = CSV ±2–3d transfer graph then surgical apply. Income Books ~−€5k vs feed ~€1.1k; N26 ~+€61k; OPEX ~−€24k.",
+      "canonical": "dept08-ledger/handover-zoho-books-full-reconcile-2026-10-08.md · DATA !!_ZOHO-BOOKS\\logs\\zoho-working\\AGENT-HANDOFF-RECONCILE.md · A-207",
+      "resume": "Zoho full reconcile / DB_Income Books feed / CSV transfer graph Zoho",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "261008_euer-bank-csv-gaps",
+      "why": "NEW 2026-10-08 HZR drain. Gewerbe EÜR v4 gap audit: 2022 DKB never piped; 2021 DKB giro suggestions missing; 2025 giro Nov–Dec only; 2020 no scripted merge.",
+      "canonical": "DATA !!_TAX-ADMIN\\260603_HANDOFF.md § Bank gaps · dept08-ledger/handover-euer-bank-csv-gaps-hzr-2026-10-08.md",
+      "resume": "EÜR bank CSV gaps / 2022 DKB merge",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "261008_paypal-zoho-reconcile",
+      "why": "NEW 2026-10-08. PayPal API + wallet transfers done (80 posted; USD/AUD unc=0). Next = EUR ~150 vendor review + bank funding→PayPal + books −€5,694.03 vs feed €0. Broader books gaps → 261008_zoho-books-full-reconcile.",
+      "canonical": "dept08-ledger/handover-paypal-zoho-reconcile-2026-10-08.md · A-207",
+      "resume": "PayPal Zoho reconcile / PayPal EUR uncategorized",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
+      "id": "260926_allfinanz-watch-close",
+      "why": "Allfinanz Watch still open at close: LW 70 / RA 156. Deleted audit clean (noise + Kosten PDFs only). File + Protokoll, do not Delete Vertragsrelevante.",
+      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md · Proviso/docs/reference/handover-watchfolder-2026-07-30.md",
+      "resume": "continue Watch grind / Allfinanz Vertragspost",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "260929_green-bridge-patrick-murphy",
+      "why": "Superseded detail by 261007_green-bridge-fk-akte-hzr — still own client / payroll lane.",
+      "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md",
+      "resume": "Green Bridge Patrick",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_green-bridge-fk-akte-hzr",
+      "why": "12.10. Sach OS-Calc sheet, Blaschke gap list, and two unsent drafts are in the DATA Akte. OS still not typed. Wet-ink Vollmacht scan still missing. FK folder not on this HZR OneDrive.",
+      "canonical": "project-plans/green-bridge-europe-hzr-resume-2026-10-07.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
+      "resume": "Green Bridge FK OS fill / Blaschke Vollmacht send",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260930_hzr-ssd-swap-prep",
+      "why": "HOT Fri 2 Oct. Staging + HZR wind-down done 09-30. Paste: hzr52-pre-swap-2026-09-30\\FRI-HANDOVER-PASTE.md. Left: Win11 USB · Dropbox green · parcels → SN7100 install + fresh Win11.",
+      "canonical": "PO-013 · FRI-HANDOVER-PASTE",
+      "resume": "HZR SSD swap / PO-013 Friday",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_thunderbird-inbox-close",
+      "why": "LDW INBOX leftovers + Gmail/GABC not live-IMAP; hat law on DATA; Neon CF = not now",
+      "canonical": "DATA dept01-mail-triage\\RESUME.md · cf-pointers/2026-08-18-ldw-inbox-triage.md · docs/reference/dept01-email-mailbox-triage.md",
+      "resume": "triage Thunderbird INBOX / mail hat files to repo",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261007_non-dvag-mail-triage",
+      "why": "HZR resume. 27 Sep LDW INBOX 298→187. Counts stale — re-list before Trash. Bills stay on vendor Protokolls.",
+      "canonical": "DATA dept01-mail-triage\\HANDOFF-ldw-watch.md · RESUME.md",
+      "resume": "non-DVAG inbox triage",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_dvag-outlook-inbox-board",
+      "why": "HZR resume. Allfinanz Outlook inboxes classified 27 Sep; recount 29 Sep unchanged. Nothing moved or deleted. Noise delete still needs founder words.",
+      "canonical": "Proviso/docs/reference/handover-watchfolder-2026-07-30.md",
+      "resume": "DVAG inbox triage / delete the noise",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ronix-fiku-calc-go",
+      "why": "HOT HZR. 12.10 typing sheet in the Akte. Logan types DSI Lager then BHV. Blockers: Umsatz/BWA, Vorschäden, BST-Inventar. Draft not sent.",
+      "canonical": "venture-dvag/handover-ronix-fiku-bav-2026-08-04.md · Dropbox FIRMENORDNER\\Ronix GmbH\\!_Dossier.md",
+      "resume": "Ronix Calc / continue Ronix FiKu",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ldw-scan-ewe-hzr-migrate",
+      "why": "HZR migrate. LDW_Scan drained 11 Aug; Kashani EWE filed; novel delete-after 11 Sep. Confirm bay + delete novel on HZR.",
+      "canonical": "dept01-intake/handover-ldw-scan-ewe-kashani-2026-08-11.md",
+      "resume": "process LDW_Scan / Kashani EWE / HZR scan bay",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_agro-fola-preview-live",
+      "why": "HZR migrate. Real Next.js site live at agro.logans.tools (not Claude HTML). RFQ email env still missing. Client walk = Shadnia.",
+      "canonical": "C:\\Dev\\agro-solutions-gmbh\\docs\\HZR-RESUME.md · DEPLOYMENT-PLAN.md",
+      "resume": "Agro FÖLA / agro.logans.tools / Shadnia walkthrough",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_agro-b2b-site-template-prd",
+      "why": "HZR migrate. PRD to productize Agro site as reusable multi-lang B2B template. Live client ops stay in Agro repo.",
+      "canonical": "docs/backlog/ventures/Agro/PRD-b2b-marketing-site-template.md",
+      "resume": "Agro site template PRD / B2B marketing template",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ldw-to-hzr-desktop",
+      "why": "HZR first chat. LDW closed 07.10. Pull wip-LDW-20261004. Allfinanz Watch still open. Do not Delete Vertragsrelevante.",
+      "canonical": "this section · 260926_allfinanz-watch-close · board /open",
+      "resume": "I'm on HZR / Ronix Calc / continue Watch grind",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_proviso-local-ai-hzr",
+      "why": "HZR. Local Ollama KI shipped (dashboard + client, intent→DB). Reinstall/verify Ollama on HZR; no front-office mode.",
+      "canonical": "Proviso/docs/reference/handover-local-ai-2026-10-07.md · local-ai-setup.md",
+      "resume": "Proviso local KI / Ollama on HZR",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_gfp-visual-creative-stack",
+      "why": "HZR resume. Fal/Canva/Figma handoff + tool registry done. Next = wire Canva MCP; confirm Canva plan; optional prompt templates.",
+      "canonical": "dept04-content/gfp-visual-creative-stack-handoff.md",
+      "resume": "Canva MCP / GFP visual stack / Fal prompt library",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_field-journal-hzr",
+      "why": "HZR migrate. Field Journal PWA + APAC trip. Christine Balboa called + journal updated. Live = ln02 :3010.",
+      "canonical": "project-plans/field-journal-hzr-resume-2026-10-07.md · C:\\Dev\\field-journal",
+      "resume": "Field Journal / APAC 2026 / ln02 field-journal",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-sedcard-modeling",
+      "why": "HZR. /sedcard shipped (direct booking; EP photos interim; Konfektion 52-54, shoes 43-44). Polish / new photos / deploy next.",
+      "canonical": "dept11-engineering/handover-ldw-sedcard-modeling-hzr-2026-10-08.md",
+      "resume": "LDW sedcard / modeling page",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ldw-books-euer-ui",
+      "why": "HZR migrate. Live euer.logans.tools — SKR03+EÜR UI; workbook + Zoho on-disk exports merged. Next: 2025 DB→suggestions converter; per-line overrides.",
+      "canonical": "dept08-ledger/handover-ldw-books-euer-ui-hzr-2026-10-08.md · logans-tools plan",
+      "resume": "LDW Books EÜR / euer.logans.tools",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "treasury",
+      "dept": "Dept8"
+    },
+    {
       "id": "261008_paypal-zoho-reconcile",
       "why": "NEW 2026-10-08. PayPal API + wallet transfers done (80 posted; USD/AUD unc=0). Next = EUR ~150 vendor review + bank funding→PayPal + books −€5,694.03 vs feed €0.",
       "canonical": "dept08-ledger/handover-paypal-zoho-reconcile-2026-10-08.md · A-207",
@@ -495,9 +725,29 @@
     },
     {
       "id": "261008_dabos-v1-skills-hzr",
+      "why": "UPDATED 2026-10-08 wrap. Org board + Clerk allowlist shipped in logans-tools (dabos.logans.tools). Next: Neon on Vercel, smoke Gmail sign-in, stop-line Research. Ollama SSOT = ln02 (fleet-connections).",
+      "canonical": "dept11-engineering/handover-dabos-v1-skills-hzr-2026-10-08.md · logans-tools/src/docs/dabos/README.md",
+      "resume": "DABOS v1 / Neon dabos Vercel / Clerk dabos smoke",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_dabos-v1-skills-hzr",
       "why": "NEW 2026-10-08 HZR drain. Specs strong; v1 runtime ~0%. skills.sh = later accelerator. Need Neon + code home + Next-vs-FastAPI before scaffold.",
       "canonical": "dept11-engineering/handover-dabos-v1-skills-hzr-2026-10-08.md · docs/HANDOVER.md",
       "resume": "DABOS v1 / scaffold DABOS loop",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_atlassian-platform-learnings",
+      "why": "NEW 2026-10-08 LDW→HZR. Transcript filed; implement patterns only (async job + Zod + PRD-010 after v1). No Envoy/OSB.",
+      "canonical": "dept11-engineering/handover-atlassian-platform-learnings-hzr-2026-10-08.md · atlassian-platform-engineering-inspiration.md",
+      "resume": "Atlassian platform learnings / scaffold DABOS loop",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -518,6 +768,16 @@
       "why": "NEW 2026-10-08 HZR drain. GFP main clean+pushed. Left: drop stale temp-wip stash; ~18 May draft prospect PRs wait for human triage (not CRM).",
       "canonical": "dept11-engineering/troubleshooting/handover-gfp-repo-hygiene-hzr-2026-10-08.md · GFP AGENTS.md §11",
       "resume": "GFP repo hygiene / drop temp-wip stash / triage May draft PRs",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_gfp-venture-wiring-hzr",
+      "why": "NEW 2026-10-08. GFP Layer A shipped; CX33 demoted (not performance); CMA=DE metal. Next: SIPgate A-278, PDFs→W0 A-275, or buy PO-006/PO-005.",
+      "canonical": "dept06-audience/handover-gfp-venture-wiring-hzr-2026-10-08.md · groundwork gfp-venture-wiring-groundwork-2026-07-15.md",
+      "resume": "GFP venture wiring / SIPgate A-278 / W0 PDFs",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -565,7 +825,7 @@
     },
     {
       "id": "261008_obsidian-vault-migration",
-      "why": "NEW 2026-10-08 HZR drain. Sidecar sync lives in DABOS (Atlas quarantined). Vault 30_PROJECTS\\LDW_ObsidianVault thin on LDW close — recount + sync/Marker + triage on HZR. DVAG out of scope.",
+      "why": "NEW 2026-10-08 HZR drain. Sidecar sync lives in DABOS (Dabos quarantined). Vault 30_PROJECTS\\LDW_ObsidianVault thin on LDW close — recount + sync/Marker + triage on HZR. DVAG out of scope.",
       "canonical": "dept01-intake/handover-obsidian-vault-migration-2026-10-08.md · scripts/dept01-intake/obsidian-sync/",
       "resume": "Obsidian vault migration / obsidian sidecar sync",
       "heat": "hot",
@@ -645,9 +905,19 @@
     },
     {
       "id": "261008_proviso-letter-pingen",
-      "why": "NEW 2026-10-08 HZR drain. DIN/E-POST/Pingen letter lane built; Cowork Pingen keys note in Proviso (not Atlas). Next: fill PINGEN_, smoke, wire PDF upload.",
+      "why": "NEW 2026-10-08 HZR drain. DIN/E-POST/Pingen letter lane built; Cowork Pingen keys note in Proviso (not Dabos). Next: fill PINGEN_, smoke, wire PDF upload.",
       "canonical": "Proviso docs/reference/handover-letter-channels-pingen-2026-10-08.md · COWORK-pingen-handover.md",
       "resume": "letter channels / Pingen Proviso",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_vbi0250-einheiten-vertrag",
+      "why": "NEW 2026-10-08 HZR drain. Contract table Sach/Kranken/Leben + 126%→12,60 €/E; VBI0250 = Neugeschäft/Abschluss. E independent of Stufe.",
+      "canonical": "venture-dvag/handover-vbi0250-einheiten-vertrag-2026-10-08.md · DATA !!_TAX-ADMIN\\reference\\dvag-einheiten-vertrag-sach-kranken-leben.md",
+      "resume": "VBI0250 Einheiten / 1,5 E Sach Faustregel",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -775,9 +1045,9 @@
     },
     {
       "id": "261007_phv-todesfall-2981",
-      "why": "NEW. Paperless #2981 PHV-Aufhebung (Todesfall) wrongly under CAREER-DVAG. Propose→Proviso→AF_Customer Akte + brief Protokoll; founder go before move. Names and the policy number stay in the Akte.",
+      "why": "DONE 2026-10-13. Filed in the client Akte (git-ignored, Proviso AF_Customer); wrong copy archived under C:\\DATA\\90_ARCHIVE\\2026-10-13_paperless-2981-misfile\\. Carrier letter drafted in Akte, not sent.",
       "canonical": "This file § 261007_phv-todesfall-2981 · Paperless #2981",
-      "resume": "PHV Aufhebung Akte / Paperless 2981",
+      "resume": "Paperless 2981",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -935,9 +1205,49 @@
     },
     {
       "id": "260804_ronix-fiku-bav-forms",
-      "why": "Akte advanced 2026-10-07. Anzufordern PDF emailed Gmail 2026-08-07. Still: Umsatz/BWA, Vorschäden, Inventar Blindeisenweg; OS Calc on HZR.",
+      "why": "12.10 typing sheet + unsent blocker draft in the Akte. Still: Umsatz/BWA, Vorschäden, Inventar Blindeisenweg. OS Calc is Logan.",
       "canonical": "Dropbox Ronix GmbH\\!_Dossier.md · A-291",
       "resume": "Ronix FiKu / Ronix Calc",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "consulting",
+      "dept": "Dept21"
+    },
+    {
+      "id": "261008_dil-inbox-hzr",
+      "why": "HZR migrate drain. DIL inbox pilot mid-flight on LDW; OCR/naming fixed in logans-tools. Next: --newest=N → review → apply with OK.",
+      "canonical": "dept01-intake/document-organisation/handover-dil-inbox-hzr-2026-10-08.md",
+      "resume": "DIL inbox / look at the drives",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ln02-backup-manifests-hzr",
+      "why": "HZR drain. Backup run logs + WORK manifests placed for agents; continue examine/rename/whittle/archive. Dabos gone — DABOS scripts.",
+      "canonical": "dept09-assets/handover-ln02-backup-manifests-agent-logs-hzr-2026-10-08.md · founder-desk/data-retail-resume.md",
+      "resume": "look at the drives / ln02 backup logs",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260803_data-retail-registry-hygiene",
+      "why": "Registry hygiene done. Inbox drain promoted to 261008_dil-inbox-hzr.",
+      "canonical": "founder-desk/data-retail-resume.md",
+      "resume": "look at the drives",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_ln02-backup-manifests-hzr",
+      "why": "HZR drain. Backup run logs + WORK manifests placed for agents; continue examine/rename/whittle/archive. Dabos gone — DABOS scripts.",
+      "canonical": "dept09-assets/handover-ln02-backup-manifests-agent-logs-hzr-2026-10-08.md · founder-desk/data-retail-resume.md",
+      "resume": "look at the drives / ln02 backup logs",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -1142,6 +1452,176 @@
       "source": "chat-backlog",
       "segment": "growth",
       "dept": "Dept4"
+    },
+    {
+      "id": "261007_borghei-miri-vasp",
+      "why": "docs/reference/venture-dvag/handover-borghei-miri-vasp-hzr-2026-10-07.md · Dropbox Akte",
+      "canonical": "docs/reference/venture-dvag/handover-borghei-miri-vasp-hzr-2026-10-07.md · Dropbox Akte",
+      "resume": "Borghei Miri VASP / continue Reza Borghei",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ra-paperless-p11-hzr",
+      "why": "Paperless RA-TEMP → Dropbox/DATA filing. LDW closed 2026-10-07 migrating to HZR mid Reza A-table confirm. Supersedes thin index `261007_temp-paperless-akt",
+      "canonical": "C:\\Dev\\Proviso\\docs\\reference\\handover-temp-logan-filing-2026-08-01.md · rule .cursor/rules/ra-paperless-filing.mdc (§15 Proviso materia",
+      "resume": "continue RA Paperless / Reza A table / RA-TEMP bridge",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_field-journal-hzr",
+      "why": "Field Journal / Christine Balboa chat drained 2026-10-07 on LDW for HZR migrate. App + trip continue on HZR / ln02.",
+      "canonical": "field-journal-hzr-resume-2026-10-07.md · repo C:\\Dev\\field-journal · live",
+      "resume": "Field Journal / APAC 2026 / ln02 field-journal",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_gfp-visual-creative-stack",
+      "why": "Visual creative stack chat closed on LDW 2026-10-07 while migrating to HZR. Handoff + expanded tool registry written; Canva MCP not wired yet.",
+      "canonical": "docs/reference/dept04-content/gfp-visual-creative-stack-handoff.md (stub: docs/reference/dept04-content/gfp-visual-creative-stack-handoff.md) · pointer",
+      "resume": "Canva MCP / GFP visual stack / Fal prompt library",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_agro-fola-preview-live",
+      "why": "Laptop chat drained 2026-10-07 for HZR. Claude HTML pitch demos reviewed and filed under docs/previews/; production CI = existing Next.js app, redeployed",
+      "canonical": "C:\\Dev\\agro-solutions-gmbh\\docs\\HZR-RESUME.md · docs/DEPLOYMENT-PLAN.md · docs/CLIENT-PROPOSAL-AND-HANDOVER.md · docs/PRICING.md",
+      "resume": "Agro FÖLA / agro.logans.tools / Shadnia walkthrough",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_agro-b2b-site-template-prd",
+      "why": "Productize Agro B2B marketing site as a reusable template; HZR work should not block client walkthrough.",
+      "canonical": "docs/backlog/ventures/Agro/PRD-b2b-marketing-site-template.md · mirror `C:\\Dev\\agro-solutions-gmbh\\docs\\PRD-b2b-marketing-site-template.md",
+      "resume": "Agro site template PRD / B2B marketing template",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_onenote-protokoll-hzr",
+      "why": "Founder migrating to HZR; OneNote→file Protokoll lane still has intensive CM SectionGroups + LW couples; Live AF_Kunden may be broken.",
+      "canonical": "C:\\Dev\\Proviso\\docs\\reference\\handover-onenote-protokoll-2026-08-01.md (paste at top) · doctrine af-customer-folder-protocol.md § Hydrat",
+      "resume": "continue OneNote Protokoll / intensive CM SectionGroups",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_temp-paperless-akte-hzr",
+      "why": "RA filing SSOT is Paperless RA-TEMP → Dropbox Akte (not legacy TEMP A→Z). Founder migrating to HZR.",
+      "canonical": "C:\\Dev\\Proviso\\docs\\reference\\handover-temp-logan-filing-2026-08-01.md · rule Proviso/.cursor/rules/ra-paperless-filing.mdc · older scaf",
+      "resume": "RA-TEMP bridge / Paperless HZR / continue RA Paperless",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_proviso-local-ai-hzr",
+      "why": "Local Ollama KI for Proviso back office; verify on HZR after migrate.",
+      "canonical": "C:\\Dev\\Proviso\\docs\\reference\\handover-local-ai-2026-10-07.md · docs/local-ai-setup.md",
+      "resume": "Proviso local KI / Ollama HZR",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_ronix-fiku-calc-go",
+      "why": "12.10 typing sheet in the Akte. Logan types DSI then BHV. Three blockers still open; draft not sent.",
+      "canonical": "Dropbox FIRMENORDNER\\Ronix GmbH\\!_Dossier.md (§ OS Calc tippbereit) + !_Protokoll.md · repo `docs/reference/venture-dvag/handover-ronix-",
+      "resume": "Ronix Calc / continue Ronix FiKu",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "consulting",
+      "dept": "Dept21"
+    },
+    {
+      "id": "261007_hzr-leave-backup-close",
+      "why": "",
+      "canonical": "see section",
+      "resume": "HZR leave verify / HZR weekly ln02 backup",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_thunderbird-inbox-close",
+      "why": "Thunderbird triage chat closed. Dept1 grind + hat-placement, not Central Files in Neon.",
+      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\RESUME.md · cf-pointers/2026-08-18-ldw-inbox-triage.md · method `docs/reference/dept01-email-m",
+      "resume": "triage Thunderbird INBOX / mail hat files to repo",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261007_non-dvag-mail-triage",
+      "why": "Chat closed 2026-10-07 on LDW so the same pass can resume on HZR. This is the 27 Sep non-DVAG LDW inbox drain, not the Aug 18 Thunderbird snapshot above",
+      "canonical": "C:\\DATA\\20_ADMIN\\DABOS\\dept01-mail-triage\\HANDOFF-ldw-watch.md · RESUME.md · method docs/reference/dept01-email-mailbox-triage.md. Bil",
+      "resume": "non-DVAG inbox triage",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_proviso-local-edition-hzr",
+      "why": "Proviso Local Edition product chat closed 2026-10-07 for LDW→HZR. Monatsziel + launch fix need smoke on HZR.",
+      "canonical": "C:\\Dev\\Proviso\\docs\\reference\\handover-local-edition-hzr-2026-10-07.md",
+      "resume": "Proviso Local Edition / Monatsziel Einheiten / Proviso desktop shortcut",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261007_mz-geren-invoice",
+      "why": "founder-desk/handover-mz-geren-invoice-2026-10-07.md · Dropbox MZ 260805",
+      "canonical": "founder-desk/handover-mz-geren-invoice-2026-10-07.md · Dropbox MZ 260805",
+      "resume": "MZ Geren invoice",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "261007_dvag-outlook-inbox-board",
+      "why": "Allfinanz Outlook classified on the laptop 2026-10-07. Handover is now on main.",
+      "canonical": "founder-desk/handover-dvag-outlook-inbox-2026-10-07.md",
+      "resume": "Allfinanz Outlook triage",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "mail",
+      "dept": "Dept1"
+    },
+    {
+      "id": "261008_hzr-unattended-hour",
+      "why": "Thursday close retried after npm PATH fix. Deinert and laptop archive still need Logan.",
+      "canonical": "founder-desk OPEN-CHAT-BACKLOG this section",
+      "resume": "Deinert figure / debt review prompt 0",
+      "heat": "hot",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     }
   ],
   "open": [
@@ -1156,6 +1636,16 @@
       "dept": "Dept9"
     },
     {
+      "id": "261008_pirate-codex-hzr",
+      "why": "Closed LDW chat that synced Pirate Skills Grow+Build into DABOS. Next chats on HZR only need pull + use as reference library (not read-all).",
+      "canonical": "docs/reference/dept04-content/handover-pirate-codex-hzr-2026-10-08.md · docs/pirate-codex/README.md · SYNC.md",
+      "resume": "Pirate Codex HZR / sync pirate codex",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
       "id": "261008_zoho-expenses-eur-format",
       "why": "Zoho Expenses remapped into EÜR-shaped review table (best guess). Founder still needs manual category check + copy/paste into year EÜR — migrating desk to HZR.",
       "canonical": "dept08-ledger/handover-zoho-expenses-eur-format-2026-10-08.md · DATA C:\\DATA\\20_ADMIN\\!!_ZOHO-BOOKS\\expenses-working-xlsx\\ · script scripts/dept08-ledger/tax/fill_zoho_eur_sheet.py",
@@ -1164,6 +1654,86 @@
       "source": "chat-backlog",
       "segment": "treasury",
       "dept": "Dept8"
+    },
+    {
+      "id": "261008_gfp-freelancer-konzept-pdf",
+      "why": "Jul Einsendung to DVAG customer PDF. Drained 2026-10-08 for HZR migrate.",
+      "canonical": "docs/reference/dept17-sales/handover-gfp-freelancer-konzept-pdf-2026-10-08.md · GFP \u0007dvisory/client-plans/2026-07-20-your-financial-plan.pdf",
+      "resume": "freelancer Konzept PDF",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261009_ldw-chat-gaps-and-wip-merge",
+      "why": "LDW chat sweep (8 Oct 2026) found items that never landed as a live backlog row. Recorded 9 Oct 2026 ~00:20 Berlin while migrating LDW to HZR. Transcripts were not on disk under agent-transcripts\\<id>.jsonl (search missed), so the next steps below are from the sweep report C:\\Users\\Logan\\cursor-archive\\LDW-chat-sweep-2026-10-08.md.",
+      "canonical": "",
+      "resume": "live intakes on gaps 1, 2, 3, 5, and 7 above · LDW chat gaps / Buzz wave-1",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260814_vaultwarden-office-resume",
+      "why": "Daily use done — Bitwarden app → self-hosted Vaultwarden on ln02. Tailscale must be on the device; accepted. Temp master file gone.",
+      "canonical": "docs/reference/dept09-assets/handover-vaultwarden-ln02-2026-08-14.md",
+      "resume": "“Zoho Vault import”",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "260826_amazon-2024-relist",
+      "why": "Closed 2026-08-26 night. Founder split: 302-6852950-4887532 €19 ≈ Privat; 302-7844144-9725906 Jabra Ohrpolster €13.98 Gewerbe ✅ (240729_GW-xx-Betriebsausstattung_AMZN-Jabra-Evolve75-Ohrpolster_319794801.pdf); Gürtelschnalle €9.75 ≈ Privat (page 2 of portal export — not filed).",
+      "canonical": "!_TAXES-2024/DIGITAL-BELEG-GAP-2024.md",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260826_lespeed-2023-invoice",
+      "why": "Closed 2026-08-28. Founder: ≈ Kontoauszug OK — Wise Care / DRILespeed €37.30 (2023-03-11 N26); portal no longer yields 2023 invoice (provider → 2Checkout/WiseCleaner; 2025 BV92653429 only).",
+      "canonical": "!_TAXES-2023/DIGITAL-BELEG-GAP-2023.md ≈ section · prior refs: 210309_…Lespeed-DigitalRiver… (2021) · 240317_…Lespeed-WiseCar… (2024)",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "260826_schmeling-2022-scan",
+      "why": "Closed 2026-08-27. All three AT payments have BFBS invoices on disk (incl. Jun–Jul–Aug RE 29+34+39).",
+      "canonical": "!_TAXES-2022/DIGITAL-BELEG-GAP-2022.md",
+      "resume": "",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "other",
+      "dept": "Dept21"
+    },
+    {
+      "id": "261007_bridgelife-hzr",
+      "why": "BridgeLife chat drained 2026-10-07 on LDW for HZR migrate. Localhost dry-run worked; product handoff lives in the compiled repo.",
+      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md · README.md · AGENTS.md",
+      "resume": "BridgeLife HZR / bridgelife dry run",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
+    },
+    {
+      "id": "261008_gfp-marika-mm-followup",
+      "why": "Money Manual / Marika client-pack chat drained for HZR migrate. Pack on GFP main; human closeout + voice + A-252 open.",
+      "canonical": "GFP src/docs/handover-marika-money-manual-hzr-2026-10-08.md · DABOS docs/registers/gfp-marika-mm-followup-hzr-2026-10-08.md",
+      "resume": "Marika Money Manual / client pack closeout",
+      "heat": "open",
+      "source": "chat-backlog",
+      "segment": "assets",
+      "dept": "Dept9"
     }
   ],
   "ship": []
