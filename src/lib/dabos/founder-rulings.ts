@@ -1,0 +1,41 @@
+/**
+ * Founder-ruling condition overrides. A founder ruling takes precedence over
+ * computed (stat-indicated/default) working conditions until a verified formula
+ * advance or a newer founder ruling replaces it.
+ * @see DABOS docs/reference/conditions-ethics-ssot.md
+ */
+import type { ConditionLabel } from '@/lib/dabos/condition-ladder';
+
+export const CONDITION_SOURCES = ['computed', 'formula', 'founder_ruling'] as const;
+export type ConditionSource = (typeof CONDITION_SOURCES)[number];
+
+export type FounderRulingPreset = {
+  entity_type: 'division' | 'department';
+  entity_ids: string[];
+  condition: ConditionLabel;
+  ruling_date: string;
+  ruling_ref: string;
+  ruling_note?: string;
+};
+
+const ALL_DEPTS = Array.from({ length: 21 }, (_, i) => `Dept${i + 1}`);
+
+export const FOUNDER_RULING_PRESETS: Record<string, FounderRulingPreset> = {
+  '2026-10-16-confusion': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Confusion',
+    ruling_date: '2026-10-16',
+    ruling_ref: 'DABOS:docs/reference/staff-status/receipts/founder-decision-treason-2026-10-16.md',
+    ruling_note: 'Founder rejected Treason claims; all Dept1-21 assigned Confusion.',
+  },
+};
+
+/** Founder ruling wins over the computed working condition. */
+export function resolveWorkingWithOverride(
+  computed: ConditionLabel,
+  existing: { working_condition: ConditionLabel; condition_source?: ConditionSource | null } | null
+): ConditionLabel {
+  if (existing?.condition_source === 'founder_ruling') return existing.working_condition;
+  return computed;
+}

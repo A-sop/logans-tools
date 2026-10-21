@@ -26,6 +26,11 @@ export const DEPT_BATTLE_PLAN_WEEKLY: Record<string, string> = {
 };
 
 export const CONDITION_BATTLE_EMPHASIS: Partial<Record<ConditionLabel, string>> = {
+  Confusion: 'Confusion formula: find out where you are (locational), per new unit of time; no credit carried over.',
+  Treason: 'Treason formula: find out that you are.',
+  Enemy: 'Enemy formula: find out who you really are.',
+  Doubt: 'Doubt formula: inform yourself honestly of intentions/activities; decide; act.',
+  Liability: 'Liability formula: decide who are friends; deliver an effective blow to the enemies of the group; make up damage; apply for re-entry.',
   'Non-Existence': 'Minimum viable stat only — activate one promotion item.',
   Danger: 'Danger formula: bypass → change → deliver → economize → stiffen → promote.',
   Emergency: 'Stabilize primary stat before new promotion.',
