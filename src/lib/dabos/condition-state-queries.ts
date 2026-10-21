@@ -83,7 +83,9 @@ export async function upsertEntityConditionState(
       NOW()
     )
     ON CONFLICT (entity_type, entity_id) DO UPDATE SET
-      working_condition = EXCLUDED.working_condition,
+      -- A founder ruling overrides the computed condition; refresh must not undo it.
+      working_condition = CASE WHEN entity_condition_state.condition_source = 'founder_ruling'
+        THEN entity_condition_state.working_condition ELSE EXCLUDED.working_condition END,
       stat_indicated_condition = EXCLUDED.stat_indicated_condition,
       stat_indicated_at = EXCLUDED.stat_indicated_at,
       danger_why = COALESCE(EXCLUDED.danger_why, entity_condition_state.danger_why),
