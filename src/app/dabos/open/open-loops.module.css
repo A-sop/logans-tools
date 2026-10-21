@@ -194,3 +194,57 @@
 .popText { overflow-wrap: anywhere; }
 .popMeta { grid-column: 2; font-family: var(--ol-mono); font-size: 0.68rem; color: var(--ol-muted); }
 .popEmpty { margin: 0.45rem 0; color: var(--ol-muted); font-size: 0.84rem; }
+
+/* Prayer-wheel drum */
+.drumStage { position: relative; --drum-h: 27rem; }
+.drumView {
+  position: relative;
+  perspective: 1100px;
+  perspective-origin: 50% 30%;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  overflow: hidden;
+  padding-top: 1.2rem;
+}
+.drumView:active { cursor: grabbing; }
+.drumCyl { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.drumFace {
+  position: absolute;
+  top: 1.4rem;
+  left: 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-sizing: border-box;
+  padding: 0.4rem 0.3rem;
+  height: calc(var(--drum-h) - 2.4rem);
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(90deg, rgba(12, 53, 86, 0.22), rgba(255, 255, 255, 0.12) 50%, rgba(12, 53, 86, 0.22));
+}
+.drumRim {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 3px solid rgba(180, 140, 60, 0.85);
+  background: radial-gradient(circle, rgba(255, 230, 170, 0.18), rgba(120, 80, 20, 0.35));
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+}
+.drumRimTop { top: 1.4rem; }
+.drumRimBot { top: calc(var(--drum-h) - 1rem); }
+.drumNav { display: flex; justify-content: center; align-items: center; gap: 0.8rem; margin-top: 0.3rem; font-size: 0.75rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+.drumNav button { border: 0; border-radius: 999px; width: 2rem; height: 2rem; background: rgba(255,255,255,0.85); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.drumPop { position: absolute; z-index: 60; left: 50%; top: 2rem; transform: translateX(-50%); }
+.drumPop .popover { position: static; }
+@media (max-width: 520px) {
+  .drumStage { --drum-h: 25rem; }
+  .drumFace .deptCard { min-height: 3.9rem; padding: 0.35rem 0.4rem; }
+  .drumFace .divHead { padding: 0.3rem 0.35rem; }
+}
+
+.drumWrap { position: relative; }
+.boardDrum { display: flex; flex-direction: column; gap: 0.7rem; position: relative; }
+.boardDrum .secRow { grid-template-columns: 1fr 1fr; }

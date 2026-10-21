@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import type { OpenLoopItem, OpenLoopsSnapshot } from '@/lib/dabos/open-loops';
 import { closedShare, itemDept, resolveGoals } from '@/lib/dabos/open-loops';
 import {
@@ -136,6 +136,146 @@ function TaskPopover({
   );
 }
 
+function PrayerDrum({
+  faces,
+  paused,
+}: {
+  faces: { key: string; node: ReactNode }[];
+  paused: boolean;
+}) {
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const cylRef = useRef<HTMLDivElement | null>(null);
+  const faceRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [width, setWidth] = useState(800);
+  const st = useRef({ angle: 0, vel: 0, dragging: false, lastX: 0, lastT: 0, moved: 0, idleAt: 0 });
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+  const n = faces.length;
+  const step = 360 / n;
+  const faceW = width < 520 ? Math.max(128, Math.min(160, width * 0.4)) : 210;
+  const radius = Math.round((faceW / 2 / Math.tan(Math.PI / n)) * 1.04);
+
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setWidth(e.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let raf = 0;
+    let prev = performance.now();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tick = (t: number) => {
+      const dt = Math.min(64, t - prev) / 16.67;
+      prev = t;
+      const s = st.current;
+      if (!s.dragging) {
+        if (Math.abs(s.vel) > 0.02) {
+          s.angle += s.vel * dt;
+          s.vel *= Math.pow(0.95, dt);
+          s.idleAt = t;
+        } else {
+          s.vel = 0;
+          if (!pausedRef.current && !reduce && t - s.idleAt > 2500) s.angle -= 0.06 * dt;
+        }
+      }
+      if (pausedRef.current) s.idleAt = t;
+      if (cylRef.current) cylRef.current.style.transform = `translateZ(${-radius}px) rotateY(${s.angle}deg)`;
+      faceRefs.current.forEach((f, i) => {
+        if (!f) return;
+        const a = ((i * step + s.angle) * Math.PI) / 180;
+        const c = Math.cos(a);
+        f.style.opacity = String(Math.max(0, 0.25 + 0.75 * c));
+        f.style.pointerEvents = c > 0.35 ? 'auto' : 'none';
+        f.style.zIndex = String(Math.round(c * 100) + 100);
+      });
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [radius, step]);
+
+  const degPerPx = 360 / (2 * Math.PI * radius);
+  const onDown = (e: ReactPointerEvent) => {
+    const s = st.current;
+    s.dragging = true;
+    s.lastX = e.clientX;
+    s.lastT = performance.now();
+    s.vel = 0;
+    s.moved = 0;
+  };
+  const onMove = (e: ReactPointerEvent) => {
+    const s = st.current;
+    if (!s.dragging) return;
+    const dx = e.clientX - s.lastX;
+    const now = performance.now();
+    s.moved += Math.abs(dx);
+    if (s.moved > 6 && !(e.currentTarget as Element).hasPointerCapture(e.pointerId)) {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    }
+    s.angle += dx * degPerPx;
+    const dtf = Math.max(1, now - s.lastT) / 16.67;
+    s.vel = 0.7 * s.vel + 0.3 * ((dx * degPerPx) / dtf);
+    s.lastX = e.clientX;
+    s.lastT = now;
+    s.idleAt = now;
+  };
+  const onUp = () => {
+    const s = st.current;
+    if (performance.now() - s.lastT > 80) s.vel = 0;
+    s.dragging = false;
+  };
+  const spinTo = (dir: number) => {
+    st.current.vel = 0;
+    st.current.angle = Math.round(st.current.angle / step) * step + dir * step;
+    st.current.idleAt = performance.now();
+  };
+
+  return (
+    <div className={styles.drumStage} ref={stageRef}>
+      <div
+        className={styles.drumView}
+        style={{ height: 'var(--drum-h)' }}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerCancel={onUp}
+        onClickCapture={(e) => {
+          if (st.current.moved > 6) {
+            e.stopPropagation();
+            e.preventDefault();
+            st.current.moved = 0;
+          }
+        }}
+      >
+        <div className={styles.drumCyl} ref={cylRef}>
+          <div className={`${styles.drumRim} ${styles.drumRimTop}`} style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius, transform: `rotateX(90deg)` }} />
+          <div className={`${styles.drumRim} ${styles.drumRimBot}`} style={{ width: radius * 2, height: radius * 2, marginLeft: -radius, marginTop: -radius, transform: `rotateX(90deg)` }} />
+          {faces.map((f, i) => (
+            <div
+              key={f.key}
+              ref={(el) => {
+                faceRefs.current[i] = el;
+              }}
+              className={styles.drumFace}
+              style={{ width: faceW, marginLeft: -faceW / 2, transform: `rotateY(${-i * step}deg) translateZ(${radius}px)` }}
+            >
+              {f.node}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={styles.drumNav}>
+        <button type="button" onClick={() => spinTo(1)} aria-label="Previous division">‹</button>
+        <span>Swipe to turn</span>
+        <button type="button" onClick={() => spinTo(-1)} aria-label="Next division">›</button>
+      </div>
+    </div>
+  );
+}
+
 export function OpenLoopsBoard({
   data,
   live = false,
@@ -150,6 +290,11 @@ export function OpenLoopsBoard({
   const [heat, setHeat] = useState<HeatFilter>('all');
   const [openId, setOpenId] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleClose = (id: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpenId((v) => (v === id ? null : v)), 250);
+  };
 
   const byDept = useMemo(() => {
     const all = [...data.hot, ...data.open, ...data.ship];
@@ -184,12 +329,13 @@ export function OpenLoopsBoard({
       0
     );
   const total = [...byDept.values()].reduce((a, b) => a + b.length, 0);
-  const allOrder: string[] = [...DCO_DIVISION_IDS, ...ORG_DIVISION_IDS];
+  const drumOrder: BoardDivisionId[] = [...DCO_DIVISION_IDS, ...ORG_DIVISION_IDS];
+  let openDept: OpenOrgDept | undefined;
+  for (const d of org) for (const x of d.departments) if (x.id === openId) openDept = x;
 
   const renderDivision = (id: BoardDivisionId) => {
     const div = divById.get(id);
     if (!div) return null;
-    const colIndex = allOrder.indexOf(id);
     const divCount = div.departments.reduce((a, d) => a + (byDept.get(d.id)?.length ?? 0), 0);
     return (
       <div key={id} className={styles.divCol}>
@@ -209,11 +355,14 @@ export function OpenLoopsBoard({
               key={dept.id}
               className={styles.deptWrap}
               onMouseEnter={(e) => {
-                if (window.matchMedia('(hover: hover)').matches) setOpenId(dept.id);
+                if (window.matchMedia('(hover: hover)').matches) {
+                  if (closeTimer.current) clearTimeout(closeTimer.current);
+                  setOpenId(dept.id);
+                }
                 e.stopPropagation();
               }}
               onMouseLeave={() => {
-                if (window.matchMedia('(hover: hover)').matches) setOpenId((v) => (v === dept.id ? null : v));
+                if (window.matchMedia('(hover: hover)').matches) scheduleClose(dept.id);
               }}
             >
               <button
@@ -235,14 +384,7 @@ export function OpenLoopsBoard({
                   </span>
                 </span>
               </button>
-              {isOpen ? (
-                <TaskPopover
-                  title={`${deptNumberLabel(dept.id, { short: true })} · ${role}`}
-                  items={items}
-                  alignRight={colIndex >= 4}
-                  onClose={() => setOpenId(null)}
-                />
-              ) : null}
+
             </div>
           );
         })}
@@ -257,8 +399,8 @@ export function OpenLoopsBoard({
         <AimRow data={data} heat={heat} setHeat={setHeat} live={live} />
       </header>
 
-      <div className={styles.boardScroll}>
-        <div className={styles.board}>
+      <div className={styles.drumWrap}>
+        <div className={styles.boardDrum}>
           <div className={styles.execRow}>
             <div className={`${styles.execBox} ${styles.execEd}`}>
               <span>{EXECUTIVE_LABELS.director}</span>
@@ -275,12 +417,24 @@ export function OpenLoopsBoard({
               <strong>{countFor(ORG_DIVISION_IDS)}</strong>
             </div>
           </div>
-          <div className={styles.divRow}>
-            <div className={styles.divBlock}>{DCO_DIVISION_IDS.map((id) => renderDivision(id))}</div>
-            <div className={`${styles.divBlock} ${styles.divBlockOrg}`}>
-              {ORG_DIVISION_IDS.map((id) => renderDivision(id))}
+          <PrayerDrum
+            paused={openId !== null}
+            faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
+          />
+          {openDept ? (
+            <div
+              className={styles.drumPop}
+              onMouseEnter={() => closeTimer.current && clearTimeout(closeTimer.current)}
+              onMouseLeave={() => window.matchMedia('(hover: hover)').matches && scheduleClose(openDept!.id)}
+            >
+              <TaskPopover
+                title={`${deptNumberLabel(openDept.id, { short: true })} \u00b7 ${deptRoleLabel(openDept)}`}
+                items={byDept.get(openDept.id) ?? []}
+                alignRight={false}
+                onClose={() => setOpenId(null)}
+              />
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>
