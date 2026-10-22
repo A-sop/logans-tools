@@ -3,6 +3,7 @@
  * Reads local registers + Proviso Abrechnung (read-only). Never invents ship counts.
  *
  * Div map (STAT-MAP):
+ *  Div1 artifacts_indexed (unique pages in DABOS docs/wiki/index.md, ruling 2026-10-21)
  *  Div2 leads_or_touchpoints_created + Dept4 content_pieces_shipped (content factory = Div2)
  *  Div3 taxable_income_eur (Proviso commission Abrechnung + other incomes as added)
  *  Div4 shipped_outputs (ship-log Counts=yes rows)
@@ -16,6 +17,7 @@
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import { endOfISOWeek, getISOWeek, getISOWeekYear, parseISO, setISOWeek, startOfYear } from 'date-fns';
+import { countArtifactsIndexed } from '@/lib/dabos/artifacts-indexed';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 
 export type DivisionWeeklyResult = {
@@ -255,6 +257,19 @@ export async function postDivisionWeeklyStats(opts: {
     metricKey: string;
     value: number;
   }> = [];
+
+  const artifacts = countArtifactsIndexed();
+  if (artifacts.sourcesPresent) {
+    rows.push({
+      divisionId: 'Div1',
+      departmentId: null,
+      metricKey: 'artifacts_indexed',
+      value: artifacts.total,
+    });
+    notes.push(`Div1 artifacts_indexed=${artifacts.total} (unique wiki pages; ${artifacts.rows} index rows)`);
+  } else {
+    notes.push(`Div1 artifacts_indexed skipped ? missing ${artifacts.source}`);
+  }
 
   if (contentStatus != null) {
     rows.push({

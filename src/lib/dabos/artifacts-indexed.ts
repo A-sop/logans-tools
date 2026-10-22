@@ -1,58 +1,59 @@
 /**
- * Div1 primary: artifacts_indexed — SSOT basis from DABOS artifact-index.md
- * (Dept3 Perception). Count top-level .md only; exclude the index itself and DRAFT LDWPLs.
+ * Div1 primary: artifacts_indexed = unique wiki pages in the DABOS wiki index
+ * (Logan ruling 2026-10-21: count unique pages, not table rows).
+ *
+ * Basis: every Markdown link target in DABOS/docs/wiki/index.md, normalised
+ * (\ -> /, leading ./ dropped, trailing / dropped, lowercase), external links and
+ * pure anchors skipped, then de-duplicated. At DABOS head 368cfd9e this is 232
+ * (237 catalog rows, 229 unique catalog pages + SCHEMA, log, inbox/).
  */
-import { existsSync, readdirSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 
-const DABOS_REGISTERS = path.join('C:', 'Dev', 'DABOS', 'docs', 'registers');
-const DABOS_POLICY = path.join('C:', 'Dev', 'DABOS', 'docs', 'policy');
-const DATA_REGISTERS = path.join('C:', 'DATA', '10_WORK', 'dabos-registers');
-const OFFER_DRAFTS = path.join(DATA_REGISTERS, 'offer-drafts');
+const DABOS_REPO_ROOT = process.env.DABOS_REPO_ROOT?.trim() || path.join('C:', 'Dev', 'DABOS');
+export const DABOS_WIKI_INDEX =
+  process.env.DABOS_WIKI_INDEX?.trim() || path.join(DABOS_REPO_ROOT, 'docs', 'wiki', 'index.md');
 
 export type ArtifactsIndexedCount = {
   total: number;
-  parts: {
-    dabosRegisters: number;
-    dabosPolicy: number;
-    dataRegistersTop: number;
-    offerDrafts: number;
-  };
+  rows: number;
   sourcesPresent: boolean;
+  source: string;
 };
 
-function listMd(dir: string, opts?: { exclude?: (name: string) => boolean }): string[] {
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((e) => e.isFile() && e.name.toLowerCase().endsWith('.md'))
-    .map((e) => e.name)
-    .filter((name) => !(opts?.exclude?.(name) ?? false));
+const LINK_RE = /\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+
+export function normaliseWikiTarget(raw: string): string | null {
+  let t = raw.trim().split('#')[0];
+  if (!t || /^[a-z][a-z0-9+.-]*:/i.test(t)) return null; // http:, mailto:, ...
+  t = t.replace(/\\/g, '/').replace(/^(\.\/)+/, '').replace(/\/+$/, '');
+  return t ? t.toLowerCase() : null;
 }
 
-/** Signed shelf only — skip DRAFT LDWPL-* per GOV-001 / artifact-index. */
-function isDraftPolicy(name: string): boolean {
-  const upper = name.toUpperCase();
-  return upper.includes('DRAFT') || /^LDWPL-260709/i.test(name);
+/** Unique page targets linked from the wiki index text. */
+export function countUniqueWikiPages(indexText: string): { unique: number; rows: number } {
+  const pages = new Set<string>();
+  let rows = 0;
+  for (const line of indexText.split(/\r?\n/)) {
+    if (/^\|\s*\[/.test(line)) rows += 1;
+    for (const m of line.matchAll(LINK_RE)) {
+      const t = normaliseWikiTarget(m[1]);
+      if (t) pages.add(t);
+    }
+  }
+  return { unique: pages.size, rows };
 }
 
-export function countArtifactsIndexed(): ArtifactsIndexedCount {
-  const dabosRegisters = listMd(DABOS_REGISTERS, {
-    exclude: (n) => n.toLowerCase() === 'artifact-index.md',
-  }).length;
-  const dabosPolicy = listMd(DABOS_POLICY, { exclude: isDraftPolicy }).length;
-  const dataRegistersTop = listMd(DATA_REGISTERS).length;
-  const offerDrafts = listMd(OFFER_DRAFTS).length;
-  const sourcesPresent =
-    existsSync(DABOS_REGISTERS) || existsSync(DABOS_POLICY) || existsSync(DATA_REGISTERS);
-
-  return {
-    total: dabosRegisters + dabosPolicy + dataRegistersTop + offerDrafts,
-    parts: { dabosRegisters, dabosPolicy, dataRegistersTop, offerDrafts },
-    sourcesPresent,
-  };
+export function countArtifactsIndexed(indexPath: string = DABOS_WIKI_INDEX): ArtifactsIndexedCount {
+  if (!existsSync(indexPath)) {
+    return { total: 0, rows: 0, sourcesPresent: false, source: indexPath };
+  }
+  const { unique, rows } = countUniqueWikiPages(readFileSync(indexPath, 'utf8'));
+  return { total: unique, rows, sourcesPresent: true, source: indexPath };
 }
 
 export const ARTIFACTS_INDEXED_BASIS = {
-  ssot: 'DABOS/docs/registers/artifact-index.md',
-  dirs: [DABOS_REGISTERS, DABOS_POLICY, DATA_REGISTERS, OFFER_DRAFTS],
+  ssot: 'DABOS/docs/wiki/index.md',
+  rule: 'unique link targets (Logan ruling 2026-10-21)',
+  path: DABOS_WIKI_INDEX,
 };
