@@ -9,6 +9,8 @@ import {
 } from '@/lib/dabos/condition-state';
 import {
   guardNoUnauthorisedUpgrade,
+  requireFounderGoAhead,
+  type FounderGoAhead,
   resolveWorkingWithOverride,
   type ConditionSource,
 } from '@/lib/dabos/founder-rulings';
@@ -204,9 +206,19 @@ export async function advanceEntityWorkingCondition(
   if (!next) {
     return { advanced: false, working_condition: state.working_condition };
   }
+  // Upgrade gate (founder ruling 2026-10-22): a verified formula is necessary but
+  // not sufficient. The founder's written go-ahead for this entity and rung must
+  // exist; otherwise refuse (throws) and change nothing.
+  const goAheads = (await sql`
+    SELECT condition_label, ruling_ref
+    FROM condition_founder_rulings
+    WHERE entity_type = ${entityType} AND entity_id = ${entityId} AND condition_label = ${next}
+    ORDER BY ruling_date DESC
+  `) as FounderGoAhead[];
+  const rulingRef = requireFounderGoAhead(entityType, entityId, next, goAheads);
   await sql`
     UPDATE entity_condition_state
-    SET working_condition = ${next}, condition_source = 'formula', updated_at = NOW()
+    SET working_condition = ${next}, condition_source = 'founder_ruling', ruling_ref = ${rulingRef}, updated_at = NOW()
     WHERE entity_type = ${entityType} AND entity_id = ${entityId}
   `;
   return { advanced: true, working_condition: next };

@@ -58,3 +58,37 @@ export function guardNoUnauthorisedUpgrade(
   if (previousSource === 'founder_ruling') return proposed;
   return previous;
 }
+
+/** Thrown when a condition would be raised without a written founder go-ahead. */
+export class FounderGoAheadRequiredError extends Error {
+  constructor(
+    public readonly entityType: string,
+    public readonly entityId: string,
+    public readonly targetCondition: ConditionLabel
+  ) {
+    super(
+      `Upgrade gate (founder ruling 2026-10-22): ${entityType} ${entityId} cannot move up to ` +
+        `${targetCondition} without a written founder go-ahead. Dept19 sends the evidence to the ` +
+        `founder; the founder records the go-ahead (condition_founder_rulings row for this entity ` +
+        `and rung, e.g. npm run dabos:founder-ruling -- --apply). No change was made.`
+    );
+    this.name = 'FounderGoAheadRequiredError';
+  }
+}
+
+export type FounderGoAhead = { condition_label: ConditionLabel; ruling_ref: string | null };
+
+/**
+ * Upgrade gate for manual formula advances: returns the founder's ruling_ref
+ * authorising `target` for this entity, or throws FounderGoAheadRequiredError.
+ */
+export function requireFounderGoAhead(
+  entityType: string,
+  entityId: string,
+  target: ConditionLabel,
+  goAheads: FounderGoAhead[]
+): string {
+  const match = goAheads.find((g) => g.condition_label === target && !!g.ruling_ref?.trim());
+  if (!match) throw new FounderGoAheadRequiredError(entityType, entityId, target);
+  return match.ruling_ref!.trim();
+}
