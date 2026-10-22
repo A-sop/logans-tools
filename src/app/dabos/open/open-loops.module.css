@@ -672,3 +672,32 @@
 .execOverlay { display: block !important; }
 .execOverlay > span { display: inline; }
 .execOverlay strong { margin-left: 0.4rem; white-space: nowrap; }
+
+/* ===== PR29: fixed exec header above the drum ===== */
+.drumStage { --band-h: 0rem; }
+.execHeader { display: flex; flex-direction: column; gap: 0.45rem; position: relative; z-index: 5; }
+.execPlateRow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+.execPlate {
+  height: 3.6rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 0.1rem;
+  padding: 0.3rem 0.5rem;
+  background: linear-gradient(180deg, #13285a, #0a1838 60%, #06102a);
+  border: 1px solid #c5a059;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px #06102a, inset 0 0 0 3px rgba(197, 160, 89, 0.4), 0 6px 18px rgba(0, 0, 0, 0.45);
+  color: #f4ecd8;
+  font-family: var(--ol-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+}
+.execPlate strong { font-family: var(--ol-mono); color: #f1dba0; }
+.execPlateEd { flex-direction: row; gap: 0.5rem; font-size: 0.86rem; }
+.execPlateEd > span { white-space: nowrap; }
