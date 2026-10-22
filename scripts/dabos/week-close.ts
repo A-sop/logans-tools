@@ -145,30 +145,8 @@ async function main() {
     console.log(`\nDept3 crawl skipped: ${crawl.error}`);
   }
 
-  let ventures: Array<{
-    venture_tag: string;
-    label?: string;
-    baseline_eur_monthly: number;
-    target_eur_monthly: number;
-    source_system: string;
-  }> = [];
-  try {
-    ventures = (await sql`
-      SELECT venture_tag, label, baseline_eur_monthly, target_eur_monthly, source_system
-      FROM venture_income_targets
-      ORDER BY venture_tag
-    `) as typeof ventures;
-  } catch {
-    console.log('\n(venture_income_targets not migrated — run npm run dabos:migrate)');
-  }
-  if (ventures.length > 0) {
-    console.log('\nVenture income targets:');
-    for (const v of ventures) {
-      console.log(
-        `  ${v.venture_tag}: baseline €${v.baseline_eur_monthly} → target €${v.target_eur_monthly} (${v.source_system})`
-      );
-    }
-  }
+  // Venture baselines/targets are planning figures (e.g. DVAG baseline) and were ruled out of
+  // week-close reporting on 2026-10-04; they are no longer printed or logged here.
 
   const roleId = soft ? 'week_close_soft' : 'week_close';
   await sql`
@@ -182,7 +160,6 @@ async function main() {
         past_stats_deadline: pastDeadline,
         cloud_only: skipLocal,
         conditions: result.samples,
-        venture_count: ventures.length,
         gfp_poster: gfpPoster,
         division_poster: divisionPoster,
         stat_crawl: crawl,

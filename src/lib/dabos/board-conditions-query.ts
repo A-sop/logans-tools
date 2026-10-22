@@ -314,21 +314,18 @@ async function persistConditionEvaluation(
   entityType: 'division' | 'department' | 'workspace' | 'project',
   entityId: string,
   evaluation: ConditionEvaluation
-): Promise<boolean> {
+): Promise<string | null> {
   let merged = evaluation;
   try {
     merged = await syncEntityConditionFromEvaluation(sql, entityType, entityId, evaluation);
-  } catch {
-    if (evaluation.stat_indicated_condition) {
-      merged = {
-        ...evaluation,
-        working_condition: evaluation.stat_indicated_condition,
-        condition: evaluation.stat_indicated_condition,
-      };
-    }
+  } catch (err) {
+    // Never fall back to the stat-indicated condition: that would override a founder
+    // ruling. Skip the write and surface the error instead.
+    console.warn(`condition sync failed for ${entityType} ${entityId}: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
   }
   const label = merged.working_condition ?? merged.stat_indicated_condition;
-  if (!label) return false;
+  if (!label) return null;
   await sql`
     INSERT INTO conditions (entity_type, entity_id, condition, confidence, basis)
     VALUES (
@@ -339,7 +336,7 @@ async function persistConditionEvaluation(
       ${JSON.stringify(merged.basis)}::jsonb
     )
   `;
-  return true;
+  return label;
 }
 
 export async function refreshAllConditionsFromBoardWithSql(sql: DabosSql): Promise<{
@@ -353,10 +350,11 @@ export async function refreshAllConditionsFromBoardWithSql(sql: DabosSql): Promi
   const samples: { entity_id: string; condition: string }[] = [];
 
   for (const [id, evaluation] of board.divisions) {
-    if (await persistConditionEvaluation(sql, 'division', id, evaluation)) {
+    const persisted = await persistConditionEvaluation(sql, 'division', id, evaluation);
+    if (persisted) {
       divisions += 1;
       if (samples.length < 7) {
-        samples.push({ entity_id: id, condition: evaluation.condition! });
+        samples.push({ entity_id: id, condition: persisted });
       }
     }
   }
