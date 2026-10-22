@@ -53,3 +53,17 @@ describe('computeQaPassRate', () => {
     expect(computeQaPassRate('## Notes\nno verdicts')).toBeNull();
   });
 });
+
+describe('computeQaPassRate weekly regression (W43 all-time 4/5 bug)', () => {
+  const JULY = [1, 2, 3, 4, 5]
+    .map((n) => `## Instance ${n}\n\n**Verdict: ${n === 5 ? 'FAIL' : 'PASS'}**\n**Validated on:** 2026-07-0${n + 1}\n`)
+    .join('\n');
+  it('does not post the all-time July 4/5 in CW43; returns null (to-report)', () => {
+    expect(computeQaPassRate(JULY)).toBe(80);
+    expect(computeQaPassRate(JULY, { year: 2026, week: 43 })).toBeNull();
+  });
+  it('counts only verdicts closed inside the CW43 window', () => {
+    const md = `${JULY}\n## Instance 6\n\n**Verdict: PASS**\n**Validated on:** 2026-10-20\n`;
+    expect(computeQaPassRate(md, { year: 2026, week: 43 })).toBe(100);
+  });
+});

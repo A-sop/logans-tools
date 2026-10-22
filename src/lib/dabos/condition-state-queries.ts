@@ -7,6 +7,7 @@ import {
   type EntityType,
   type FormulaStepNote,
 } from '@/lib/dabos/condition-state';
+import { resolveWorkingWithOverride, type ConditionSource } from '@/lib/dabos/founder-rulings';
 import type { ConditionEvaluation } from '@/lib/dabos/types';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 
@@ -38,7 +39,7 @@ export async function getEntityConditionState(
 ) {
   const rows = await sql`
     SELECT entity_type, entity_id, working_condition, stat_indicated_condition,
-           stat_indicated_at, danger_why, updated_at
+           stat_indicated_at, danger_why, updated_at, condition_source
     FROM entity_condition_state
     WHERE entity_type = ${entityType} AND entity_id = ${entityId}
   `;
@@ -54,6 +55,7 @@ export async function getEntityConditionState(
       : null,
     danger_why: (row.danger_why as DangerWhyBasis | null) ?? null,
     updated_at: (row.updated_at as Date).toISOString(),
+    condition_source: ((row.condition_source as ConditionSource | null) ?? 'computed') as ConditionSource,
   };
 }
 
@@ -100,9 +102,12 @@ export async function syncEntityConditionFromEvaluation(
   evaluation: ConditionEvaluation
 ): Promise<ConditionEvaluation> {
   const existing = await getEntityConditionState(sql, entityType, entityId);
-  const working = syncWorkingCondition(
-    existing?.working_condition ?? null,
-    evaluation.stat_indicated_condition
+  // A stat can only suggest: a founder-ruled condition is kept and reported as-is.
+  const working = resolveWorkingWithOverride(
+    syncWorkingCondition(existing?.working_condition ?? null, evaluation.stat_indicated_condition),
+    existing?.working_condition
+      ? { working_condition: existing.working_condition, condition_source: existing.condition_source }
+      : null
   );
   await upsertEntityConditionState(sql, {
     entity_type: entityType,
