@@ -5,8 +5,10 @@ import { syncWorkingCondition } from '@/lib/dabos/condition-state';
 import {
   FOUNDER_RULING_PRESETS,
   guardNoUnauthorisedUpgrade,
+  isAssignedSource,
   resolveWorkingWithOverride,
 } from '@/lib/dabos/founder-rulings';
+import { planAssignment } from '../../../scripts/dabos/apply-founder-ruling';
 
 describe('lower conditions + founder ruling', () => {
   it('orders lower conditions below Non-Existence', () => {
@@ -52,5 +54,34 @@ describe('upgrade gate (founder ruling 2026-10-22)', () => {
   });
   it('no prior row: proposed passes (default path)', () => {
     expect(guardNoUnauthorisedUpgrade(null, 'Non-Existence')).toBe('Non-Existence');
+  });
+});
+
+describe('one assignment rule (founder ruling 2026-10-22 22:31)', () => {
+  it('a Dept19 + Ethics assignment overrides computed on any rung', () => {
+    expect(isAssignedSource('dept19_ethics')).toBe(true);
+    expect(isAssignedSource('computed')).toBe(false);
+    expect(resolveWorkingWithOverride('Normal', { working_condition: 'Doubt', condition_source: 'dept19_ethics' })).toBe('Doubt');
+    expect(resolveWorkingWithOverride('Normal', { working_condition: 'Power Change', condition_source: 'dept19_ethics' })).toBe('Power Change');
+  });
+  it('stat sync cannot lift a Dept19 + Ethics assignment, and the gate still blocks the raise', () => {
+    const existing = { working_condition: 'Enemy' as const, condition_source: 'dept19_ethics' as const };
+    const resolved = resolveWorkingWithOverride(syncWorkingCondition('Enemy', 'Power'), existing);
+    expect(guardNoUnauthorisedUpgrade('Enemy', resolved, 'dept19_ethics')).toBe('Enemy');
+    expect(guardNoUnauthorisedUpgrade('Enemy', 'Normal', 'dept19_ethics')).toBe('Enemy');
+  });
+});
+
+describe('planAssignment (apply script)', () => {
+  it('founder override always applies', () => {
+    expect(planAssignment('founder', 'Confusion', 'Power', null)).toEqual({ ok: true, source: 'founder_ruling' });
+  });
+  it('Dept19 + Ethics: downgrade or same rung applies on any rung', () => {
+    expect(planAssignment('dept19_ethics', 'Normal', 'Treason', null)).toEqual({ ok: true, source: 'dept19_ethics' });
+    expect(planAssignment('dept19_ethics', null, 'Liability', null)).toEqual({ ok: true, source: 'dept19_ethics' });
+  });
+  it('Dept19 + Ethics: upgrade refused without the founder go-ahead, recorded as founder_ruling with it', () => {
+    expect(planAssignment('dept19_ethics', 'Confusion', 'Treason', null).ok).toBe(false);
+    expect(planAssignment('dept19_ethics', 'Confusion', 'Treason', 'receipt.md')).toEqual({ ok: true, source: 'founder_ruling' });
   });
 });
