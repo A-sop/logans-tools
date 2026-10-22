@@ -241,14 +241,23 @@ function PrayerDrum({
           }
         }
         const arc = hi - lo;
-        const mid = (lo + hi) / 2;
-        const width = Math.min(2 * radius * Math.sin(((arc / 2) * Math.PI) / 180), faceW * 2) - 12;
-        const show = arc > 28;
+        // Anchor clamped to the front-facing part (|angle| <= 35deg); fade as the arc leaves it.
+        const FRONT = 35;
+        const mid = Math.max(-FRONT, Math.min(FRONT, (lo + hi) / 2));
+        const frontLo = Math.max(lo, -FRONT);
+        const frontHi = Math.min(hi, FRONT);
+        const frontArc = Math.max(0, frontHi - frontLo);
+        const rad = (mid * Math.PI) / 180;
+        // Never extend past the drum silhouette (projected half-width = R).
+        const silhouette = (2 * (radius * 0.97 - radius * Math.abs(Math.sin(rad)))) / Math.max(0.2, Math.cos(rad));
+        const width = Math.min(2 * radius * Math.sin(((arc / 2) * Math.PI) / 180), faceW * 2, silhouette) - 12;
+        const show = arc > 10 && frontArc > 4 && width >= 150;
+        const fade = Math.min(1, frontArc / 24);
         f.style.width = `${Math.max(0, width)}px`;
         f.style.marginLeft = `${-Math.max(0, width) / 2}px`;
         f.style.transform = `perspective(1400px) translateZ(${-radius}px) rotateY(${mid}deg) translateZ(${radius + 2}px)`;
         f.style.visibility = show ? 'visible' : 'hidden';
-        f.style.opacity = show ? String(Math.min(1, (arc - 28) / 20)) : '0';
+        f.style.opacity = show ? String(fade) : '0';
         f.style.zIndex = '450';
       });
       raf = requestAnimationFrame(tick);
