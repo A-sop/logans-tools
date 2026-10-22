@@ -701,3 +701,8 @@
 .execPlate strong { font-family: var(--ol-mono); color: #f1dba0; }
 .execPlateEd { flex-direction: row; gap: 0.5rem; font-size: 0.86rem; }
 .execPlateEd > span { white-space: nowrap; }
+
+/* PR30: ED fixed; DCO/OEC band on drum, slightly larger, max 2 lines */
+.execOverlay { font-size: 0.88rem !important; line-height: 1.15; }
+.drumBand { overflow: visible !important; }
+.drumStage { --band-h: 0.8rem !important; --strip-h: 2.9rem !important; }
