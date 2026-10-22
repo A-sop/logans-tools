@@ -144,7 +144,7 @@ function PrayerDrum({
   paused,
 }: {
   faces: { key: string; node: ReactNode }[];
-  band: ReactNode[];
+  band: { key: string; node: ReactNode; at: number; row: number }[];
   paused: boolean;
 }) {
   const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -162,8 +162,6 @@ function PrayerDrum({
   // Flat panels of a regular N-gon prism: width = 2R·tan(π/N) so neighbours meet with a ~2px seam.
   const radius = Math.round(Math.min(320, w * 0.5));
   const faceW = Math.round(2 * radius * Math.tan(Math.PI / n)) - 2;
-  const bandStep = 360 / band.length;
-  const bandW = Math.round(2 * radius * Math.sin(Math.PI / band.length) - 3);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -212,22 +210,21 @@ function PrayerDrum({
         f.style.zIndex = String(Math.round(c * 100) + 100);
         f.style.filter = `brightness(${0.7 + 0.3 * c})`;
       });
-      bandRefs.current.forEach((f, i) => {
+      bandRefs.current.forEach((f) => {
         if (!f) return;
-        const deg = i * bandStep + s.angle;
-        const a = (deg * Math.PI) / 180;
-        const c = Math.cos(a);
-        const rot = ((((deg + 180) % 360) + 360) % 360) - 180;
-        f.style.transform = `translateX(${radius * Math.sin(a)}px) perspective(900px) translateZ(${radius * (c - 1)}px) rotateY(${rot}deg)`;
-        f.style.opacity = c < 0.3 ? '0' : String(Math.min(1, 0.1 + c));
-        f.style.visibility = c < 0.3 ? 'hidden' : 'visible';
-        f.style.zIndex = String(Math.round(c * 100) + 100);
+        // Overlay label centred on its span's arc (fractional face index), on the tangent plane.
+        const deg = Number(f.dataset.at) * step + s.angle;
+        const c = Math.cos((deg * Math.PI) / 180);
+        f.style.transform = `perspective(1400px) translateZ(${-radius}px) rotateY(${deg}deg) translateZ(${radius + 2}px)`;
+        f.style.visibility = c < 0.25 ? 'hidden' : 'visible';
+        f.style.opacity = c < 0.25 ? '0' : String(Math.min(1, (c - 0.25) * 3));
+        f.style.zIndex = String(Math.round(c * 100) + 400);
       });
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [radius, step, bandStep]);
+  }, [radius, step]);
 
   const degPerPx = 360 / (2 * Math.PI * Math.max(60, radius));
   const onDown = (e: ReactPointerEvent) => {
@@ -302,16 +299,17 @@ function PrayerDrum({
             <circle cx="50" cy="75" r="5" fill="#fffbe6" />
           </svg>
         </div>
-        {band.map((node, i) => (
+        {band.map((b, i) => (
           <div
-            key={`band-${i}`}
+            key={b.key}
             ref={(el) => {
               bandRefs.current[i] = el;
             }}
-            className={styles.drumBand}
-            style={{ width: bandW, marginLeft: -bandW / 2 }}
+            data-at={b.at}
+            className={`${styles.drumBand} ${b.row === 1 ? styles.drumBandRow1 : ''}`}
+            style={{ width: faceW * 2, marginLeft: -faceW }}
           >
-            {node}
+            {b.node}
           </div>
         ))}
         {faces.map((f, i) => (
@@ -395,36 +393,15 @@ export function OpenLoopsBoard({
     return (
       <div key={id} className={styles.divCol}>
         {(() => {
-          // One label per exec strip, centred on the arc of the columns it spans. For an even span
-          // the label straddles the middle seam: each half-panel renders it offset so it reads as one.
-          const label = (span: readonly string[], text: string, n: number) => {
-            const i = span.indexOf(id);
-            const k = span.length;
-            // Label lives on the single panel nearest the centre of its span; never split.
-            if (i !== Math.floor((k - 1) / 2)) return null;
-            return (
-              <span className={styles.execLabel}>
-                <span>{text}</span>
-                <strong>{n}</strong>
-              </span>
-            );
-          };
-          const isDco = (DCO_DIVISION_IDS as readonly string[]).includes(id);
-          const group: readonly string[] = isDco ? DCO_DIVISION_IDS : ORG_DIVISION_IDS;
+          const group: readonly string[] = (DCO_DIVISION_IDS as readonly string[]).includes(id)
+            ? DCO_DIVISION_IDS
+            : ORG_DIVISION_IDS;
           return (
             <>
-              <div className={`${styles.execStrip} ${styles.execStripEd}`}>
-                {label(drumOrder, EXECUTIVE_LABELS.director, total)}
-              </div>
+              <div className={`${styles.execStrip} ${styles.execStripEd}`} />
               <div
                 className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
-              >
-                {label(
-                  group,
-                  isDco ? EXECUTIVE_LABELS.dcoSecretary : EXECUTIVE_LABELS.orgSecretary,
-                  countFor(group)
-                )}
-              </div>
+              />
             </>
           );
         })()}
@@ -493,7 +470,41 @@ export function OpenLoopsBoard({
           <PrayerDrum
             paused={openId !== null}
             faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
-            band={[]}
+            band={[
+              {
+                key: 'ed',
+                row: 0,
+                at: (drumOrder.length - 1) / 2,
+                node: (
+                  <span className={`${styles.execOverlay} ${styles.execOverlayEd}`}>
+                    <span>{EXECUTIVE_LABELS.director}</span>
+                    <strong>{total}</strong>
+                  </span>
+                ),
+              },
+              {
+                key: 'dco',
+                row: 1,
+                at: (drumOrder.indexOf(DCO_DIVISION_IDS[0]) + drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1])) / 2,
+                node: (
+                  <span className={styles.execOverlay}>
+                    <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                    <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+                  </span>
+                ),
+              },
+              {
+                key: 'oec',
+                row: 1,
+                at: (drumOrder.indexOf(ORG_DIVISION_IDS[0]) + drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1])) / 2,
+                node: (
+                  <span className={styles.execOverlay}>
+                    <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                    <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+                  </span>
+                ),
+              },
+            ]}
           />
           {openDept ? (
             <div

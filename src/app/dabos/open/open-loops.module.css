@@ -628,3 +628,38 @@
   overflow-wrap: normal !important;
 }
 .drumFace .deptCard { height: 5.6rem; }
+
+/* ===== PR26: taller uniform groups, one-line exec labels as rotating overlays ===== */
+.drumStage { --strip-h: 2.6rem; --drum-h: 40rem; }
+.execStrip { height: var(--strip-h) !important; }
+.drumFace .divHead { height: 4rem !important; }
+.drumFace .deptCard { height: 6.4rem !important; gap: 0.3rem; }
+.drumFace .deptName { line-height: 1.2 !important; max-height: 2.45em; }
+.drumBand {
+  top: calc(1.6rem + var(--band-h)) !important;
+  height: var(--strip-h) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.drumBandRow1 { top: calc(1.6rem + var(--band-h) + var(--strip-h) + 4px) !important; }
+.execOverlay {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  color: #f4ecd8;
+  font-family: var(--ol-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.execOverlay strong { font-family: var(--ol-mono); color: #f1dba0; }
+.execOverlayEd { font-size: 0.86rem; }
