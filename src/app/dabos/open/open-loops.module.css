@@ -593,3 +593,39 @@
 }
 .execStripFirst { border-left: 1px solid #c5a059 !important; }
 .execStripLast { border-right: 1px solid #c5a059 !important; }
+
+/* ===== PR24: centred single exec labels (flex, may wrap to 2 lines), 2-line dept titles ===== */
+.execStrip {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  height: 2.4rem;
+  white-space: normal;
+}
+.execLabel {
+  position: static !important;
+  transform: none !important;
+  left: auto !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: calc(100% - 0.8rem);
+  text-align: center;
+  white-space: normal;
+  font-size: 0.56rem;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
+}
+.execStripEd .execLabel { font-size: 0.62rem; }
+.drumFace .deptName {
+  font-size: 0.88rem !important;
+  -webkit-line-clamp: 2;
+  max-height: 2.35em;
+  white-space: normal;
+  hyphens: none !important;
+  -webkit-hyphens: none !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+.drumFace .deptCard { height: 5.4rem; }
