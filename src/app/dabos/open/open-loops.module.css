@@ -663,3 +663,7 @@
 }
 .execOverlay strong { font-family: var(--ol-mono); color: #f1dba0; }
 .execOverlayEd { font-size: 0.86rem; }
+
+/* PR27: overlay labels wrap to 2 lines only if they cannot fit */
+.execOverlay { white-space: normal !important; justify-content: center; flex-wrap: wrap; row-gap: 0; column-gap: 0.4rem; }
+.execOverlay > span { white-space: nowrap; }
