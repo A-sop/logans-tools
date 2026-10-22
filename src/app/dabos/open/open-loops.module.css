@@ -613,13 +613,12 @@
   max-width: calc(100% - 0.8rem);
   text-align: center;
   white-space: normal;
-  font-size: 0.56rem;
+  font-size: 0.62rem;
   line-height: 1.15;
   letter-spacing: 0.05em;
 }
-.execStripEd .execLabel { font-size: 0.62rem; }
+.execStripEd .execLabel { font-size: 0.66rem; }
 .drumFace .deptName {
-  font-size: 0.88rem !important;
   -webkit-line-clamp: 2;
   max-height: 2.35em;
   white-space: normal;
@@ -628,4 +627,4 @@
   word-break: normal !important;
   overflow-wrap: normal !important;
 }
-.drumFace .deptCard { height: 5.4rem; }
+.drumFace .deptCard { height: 5.6rem; }
