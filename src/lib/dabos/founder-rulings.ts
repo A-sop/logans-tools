@@ -4,7 +4,7 @@
  * advance or a newer founder ruling replaces it.
  * @see DABOS docs/reference/conditions-ethics-ssot.md
  */
-import type { ConditionLabel } from '@/lib/dabos/condition-ladder';
+import { conditionSeverity, type ConditionLabel } from '@/lib/dabos/condition-ladder';
 
 export const CONDITION_SOURCES = ['computed', 'formula', 'founder_ruling'] as const;
 export type ConditionSource = (typeof CONDITION_SOURCES)[number];
@@ -38,4 +38,23 @@ export function resolveWorkingWithOverride(
 ): ConditionLabel {
   if (existing?.condition_source === 'founder_ruling') return existing.working_condition;
   return computed;
+}
+
+/**
+ * Upgrade gate (founder ruling 2026-10-22, DABOS receipt
+ * staff-status/receipts/founder-decision-upgrade-gate-2026-10-22.md):
+ * automated paths (week close, condition sync) may never RAISE the working
+ * condition. A higher rung than the stored one is only kept when the stored
+ * row is a founder ruling authorising it. Downgrades pass through unchanged.
+ */
+export function guardNoUnauthorisedUpgrade(
+  previous: ConditionLabel | null,
+  proposed: ConditionLabel,
+  previousSource?: ConditionSource | null
+): ConditionLabel {
+  if (!previous) return proposed;
+  const isUpgrade = conditionSeverity(proposed) < conditionSeverity(previous);
+  if (!isUpgrade) return proposed;
+  if (previousSource === 'founder_ruling') return proposed;
+  return previous;
 }

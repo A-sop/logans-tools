@@ -1,8 +1,12 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { conditionSeverity, isConditionLabel, nextBetterCondition } from '@/lib/dabos/condition-ladder';
 import { syncWorkingCondition } from '@/lib/dabos/condition-state';
-import { FOUNDER_RULING_PRESETS, resolveWorkingWithOverride } from '@/lib/dabos/founder-rulings';
+import {
+  FOUNDER_RULING_PRESETS,
+  guardNoUnauthorisedUpgrade,
+  resolveWorkingWithOverride,
+} from '@/lib/dabos/founder-rulings';
 
 describe('lower conditions + founder ruling', () => {
   it('orders lower conditions below Non-Existence', () => {
@@ -25,5 +29,28 @@ describe('lower conditions + founder ruling', () => {
     const p = FOUNDER_RULING_PRESETS['2026-10-16-confusion']!;
     expect(p.entity_ids).toHaveLength(21);
     expect(p.condition).toBe('Confusion');
+  });
+});
+
+describe('upgrade gate (founder ruling 2026-10-22)', () => {
+  it('blocks a raise from a computed or formula row', () => {
+    expect(guardNoUnauthorisedUpgrade('Confusion', 'Non-Existence', 'computed')).toBe('Confusion');
+    expect(guardNoUnauthorisedUpgrade('Emergency', 'Normal', 'formula')).toBe('Emergency');
+    expect(guardNoUnauthorisedUpgrade('Danger', 'Power', null)).toBe('Danger');
+  });
+  it('lets downgrades and same-rung writes through', () => {
+    expect(guardNoUnauthorisedUpgrade('Normal', 'Danger', 'computed')).toBe('Danger');
+    expect(guardNoUnauthorisedUpgrade('Confusion', 'Confusion', 'founder_ruling')).toBe('Confusion');
+  });
+  it('allows a raise only when a founder_ruling row authorises it', () => {
+    expect(guardNoUnauthorisedUpgrade('Emergency', 'Normal', 'founder_ruling')).toBe('Normal');
+  });
+  it('a stat jump cannot lift a founder-ruled Confusion through sync', () => {
+    const existing = { working_condition: 'Confusion' as const, condition_source: 'founder_ruling' as const };
+    const resolved = resolveWorkingWithOverride(syncWorkingCondition('Confusion', 'Power'), existing);
+    expect(guardNoUnauthorisedUpgrade('Confusion', resolved, 'founder_ruling')).toBe('Confusion');
+  });
+  it('no prior row: proposed passes (default path)', () => {
+    expect(guardNoUnauthorisedUpgrade(null, 'Non-Existence')).toBe('Non-Existence');
   });
 });

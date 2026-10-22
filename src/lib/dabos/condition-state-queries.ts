@@ -7,7 +7,11 @@ import {
   type EntityType,
   type FormulaStepNote,
 } from '@/lib/dabos/condition-state';
-import { resolveWorkingWithOverride, type ConditionSource } from '@/lib/dabos/founder-rulings';
+import {
+  guardNoUnauthorisedUpgrade,
+  resolveWorkingWithOverride,
+  type ConditionSource,
+} from '@/lib/dabos/founder-rulings';
 import type { ConditionEvaluation } from '@/lib/dabos/types';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 
@@ -103,11 +107,18 @@ export async function syncEntityConditionFromEvaluation(
 ): Promise<ConditionEvaluation> {
   const existing = await getEntityConditionState(sql, entityType, entityId);
   // A stat can only suggest: a founder-ruled condition is kept and reported as-is.
-  const working = resolveWorkingWithOverride(
+  const resolved = resolveWorkingWithOverride(
     syncWorkingCondition(existing?.working_condition ?? null, evaluation.stat_indicated_condition),
     existing?.working_condition
       ? { working_condition: existing.working_condition, condition_source: existing.condition_source }
       : null
+  );
+  // Upgrade gate (founder ruling 2026-10-22): sync may never raise a condition
+  // unless a founder_ruling row authorises that rung. Downgrades unaffected.
+  const working = guardNoUnauthorisedUpgrade(
+    existing?.working_condition ?? null,
+    resolved,
+    existing?.condition_source
   );
   await upsertEntityConditionState(sql, {
     entity_type: entityType,
