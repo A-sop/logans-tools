@@ -400,15 +400,10 @@ export function OpenLoopsBoard({
           const label = (span: readonly string[], text: string, n: number) => {
             const i = span.indexOf(id);
             const k = span.length;
-            let pos: 'c' | 'r' | 'l' | null = null;
-            if (k % 2 === 1 && i === (k - 1) / 2) pos = 'c';
-            if (k % 2 === 0 && i === k / 2 - 1) pos = 'r';
-            if (k % 2 === 0 && i === k / 2) pos = 'l';
-            if (!pos) return null;
+            // Label lives on the single panel nearest the centre of its span; never split.
+            if (i !== Math.floor((k - 1) / 2)) return null;
             return (
-              <span
-                className={`${styles.execLabel} ${pos === 'r' ? styles.execLabelAtRight : pos === 'l' ? styles.execLabelAtLeft : ''}`}
-              >
+              <span className={styles.execLabel}>
                 <span>{text}</span>
                 <strong>{n}</strong>
               </span>
@@ -443,7 +438,7 @@ export function OpenLoopsBoard({
           const hot = items.some((i) => i.heat === 'hot');
           const isOpen = openId === dept.id;
           const cond = workingConditions?.[dept.id] ?? null;
-          const role = deptRoleLabel(dept);
+          const role = deptRoleLabel(dept).replace(/-\n/g, '').replace(/\s*\n\s*/g, ' ');
           return (
             <div
               key={dept.id}
