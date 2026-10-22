@@ -268,7 +268,7 @@ export async function postDivisionWeeklyStats(opts: {
     });
     notes.push(`Div1 artifacts_indexed=${artifacts.total} (unique wiki pages; ${artifacts.rows} index rows)`);
   } else {
-    notes.push(`Div1 artifacts_indexed skipped ? missing ${artifacts.source}`);
+    notes.push(`Div1 artifacts_indexed skipped - missing ${artifacts.source}`);
   }
 
   if (contentStatus != null) {

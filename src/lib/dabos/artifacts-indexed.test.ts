@@ -36,3 +36,10 @@ describe('countArtifactsIndexed', () => {
     expect(countArtifactsIndexed(path.join(tmpdir(), 'nope', 'index.md')).sourcesPresent).toBe(false);
   });
 });
+
+describe('artifacts_indexed at DABOS 368cfd9e (fixture copy of docs/wiki/index.md)', () => {
+  it('counts 232 unique pages (229 catalog + SCHEMA, log, inbox)', () => {
+    const fixture = path.join(__dirname, '__fixtures__', 'dabos-wiki-index-368cfd9e.md');
+    expect(countArtifactsIndexed(fixture)).toMatchObject({ total: 232, sourcesPresent: true });
+  });
+});
