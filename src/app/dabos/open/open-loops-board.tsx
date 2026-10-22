@@ -394,24 +394,43 @@ export function OpenLoopsBoard({
     const divCount = div.departments.reduce((a, d) => a + (byDept.get(d.id)?.length ?? 0), 0);
     return (
       <div key={id} className={styles.divCol}>
-        <div
-          className={`${styles.execStrip} ${styles.execStripEd} ${id === drumOrder[0] ? styles.execStripFirst : ''} ${id === drumOrder[drumOrder.length - 1] ? styles.execStripLast : ''}`}
-        >
-          <span>{EXECUTIVE_LABELS.director}</span>
-          <strong>{total}</strong>
-        </div>
         {(() => {
-          const group: readonly string[] = (DCO_DIVISION_IDS as readonly string[]).includes(id)
-            ? DCO_DIVISION_IDS
-            : ORG_DIVISION_IDS;
-          const isDco = group === (DCO_DIVISION_IDS as readonly string[]);
+          // One label per exec strip, centred on the arc of the columns it spans. For an even span
+          // the label straddles the middle seam: each half-panel renders it offset so it reads as one.
+          const label = (span: readonly string[], text: string, n: number) => {
+            const i = span.indexOf(id);
+            const k = span.length;
+            let pos: 'c' | 'r' | 'l' | null = null;
+            if (k % 2 === 1 && i === (k - 1) / 2) pos = 'c';
+            if (k % 2 === 0 && i === k / 2 - 1) pos = 'r';
+            if (k % 2 === 0 && i === k / 2) pos = 'l';
+            if (!pos) return null;
+            return (
+              <span
+                className={`${styles.execLabel} ${pos === 'r' ? styles.execLabelAtRight : pos === 'l' ? styles.execLabelAtLeft : ''}`}
+              >
+                <span>{text}</span>
+                <strong>{n}</strong>
+              </span>
+            );
+          };
+          const isDco = (DCO_DIVISION_IDS as readonly string[]).includes(id);
+          const group: readonly string[] = isDco ? DCO_DIVISION_IDS : ORG_DIVISION_IDS;
           return (
-            <div
-              className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
-            >
-              <span>{isDco ? EXECUTIVE_LABELS.dcoSecretary : EXECUTIVE_LABELS.orgSecretary}</span>
-              <strong>{countFor(group)}</strong>
-            </div>
+            <>
+              <div className={`${styles.execStrip} ${styles.execStripEd}`}>
+                {label(drumOrder, EXECUTIVE_LABELS.director, total)}
+              </div>
+              <div
+                className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
+              >
+                {label(
+                  group,
+                  isDco ? EXECUTIVE_LABELS.dcoSecretary : EXECUTIVE_LABELS.orgSecretary,
+                  countFor(group)
+                )}
+              </div>
+            </>
           );
         })()}
         <div className={styles.divHead}>
