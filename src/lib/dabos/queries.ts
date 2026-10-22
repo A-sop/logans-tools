@@ -15,6 +15,7 @@ import {
   type BoardWeekContext,
 } from '@/lib/dabos/board-conditions-query';
 import { getDabosSql } from '@/lib/dabos/db';
+import { rawStatFallbackEvaluation } from '@/lib/dabos/founder-rulings';
 import type { EntityType } from '@/lib/dabos/condition-state';
 import type { ConditionEvaluation } from '@/lib/dabos/types';
 
@@ -90,7 +91,7 @@ async function persistConditionEvaluation(
   entityId: string,
   evaluation: ConditionEvaluation
 ): Promise<boolean> {
-  const label = evaluation.working_condition ?? evaluation.stat_indicated_condition;
+  const label = evaluation.working_condition;
   if (!label) return false;
   const sql = getDabosSql();
   await sql`
@@ -116,16 +117,13 @@ async function evaluatePersistAndSync(
   try {
     merged = await syncEntityConditionFromEvaluation(sql, entityType, entityId, evaluation);
   } catch {
-    /* entity_condition_state table may be missing before migration 008 */
-    if (evaluation.stat_indicated_condition) {
-      merged = {
-        ...evaluation,
-        working_condition: evaluation.stat_indicated_condition,
-        condition: evaluation.stat_indicated_condition,
-      };
-    }
+    /* entity_condition_state table may be missing before migration 008.
+       Upgrade gate: without the stored row we cannot see a founder ruling, so the
+       raw stat is reported as a suggestion only and never becomes the condition. */
+    merged = rawStatFallbackEvaluation(evaluation);
   }
-  if (merged.working_condition ?? merged.stat_indicated_condition) {
+  // Only a gated working condition is persisted; a bare stat suggestion is not.
+  if (merged.working_condition) {
     await persistConditionEvaluation(entityType, entityId, merged);
   }
   return merged;
