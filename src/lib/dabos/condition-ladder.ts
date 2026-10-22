@@ -1,5 +1,5 @@
 /**
- * PRD-004 full condition scale incl. lower conditions below Non-Existence (ruling 21 Oct 2026).
+ * PRD-004 full condition scale incl. lower conditions below Non-Existence (ruling 21 Oct 2026; assignment rule 22 Oct 2026 22:31).
  * SSOT: DABOS docs/reference/conditions-ethics-ssot.md
  * (best → worst).
  * @see DABOS/docs/PRD-004-conditions-memory-governance.md
@@ -21,7 +21,7 @@ export const UPPER_CONDITION_LADDER = [
 
 export type ConditionLabel = (typeof UPPER_CONDITION_LADDER)[number];
 
-/** Ladder index: 0 = best (Power Change), 11 = worst (Confusion). Higher = worse. Lower conditions (Liability..Confusion) are assigned, never stat-indicated. */
+/** Ladder index: 0 = best (Power Change), 11 = worst (Confusion). Higher = worse. The stat engine only indicates Power Change..Non-Existence (advisory); Dept19 + Dept3 Ethics assign any rung on stat evidence, the founder may override (ruling 2026-10-22 22:31). */
 export function conditionSeverity(label: ConditionLabel): number {
   return UPPER_CONDITION_LADDER.indexOf(label);
 }

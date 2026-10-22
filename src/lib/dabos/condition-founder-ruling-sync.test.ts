@@ -47,7 +47,7 @@ describe('week-close condition sync respects founder rulings', () => {
     expect(upsert.values).toContain('Confusion');
     expect(upsert.text).not.toMatch(/(SET|,)\s*condition_source\s*=/i);
     expect(upsert.text).not.toMatch(/INSERT INTO entity_condition_state \([^)]*condition_source/i);
-    expect(upsert.text).toMatch(/CASE WHEN entity_condition_state\.condition_source = 'founder_ruling'\s+THEN entity_condition_state\.working_condition/);
+    expect(upsert.text).toMatch(/CASE WHEN entity_condition_state\.condition_source IN \('founder_ruling', 'dept19_ethics'\)\s+THEN entity_condition_state\.working_condition/);
   });
 
   it('still lowers a computed condition when the stat is worse', async () => {
