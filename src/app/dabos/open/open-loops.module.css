@@ -536,3 +536,60 @@
 .execStripFirst { border-left: 1px solid #c5a059; }
 .execStripLast { border-right: 1px solid #c5a059; }
 @media (max-width: 520px) { .drumStage { --drum-h: 34rem; } }
+
+/* ===== PR23: uniform card sizes, single centred exec labels ===== */
+.execStrip {
+  position: relative;
+  display: block !important;
+  height: 1.9rem;
+  padding: 0 !important;
+  overflow: hidden;
+  border-left: 0;
+  border-right: 0;
+}
+.execLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.execLabelAtRight { left: 100%; }
+.execLabelAtLeft { left: 0; }
+.drumFace .divHead {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  height: 3.6rem;
+  min-height: 0 !important;
+  overflow: hidden;
+}
+.drumFace .divHead .divCount { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); }
+.drumFace .divHead .divName { line-height: 1.1; padding: 0 1.4rem; }
+.drumFace .deptCard {
+  height: 5rem;
+  min-height: 0 !important;
+  justify-content: center;
+  align-items: stretch;
+  text-align: left;
+  overflow: hidden;
+}
+.drumFace .deptName {
+  hyphens: none;
+  -webkit-hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.15;
+}
+.execStripFirst { border-left: 1px solid #c5a059 !important; }
+.execStripLast { border-right: 1px solid #c5a059 !important; }
