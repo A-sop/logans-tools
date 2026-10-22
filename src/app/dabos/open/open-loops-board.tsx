@@ -432,19 +432,6 @@ export function OpenLoopsBoard({
     const divCount = div.departments.reduce((a, d) => a + (byDept.get(d.id)?.length ?? 0), 0);
     return (
       <div key={id} className={styles.divCol}>
-        {(() => {
-          const group: readonly string[] = (DCO_DIVISION_IDS as readonly string[]).includes(id)
-            ? DCO_DIVISION_IDS
-            : ORG_DIVISION_IDS;
-          return (
-            <>
-              <div className={`${styles.execStrip} ${styles.execStripEd}`} />
-              <div
-                className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
-              />
-            </>
-          );
-        })()}
         <div className={styles.divHead}>
           <span className={styles.divBand}>{DIVISION_BAND_TITLE[id]}</span>
           <span className={styles.divName}>{div.operational_name}</span>
@@ -507,47 +494,26 @@ export function OpenLoopsBoard({
 
       <div className={styles.drumWrap}>
         <div className={styles.boardDrum}>
+          <div className={styles.execHeader}>
+            <div className={`${styles.execPlate} ${styles.execPlateEd}`}>
+              <span>{EXECUTIVE_LABELS.director}</span>
+              <strong>{total}</strong>
+            </div>
+            <div className={styles.execPlateRow}>
+              <div className={styles.execPlate}>
+                <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+              </div>
+              <div className={styles.execPlate}>
+                <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+              </div>
+            </div>
+          </div>
           <PrayerDrum
             paused={openId !== null}
             faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
-            band={[
-              {
-                key: 'ed',
-                row: 0,
-                a0: 0,
-                a1: drumOrder.length - 1,
-                node: (
-                  <span className={`${styles.execOverlay} ${styles.execOverlayEd}`}>
-                    <span>{EXECUTIVE_LABELS.director}</span>
-                    <strong>{total}</strong>
-                  </span>
-                ),
-              },
-              {
-                key: 'dco',
-                row: 1,
-                a0: drumOrder.indexOf(DCO_DIVISION_IDS[0]),
-                a1: drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1]),
-                node: (
-                  <span className={styles.execOverlay}>
-                    <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-                    <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-                  </span>
-                ),
-              },
-              {
-                key: 'oec',
-                row: 1,
-                a0: drumOrder.indexOf(ORG_DIVISION_IDS[0]),
-                a1: drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1]),
-                node: (
-                  <span className={styles.execOverlay}>
-                    <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-                    <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-                  </span>
-                ),
-              },
-            ]}
+            band={[]}
           />
           {openDept ? (
             <div
