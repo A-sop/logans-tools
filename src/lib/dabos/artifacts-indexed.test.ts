@@ -37,9 +37,11 @@ describe('countArtifactsIndexed', () => {
   });
 });
 
-describe('artifacts_indexed at DABOS 368cfd9e (fixture copy of docs/wiki/index.md)', () => {
-  it('counts 232 unique pages (229 catalog + SCHEMA, log, inbox)', () => {
-    const fixture = path.join(__dirname, '__fixtures__', 'dabos-wiki-index-368cfd9e.md');
-    expect(countArtifactsIndexed(fixture)).toMatchObject({ total: 232, sourcesPresent: true });
+describe('artifacts_indexed on a synthetic wiki index fixture', () => {
+  // Synthetic only: no DABOS content in this public repo. The live count (232 at
+  // DABOS 368cfd9e) is a documented manual recount, not a test.
+  it('counts 9 unique pages from 9 table rows + 5 list links', () => {
+    const fixture = path.join(__dirname, '__fixtures__', 'wiki-index-synthetic.md');
+    expect(countArtifactsIndexed(fixture)).toMatchObject({ total: 9, rows: 9, sourcesPresent: true });
   });
 });
