@@ -4,7 +4,9 @@ import { conditionSeverity, isConditionLabel, nextBetterCondition } from '@/lib/
 import { syncWorkingCondition } from '@/lib/dabos/condition-state';
 import {
   FOUNDER_RULING_PRESETS,
+  FounderGoAheadRequiredError,
   guardNoUnauthorisedUpgrade,
+  requireFounderGoAhead,
   resolveWorkingWithOverride,
 } from '@/lib/dabos/founder-rulings';
 
@@ -52,5 +54,31 @@ describe('upgrade gate (founder ruling 2026-10-22)', () => {
   });
   it('no prior row: proposed passes (default path)', () => {
     expect(guardNoUnauthorisedUpgrade(null, 'Non-Existence')).toBe('Non-Existence');
+  });
+});
+
+describe('formula advance needs founder go-ahead (upgrade gate)', () => {
+  it('refuses with a clear error when no go-ahead exists', () => {
+    expect(() => requireFounderGoAhead('department', 'Dept8', 'Treason', [])).toThrow(
+      FounderGoAheadRequiredError
+    );
+    expect(() => requireFounderGoAhead('department', 'Dept8', 'Treason', [])).toThrow(
+      /cannot move up to Treason without a written founder go-ahead/
+    );
+  });
+  it('refuses a go-ahead for a different rung or without a reference', () => {
+    expect(() =>
+      requireFounderGoAhead('department', 'Dept8', 'Treason', [
+        { condition_label: 'Enemy', ruling_ref: 'receipt.md' },
+        { condition_label: 'Treason', ruling_ref: '  ' },
+      ])
+    ).toThrow(FounderGoAheadRequiredError);
+  });
+  it('returns the ruling reference when the go-ahead matches the rung', () => {
+    expect(
+      requireFounderGoAhead('department', 'Dept8', 'Treason', [
+        { condition_label: 'Treason', ruling_ref: 'DABOS:receipts/go-ahead-dept8.md' },
+      ])
+    ).toBe('DABOS:receipts/go-ahead-dept8.md');
   });
 });
