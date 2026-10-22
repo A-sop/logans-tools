@@ -144,7 +144,7 @@ function PrayerDrum({
   paused,
 }: {
   faces: { key: string; node: ReactNode }[];
-  band: { key: string; node: ReactNode; at: number; row: number }[];
+  band: { key: string; node: ReactNode; a0: number; a1: number; row: number }[];
   paused: boolean;
 }) {
   const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -176,6 +176,11 @@ function PrayerDrum({
     let raf = 0;
     let prev = performance.now();
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fixed = new URLSearchParams(window.location.search).get('drumAngle');
+    if (fixed !== null && !Number.isNaN(Number(fixed))) {
+      st.current.angle = Number(fixed);
+    }
+    const frozen = fixed !== null;
     const tick = (t: number) => {
       const dt = Math.min(64, t - prev) / 16.67;
       prev = t;
@@ -187,7 +192,7 @@ function PrayerDrum({
           s.idleAt = t;
         } else {
           s.vel = 0;
-          if (!pausedRef.current && !reduce && t - s.idleAt > 2500) s.angle -= 0.06 * dt;
+          if (!pausedRef.current && !reduce && !frozen && t - s.idleAt > 2500) s.angle -= 0.06 * dt;
         }
       }
       if (pausedRef.current) s.idleAt = t;
@@ -212,19 +217,45 @@ function PrayerDrum({
       });
       bandRefs.current.forEach((f) => {
         if (!f) return;
-        // Overlay label centred on its span's arc (fractional face index), on the tangent plane.
-        const deg = Number(f.dataset.at) * step + s.angle;
-        const c = Math.cos((deg * Math.PI) / 180);
-        f.style.transform = `perspective(1400px) translateZ(${-radius}px) rotateY(${deg}deg) translateZ(${radius + 2}px)`;
-        f.style.visibility = c < 0.25 ? 'hidden' : 'visible';
-        f.style.opacity = c < 0.25 ? '0' : String(Math.min(1, (c - 0.25) * 3));
-        f.style.zIndex = String(Math.round(c * 100) + 400);
+        // Label sits on the front-facing part of its arc: intersect the span with the visible
+        // window, centre on that, width = chord of it (max two panels). Full ring stays at front.
+        const a0 = Number(f.dataset.a0);
+        const a1 = Number(f.dataset.a1);
+        const WIN = 62;
+        let lo = 0;
+        let hi = 0;
+        if (a1 - a0 + 1 >= n) {
+          lo = -WIN;
+          hi = WIN;
+        } else {
+          const start = (a0 - 0.5) * step + s.angle;
+          const span = (a1 - a0 + 1) * step;
+          const st0 = ((((start + 180) % 360) + 360) % 360) - 180;
+          for (const k of [-360, 0, 360]) {
+            const l = Math.max(st0 + k, -WIN);
+            const h = Math.min(st0 + k + span, WIN);
+            if (h - l > hi - lo) {
+              lo = l;
+              hi = h;
+            }
+          }
+        }
+        const arc = hi - lo;
+        const mid = (lo + hi) / 2;
+        const width = Math.min(2 * radius * Math.sin(((arc / 2) * Math.PI) / 180), faceW * 2) - 12;
+        const show = arc > 28;
+        f.style.width = `${Math.max(0, width)}px`;
+        f.style.marginLeft = `${-Math.max(0, width) / 2}px`;
+        f.style.transform = `perspective(1400px) translateZ(${-radius}px) rotateY(${mid}deg) translateZ(${radius + 2}px)`;
+        f.style.visibility = show ? 'visible' : 'hidden';
+        f.style.opacity = show ? String(Math.min(1, (arc - 28) / 20)) : '0';
+        f.style.zIndex = '450';
       });
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [radius, step]);
+  }, [radius, step, n, faceW]);
 
   const degPerPx = 360 / (2 * Math.PI * Math.max(60, radius));
   const onDown = (e: ReactPointerEvent) => {
@@ -305,9 +336,9 @@ function PrayerDrum({
             ref={(el) => {
               bandRefs.current[i] = el;
             }}
-            data-at={b.at}
+            data-a0={b.a0}
+            data-a1={b.a1}
             className={`${styles.drumBand} ${b.row === 1 ? styles.drumBandRow1 : ''}`}
-            style={{ width: faceW * 2, marginLeft: -faceW }}
           >
             {b.node}
           </div>
@@ -474,7 +505,8 @@ export function OpenLoopsBoard({
               {
                 key: 'ed',
                 row: 0,
-                at: (drumOrder.length - 1) / 2,
+                a0: 0,
+                a1: drumOrder.length - 1,
                 node: (
                   <span className={`${styles.execOverlay} ${styles.execOverlayEd}`}>
                     <span>{EXECUTIVE_LABELS.director}</span>
@@ -485,7 +517,8 @@ export function OpenLoopsBoard({
               {
                 key: 'dco',
                 row: 1,
-                at: (drumOrder.indexOf(DCO_DIVISION_IDS[0]) + drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1])) / 2,
+                a0: drumOrder.indexOf(DCO_DIVISION_IDS[0]),
+                a1: drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1]),
                 node: (
                   <span className={styles.execOverlay}>
                     <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
@@ -496,7 +529,8 @@ export function OpenLoopsBoard({
               {
                 key: 'oec',
                 row: 1,
-                at: (drumOrder.indexOf(ORG_DIVISION_IDS[0]) + drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1])) / 2,
+                a0: drumOrder.indexOf(ORG_DIVISION_IDS[0]),
+                a1: drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1]),
                 node: (
                   <span className={styles.execOverlay}>
                     <span>{EXECUTIVE_LABELS.orgSecretary}</span>
