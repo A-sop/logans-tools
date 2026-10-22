@@ -251,7 +251,7 @@ function PrayerDrum({
         // Never extend past the drum silhouette (projected half-width = R).
         const silhouette = (2 * (radius * 0.97 - radius * Math.abs(Math.sin(rad)))) / Math.max(0.2, Math.cos(rad));
         const width = Math.min(2 * radius * Math.sin(((arc / 2) * Math.PI) / 180), faceW * 2, silhouette) - 12;
-        const show = arc > 10 && frontArc > 4 && width >= 150;
+        const show = arc > 10 && frontArc > 4 && width >= 215; // below this the label would need 3 lines
         const fade = Math.min(1, frontArc / 24);
         f.style.width = `${Math.max(0, width)}px`;
         f.style.marginLeft = `${-Math.max(0, width) / 2}px`;
@@ -432,6 +432,16 @@ export function OpenLoopsBoard({
     const divCount = div.departments.reduce((a, d) => a + (byDept.get(d.id)?.length ?? 0), 0);
     return (
       <div key={id} className={styles.divCol}>
+        {(() => {
+          const group: readonly string[] = (DCO_DIVISION_IDS as readonly string[]).includes(id)
+            ? DCO_DIVISION_IDS
+            : ORG_DIVISION_IDS;
+          return (
+            <div
+              className={`${styles.execStrip} ${id === group[0] ? styles.execStripFirst : ''} ${id === group[group.length - 1] ? styles.execStripLast : ''}`}
+            />
+          );
+        })()}
         <div className={styles.divHead}>
           <span className={styles.divBand}>{DIVISION_BAND_TITLE[id]}</span>
           <span className={styles.divName}>{div.operational_name}</span>
@@ -499,21 +509,36 @@ export function OpenLoopsBoard({
               <span>{EXECUTIVE_LABELS.director}</span>
               <strong>{total}</strong>
             </div>
-            <div className={styles.execPlateRow}>
-              <div className={styles.execPlate}>
-                <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-                <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-              </div>
-              <div className={styles.execPlate}>
-                <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-                <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-              </div>
-            </div>
           </div>
           <PrayerDrum
             paused={openId !== null}
             faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
-            band={[]}
+            band={[
+              {
+                key: 'dco',
+                row: 0,
+                a0: drumOrder.indexOf(DCO_DIVISION_IDS[0]),
+                a1: drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1]),
+                node: (
+                  <span className={styles.execOverlay}>
+                    <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                    <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+                  </span>
+                ),
+              },
+              {
+                key: 'oec',
+                row: 0,
+                a0: drumOrder.indexOf(ORG_DIVISION_IDS[0]),
+                a1: drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1]),
+                node: (
+                  <span className={styles.execOverlay}>
+                    <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                    <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+                  </span>
+                ),
+              },
+            ]}
           />
           {openDept ? (
             <div
