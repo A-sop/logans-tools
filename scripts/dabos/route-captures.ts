@@ -115,7 +115,40 @@ async function main() {
         updated_at = now()
       WHERE id = ${t.id} AND department_id = 'Dept1'`;
   }
-  console.log(JSON.stringify({ source, dry, plan: plan.length, matched: updates.length, missing, filled, counts, backup: dry ? null : backup }));
+  // Exact full-URL duplicates across open telegram + youtube captures: keep all, raise priority one step.
+  const all = await sql`
+    SELECT id, department_id, division_id, status, priority, title, description, ingest_source, ingest_external_id, ingest_meta
+    FROM tasks WHERE ingest_source IN ('telegram', 'youtube') AND status NOT IN ('done', 'cancelled')`;
+  const planUrls = new Map<string, string[]>(plan.map((i) => [i.bundle, i.urls ?? []]));
+  const groups = new Map<string, any[]>();
+  for (const t of all) {
+    const urls = new Set<string>();
+    for (const u of t.ingest_meta?.urls ?? []) urls.add(String(u));
+    for (const u of String(t.description ?? '').match(/https?:\/\/\S+/g) ?? []) urls.add(u);
+    const b = t.ingest_source === 'telegram' ? t.ingest_meta?.wiki_bundle : null;
+    for (const u of (b && planUrls.get(b)) || []) urls.add(u);
+    for (const u of urls) groups.set(u, [...(groups.get(u) ?? []), t]);
+  }
+  const dupGroups = [...groups.entries()].filter(([, ts]) => new Set(ts.map((x: any) => x.id)).size > 1);
+  const raisedIds = new Set<string>();
+  const dupLines: string[] = [];
+  for (const [url, ts] of dupGroups) {
+    const uniq = [...new Map(ts.map((x: any) => [x.id, x])).values()] as any[];
+    const minP = Math.min(...uniq.map((x) => Number(x.priority ?? 3)));
+    const raised = Math.max(1, minP - 1);
+    for (const t of uniq) {
+      if (raisedIds.has(t.id) || t.ingest_meta?.dup_raised) continue;
+      raisedIds.add(t.id);
+      dupLines.push([batch + '-dup', ...cols.slice(1).map((c) => t[c])].map(csvCell).join(','));
+      if (dry) continue;
+      if (!fs.existsSync(backup)) fs.writeFileSync(backup, cols.join(',') + '\n', 'utf8');
+      fs.appendFileSync(backup, dupLines[dupLines.length - 1] + '\n', 'utf8'); // backup before write
+      const meta = { ...(t.ingest_meta || {}), dup_raised: true, dup_count: uniq.length, dup_url_group: url.slice(0, 300) };
+      await sql`UPDATE tasks SET priority = ${raised}, ingest_meta = ${JSON.stringify(meta)}::jsonb, updated_at = now() WHERE id = ${t.id}`;
+    }
+  }
+  console.log(JSON.stringify({ source, dry, plan: plan.length, matched: updates.length, missing, filled, counts,
+    dup_groups: dupGroups.length, dup_tasks_raised: raisedIds.size, backup: dry ? null : backup }));
   process.exit(0);
 }
 
