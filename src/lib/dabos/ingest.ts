@@ -3,7 +3,13 @@
  * ESTO flap §F: Telegram / Slack / Buzz call the same shape.
  * Wire field `mouth` = which IN (do not teach as org anatomy).
  */
+import { createHash } from 'crypto';
+
 import type { Sql } from '@/lib/dabos/db';
+
+export function urlHash(url: string): string {
+  return createHash('sha256').update(url).digest('hex').slice(0, 32);
+}
 
 export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api'; // wire: which IN
 
@@ -43,6 +49,34 @@ export type IngestResult = {
   title: string;
   ack: string;
 };
+
+/**
+ * Hat table: docs/reference/dept01-intake/intake-classification-hat.md (DABOS). Keep in sync.
+ * Deterministic first pass at ingest. Routes only when exactly one department matches;
+ * otherwise the capture stays in Dept1 and the Dept1 batch (telegram_extract.py route) classifies it.
+ */
+export const HAT_SIGNALS: { dept: string; label: string; re: RegExp }[] = [
+  { dept: 'Dept15', label: 'regulatory/tax/legal/residency', re: /\b(steuer\w*|finanzamt|tax(es)?|legal|law(yer)?|visa|residency|aufenthalt\w*|gdpr|dsgvo|compliance|regulat\w*)\b/i },
+  { dept: 'Dept8', label: 'finance/money/investing/accounting', re: /\b(invest\w*|etf|stocks?|aktie\w*|dividend\w*|accounting|buchhaltung|ledger|gnucash|budget\w*|portfolio|crypto|bitcoin)\b/i },
+  { dept: 'Dept16', label: 'marketing/lead-gen/brand/audience', re: /\b(marketing|lead[- ]?gen\w*|leads|brand(ing)?|audience|seo|funnel|ads?|newsletter|instagram growth|followers)\b/i },
+  { dept: 'Dept17', label: 'sales/clients/pricing/consulting', re: /\b(sales|selling|clients?|pricing|price your|consulting|closing|cold call\w*|offer)\b/i },
+  { dept: 'Dept4', label: 'content production', re: /\b(video editing|youtube (channel|craft|thumbnail\w*)|thumbnails?|script ?writing|copywriting|kdp|kindle|podcast)\b/i },
+  { dept: 'Dept10', label: 'AI/tooling/systems/code', re: /\b(ai|llm|gpt|claude|cursor|agents?|n8n|automation|github|code|coding|python|homelab|self-?host\w*|ollama|api)\b/i },
+  { dept: 'Dept20', label: 'venture/business-model', re: /\b(business model|side hustle|startup|saas|venture|passive income|dropshipping|fba)\b/i },
+  { dept: 'Dept21', label: 'founder health/personal growth', re: /\b(health|sleep|fitness|workout|meditat\w*|habits?|mindset|discipline|nutrition)\b/i },
+];
+
+export function classifyCapture(text: string): { department_id: string | null; reason: string; candidates: string[] } {
+  const hits = HAT_SIGNALS.filter((s) => s.re.test(text || ''));
+  if (hits.length === 1) {
+    return { department_id: hits[0].dept, reason: `ingest hat signal: ${hits[0].label}`, candidates: [hits[0].dept] };
+  }
+  return {
+    department_id: null,
+    reason: hits.length ? `ambiguous at ingest: ${hits.map((h) => h.dept).join(' or ')}` : 'no hat signal at ingest; Dept1 batch classifies',
+    candidates: hits.map((h) => h.dept),
+  };
+}
 
 const DEPT_RE = /^(?:dept:|#)?(Dept\d{1,2})\b[:\s-]*/i;
 const TASK_PREFIX_RE = /^(?:task|despatch|dispatch|agent)\s*:\s*/i;
@@ -141,7 +175,37 @@ export async function ingestCapture(
   }
 
   const parsed = parseIngestText(input.text || '');
-  let department_id = input.department_id ?? parsed.department_id ?? 'Dept1';
+  const isDvag = DVAG_KEYWORD_REGEX.test(input.text || '');
+  // DVAG items: no keyword routing, Proviso case index is SSOT (counts only).
+  const auto = isDvag ? null : classifyCapture([input.text || '', input.title || ''].join(' '));
+  let department_id = input.department_id ?? parsed.department_id ?? auto?.department_id ?? 'Dept1';
+  const routed_reason =
+    input.department_id || parsed.department_id
+      ? 'explicit DeptN tag'
+      : isDvag
+        ? 'DVAG item: Proviso case index (counts only)'
+        : auto?.reason ?? '';
+
+  // Exact full-URL duplicates (hat rule: never normalise). Keep both; raise priority.
+  let dupOf: { id: string; department_id: string; priority: number } | null = null;
+  for (const url of input.urls ?? []) {
+    const hit = await sql`
+      SELECT id, department_id, priority FROM tasks
+      WHERE ingest_source IN ('telegram', 'youtube') AND status NOT IN ('done', 'cancelled')
+        AND (ingest_meta->'urls' ? ${url} OR ingest_meta->'url_hashes' ? ${urlHash(url)})
+      ORDER BY priority ASC LIMIT 1`;
+    if (hit[0]) { dupOf = hit[0] as { id: string; department_id: string; priority: number }; break; }
+  }
+  if (dupOf) {
+    const raised = Math.max(1, Number(dupOf.priority ?? 3) - 1);
+    await sql`
+      UPDATE tasks SET priority = ${raised},
+        ingest_meta = coalesce(ingest_meta, '{}'::jsonb) || jsonb_build_object(
+          'dup_count', coalesce((ingest_meta->>'dup_count')::int, 1) + 1),
+        updated_at = now()
+      WHERE id = ${dupOf.id}`;
+    if (!input.department_id && !parsed.department_id && dupOf.department_id) department_id = dupOf.department_id;
+  }
   let division_id = input.division_id ?? null;
 
   const deptRow = await sql`
@@ -178,6 +242,10 @@ export async function ingestCapture(
       captured_at: input.captured_at ?? new Date().toISOString(),
       is_work: parsed.is_work,
       is_agent: parsed.is_agent,
+      routed_reason,
+      route_candidates: auto?.candidates ?? [],
+      url_hashes: (input.urls ?? []).map(urlHash),
+      ...(dupOf ? { dup_of: dupOf.id } : {}),
     };
   } else {
     const urls = input.urls ?? [];
@@ -203,10 +271,14 @@ export async function ingestCapture(
       captured_at: input.captured_at ?? new Date().toISOString(),
       is_work: parsed.is_work,
       is_agent: parsed.is_agent,
+      routed_reason,
+      route_candidates: auto?.candidates ?? [],
+      ...(dupOf ? { dup_of: dupOf.id } : {}),
     };
   }
 
-  const priority = Math.min(5, Math.max(1, input.priority ?? (parsed.is_work ? 2 : 3)));
+  const basePriority = input.priority ?? (parsed.is_work ? 2 : 3);
+  const priority = Math.min(5, Math.max(1, dupOf ? Math.min(basePriority, Number(dupOf.priority ?? 3) - 1) : basePriority));
   const taskType = parsed.is_agent ? 'agent' : 'human';
   const assignedTo = parsed.is_agent ? null : 'founder';
   const assignedAgent = parsed.is_agent ? 'research' : null;
