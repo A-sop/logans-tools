@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+﻿import { describe, expect, it, vi } from 'vitest';
 
 import { DVAG_KEYWORD_REGEX, formatIngestAck, ingestCapture, parseIngestText } from '@/lib/dabos/ingest';
 
@@ -77,6 +77,9 @@ describe('ingestCapture with mocked DB', () => {
     
     // Mock existing check (no duplicate)
     mockSql.mockResolvedValueOnce([]);
+
+    // Mock exact-URL duplicate lookup (none)
+    mockSql.mockResolvedValueOnce([]);
     
     // Mock department lookup
     mockSql.mockResolvedValueOnce([{ id: 'Dept1', division_id: 'Div1' }]);
@@ -109,8 +112,8 @@ describe('ingestCapture with mocked DB', () => {
     expect(result.short_id).toBe('abcd1234');
 
     // Check the INSERT call (third call: 0=existing check, 1=dept lookup, 2=insert, 3=role_runs)
-    expect(mockSql).toHaveBeenCalledTimes(4);
-    const insertCall = mockSql.mock.calls[2];
+    expect(mockSql).toHaveBeenCalledTimes(5);
+    const insertCall = mockSql.mock.calls[3];
     
     // Tagged template: first arg is strings array, rest are values
     // The values are: workspace_id, division_id, department_id, title, description, type, status, priority, assigned_to, assigned_agent, basket, ingest_source, external_id, ingest_meta
@@ -137,6 +140,9 @@ describe('ingestCapture with mocked DB', () => {
     const mockSql = vi.fn() as any;
     
     // Mock existing check (no duplicate)
+    mockSql.mockResolvedValueOnce([]);
+
+    // Mock exact-URL duplicate lookup (none)
     mockSql.mockResolvedValueOnce([]);
     
     // Mock department lookup
@@ -166,7 +172,7 @@ describe('ingestCapture with mocked DB', () => {
     expect(result.created).toBe(true);
 
     // Check INSERT call
-    const insertCall = mockSql.mock.calls[2];
+    const insertCall = mockSql.mock.calls[3];
     const description = insertCall[5];
     const metaJson = insertCall[14];
     
@@ -240,5 +246,20 @@ describe('ingestCapture with mocked DB', () => {
     
     // Should be lowercase in meta
     expect(meta.sha256).toBe('abcdef' + '0'.repeat(58));
+  });
+});
+
+describe('classifyCapture (hat table)', () => {
+  it('routes a single clear signal', async () => {
+    const { classifyCapture } = await import('@/lib/dabos/ingest');
+    expect(classifyCapture('Finanzamt letter after 7 years abroad').department_id).toBe('Dept15');
+    expect(classifyCapture('Claude Code agents for homelab').department_id).toBe('Dept10');
+  });
+  it('keeps mixed or empty captures in Dept1 with candidates', async () => {
+    const { classifyCapture } = await import('@/lib/dabos/ingest');
+    const mixed = classifyCapture('AI tool for tax returns');
+    expect(mixed.department_id).toBeNull();
+    expect(mixed.candidates.sort()).toEqual(['Dept10', 'Dept15']);
+    expect(classifyCapture('[link]').department_id).toBeNull();
   });
 });
