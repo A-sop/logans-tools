@@ -3,7 +3,8 @@
  *
  * The week-close poster reports each division's condition; it does not assign one.
  * A condition is only reported when it was actually recorded for the division:
- *   - condition_source = 'founder_ruling' (founder ruling with date + ref), or
+ *   - condition_source = 'founder_ruling' AND a non-empty ruling_date AND ruling_ref
+ *     (a founder_ruling row missing either is reported as 'to-report'), or
  *   - condition_source = 'formula' (verified EP / formula advance).
  * Anything else - no row, or a 'computed' row (stat trend or the Non-Existence seed
  * default) - is reported as 'to-report'. The poster never defaults a division to
@@ -40,13 +41,16 @@ export function reportDivisionConditions(
     const row = byId.get(id);
     const condition = row?.working_condition?.trim();
     const source = row?.condition_source ?? '';
-    if (row && condition && RECORDED_SOURCES.has(source)) {
+    const rulingDate = row?.ruling_date?.trim() || null;
+    const rulingRef = row?.ruling_ref?.trim() || null;
+    const evidenced = source !== 'founder_ruling' || (rulingDate !== null && rulingRef !== null);
+    if (row && condition && RECORDED_SOURCES.has(source) && evidenced) {
       return {
         entity_id: id,
         condition,
         source: source as 'founder_ruling' | 'formula',
-        ruling_date: row.ruling_date ?? null,
-        ruling_ref: row.ruling_ref ?? null,
+        ruling_date: rulingDate,
+        ruling_ref: rulingRef,
       };
     }
     return { entity_id: id, condition: TO_REPORT, source: TO_REPORT, ruling_date: null, ruling_ref: null };

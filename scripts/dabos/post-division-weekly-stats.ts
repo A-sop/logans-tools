@@ -13,14 +13,24 @@ import {
 } from '../../src/lib/dabos/org-week-window';
 import { requireDatabaseUrl } from './load-env';
 
-/** --week=YYYY-Www = the org week closing on that ISO week's Thursday 14:00 Berlin. */
+/**
+ * --week=YYYY-Www = the org week closing on that ISO week's Thursday 14:00 Berlin.
+ * A malformed or non-existent week is an error (never silently falls back to the current week).
+ */
 function parseWeekArg(): ClosedOrgWeek {
-  const arg = process.argv.find((a) => a.startsWith('--week='));
-  if (arg) {
-    const m = arg.slice(7).match(/^(\d{4})-W(\d{1,2})$/);
-    if (m) return closedOrgWeekForIsoWeek(Number(m[1]), Number(m[2]));
+  const args = process.argv.filter((a) => a === '--week' || a.startsWith('--week='));
+  if (args.length === 0) return closedOrgWeek();
+  if (args.length > 1) throw new Error('--week given more than once');
+  const raw = args[0]!.slice('--week='.length);
+  const m = /^(\d{4})-W(\d{2})$/.exec(raw);
+  if (!m) throw new Error(`Invalid --week '${raw}': expected YYYY-Www, e.g. --week=2026-W44`);
+  const year = Number(m[1]);
+  const week = Number(m[2]);
+  const w = week >= 1 && week <= 53 ? closedOrgWeekForIsoWeek(year, week) : null;
+  if (!w || w.isoYear !== year || w.isoWeek !== week) {
+    throw new Error(`Invalid --week '${raw}': ISO week ${week} does not exist in ${year}`);
   }
-  return closedOrgWeek();
+  return w;
 }
 
 async function main() {

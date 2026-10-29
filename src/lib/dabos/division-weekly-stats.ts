@@ -5,8 +5,8 @@
  * Div map (STAT-MAP):
  *  Div2 leads_or_touchpoints_created + Dept4 content_pieces_shipped (content factory = Div2)
  *  Div3 taxable_income_eur (Proviso commission Abrechnung + other incomes as added)
- *  Div4 shipped_outputs (ship-log Counts=yes rows)
- *  Div5 qa_pass_rate (Dept13 checklist PASS / decided instances)
+ *  Div4 shipped_outputs (ship-log rows with Validated (Dept13) = PASS <date> and Counts=yes)
+ *  Div5 qa_pass_rate (Dept13 checklist PASS / decided verdict instances - per instance, not per PR/SHA)
  *  Div6 conversions — GFP poster (separate module)
  *  Div7 plan_completion_rate (establishment checklist reported / total depts)
  *
@@ -19,8 +19,9 @@ import { getISOWeek, getISOWeekYear, parseISO } from 'date-fns';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import {
   closedOrgWeekForIsoWeek,
-  isDateInClosedOrgWeek,
+  isEntryInClosedOrgWeek,
   recordedAtForClosedOrgWeek,
+  REGISTER_DATE_TIME_SOURCE,
   type ClosedOrgWeek,
 } from '@/lib/dabos/org-week-window';
 
@@ -88,15 +89,30 @@ export function countPipelineTouchpoints(pipelineMd: string | null): number {
   return n;
 }
 
+type WeekWindow = Pick<ClosedOrgWeek, 'start' | 'end' | 'startDate' | 'endDate'>;
+
+const PASS_CELL_RE = new RegExp('^PASS\\s+(' + REGISTER_DATE_TIME_SOURCE + ')', 'i');
+
 /**
- * Ship-log rows with Counts = yes (case-insensitive).
- * With window (weekly poster path), only rows whose Date column falls inside the closed
- * org week (Fri..closing Thu, see org-week-window.ts) count; without it, all-time (ship-gate).
+ * PASS date from a ship-log 'Validated (Dept13)' cell, e.g. '**PASS 2026-07-11** (instance 3)'.
+ * Returns null for FAIL, CONDITIONAL, pending ('PASS (pending ...)', 'pending PASS'), or no date.
  */
-export function countShippedOutputs(
-  shipLogMd: string | null,
-  window?: Pick<ClosedOrgWeek, 'startDate' | 'endDate'>
-): number {
+export function shipLogPassDate(validatedCell: string): string | null {
+  const cell = validatedCell.replace(/\*/g, '').trim();
+  if (/pending/i.test(cell)) return null;
+  const m = PASS_CELL_RE.exec(cell);
+  return m?.[1] ?? null;
+}
+
+/**
+ * shipped_outputs: ship-log rows where 'Validated (Dept13)' is PASS <date> (not pending, FAIL,
+ * CONDITIONAL) AND Counts = yes. Columns:
+ * | # | Date | What shipped | Acceptance line | Venture | Validated (Dept13) | Counts |
+ * With window (weekly poster path) the row is bucketed by its Dept13 PASS date, not the ship
+ * Date column (see isEntryInClosedOrgWeek: timestamps exact 14:00 cutoff; date-only provisional
+ * Thu..Wed pending Dept14). Without window: all-time (ship-gate), same PASS requirement.
+ */
+export function countShippedOutputs(shipLogMd: string | null, window?: WeekWindow): number {
   if (!shipLogMd) return 0;
   const tableStart = shipLogMd.indexOf('| # | Date |');
   if (tableStart < 0) return 0;
@@ -104,23 +120,43 @@ export function countShippedOutputs(
   const rows = section.split('\n').filter((line) => /^\|\s*\d+\s*\|/.test(line));
   return rows.filter((row) => {
     const cells = row.split('|').map((c) => c.trim());
-    if (window && !isDateInClosedOrgWeek(cells[2] ?? '', window)) return false;
     const counts = (cells[cells.length - 2] ?? '').toLowerCase().replace(/\*/g, '');
-    return counts === 'yes' || counts.startsWith('yes');
+    if (!(counts === 'yes' || counts.startsWith('yes'))) return false;
+    const passDate = shipLogPassDate(cells[cells.length - 3] ?? '');
+    if (!passDate) return false;
+    return window ? isEntryInClosedOrgWeek(passDate, window) : true;
   }).length;
 }
 
+const VERDICT_LINE_RE = /^[\s>*-]*\**\s*Verdict\s*:\s*(?:\*+\s*)*(PASS|FAIL)\b(.*)$/im;
+const VALIDATED_ON_RE = new RegExp(
+  '\\**\\s*Validated on\\s*:\\s*\\**\\s*(' + REGISTER_DATE_TIME_SOURCE + ')',
+  'i'
+);
+
 /**
- * qa_pass_rate = PASS verdicts / (PASS+FAIL) among filled Instance verdicts.
- * Weekly poster path: pass { window } (closed org week, Thu 14:00 -> Thu 14:00 Berlin) and
- * only instances whose **Validated on:** date is inside it count (Fri..closing Thu).
- * Legacy { year, week } scopes to the ISO Mon-Sun week. 0 verdicts in scope -> null (to-report).
- * Without opts: all-time. When year+week are provided, only count instances whose
- * **Validated on:** date falls in that ISO week — not the all-time register.
+ * Decided verdict of one Dept13 checklist instance: PASS / FAIL, or null when absent, empty
+ * template, CONDITIONAL, or pending ('**Verdict: PASS** (pending formal Dept13 ...)').
+ * Accepts '**Verdict: PASS**', '**Verdict:** FAIL' and unbolded 'Verdict: FAIL'.
+ */
+export function instanceVerdict(block: string): 'PASS' | 'FAIL' | null {
+  const m = VERDICT_LINE_RE.exec(block);
+  if (!m?.[1]) return null;
+  if (/pending/i.test(m[2] ?? '')) return null;
+  return m[1].toUpperCase() as 'PASS' | 'FAIL';
+}
+
+/**
+ * qa_pass_rate = PASS / (PASS + FAIL), counted PER VERDICT INSTANCE ('## Instance N' block in
+ * the Dept13 checklist register) - not per PR and not per SHA: two instances for the same PR
+ * (e.g. FAIL then PASS on a re-review) are two verdicts.
+ * Weekly poster path: pass { window } and only instances whose 'Validated on:' value is inside
+ * the closed org week count (isEntryInClosedOrgWeek). Legacy { year, week } scopes to the ISO
+ * Mon-Sun week. Without opts: all-time. 0 verdicts in scope -> null (to-report).
  */
 export function computeQaPassRate(
   validationMd: string | null,
-  opts?: { year: number; week: number } | { window: Pick<ClosedOrgWeek, 'startDate' | 'endDate'> }
+  opts?: { year: number; week: number } | { window: WeekWindow }
 ): number | null {
   if (!validationMd) return null;
 
@@ -129,18 +165,16 @@ export function computeQaPassRate(
 
   const verdicts: string[] = [];
   for (const block of blocks) {
-    const verdictMatch = block.match(/\*\*Verdict:\s*(PASS|FAIL)\b/i);
-    if (!verdictMatch?.[1]) continue;
+    const verdict = instanceVerdict(block);
+    if (!verdict) continue;
 
     if (opts) {
-      const dateMatch =
-        block.match(/\*\*Validated on:\*\*\s*(\d{4}-\d{2}-\d{2})/i) ??
-        block.match(/Validated on:\s*(\d{4}-\d{2}-\d{2})/i);
+      const dateMatch = VALIDATED_ON_RE.exec(block);
       if (!dateMatch?.[1]) continue;
       if ('window' in opts) {
-        if (!isDateInClosedOrgWeek(dateMatch[1], opts.window)) continue;
+        if (!isEntryInClosedOrgWeek(dateMatch[1], opts.window)) continue;
       } else {
-        const validated = parseISO(dateMatch[1]);
+        const validated = parseISO(dateMatch[1].slice(0, 10));
         if (Number.isNaN(validated.getTime())) continue;
         if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
           continue;
@@ -148,7 +182,7 @@ export function computeQaPassRate(
       }
     }
 
-    verdicts.push(verdictMatch[1].toUpperCase());
+    verdicts.push(verdict);
   }
 
   if (verdicts.length === 0) return null;
@@ -172,6 +206,15 @@ export type ProvisoMonthIncome = {
   lineCount: number;
 };
 
+/** Minimal shape of node:sqlite DatabaseSync used below (params _-prefixed for no-unused-vars). */
+type NodeSqliteDatabaseCtor = new (
+  _dbPath: string,
+  _options?: { readOnly?: boolean }
+) => {
+  prepare: (_sql: string) => { all: (..._params: unknown[]) => unknown[] };
+  close: () => void;
+};
+
 /** Sum Diskont-Konto (Abrechnung residual EUR) for Logan VB — local Proviso only. */
 export function readProvisoMonthlyIncome(
   dbPath = process.env.PROVISO_DB_PATH?.trim() || DEFAULT_PROVISO_DB,
@@ -180,16 +223,7 @@ export function readProvisoMonthlyIncome(
   if (!existsSync(dbPath)) return [];
   // Node 22+ built-in SQLite — no native addon; scripts/office only.
   // Avoid `import('node:sqlite')` types — Vercel/tsc may not have @types for it.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { DatabaseSync } = require('node:sqlite') as {
-    DatabaseSync: new (
-      path: string,
-      opts?: { readOnly?: boolean }
-    ) => {
-      prepare: (sql: string) => { all: (...params: unknown[]) => unknown[] };
-      close: () => void;
-    };
-  };
+  const { DatabaseSync } = require('node:sqlite') as { DatabaseSync: NodeSqliteDatabaseCtor };
   const db = new DatabaseSync(dbPath, { readOnly: true });
   try {
     const rows = db
@@ -267,7 +301,8 @@ export async function postDivisionWeeklyStats(opts: {
   const windowBasis = {
     org_week_start: window.start.toISOString(),
     org_week_end: window.end.toISOString(),
-    window_rule: 'Thu 14:00 -> Thu 14:00 Europe/Berlin; date-only entries Fri..closing Thu',
+    window_rule:
+      'Thu 14:00 -> Thu 14:00 Europe/Berlin; timestamped entries exact cutoff; date-only entries Thu..Wed (provisional, pending Dept14); shipped_outputs by Dept13 PASS date; qa per verdict instance',
   };
   const notes: string[] = [];
   const inserted: string[] = [];

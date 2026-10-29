@@ -46,4 +46,15 @@ describe('reportDivisionConditions (week-close reports, never assigns)', () => {
     ]);
     expect(out[0]!.condition).toBe(TO_REPORT);
   });
+
+  it('a founder_ruling without ruling_date or ruling_ref is to-report (needs both)', () => {
+    const out = reportDivisionConditions(['Div1', 'Div2', 'Div3', 'Div4'], [
+      { entity_id: 'Div1', working_condition: 'Emergency', condition_source: 'founder_ruling' },
+      { entity_id: 'Div2', working_condition: 'Emergency', condition_source: 'founder_ruling', ruling_date: '2026-10-21' },
+      { entity_id: 'Div3', working_condition: 'Emergency', condition_source: 'founder_ruling', ruling_ref: 'synthetic-ref-3' },
+      { entity_id: 'Div4', working_condition: 'Emergency', condition_source: 'founder_ruling', ruling_date: ' ', ruling_ref: 'synthetic-ref-4' },
+    ]);
+    expect(out.map((r) => r.condition)).toEqual([TO_REPORT, TO_REPORT, TO_REPORT, TO_REPORT]);
+    expect(out.every((r) => r.source === TO_REPORT)).toBe(true);
+  });
 });
