@@ -91,19 +91,36 @@ export function countPipelineTouchpoints(pipelineMd: string | null): number {
 
 type WeekWindow = Pick<ClosedOrgWeek, 'start' | 'end' | 'startDate' | 'endDate'>;
 
-const PASS_CELL_RE = new RegExp('^PASS\\s+(' + REGISTER_DATE_TIME_SOURCE + ')', 'i');
+/**
+ * A 'pending' qualifier placed IMMEDIATELY after a PASS token, e.g. 'PASS** (pending formal',
+ * 'PASS (pending', 'PASS - pending'. A later mention of 'pending' in the reason text does not
+ * qualify the verdict (Instance 1 in the real register is a FAIL whose reason says "pending").
+ */
+const PENDING_QUALIFIER_RE = /^\s*\**\s*(?:[([]\s*|[\u2014\u2013:,;-]\s*)?pending\b/i;
+
+/** Token boundary: 'PASS-conditional', 'PASS/FAIL', 'PASSED' are not a bare PASS / FAIL. */
+const BARE_TOKEN_END = '(?![\\w/-])';
+
+/** Ship-log cell: uppercase PASS only (outside a 'Verdict:' line, case matters). */
+const PASS_CELL_RE = new RegExp('^PASS' + BARE_TOKEN_END + '(.*)$');
+const LEADING_DATE_RE = new RegExp('^\\s*(' + REGISTER_DATE_TIME_SOURCE + ')(.*)$');
 
 /**
  * PASS date from a ship-log 'Validated (Dept13)' cell, e.g. '**PASS 2026-07-11** (instance 3)'.
- * Returns null for FAIL, CONDITIONAL, pending ('PASS (pending ...)', 'pending PASS'), or no date.
+ * Returns null for FAIL, CONDITIONAL, 'PASS-conditional', lowercase 'pass', 'pending PASS',
+ * a PASS qualified as pending right after the token or its date, or a PASS without a date.
  */
 export function shipLogPassDate(validatedCell: string): string | null {
-  const cell = validatedCell.replace(/\*/g, '').trim();
-  if (/pending/i.test(cell)) return null;
+  const cell = validatedCell.trim().replace(/^\*+/, '');
   const m = PASS_CELL_RE.exec(cell);
-  return m?.[1] ?? null;
+  if (!m) return null;
+  const afterPass = m[1] ?? '';
+  if (PENDING_QUALIFIER_RE.test(afterPass)) return null;
+  const d = LEADING_DATE_RE.exec(afterPass.replace(/^\*+/, ''));
+  if (!d?.[1]) return null;
+  if (PENDING_QUALIFIER_RE.test(d[2] ?? '')) return null;
+  return d[1];
 }
-
 /**
  * shipped_outputs: ship-log rows where 'Validated (Dept13)' is PASS <date> (not pending, FAIL,
  * CONDITIONAL) AND Counts = yes. Columns:
@@ -128,24 +145,32 @@ export function countShippedOutputs(shipLogMd: string | null, window?: WeekWindo
   }).length;
 }
 
-const VERDICT_LINE_RE = /^[\s>*-]*\**\s*Verdict\s*:\s*(?:\*+\s*)*(PASS|FAIL)\b(.*)$/im;
+/** First 'Verdict:' line of an instance (bold, bold-label or plain; list / quote prefixes ok). */
+const VERDICT_LINE_RE = /^[\s>*-]*\**\s*Verdict\s*:(.*)$/im;
+/** Inside a Verdict: line the token may be any case; it must be a bare PASS / FAIL. */
+const VERDICT_TOKEN_RE = new RegExp('^\\s*(?:\\*+\\s*)*(PASS|FAIL)' + BARE_TOKEN_END + '(.*)$', 'i');
 const VALIDATED_ON_RE = new RegExp(
   '\\**\\s*Validated on\\s*:\\s*\\**\\s*(' + REGISTER_DATE_TIME_SOURCE + ')',
   'i'
 );
 
 /**
- * Decided verdict of one Dept13 checklist instance: PASS / FAIL, or null when absent, empty
- * template, CONDITIONAL, or pending ('**Verdict: PASS** (pending formal Dept13 ...)').
- * Accepts '**Verdict: PASS**', '**Verdict:** FAIL' and unbolded 'Verdict: FAIL'.
+ * Decided verdict of one Dept13 checklist instance, read from its FIRST 'Verdict:' line:
+ * PASS / FAIL, or null when absent, empty template, CONDITIONAL, a qualified token
+ * ('PASS-conditional'), or a PASS qualified as pending immediately after the token
+ * ('**Verdict: PASS** (pending formal Dept13 ...)'). 'pending' later in a reason never drops a
+ * verdict, and FAIL is never dropped for 'pending'.
+ * Accepts '**Verdict: PASS**', '**Verdict:** FAIL', unbolded 'Verdict: FAIL', 'Verdict: fail'.
  */
 export function instanceVerdict(block: string): 'PASS' | 'FAIL' | null {
-  const m = VERDICT_LINE_RE.exec(block);
+  const line = VERDICT_LINE_RE.exec(block);
+  if (!line) return null;
+  const m = VERDICT_TOKEN_RE.exec(line[1] ?? '');
   if (!m?.[1]) return null;
-  if (/pending/i.test(m[2] ?? '')) return null;
-  return m[1].toUpperCase() as 'PASS' | 'FAIL';
+  const verdict = m[1].toUpperCase() as 'PASS' | 'FAIL';
+  if (verdict === 'PASS' && PENDING_QUALIFIER_RE.test(m[2] ?? '')) return null;
+  return verdict;
 }
-
 /**
  * qa_pass_rate = PASS / (PASS + FAIL), counted PER VERDICT INSTANCE ('## Instance N' block in
  * the Dept13 checklist register) - not per PR and not per SHA: two instances for the same PR

@@ -17,6 +17,7 @@ import {
 import { closedOrgWeek } from '@/lib/dabos/org-week-window';
 import { runStatCrawl } from '@/lib/dabos/stat-crawl';
 import { loadReportedDivisionConditions } from '@/lib/dabos/week-close-conditions';
+import { conditionRefreshEnabled, runOptInConditionRefresh } from '@/lib/dabos/week-close-refresh';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
@@ -109,21 +110,10 @@ export async function GET(request: Request) {
   } catch {
     /* reported as empty */
   }
-  // Opt-in only; a failure must not abort the crawl / role_run / response.
-  let refresh: Awaited<ReturnType<typeof refreshAllConditionsFromBoardWithSql>> | null = null;
-  let refreshError: string | null = null;
-  if (process.env.DABOS_WEEK_CLOSE_REFRESH_CONDITIONS === '1') {
-    try {
-      refresh = await refreshAllConditionsFromBoardWithSql(sql);
-    } catch (err) {
-      refreshError = err instanceof Error ? err.message : String(err);
-    }
-  }
-  const conditionRefresh = refresh
-    ? { week: refresh.week.label, persisted: refresh.persisted }
-    : refreshError
-      ? { error: refreshError }
-      : { skipped: true };
+  // Opt-in only; a failure is captured and must not abort the crawl / role_run / response.
+  const conditionRefresh = await runOptInConditionRefresh(conditionRefreshEnabled(), () =>
+    refreshAllConditionsFromBoardWithSql(sql)
+  );
 
   let crawl: Record<string, unknown> | null = null;
   try {

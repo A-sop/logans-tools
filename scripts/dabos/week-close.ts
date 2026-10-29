@@ -1,5 +1,5 @@
 /**
- * Thursday week-close: GFP + division weekly posters + refresh conditions +
+ * Thursday week-close: GFP + division weekly posters + condition report (refresh opt-in) +
  * Dept3 stat crawl + role_run.
  * Run on office PC (Good Thursday): npm run dabos:week-close
  * Soft rehearsal (other days / pre-Thu): DABOS_WEEK_CLOSE_SOFT=1 — same pipeline,
@@ -22,6 +22,10 @@ import {
 import { closedOrgWeek } from '../../src/lib/dabos/org-week-window';
 import { runStatCrawl } from '../../src/lib/dabos/stat-crawl';
 import { loadReportedDivisionConditions } from '../../src/lib/dabos/week-close-conditions';
+import {
+  conditionRefreshEnabled,
+  runOptInConditionRefresh,
+} from '../../src/lib/dabos/week-close-refresh';
 import { loadEnvLocal, requireDatabaseUrl } from './load-env';
 
 function cloudOnly(): boolean {
@@ -34,11 +38,8 @@ function cloudOnly(): boolean {
  * Condition refresh (board evaluation -> entity_condition_state + conditions rows) is NOT
  * part of the week-close by default: the poster reports recorded conditions, it does not
  * assign them (Dept13 FAIL W44, 2026-10-29). Opt in with DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1;
- * the standalone refresh-conditions script/cron is unchanged.
+ * the standalone refresh-conditions script/cron is unchanged. See week-close-refresh.ts.
  */
-function refreshConditions(): boolean {
-  return process.env.DABOS_WEEK_CLOSE_REFRESH_CONDITIONS === '1';
-}
 
 function softClose(): boolean {
   return process.env.DABOS_WEEK_CLOSE_SOFT === '1';
@@ -142,16 +143,16 @@ async function main() {
     console.log(`  ${row.entity_id}: ${row.condition} [${row.source}]`);
   }
 
-  let conditionRefresh: Record<string, unknown> = {
-    skipped: true,
-    reason: 'week-close reports conditions only; set DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1 to refresh',
-  };
-  if (refreshConditions()) {
-    const result = await refreshAllConditionsFromBoardWithSql(sql);
-    conditionRefresh = { week: result.week.label, persisted: result.persisted };
+  // Opt-in; errors are captured (not thrown) so the crawl + role_run still run.
+  const conditionRefresh = await runOptInConditionRefresh(conditionRefreshEnabled(), () =>
+    refreshAllConditionsFromBoardWithSql(sql)
+  );
+  if ('persisted' in conditionRefresh) {
     console.log(
-      `  Condition refresh: persisted ${result.persisted.divisions} division + ${result.persisted.departments} department`
+      `  Condition refresh: persisted ${conditionRefresh.persisted.divisions} division + ${conditionRefresh.persisted.departments} department`
     );
+  } else if ('error' in conditionRefresh) {
+    console.log(`  Condition refresh FAILED: ${conditionRefresh.error}`);
   } else {
     console.log('  Condition refresh skipped (not part of week-close by default)');
   }

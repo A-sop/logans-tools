@@ -1,3 +1,6 @@
+import { readFileSync } from 'fs';
+import path from 'path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -177,5 +180,60 @@ describe('computeQaPassRate counts PER VERDICT INSTANCE (not per PR or SHA), clo
     const allOld = VALIDATION.split('## Instance 4')[0]!; // July only: 2/3 = 66.7 all-time
     expect(computeQaPassRate(allOld)).toBe(66.7);
     expect(computeQaPassRate(allOld, { window: W44 })).toBeNull();
+  });
+});
+// Exact lines from the real Dept13 register (see fixture header); no client data.
+const REAL_REGISTER_SHAPE = readFileSync(
+  path.join(__dirname, '__fixtures__', 'dept13-register-shape.md'),
+  'utf8'
+);
+const REAL_INSTANCE_1_VERDICT = REAL_REGISTER_SHAPE.split('\n').find((l) =>
+  l.startsWith('**Verdict: FAIL**')
+)!;
+
+describe('real register regression (Dept13 FAIL on 8bc8291f: pending in a FAIL reason)', () => {
+  it('Instance 1 is a FAIL even though its reason text mentions "pending"', () => {
+    expect(REAL_INSTANCE_1_VERDICT).toContain('"pending"');
+    expect(instanceVerdict(REAL_INSTANCE_1_VERDICT)).toBe('FAIL');
+  });
+  it('all-time qa on the real register shape is 66.7 (I1 FAIL, I2+I3 PASS; I4 pending PASS, I5 CONDITIONAL, template excluded)', () => {
+    expect(computeQaPassRate(REAL_REGISTER_SHAPE)).toBe(66.7);
+  });
+  it('FAIL is never dropped for "pending" anywhere on the line', () => {
+    expect(instanceVerdict('**Verdict: FAIL** — acceptance evidence still pending')).toBe('FAIL');
+    expect(instanceVerdict('**Verdict: FAIL** (pending founder re-check)')).toBe('FAIL');
+    expect(instanceVerdict('Verdict: FAIL - pending')).toBe('FAIL');
+  });
+  it('pending only drops a PASS when it qualifies the token immediately', () => {
+    expect(instanceVerdict('**Verdict: PASS** (pending formal Dept13 hat re-sign-off)')).toBeNull();
+    expect(instanceVerdict('Verdict: PASS (pending founder walk)')).toBeNull();
+    expect(instanceVerdict('**Verdict:** PASS — pending sign-off')).toBeNull();
+    expect(instanceVerdict('**Verdict: PASS** — item 4 was pending, now evidenced 2026-10-27')).toBe('PASS');
+  });
+});
+
+describe('qualified tokens and case', () => {
+  it('PASS-conditional and similar PASS-/FAIL- qualifiers are not a decided verdict', () => {
+    expect(instanceVerdict('**Verdict: PASS-conditional** (needs redeploy)')).toBeNull();
+    expect(instanceVerdict('Verdict: PASS-provisional')).toBeNull();
+    expect(instanceVerdict('Verdict: PASS/FAIL')).toBeNull();
+    expect(instanceVerdict('Verdict: PASSED')).toBeNull();
+    expect(instanceVerdict('Verdict: FAIL-soft')).toBeNull();
+    expect(shipLogPassDate('**PASS-conditional 2026-10-27**')).toBeNull();
+  });
+  it('lowercase counts only inside a Verdict: line', () => {
+    expect(instanceVerdict('Verdict: pass')).toBe('PASS');
+    expect(instanceVerdict('**verdict:** Fail')).toBe('FAIL');
+    expect(instanceVerdict('Item 3: pass\nnotes: fail')).toBeNull(); // no Verdict: line
+    expect(shipLogPassDate('pass 2026-10-27')).toBeNull(); // ship cell: uppercase PASS required
+    expect(shipLogPassDate('Pass 2026-10-27')).toBeNull();
+  });
+  it('reads the FIRST Verdict: line only (a later PASS in notes does not rescue a CONDITIONAL)', () => {
+    expect(instanceVerdict('**Verdict: CONDITIONAL**\nnotes\nVerdict: PASS once redeployed')).toBeNull();
+  });
+  it('ship-log cell: a later "pending" in the PASS reason does not drop the row', () => {
+    expect(shipLogPassDate('**PASS 2026-10-27** (instance 9; earlier pending note resolved)')).toBe('2026-10-27');
+    expect(shipLogPassDate('**PASS 2026-10-27** (pending founder walk)')).toBeNull();
+    expect(shipLogPassDate('PASS (pending) 2026-10-27')).toBeNull();
   });
 });
