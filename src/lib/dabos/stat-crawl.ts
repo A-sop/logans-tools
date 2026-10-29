@@ -53,6 +53,7 @@ export async function runStatCrawl(opts: {
         AND metric_key = ${metric}
         AND EXTRACT(ISOYEAR FROM recorded_at AT TIME ZONE 'Europe/Berlin') = ${isoYear}
         AND EXTRACT(WEEK FROM recorded_at AT TIME ZONE 'Europe/Berlin') = ${isoWeek}
+        AND superseded_at IS NULL
       ORDER BY recorded_at DESC
       LIMIT 5
     `;
@@ -67,6 +68,7 @@ export async function runStatCrawl(opts: {
             AND department_id IS NULL
             AND metric_key = 'taxable_income_eur'
             AND workspace_id LIKE 'proviso-%'
+            AND superseded_at IS NULL
           ORDER BY recorded_at DESC
           LIMIT 1
         `;

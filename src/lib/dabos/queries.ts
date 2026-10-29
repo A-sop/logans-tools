@@ -147,6 +147,7 @@ export async function evaluateAndPersistCondition(input: {
           WHERE department_id = ${input.entity_id}
             AND metric_key = ${input.metric_key}
             AND recorded_at >= ${since}::timestamptz
+            AND superseded_at IS NULL
           ORDER BY recorded_at ASC
         `
       : await sql`
@@ -156,6 +157,7 @@ export async function evaluateAndPersistCondition(input: {
             AND department_id IS NULL
             AND metric_key = ${input.metric_key}
             AND recorded_at >= ${since}::timestamptz
+            AND superseded_at IS NULL
           ORDER BY recorded_at ASC
         `;
 
@@ -179,6 +181,7 @@ export async function getLatestCondition(
     SELECT condition, confidence, basis, created_at
     FROM conditions
     WHERE entity_type = ${entityType} AND entity_id = ${entityId}
+      AND superseded_at IS NULL
     ORDER BY created_at DESC
     LIMIT 1
   `;
@@ -193,6 +196,7 @@ export async function getLatestStatValue(divisionId: string, metricKey: string) 
     WHERE division_id = ${divisionId}
       AND department_id IS NULL
       AND metric_key = ${metricKey}
+      AND superseded_at IS NULL
     ORDER BY recorded_at DESC
     LIMIT 1
   `;

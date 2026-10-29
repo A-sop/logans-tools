@@ -189,6 +189,7 @@ export async function evaluateBoardConditionsWithSql(
     FROM stats
     WHERE recorded_at >= ${start.toISOString()}::timestamptz
       AND recorded_at <= ${end.toISOString()}::timestamptz
+      AND superseded_at IS NULL
     ORDER BY recorded_at ASC
   `;
 
