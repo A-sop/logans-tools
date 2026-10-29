@@ -1,3 +1,5 @@
+// RUNTIME REQUIREMENT: readers below filter `superseded_at IS NULL`; migration
+// 021_stats_conditions_superseded.sql must be applied before this code is deployed (README > Deploy).
 import { getISOWeek, getISOWeekYear } from 'date-fns';
 
 import {

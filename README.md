@@ -38,3 +38,9 @@ Open http://localhost:3000
 ## Deploy
 
 Vercel or similar. Connect repo, add custom domain logans.tools when ready.
+
+**DABOS deploy order (migration 021):** apply `migrations/021_stats_conditions_superseded.sql`
+(`npm run dabos:migrate`) to the target database BEFORE deploying any build that contains the
+supersede readers (`superseded_at IS NULL` filters in board, stat crawl, morning plan,
+establishment and department pages). Those readers have no missing-column fallback: deploying
+first makes them fail with `column "superseded_at" does not exist`.

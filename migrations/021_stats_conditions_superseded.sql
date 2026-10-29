@@ -4,6 +4,8 @@
 -- Readers used by the board, stat crawl, morning plan, establishment and department pages
 --   filter `superseded_at IS NULL`. Those readers have NO missing-column fallback:
 --   this migration MUST be applied before deploying the reader change.
+-- DEPLOY ORDER: run this migration BEFORE any deploy of code that filters superseded_at
+--   (see README > Deploy). Otherwise those readers error at runtime.
 -- Idempotent (ADD COLUMN IF NOT EXISTS). Additive, nullable, no default: SAFE.
 -- Run with: npm run dabos:migrate (Logan only, after Dept13 PASS).
 --

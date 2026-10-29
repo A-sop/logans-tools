@@ -99,9 +99,9 @@ BEGIN
   END IF;
   SELECT count(*) INTO n FROM stats
    WHERE id = '01741053-8340-4b45-a2da-6bc707647cdf' AND division_id = 'Div4'
-     AND department_id IS NULL AND metric_key = 'shipped_outputs';
+     AND department_id IS NULL AND metric_key = 'shipped_outputs' AND value = 2;
   IF n <> 1 THEN
-    RAISE EXCEPTION 'guard 1c: 01741053-... is not the Div4 division-level shipped_outputs row';
+    RAISE EXCEPTION 'guard 1c: 01741053-... is not the Div4 division-level shipped_outputs row with value 2';
   END IF;
 
   -- Guard 2: exactly the 28 listed, not-yet-superseded conditions rows in the window,

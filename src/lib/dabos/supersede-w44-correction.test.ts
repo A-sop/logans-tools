@@ -51,7 +51,12 @@ const CONDITION_IDS = [
   '451a216b-fee4-4601-b202-c6d64e342456',
 ];
 
-async function seed(db: PGlite, opts: { skipStat?: string; extraWindowCondition?: boolean } = {}) {
+const DIV4_ROW = '01741053-8340-4b45-a2da-6bc707647cdf';
+
+async function seed(
+  db: PGlite,
+  opts: { skipStat?: string; extraWindowCondition?: boolean; div4Value?: number } = {}
+) {
   for (const d of ['Div1', 'Div2', 'Div3', 'Div4', 'Div5', 'Div6', 'Div7']) {
     await db.query(`INSERT INTO divisions (id, operational_name) VALUES ($1, $1)`, [d]);
   }
@@ -60,8 +65,9 @@ async function seed(db: PGlite, opts: { skipStat?: string; extraWindowCondition?
     if (id === opts.skipStat) continue;
     await db.query(
       `INSERT INTO stats (id, workspace_id, division_id, department_id, metric_key, value, recorded_at)
-       VALUES ($1, $2, $3, $4, $5, 1, '2026-11-01T23:59:59.999Z')`,
-      [id, WS, div, dept, metric]
+       VALUES ($1, $2, $3, $4, $5, $6, '2026-11-01T23:59:59.999Z')`,
+      // Div4 row carries the live value 2 (read-only check on Neon 2026-10-29); others are made up.
+      [id, WS, div, dept, metric, id === DIV4_ROW ? (opts.div4Value ?? 2) : 1]
     );
   }
   // Unrelated row in another workspace: must never be touched.
@@ -175,6 +181,12 @@ describe('2026-10-29 W44 correction SQL', () => {
     await seed(db, { skipStat: 'b258a7bb-d67a-4ef7-9288-900e6d871e61' });
     await expect(runCorrection(db)).rejects.toThrow(/guard 1: expected 6 active stats rows/);
     expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 5 });
+  });
+
+  it('aborts (guard 1c) when the Div4 row value is not 2, e.g. 999', async () => {
+    await seed(db, { div4Value: 999 });
+    await expect(runCorrection(db)).rejects.toThrow(/guard 1c/);
+    expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 6 });
   });
 
   it('aborts when an unlisted stats row is active in the workspace', async () => {
