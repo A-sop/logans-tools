@@ -12,14 +12,13 @@
 --      (ln02 poster @2474654: ISO Mon-Sun window, all-time qa).
 --   2. Marks the 28 conditions rows created 2026-10-29T13:30:00Z..13:30:20Z
 --      (7 divisions + 21 departments; poster default, not an assignment) superseded.
---   3. Inserts Div4 shipped_outputs = 6 for div-live-2026-W44 (marked value), correcting
---      01741053-8340-4b45-a2da-6bc707647cdf.
---   No Div5 row, no corrected condition rows, no Dept12 row.
+--   No corrected rows of any kind: every W44 division stat is to-report. The Div4 W44 = 6
+--   mark was WITHDRAWN by Dept13 on 2026-10-29 (#180's PASS falls in W45), so Div4 is
+--   to-report too. No Div4/Div5/Dept12 row, no corrected condition rows.
+--   End state (guard 5): 0 active stats rows in div-live-2026-W44.
 --
 -- Undo (manual, if ever needed):
 --   BEGIN;
---   DELETE FROM stats WHERE workspace_id = 'div-live-2026-W44' AND recorded_by = 'dept11-correction'
---     AND basis->>'corrects' = '01741053-8340-4b45-a2da-6bc707647cdf';
 --   UPDATE stats SET superseded_at = NULL, superseded_reason = NULL
 --     WHERE superseded_reason = 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)';
 --   UPDATE conditions SET superseded_at = NULL, superseded_reason = NULL
@@ -34,7 +33,7 @@ DECLARE
     '2683a636-bb19-46f4-a800-1f73d5ba16ed', -- Div5  qa_pass_rate
     'e2f0c13c-bc2f-420a-80cc-47539d40aedf', -- Div2  leads_or_touchpoints_created
     '4e3ec69c-dfef-4ba4-9a89-1dffd4114623', -- Div2/Dept4 content_pieces_shipped
-    '01741053-8340-4b45-a2da-6bc707647cdf', -- Div4  shipped_outputs (corrected below)
+    '01741053-8340-4b45-a2da-6bc707647cdf', -- Div4  shipped_outputs (to-report; Dept13 withdrew the =6 mark)
     'd9e75ecc-6b37-44f2-8929-786198cf47f0', -- Div4/Dept12 shipped_outputs
     'b258a7bb-d67a-4ef7-9288-900e6d871e61'  -- Div7  plan_completion_rate
   ]::uuid[];
@@ -134,31 +133,13 @@ BEGIN
     RAISE EXCEPTION 'guard 4: conditions update touched % rows, expected 28', n;
   END IF;
 
-  -- 3. Insert the marked Div4 value (only if no active Div4 row remains in the workspace).
-  INSERT INTO stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
-  SELECT ws, 'Div4', NULL, 'shipped_outputs', 6::numeric, '2026-10-29T12:59:59.999Z'::timestamptz,
-         jsonb_build_object(
-           'source', 'marked value: Div4 W44 post 2026-10-29 14:41 Berlin',
-           'corrects', '01741053-8340-4b45-a2da-6bc707647cdf'
-         ),
-         'dept11-correction'
-   WHERE NOT EXISTS (
-     SELECT 1 FROM stats s
-      WHERE s.workspace_id = ws AND s.division_id = 'Div4' AND s.department_id IS NULL
-        AND s.metric_key = 'shipped_outputs' AND s.superseded_at IS NULL
-   );
-  GET DIAGNOSTICS n = ROW_COUNT;
-  IF n <> 1 THEN
-    RAISE EXCEPTION 'guard 5: Div4 correction insert touched % rows, expected 1', n;
-  END IF;
-
-  -- Guard 6: end state. Only the correction row is active in the workspace.
+  -- Guard 5: end state. Nothing active remains in the workspace (all to-report, no inserts).
   SELECT count(*) INTO n FROM stats WHERE workspace_id = ws AND superseded_at IS NULL;
-  IF n <> 1 THEN
-    RAISE EXCEPTION 'guard 6: expected 1 active stats row in % after correction, found %', ws, n;
+  IF n <> 0 THEN
+    RAISE EXCEPTION 'guard 5: expected 0 active stats rows in % after correction, found %', ws, n;
   END IF;
 
-  RAISE NOTICE 'W44 correction ok: 6 stats + 28 conditions superseded, Div4 shipped_outputs=6 inserted';
+  RAISE NOTICE 'W44 correction ok: 6 stats + 28 conditions superseded, 0 active W44 rows (all to-report)';
 END
 $$;
 

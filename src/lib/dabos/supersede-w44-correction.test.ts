@@ -100,11 +100,11 @@ async function runCorrection(db: PGlite): Promise<void> {
 }
 
 async function counts(db: PGlite) {
-  const r = await db.query<{ s: number; c: number; ins: number; active_ws: number }>(`
+  const r = await db.query<{ s: number; c: number; total: number; active_ws: number }>(`
     SELECT
       (SELECT count(*)::int FROM stats WHERE superseded_at IS NOT NULL) AS s,
       (SELECT count(*)::int FROM conditions WHERE superseded_at IS NOT NULL) AS c,
-      (SELECT count(*)::int FROM stats WHERE recorded_by = 'dept11-correction') AS ins,
+      (SELECT count(*)::int FROM stats) AS total,
       (SELECT count(*)::int FROM stats WHERE workspace_id = '${WS}' AND superseded_at IS NULL) AS active_ws
   `);
   return r.rows[0]!;
@@ -131,10 +131,11 @@ describe('2026-10-29 W44 correction SQL', () => {
     await db.close();
   });
 
-  it('supersedes 6 stats + 28 conditions and inserts Div4 shipped_outputs = 6', async () => {
+  it('supersedes 6 stats + 28 conditions and leaves 0 active W44 rows (all to-report, no inserts)', async () => {
     await seed(db);
     await runCorrection(db);
-    expect(await counts(db)).toEqual({ s: 6, c: 28, ins: 1, active_ws: 1 });
+    // total 7 = 6 W44 rows + 1 unrelated gfp row: nothing inserted, nothing deleted.
+    expect(await counts(db)).toEqual({ s: 6, c: 28, total: 7, active_ws: 0 });
 
     const reasons = await db.query<{ t: string; r: string }>(`
       SELECT DISTINCT 'stats' AS t, superseded_reason AS r FROM stats WHERE superseded_at IS NOT NULL
@@ -145,23 +146,6 @@ describe('2026-10-29 W44 correction SQL', () => {
       { t: 'conditions', r: 'Dept13 FAIL 2026-10-29: poster default, not an assignment' },
       { t: 'stats', r: 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)' },
     ]);
-
-    const row = await db.query<Record<string, unknown>>(`
-      SELECT division_id, department_id, metric_key, value::float8 AS value, recorded_at, basis, recorded_by
-      FROM stats WHERE workspace_id = '${WS}' AND superseded_at IS NULL`);
-    expect(row.rows).toHaveLength(1);
-    expect(row.rows[0]).toMatchObject({
-      division_id: 'Div4',
-      department_id: null,
-      metric_key: 'shipped_outputs',
-      value: 6,
-      recorded_by: 'dept11-correction',
-      basis: {
-        source: 'marked value: Div4 W44 post 2026-10-29 14:41 Berlin',
-        corrects: '01741053-8340-4b45-a2da-6bc707647cdf',
-      },
-    });
-    expect((row.rows[0]!.recorded_at as Date).toISOString()).toBe('2026-10-29T12:59:59.999Z');
 
     // Rows outside scope untouched.
     const untouched = await db.query<{ n: number }>(`
@@ -174,39 +158,39 @@ describe('2026-10-29 W44 correction SQL', () => {
     await seed(db);
     await runCorrection(db);
     await expect(runCorrection(db)).rejects.toThrow(/guard 1/);
-    expect(await counts(db)).toEqual({ s: 6, c: 28, ins: 1, active_ws: 1 });
+    expect(await counts(db)).toEqual({ s: 6, c: 28, total: 7, active_ws: 0 });
   });
 
   it('aborts and rolls back when an expected stats row is missing', async () => {
     await seed(db, { skipStat: 'b258a7bb-d67a-4ef7-9288-900e6d871e61' });
     await expect(runCorrection(db)).rejects.toThrow(/guard 1: expected 6 active stats rows/);
-    expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 5 });
+    expect(await counts(db)).toEqual({ s: 0, c: 0, total: 6, active_ws: 5 });
   });
 
   it('aborts (guard 1c) when the Div4 row value is not 2, e.g. 999', async () => {
     await seed(db, { div4Value: 999 });
     await expect(runCorrection(db)).rejects.toThrow(/guard 1c/);
-    expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 6 });
+    expect(await counts(db)).toEqual({ s: 0, c: 0, total: 7, active_ws: 6 });
   });
 
   it('aborts when an unlisted stats row is active in the workspace', async () => {
     await seed(db);
     await db.query(`INSERT INTO stats (workspace_id, division_id, metric_key, value) VALUES ('${WS}', 'Div1', 'artifacts_indexed', 3)`);
     await expect(runCorrection(db)).rejects.toThrow(/guard 1b/);
-    expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 7 });
+    expect(await counts(db)).toEqual({ s: 0, c: 0, total: 8, active_ws: 7 });
   });
 
   it('aborts when an unlisted conditions row sits in the window', async () => {
     await seed(db, { extraWindowCondition: true });
     await expect(runCorrection(db)).rejects.toThrow(/guard 2b/);
-    expect(await counts(db)).toEqual({ s: 0, c: 0, ins: 0, active_ws: 6 });
+    expect(await counts(db)).toEqual({ s: 0, c: 0, total: 7, active_ws: 6 });
   });
 
   it('aborts when an expected conditions row is already superseded', async () => {
     await seed(db);
     await db.query(`UPDATE conditions SET superseded_at = now(), superseded_reason = 'x' WHERE id = 'be025a0d-efca-4eb7-9933-054430a1dfe9'`);
     await expect(runCorrection(db)).rejects.toThrow(/guard 2: expected 28 active conditions rows in window, found 27/);
-    expect(await counts(db)).toEqual({ s: 0, c: 1, ins: 0, active_ws: 6 });
+    expect(await counts(db)).toEqual({ s: 0, c: 1, total: 7, active_ws: 6 });
   });
 
   it('aborts when migration 021 has not been applied', async () => {
