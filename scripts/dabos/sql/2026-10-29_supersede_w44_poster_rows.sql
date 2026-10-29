@@ -13,8 +13,8 @@
 --   2. Marks the 28 conditions rows created 2026-10-29T13:30:00Z..13:30:20Z
 --      (7 divisions + 21 departments; poster default, not an assignment) superseded.
 --   No corrected rows of any kind: every W44 division stat is to-report, Div4 included.
---   Dept13 set Div4 W44 to to-report on 29 Oct 2026: PASS dates for #171/#177/#178/#179(ph1)
---   are bounded within W44 but not sourced to the day.
+--   The Div4 W44 = 6 mark was withdrawn by Dept13 on 29 Oct: four of the six PASS dates can't be pinned to a day
+--   (#171/#177/#178/#179 ph1: bounded within W44, not sourced to the day).
 --   No Div4/Div5/Dept12 row, no corrected condition rows.
 --   End state (guard 5): 0 active stats rows in div-live-2026-W44.
 --
@@ -34,7 +34,7 @@ DECLARE
     '2683a636-bb19-46f4-a800-1f73d5ba16ed', -- Div5  qa_pass_rate
     'e2f0c13c-bc2f-420a-80cc-47539d40aedf', -- Div2  leads_or_touchpoints_created
     '4e3ec69c-dfef-4ba4-9a89-1dffd4114623', -- Div2/Dept4 content_pieces_shipped
-    '01741053-8340-4b45-a2da-6bc707647cdf', -- Div4  shipped_outputs (to-report: PASS dates #171/#177/#178/#179(ph1) not sourced to the day)
+    '01741053-8340-4b45-a2da-6bc707647cdf', -- Div4  shipped_outputs (to-report: =6 mark withdrawn by Dept13 on 29 Oct)
     'd9e75ecc-6b37-44f2-8929-786198cf47f0', -- Div4/Dept12 shipped_outputs
     'b258a7bb-d67a-4ef7-9288-900e6d871e61'  -- Div7  plan_completion_rate
   ]::uuid[];
