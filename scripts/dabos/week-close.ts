@@ -19,13 +19,25 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '../../src/lib/dabos/org-week';
+import { closedOrgWeek } from '../../src/lib/dabos/org-week-window';
 import { runStatCrawl } from '../../src/lib/dabos/stat-crawl';
+import { loadReportedDivisionConditions } from '../../src/lib/dabos/week-close-conditions';
 import { loadEnvLocal, requireDatabaseUrl } from './load-env';
 
 function cloudOnly(): boolean {
   if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '1') return true;
   if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '0') return false;
   return Boolean(process.env.VERCEL);
+}
+
+/**
+ * Condition refresh (board evaluation -> entity_condition_state + conditions rows) is NOT
+ * part of the week-close by default: the poster reports recorded conditions, it does not
+ * assign them (Dept13 FAIL W44, 2026-10-29). Opt in with DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1;
+ * the standalone refresh-conditions script/cron is unchanged.
+ */
+function refreshConditions(): boolean {
+  return process.env.DABOS_WEEK_CLOSE_REFRESH_CONDITIONS === '1';
 }
 
 function softClose(): boolean {
@@ -43,6 +55,7 @@ async function main() {
   const hoursLeft = hoursUntilStatsDeadline(now);
   const skipLocal = cloudOnly();
   const soft = softClose();
+  const closed = closedOrgWeek(now);
 
   console.log(soft ? `# DABOS week close (SOFT rehearsal)` : `# DABOS week close`);
   console.log(label);
@@ -98,16 +111,17 @@ async function main() {
     try {
       const div = await postDivisionWeeklyStats({
         dabosSql: sql,
-        year,
-        week,
+        window: closed,
         includeProvisoMonths: 12,
       });
       divisionPoster = {
         workspace_id: div.workspaceId,
+        window: div.window,
         inserted: div.inserted,
         notes: div.notes,
       };
       console.log(`\nDivision poster ${div.workspaceId}: inserted=${div.inserted.length}`);
+      console.log(`  ${closed.label}`);
       for (const note of div.notes) console.log(`  ${note}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -116,14 +130,30 @@ async function main() {
     }
   }
 
-  const result = await refreshAllConditionsFromBoardWithSql(sql);
+  // Report recorded conditions only (founder ruling / formula); else to-report. Never assign.
+  let reportedConditions: Awaited<ReturnType<typeof loadReportedDivisionConditions>> = [];
+  try {
+    reportedConditions = await loadReportedDivisionConditions(sql);
+  } catch (err) {
+    console.log(`\nConditions read failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+  console.log('\nConditions (reported from recorded rulings; the poster does not assign conditions):');
+  for (const row of reportedConditions) {
+    console.log(`  ${row.entity_id}: ${row.condition} [${row.source}]`);
+  }
 
-  console.log(`\nConditions (${result.week.label}):`);
-  console.log(
-    `  Persisted ${result.persisted.divisions} division + ${result.persisted.departments} department`
-  );
-  for (const row of result.samples) {
-    console.log(`  ${row.entity_id}: ${row.condition}`);
+  let conditionRefresh: Record<string, unknown> = {
+    skipped: true,
+    reason: 'week-close reports conditions only; set DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1 to refresh',
+  };
+  if (refreshConditions()) {
+    const result = await refreshAllConditionsFromBoardWithSql(sql);
+    conditionRefresh = { week: result.week.label, persisted: result.persisted };
+    console.log(
+      `  Condition refresh: persisted ${result.persisted.divisions} division + ${result.persisted.departments} department`
+    );
+  } else {
+    console.log('  Condition refresh skipped (not part of week-close by default)');
   }
 
   let crawl: Record<string, unknown> | null = null;
@@ -159,7 +189,14 @@ async function main() {
         org_week: label,
         past_stats_deadline: pastDeadline,
         cloud_only: skipLocal,
-        conditions: result.samples,
+        closed_week: {
+          start: closed.start.toISOString(),
+          end: closed.end.toISOString(),
+          label: closed.label,
+        },
+        conditions: reportedConditions,
+        conditions_assigned: false,
+        condition_refresh: conditionRefresh,
         gfp_poster: gfpPoster,
         division_poster: divisionPoster,
         stat_crawl: crawl,

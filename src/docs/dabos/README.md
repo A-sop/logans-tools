@@ -156,6 +156,8 @@ Until DNS is correct, use default Clerk hosting (no custom primary domain) or Pr
 
 **ln02 (optional):** `DABOS/scripts/dept02-coordination/dabos/ln02-run-cadence.sh morning-plan|week-close|refresh-conditions`
 
+**Week-close poster window (Dept11, 2026-10-29):** the division poster reports the org week that **closed** at the most recent Thu 14:00 Europe/Berlin (DABOS `.agents/roles/_standing-orders.md`: "Stat week: Thursday 14:00 Europe/Berlin close"), not the ISO Mon-Sun week and not the week that just started. `div-live-YYYY-Www` = ISO week of the closing Thursday; `recorded_at` = close minus 1 ms. Date-only register rows (ship-log Date, Dept13 `Validated on`) count Fri..closing Thu. `shipped_outputs` and `qa_pass_rate` count only rows inside that window; `qa_pass_rate` with 0 verdicts posts **no row** (to-report). Conditions: week-close **reports** each division's recorded condition (`founder_ruling` / `formula` in `entity_condition_state`) and otherwise `to-report`; it does not assign or refresh conditions unless `DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1` (code: `src/lib/dabos/org-week-window.ts`, `week-close-conditions.ts`).
+
 **Windows office PC:** `DABOS/scripts/dept02-coordination/dabos/schedule-dabos-cadence.ps1`
 
 ## Migrations

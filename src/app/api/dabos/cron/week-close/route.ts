@@ -14,7 +14,9 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '@/lib/dabos/org-week';
+import { closedOrgWeek } from '@/lib/dabos/org-week-window';
 import { runStatCrawl } from '@/lib/dabos/stat-crawl';
+import { loadReportedDivisionConditions } from '@/lib/dabos/week-close-conditions';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
@@ -72,12 +74,12 @@ export async function GET(request: Request) {
     try {
       const div = await postDivisionWeeklyStats({
         dabosSql: sql,
-        year,
-        week,
+        window: closedOrgWeek(now),
         includeProvisoMonths: 12,
       });
       divisionPoster = {
         workspace_id: div.workspaceId,
+        window: div.window,
         inserted: div.inserted,
         notes: div.notes,
       };
@@ -88,7 +90,17 @@ export async function GET(request: Request) {
     }
   }
 
-  const result = await refreshAllConditionsFromBoardWithSql(sql);
+  // Week-close reports recorded conditions; it does not assign them (Dept13 FAIL W44).
+  let reportedConditions: Awaited<ReturnType<typeof loadReportedDivisionConditions>> = [];
+  try {
+    reportedConditions = await loadReportedDivisionConditions(sql);
+  } catch {
+    /* reported as empty */
+  }
+  const refresh =
+    process.env.DABOS_WEEK_CLOSE_REFRESH_CONDITIONS === '1'
+      ? await refreshAllConditionsFromBoardWithSql(sql)
+      : null;
 
   let crawl: Record<string, unknown> | null = null;
   try {
@@ -113,7 +125,11 @@ export async function GET(request: Request) {
           past_stats_deadline: isPastStatsDeadline(now),
           cloud_only: skipLocal,
           cutoff: getStatCutoffSnapshot(now),
-          conditions: result.samples,
+          conditions: reportedConditions,
+          conditions_assigned: false,
+          condition_refresh: refresh
+            ? { week: refresh.week.label, persisted: refresh.persisted }
+            : { skipped: true },
           gfp_poster: gfpPoster,
           division_poster: divisionPoster,
           stat_crawl: crawl,
@@ -133,8 +149,9 @@ export async function GET(request: Request) {
     job: 'week_close',
     cloud_only: skipLocal,
     org_week: orgWeekLabel(weekStart),
-    week: result.week.label,
-    persisted: result.persisted,
+    conditions: reportedConditions,
+    conditions_assigned: false,
+    condition_refresh: refresh ? { week: refresh.week.label, persisted: refresh.persisted } : { skipped: true },
     gfp_poster: gfpPoster,
     division_poster: divisionPoster,
     stat_crawl: crawl,

@@ -15,12 +15,19 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
-import { endOfISOWeek, getISOWeek, getISOWeekYear, parseISO, setISOWeek, startOfYear } from 'date-fns';
+import { getISOWeek, getISOWeekYear, parseISO } from 'date-fns';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
+import {
+  closedOrgWeekForIsoWeek,
+  isDateInClosedOrgWeek,
+  recordedAtForClosedOrgWeek,
+  type ClosedOrgWeek,
+} from '@/lib/dabos/org-week-window';
 
 export type DivisionWeeklyResult = {
   workspaceId: string;
   recordedAt: string;
+  window: { start: string; end: string; label: string };
   inserted: string[];
   notes: string[];
 };
@@ -41,10 +48,6 @@ const ESTABLISHMENT = path.join(
 );
 const DEFAULT_PROVISO_DB = path.join('C:', 'Dev', 'proviso', 'data', 'proviso.db');
 const LW_VB = 2106750;
-
-function weekEndIso(year: number, week: number): string {
-  return endOfISOWeek(setISOWeek(startOfYear(new Date(year, 0, 4)), week)).toISOString();
-}
 
 function readText(filePath: string): string | null {
   if (!existsSync(filePath)) return null;
@@ -85,8 +88,15 @@ export function countPipelineTouchpoints(pipelineMd: string | null): number {
   return n;
 }
 
-/** Ship-log rows with Counts = yes (case-insensitive). */
-export function countShippedOutputs(shipLogMd: string | null): number {
+/**
+ * Ship-log rows with Counts = yes (case-insensitive).
+ * With window (weekly poster path), only rows whose Date column falls inside the closed
+ * org week (Fri..closing Thu, see org-week-window.ts) count; without it, all-time (ship-gate).
+ */
+export function countShippedOutputs(
+  shipLogMd: string | null,
+  window?: Pick<ClosedOrgWeek, 'startDate' | 'endDate'>
+): number {
   if (!shipLogMd) return 0;
   const tableStart = shipLogMd.indexOf('| # | Date |');
   if (tableStart < 0) return 0;
@@ -94,6 +104,7 @@ export function countShippedOutputs(shipLogMd: string | null): number {
   const rows = section.split('\n').filter((line) => /^\|\s*\d+\s*\|/.test(line));
   return rows.filter((row) => {
     const cells = row.split('|').map((c) => c.trim());
+    if (window && !isDateInClosedOrgWeek(cells[2] ?? '', window)) return false;
     const counts = (cells[cells.length - 2] ?? '').toLowerCase().replace(/\*/g, '');
     return counts === 'yes' || counts.startsWith('yes');
   }).length;
@@ -101,12 +112,15 @@ export function countShippedOutputs(shipLogMd: string | null): number {
 
 /**
  * qa_pass_rate = PASS verdicts / (PASS+FAIL) among filled Instance verdicts.
- * When year+week are provided (weekly post path), only count instances whose
+ * Weekly poster path: pass { window } (closed org week, Thu 14:00 -> Thu 14:00 Berlin) and
+ * only instances whose **Validated on:** date is inside it count (Fri..closing Thu).
+ * Legacy { year, week } scopes to the ISO Mon-Sun week. 0 verdicts in scope -> null (to-report).
+ * Without opts: all-time. When year+week are provided, only count instances whose
  * **Validated on:** date falls in that ISO week — not the all-time register.
  */
 export function computeQaPassRate(
   validationMd: string | null,
-  opts?: { year: number; week: number }
+  opts?: { year: number; week: number } | { window: Pick<ClosedOrgWeek, 'startDate' | 'endDate'> }
 ): number | null {
   if (!validationMd) return null;
 
@@ -123,10 +137,14 @@ export function computeQaPassRate(
         block.match(/\*\*Validated on:\*\*\s*(\d{4}-\d{2}-\d{2})/i) ??
         block.match(/Validated on:\s*(\d{4}-\d{2}-\d{2})/i);
       if (!dateMatch?.[1]) continue;
-      const validated = parseISO(dateMatch[1]);
-      if (Number.isNaN(validated.getTime())) continue;
-      if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
-        continue;
+      if ('window' in opts) {
+        if (!isDateInClosedOrgWeek(dateMatch[1], opts.window)) continue;
+      } else {
+        const validated = parseISO(dateMatch[1]);
+        if (Number.isNaN(validated.getTime())) continue;
+        if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
+          continue;
+        }
       }
     }
 
@@ -206,11 +224,15 @@ async function insertStat(
     metricKey: string;
     value: number;
     recordedAt: string;
+    basis?: Record<string, unknown> | null;
+    recordedBy?: string | null;
   }
 ): Promise<boolean> {
+  const basis = row.basis ? JSON.stringify(row.basis) : null;
+  const recordedBy = row.recordedBy ?? null;
   const res = await dabosSql`
-    insert into stats (workspace_id, division_id, department_id, metric_key, value, recorded_at)
-    select ${row.workspaceId}, ${row.divisionId}, ${row.departmentId}, ${row.metricKey}, ${row.value}, ${row.recordedAt}::timestamptz
+    insert into stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
+    select ${row.workspaceId}, ${row.divisionId}, ${row.departmentId}, ${row.metricKey}, ${row.value}, ${row.recordedAt}::timestamptz, ${basis}::jsonb, ${recordedBy}
     where not exists (
       select 1 from stats s
       where s.workspace_id = ${row.workspaceId}
@@ -225,13 +247,28 @@ async function insertStat(
 
 export async function postDivisionWeeklyStats(opts: {
   dabosSql: DabosSql;
-  year: number;
-  week: number;
+  /** Closed org week to post (preferred). Week-close passes closedOrgWeek(now). */
+  window?: ClosedOrgWeek;
+  /** Legacy: ISO week of the closing Thursday; resolved to that closed org week. */
+  year?: number;
+  week?: number;
   includeProvisoMonths?: number;
 }): Promise<DivisionWeeklyResult> {
-  const { dabosSql, year, week } = opts;
-  const workspaceId = `div-live-${year}-W${String(week).padStart(2, '0')}`;
-  const recordedAt = weekEndIso(year, week);
+  const { dabosSql } = opts;
+  let window = opts.window;
+  if (!window) {
+    if (opts.year == null || opts.week == null) {
+      throw new Error('postDivisionWeeklyStats: pass window, or year + week');
+    }
+    window = closedOrgWeekForIsoWeek(opts.year, opts.week);
+  }
+  const workspaceId = `div-live-${window.isoYear}-W${String(window.isoWeek).padStart(2, '0')}`;
+  const recordedAt = recordedAtForClosedOrgWeek(window);
+  const windowBasis = {
+    org_week_start: window.start.toISOString(),
+    org_week_end: window.end.toISOString(),
+    window_rule: 'Thu 14:00 -> Thu 14:00 Europe/Berlin; date-only entries Fri..closing Thu',
+  };
   const notes: string[] = [];
   const inserted: string[] = [];
 
@@ -245,8 +282,8 @@ export async function postDivisionWeeklyStats(opts: {
 
   const contentPieces = countContentPiecesShipped(contentStatus);
   const touchpoints = countPipelineTouchpoints(pipeline);
-  const shipped = countShippedOutputs(shipLog);
-  const qaRate = computeQaPassRate(validation, { year, week });
+  const shipped = countShippedOutputs(shipLog, window);
+  const qaRate = computeQaPassRate(validation, { window });
   const planRate = computePlanCompletionRate(checklist);
 
   const rows: Array<{
@@ -254,6 +291,7 @@ export async function postDivisionWeeklyStats(opts: {
     departmentId: string | null;
     metricKey: string;
     value: number;
+    source: string;
   }> = [];
 
   if (contentStatus != null) {
@@ -262,6 +300,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: 'Dept4',
       metricKey: 'content_pieces_shipped',
       value: contentPieces,
+      source: 'content-status-table.md (all-time snapshot, not windowed)',
     });
     notes.push(
       `Div2 content_pieces_shipped=${contentPieces} (content factory / Dept4 submit-for-validation)`
@@ -276,6 +315,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'leads_or_touchpoints_created',
       value: touchpoints,
+      source: 'pipeline-register.md (open prospects snapshot, not windowed)',
     });
     notes.push(`Div2 leads_or_touchpoints_created=${touchpoints}`);
   } else {
@@ -289,15 +329,17 @@ export async function postDivisionWeeklyStats(opts: {
         departmentId: null,
         metricKey: 'shipped_outputs',
         value: shipped,
+        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
       },
       {
         divisionId: 'Div4',
         departmentId: 'Dept12',
         metricKey: 'shipped_outputs',
         value: shipped,
+        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
       }
     );
-    notes.push(`Div4 shipped_outputs=${shipped} (ship-log Counts=yes)`);
+    notes.push(`Div4 shipped_outputs=${shipped} (ship-log Counts=yes, dated in closed week)`);
   } else {
     notes.push(`Div4 shipped_outputs skipped — missing ${SHIP_LOG}`);
   }
@@ -308,10 +350,11 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'qa_pass_rate',
       value: qaRate,
+      source: 'docs/registers/dept13-validation-checklists.md Validated on in closed week',
     });
     notes.push(`Div5 qa_pass_rate=${qaRate}`);
   } else {
-    notes.push('Div5 qa_pass_rate skipped — no Verdict lines in validation checklists');
+    notes.push('Div5 qa_pass_rate to-report (no row posted): 0 Dept13 verdicts validated in the closed week');
   }
 
   if (planRate != null) {
@@ -320,6 +363,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'plan_completion_rate',
       value: planRate,
+      source: 'establishment-checklist.md (snapshot)',
     });
     notes.push(`Div7 plan_completion_rate=${planRate}`);
   } else {
@@ -334,6 +378,8 @@ export async function postDivisionWeeklyStats(opts: {
       metricKey: row.metricKey,
       value: row.value,
       recordedAt,
+      basis: { ...windowBasis, source: row.source },
+      recordedBy: 'week-close-poster',
     });
     if (ok) inserted.push(`${row.divisionId}.${row.metricKey}`);
   }
@@ -375,5 +421,11 @@ export async function postDivisionWeeklyStats(opts: {
     notes.push(`Proviso income skipped: ${err instanceof Error ? err.message : String(err)}`);
   }
 
-  return { workspaceId, recordedAt, inserted, notes };
+  return {
+    workspaceId,
+    recordedAt,
+    window: { start: window.start.toISOString(), end: window.end.toISOString(), label: window.label },
+    inserted,
+    notes,
+  };
 }

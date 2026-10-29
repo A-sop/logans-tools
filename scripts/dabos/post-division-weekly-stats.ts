@@ -6,26 +6,30 @@
  */
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
 import { postDivisionWeeklyStats } from '../../src/lib/dabos/division-weekly-stats';
-import { resolveGfpIsoWeek } from '../../src/lib/dabos/gfp-weekly-stats';
+import {
+  closedOrgWeek,
+  closedOrgWeekForIsoWeek,
+  type ClosedOrgWeek,
+} from '../../src/lib/dabos/org-week-window';
 import { requireDatabaseUrl } from './load-env';
 
-function parseWeekArg(): { year: number; week: number } {
+/** --week=YYYY-Www = the org week closing on that ISO week's Thursday 14:00 Berlin. */
+function parseWeekArg(): ClosedOrgWeek {
   const arg = process.argv.find((a) => a.startsWith('--week='));
   if (arg) {
     const m = arg.slice(7).match(/^(\d{4})-W(\d{1,2})$/);
-    if (m) return { year: Number(m[1]), week: Number(m[2]) };
+    if (m) return closedOrgWeekForIsoWeek(Number(m[1]), Number(m[2]));
   }
-  return resolveGfpIsoWeek();
+  return closedOrgWeek();
 }
 
 async function main() {
-  const { year, week } = parseWeekArg();
+  const window = parseWeekArg();
   const dabosSql = createDabosSql(requireDatabaseUrl());
 
   const result = await postDivisionWeeklyStats({
     dabosSql,
-    year,
-    week,
+    window,
     includeProvisoMonths: 12,
   });
 
