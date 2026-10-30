@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { buildDivisionChartBundle, weekOverlapsCalendarMonth } from '@/lib/dabos/board-charts';
 
 describe('weekOverlapsCalendarMonth', () => {
-  it('includes ISO weeks that span a calendar month boundary', () => {
+  it('includes stat weeks (Thu 14:00 -> Thu 14:00 Berlin) that span a calendar month boundary', () => {
     expect(weekOverlapsCalendarMonth(2026, 23, 5, 2026)).toBe(true);
     expect(weekOverlapsCalendarMonth(2026, 22, 5, 2026)).toBe(false);
     expect(weekOverlapsCalendarMonth(2026, 22, 4, 2026)).toBe(true);
@@ -18,7 +18,9 @@ describe('buildDivisionChartBundle', () => {
 
   it('includes May weeks when the reference week is in May', () => {
     const bundle = buildDivisionChartBundle(weeklyEntries, 2026, 22);
-    expect(bundle.month.map((point) => point.week)).toEqual([18, 19, 20, 21, 22]);
+    // Stat weeks (Dept11 2026-10-30): W18 = Thu 23 Apr 14:00 -> Thu 30 Apr 14:00 Berlin, no longer
+    // touches May (ISO W18 was Mon 27 Apr - Sun 3 May). May = W19..W22.
+    expect(bundle.month.map((point) => point.week)).toEqual([19, 20, 21, 22]);
   });
 
   it('falls back to trailing weeks when the calendar month has no stats yet', () => {

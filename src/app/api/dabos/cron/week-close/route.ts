@@ -4,10 +4,7 @@ import { refreshAllConditionsFromBoardWithSql } from '@/lib/dabos/board-conditio
 import { authorizeDabosCron } from '@/lib/dabos/cron-auth';
 import { createDabosSql } from '@/lib/dabos/dabos-connection';
 import { postDivisionWeeklyStats } from '@/lib/dabos/division-weekly-stats';
-import {
-  postGfpWeeklyStats,
-  resolveGfpIsoWeek,
-} from '@/lib/dabos/gfp-weekly-stats';
+import { postGfpWeeklyStats } from '@/lib/dabos/gfp-weekly-stats';
 import {
   getStatCutoffSnapshot,
   isPastStatsDeadline,
@@ -53,7 +50,10 @@ export async function GET(request: Request) {
   const skipLocal = cloudOnly();
 
   const gfpUrl = process.env.GFP_DATABASE_URL?.trim() || url;
-  const { year, week } = resolveGfpIsoWeek(now);
+  // Closed stat week (Thu 14:00 Berlin, org-week.ts); vercel.json runs this at 13:30 UTC Thu,
+  // i.e. 14:30 CET / 15:30 CEST, always after the boundary.
+  const closed = closedOrgWeek(now);
+  const { isoYear: year, isoWeek: week } = closed;
   let gfpPoster: Record<string, unknown> | null = null;
   try {
     const gfp = await postGfpWeeklyStats({
@@ -87,7 +87,7 @@ export async function GET(request: Request) {
     try {
       const div = await postDivisionWeeklyStats({
         dabosSql: sql,
-        window: closedOrgWeek(now),
+        window: closed,
         includeProvisoMonths: 12,
       });
       divisionPoster = {

@@ -4,10 +4,10 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { endOfISOWeek, setISOWeek, startOfYear } from 'date-fns';
 import postgres from 'postgres';
 
 import { BOARD_STAT_YEAR, currentCalendarWeek } from '../../src/lib/dabos/calendar-week';
+import { recordedAtForClosedOrgWeek, statWeekWindow } from '../../src/lib/dabos/org-week';
 
 function loadEnvLocal() {
   const envPath = path.join(process.cwd(), '.env.local');
@@ -34,9 +34,9 @@ const DIVISION_TRENDS: Record<
   Div7: { metric: 'plan_completion_rate', base: 0.62, weeklyDelta: 0.012, noise: 0.015 },
 };
 
+/** Stat week close minus 1 ms (Thu 13:59:59.999 Berlin), same as the live posters (org-week.ts). */
 function weekEndIso(year: number, week: number): Date {
-  const anchor = setISOWeek(startOfYear(new Date(year, 0, 4)), week);
-  return endOfISOWeek(anchor);
+  return new Date(recordedAtForClosedOrgWeek(statWeekWindow(year, week)));
 }
 
 function divisionValue(
@@ -60,8 +60,9 @@ async function main() {
   const sql = postgres(url, { max: 1 });
   const throughWeek = currentCalendarWeek(YEAR);
 
-  const rangeStart = new Date(YEAR, 0, 1).toISOString();
-  const rangeEnd = weekEndIso(YEAR, throughWeek).toISOString();
+  // Wide delete window: also clears seed rows written by the old ISO-week (Sunday-end) seeding.
+  const rangeStart = statWeekWindow(YEAR, 1).start.toISOString();
+  const rangeEnd = new Date(statWeekWindow(YEAR, throughWeek).end.getTime() + 7 * 86_400_000).toISOString();
 
   await sql`
     DELETE FROM stats

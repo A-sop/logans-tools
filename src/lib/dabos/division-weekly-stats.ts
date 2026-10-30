@@ -15,7 +15,6 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
-import { getISOWeek, getISOWeekYear, parseISO } from 'date-fns';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import {
   closedOrgWeekForIsoWeek,
@@ -176,8 +175,8 @@ export function instanceVerdict(block: string): 'PASS' | 'FAIL' | null {
  * the Dept13 checklist register) - not per PR and not per SHA: two instances for the same PR
  * (e.g. FAIL then PASS on a re-review) are two verdicts.
  * Weekly poster path: pass { window } and only instances whose 'Validated on:' value is inside
- * the closed org week count (isEntryInClosedOrgWeek). Legacy { year, week } scopes to the ISO
- * Mon-Sun week. Without opts: all-time. 0 verdicts in scope -> null (to-report).
+ * the closed org week count (isEntryInClosedOrgWeek). Legacy { year, week } = the stat week
+ * labelled year-Www (closing Thursday 14:00 Berlin, org-week.ts), same rule. Without opts: all-time. 0 verdicts in scope -> null (to-report).
  */
 export function computeQaPassRate(
   validationMd: string | null,
@@ -196,15 +195,8 @@ export function computeQaPassRate(
     if (opts) {
       const dateMatch = VALIDATED_ON_RE.exec(block);
       if (!dateMatch?.[1]) continue;
-      if ('window' in opts) {
-        if (!isEntryInClosedOrgWeek(dateMatch[1], opts.window)) continue;
-      } else {
-        const validated = parseISO(dateMatch[1].slice(0, 10));
-        if (Number.isNaN(validated.getTime())) continue;
-        if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
-          continue;
-        }
-      }
+      const scope = 'window' in opts ? opts.window : closedOrgWeekForIsoWeek(opts.year, opts.week);
+      if (!isEntryInClosedOrgWeek(dateMatch[1], scope)) continue;
     }
 
     verdicts.push(verdict);

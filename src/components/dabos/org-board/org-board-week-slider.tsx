@@ -7,6 +7,7 @@ import {
   boardDateInputValue,
   monthWeekTicks,
   weekContextFromDate,
+  weekContextFromDateInput,
   weeksInYear,
 } from '@/lib/dabos/calendar-week';
 import type { ConditionLabel } from '@/lib/dabos/types';
@@ -66,9 +67,8 @@ export function OrgBoardWeekSlider({
   const onDateChange = useCallback(
     (value: string) => {
       if (!value) return;
-      const parsed = new Date(`${value}T12:00:00`);
-      if (Number.isNaN(parsed.getTime())) return;
-      const ctx = weekContextFromDate(parsed);
+      const ctx = weekContextFromDateInput(value);
+      if (!ctx) return;
       navigate(ctx.year, ctx.calendarWeek);
     },
     [navigate]
@@ -91,7 +91,7 @@ export function OrgBoardWeekSlider({
             type="date"
             className="dabos-org-board__date-input"
             value={dateValue}
-            aria-label={`Board date, calendar week ${calendarWeek}`}
+            aria-label={`Board date, stat week ${calendarWeek} (closes Thursday 14:00 Berlin)`}
             onChange={(e) => onDateChange(e.target.value)}
           />
         </label>
@@ -112,7 +112,7 @@ export function OrgBoardWeekSlider({
         step={1}
         value={calendarWeek}
         list={listId}
-        aria-label={`Calendar week ${calendarWeek} of ${year}`}
+        aria-label={`Stat week ${calendarWeek} of ${year}`}
         onChange={(e) => onWeekChange(Number(e.target.value))}
       />
       <datalist id={listId}>
