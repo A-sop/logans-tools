@@ -9,10 +9,7 @@
 import { refreshAllConditionsFromBoardWithSql } from '../../src/lib/dabos/board-conditions-query';
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
 import { postDivisionWeeklyStats } from '../../src/lib/dabos/division-weekly-stats';
-import {
-  postGfpWeeklyStats,
-  resolveGfpIsoWeek,
-} from '../../src/lib/dabos/gfp-weekly-stats';
+import { postGfpWeeklyStats } from '../../src/lib/dabos/gfp-weekly-stats';
 import {
   hoursUntilStatsDeadline,
   isPastStatsDeadline,
@@ -76,7 +73,8 @@ async function main() {
   const sql = createDabosSql(url);
 
   const gfpUrl = process.env.GFP_DATABASE_URL?.trim() || url;
-  const { year, week } = resolveGfpIsoWeek(now);
+  // GFP posts the same closed stat week as the division poster (org-week.ts single source).
+  const { isoYear: year, isoWeek: week } = closed;
   let gfpPoster: Record<string, unknown> | null = null;
   try {
     const gfp = await postGfpWeeklyStats({

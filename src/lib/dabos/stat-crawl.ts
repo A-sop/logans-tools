@@ -2,10 +2,8 @@
  * Dept3 Perception crawl — after Good Thursday, flag missing division primaries.
  * Opens Neon tasks (Div1 / Dept3) + role_runs receipt. Does not invent values.
  */
-import { getISOWeek, getISOWeekYear } from 'date-fns';
-
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
-import { orgWeekLabel, weekBoundaryStart } from '@/lib/dabos/org-week';
+import { closedOrgWeek, orgWeekLabel, weekBoundaryStart } from '@/lib/dabos/org-week';
 
 export type MissingPrimary = {
   division_id: string;
@@ -29,8 +27,11 @@ export async function runStatCrawl(opts: {
   const now = opts.now ?? new Date();
   const sql = opts.dabosSql;
   const weekStart = weekBoundaryStart(now);
-  const isoYear = getISOWeekYear(now);
-  const isoWeek = getISOWeek(now);
+  // Crawl the stat week that CLOSED at the most recent Thu 14:00 Berlin (org-week.ts), matching
+  // the posters; iso_year/iso_week keep their names and are that week's YYYY-Www label.
+  const closed = closedOrgWeek(now);
+  const isoYear = closed.isoYear;
+  const isoWeek = closed.isoWeek;
   const orgWeek = orgWeekLabel(weekStart);
 
   const divisions = (await sql`
@@ -51,8 +52,8 @@ export async function runStatCrawl(opts: {
       WHERE division_id = ${div.id}
         AND department_id IS NULL
         AND metric_key = ${metric}
-        AND EXTRACT(ISOYEAR FROM recorded_at AT TIME ZONE 'Europe/Berlin') = ${isoYear}
-        AND EXTRACT(WEEK FROM recorded_at AT TIME ZONE 'Europe/Berlin') = ${isoWeek}
+        AND recorded_at >= ${closed.start.toISOString()}::timestamptz
+        AND recorded_at < ${closed.end.toISOString()}::timestamptz
         AND superseded_at IS NULL
       ORDER BY recorded_at DESC
       LIMIT 5

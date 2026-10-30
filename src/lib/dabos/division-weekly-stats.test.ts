@@ -36,11 +36,14 @@ describe('computeQaPassRate', () => {
     expect(computeQaPassRate(SAMPLE)).toBe(50);
   });
 
-  it('scopes to ISO week Validated-on dates (not all-time)', () => {
-    // 2026-07-05 is ISO week 27; Instance 1 FAIL + Instance 2 PASS → 50%
-    expect(computeQaPassRate(SAMPLE, { year: 2026, week: 27 })).toBe(50);
-    // 2026-07-11 is ISO week 28; Instance 3 PASS + Instance 4 FAIL → 50%
+  it('scopes to stat-week Validated-on dates (not all-time)', () => {
+    // Stat weeks close Thu 14:00 Berlin (Dept11 2026-10-30); date-only rule = opening Thu..Wed.
+    // 2026-07-05 (Sun) is stat week 28 (Thu 2 Jul..Wed 8 Jul); Instance 1 FAIL + Instance 2 PASS -> 50%
     expect(computeQaPassRate(SAMPLE, { year: 2026, week: 28 })).toBe(50);
+    // 2026-07-11 (Sat) is stat week 29 (Thu 9 Jul..Wed 15 Jul); Instance 3 PASS + Instance 4 FAIL -> 50%
+    expect(computeQaPassRate(SAMPLE, { year: 2026, week: 29 })).toBe(50);
+    // ISO W27 (Mon 29 Jun - Sun 5 Jul) no longer applies: stat week 27 closes Thu 2 Jul
+    expect(computeQaPassRate(SAMPLE, { year: 2026, week: 27 })).toBeNull();
   });
 
   it('returns null when the week has no validated verdicts', () => {

@@ -2,7 +2,7 @@ import type { Sql } from '@/lib/dabos/db';
 
 import {
   postGfpWeeklyStats,
-  resolveGfpIsoWeek,
+  resolveGfpStatWeek,
 } from '@/lib/dabos/gfp-weekly-stats';
 import { runResearchAgent } from '@/lib/dabos/research';
 
@@ -131,7 +131,7 @@ export async function executeGfpWeeklyStatsTask(
     return { ok: false, task_id: taskId, error: 'GFP_DATABASE_URL or DATABASE_URL required' };
   }
 
-  const { year, week } = resolveGfpIsoWeek();
+  const { year, week } = resolveGfpStatWeek();
   try {
     const posted = await postGfpWeeklyStats({
       dabosSql: sql,

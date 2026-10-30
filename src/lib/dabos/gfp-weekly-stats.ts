@@ -4,7 +4,7 @@
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import { emitStat } from '@/lib/dabos/stats-emit';
-import { endOfISOWeek, getISOWeek, getISOWeekYear, setISOWeek, startOfYear } from 'date-fns';
+import { closedOrgWeek, recordedAtForClosedOrgWeek, statWeekWindow } from '@/lib/dabos/org-week';
 import postgres from 'postgres';
 
 export const GUIDE_CAMPAIGN_SLUGS = ['guide-get-set-up-en', 'guide-finanzleben-de'] as const;
@@ -18,13 +18,18 @@ export type GfpWeeklyStatsResult = {
   inserted: string[];
 };
 
-function weekEndIso(year: number, week: number): Date {
-  return endOfISOWeek(setISOWeek(startOfYear(new Date(year, 0, 4)), week));
+/**
+ * Stat week to post at `now`: the week that CLOSED at the most recent Thu 14:00 Berlin
+ * (org-week.ts), labelled with the ISO week of its closing Thursday. Before Dept11 2026-10-30 this
+ * was the ISO week of `now` (Mon-Sun, still running when the Thursday cron fired).
+ */
+export function resolveGfpStatWeek(now = new Date()): { year: number; week: number } {
+  const w = closedOrgWeek(now);
+  return { year: w.isoYear, week: w.isoWeek };
 }
 
-export function resolveGfpIsoWeek(now = new Date()): { year: number; week: number } {
-  return { year: getISOWeekYear(now), week: getISOWeek(now) };
-}
+/** @deprecated Old name kept for callers; same as resolveGfpStatWeek (closed stat week, not ISO week of now). */
+export const resolveGfpIsoWeek = resolveGfpStatWeek;
 
 export async function postGfpWeeklyStats(opts: {
   dabosSql: DabosSql;
@@ -34,9 +39,11 @@ export async function postGfpWeeklyStats(opts: {
 }): Promise<GfpWeeklyStatsResult> {
   const { dabosSql, gfpDatabaseUrl, year, week } = opts;
   const workspaceId = `gfp-live-${year}-W${String(week).padStart(2, '0')}`;
-  const recordedAt = weekEndIso(year, week).toISOString();
-  const weekStart = new Date(weekEndIso(year, week));
-  weekStart.setUTCDate(weekStart.getUTCDate() - 6);
+  // Stat week window [Thu 14:00, next Thu 14:00) Berlin; rows recorded 1 ms before the close.
+  const window = statWeekWindow(year, week);
+  const recordedAt = recordedAtForClosedOrgWeek(window);
+  const weekStart = window.start;
+  const weekEndExclusive = window.end.toISOString();
 
   const gfpSql = postgres(gfpDatabaseUrl, { max: 1 });
   try {
@@ -49,7 +56,7 @@ export async function postGfpWeeklyStats(opts: {
         from campaign_leads
         where campaign_slug = any(${guideSlugs})
           and created_at >= ${weekStart.toISOString()}::timestamptz
-          and created_at <= ${recordedAt}::timestamptz
+          and created_at < ${weekEndExclusive}::timestamptz
       `;
     } catch (e) {
       const err = e as { code?: string };
@@ -66,7 +73,7 @@ export async function postGfpWeeklyStats(opts: {
       from campaign_leads
       where status = 'booked'
         and updated_at >= ${weekStart.toISOString()}::timestamptz
-        and updated_at <= ${recordedAt}::timestamptz
+        and updated_at < ${weekEndExclusive}::timestamptz
     `;
 
     const leadMagnetsShipped = magnetRows[0]?.n ?? 0;
@@ -110,6 +117,7 @@ export async function postGfpWeeklyStats(opts: {
               : 'guide campaign_leads week rollup',
           year,
           week,
+          window: { start: window.start.toISOString(), end: window.end.toISOString() },
         },
         recordedBy: 'gfp-poster',
         mode: 'insert_if_absent',

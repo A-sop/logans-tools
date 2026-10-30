@@ -1,7 +1,5 @@
 // RUNTIME REQUIREMENT: readers below filter `superseded_at IS NULL`; migration
 // 021_stats_conditions_superseded.sql must be applied before this code is deployed (README > Deploy).
-import { getISOWeek, getISOWeekYear } from 'date-fns';
-
 import {
   buildDivisionChartBundle,
   type DivisionChartBundle,
@@ -9,9 +7,11 @@ import {
 import {
   BOARD_STAT_YEAR,
   currentCalendarWeek,
+  weekLabel,
   ytdRangeThroughWeek,
 } from '@/lib/dabos/calendar-week';
 import { evaluateConditionFromPoints } from '@/lib/dabos/conditions';
+import { statWeekFromWorkspaceId, statWeekOf } from '@/lib/dabos/org-week';
 import {
   getEntityConditionState,
   mergeEvaluationWithWorking,
@@ -61,10 +61,25 @@ type StatPoint = {
   iso_week: number;
 };
 
-function bucketIsoWeek(isoYear: number, recordedAt: Date): number | null {
-  if (getISOWeekYear(recordedAt) !== isoYear) return null;
-  return getISOWeek(recordedAt);
+/**
+ * Stat week (org-week.ts: Thu 14:00 Berlin close) a stats row belongs to. A row whose
+ * workspace_id carries a week label (div-live-/gfp-live-/...-YYYY-Www) keeps that label, so rows
+ * written before Dept11 2026-10-30 (e.g. gfp-live rows recorded at the ISO Sunday end) stay in
+ * the week they were posted for. Otherwise the week containing recorded_at.
+ */
+export function bucketStatWeek(
+  year: number,
+  recordedAt: Date,
+  workspaceId?: string | null
+): number | null {
+  const labelled = statWeekFromWorkspaceId(workspaceId);
+  if (labelled) return labelled.year === year ? labelled.week : null;
+  const w = statWeekOf(recordedAt);
+  return w.isoYear === year ? w.isoWeek : null;
 }
+
+/** Labelled rows may be recorded up to a week after their label's close (old ISO-Sunday rows). */
+const LABELLED_ROW_GRACE_MS = 7 * 24 * 60 * 60 * 1000;
 
 function weeklyValuesFromPoints(
   points: StatPoint[],
@@ -181,16 +196,16 @@ export async function evaluateBoardConditionsWithSql(
   const weekCtx: BoardWeekContext = {
     year,
     calendarWeek: week,
-    label: `Calendar week ${week}, ${year}`,
+    label: weekLabel(year, week),
   };
 
   const divisions = await sql`SELECT id, primary_metric_key FROM divisions ORDER BY id`;
   const departments = await sql`SELECT id, division_id FROM departments ORDER BY id`;
   const statRows = await sql`
-    SELECT division_id, department_id, metric_key, value::float8 AS value, recorded_at
+    SELECT workspace_id, division_id, department_id, metric_key, value::float8 AS value, recorded_at
     FROM stats
     WHERE recorded_at >= ${start.toISOString()}::timestamptz
-      AND recorded_at <= ${end.toISOString()}::timestamptz
+      AND recorded_at <= ${new Date(end.getTime() + LABELLED_ROW_GRACE_MS).toISOString()}::timestamptz
       AND superseded_at IS NULL
     ORDER BY recorded_at ASC
   `;
@@ -203,7 +218,8 @@ export async function evaluateBoardConditionsWithSql(
       metric_key: s.metric_key as string,
       value: Number(s.value),
       recorded_at: recordedAt,
-      iso_week: bucketIsoWeek(year, recordedAt) ?? 0,
+      // bucketed stat week; rows after the selected week are dropped by weeklyValuesFromPoints
+      iso_week: bucketStatWeek(year, recordedAt, (s.workspace_id as string | null) ?? null) ?? 0,
     };
   });
 
