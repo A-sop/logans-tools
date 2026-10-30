@@ -1,9 +1,27 @@
 /**
  * Dept3 Perception crawl — after Good Thursday, flag missing division primaries.
  * Opens Neon tasks (Div1 / Dept3) + role_runs receipt. Does not invent values.
+ *
+ * Run time: stats are posted by Thu 16:00 Europe/Berlin (DABOS .agents/roles/_standing-orders.md, Rhythm:
+ * "Thursday 14:00 Europe/Berlin close; stats posted by 16:00"). The Vercel cron runs at 15:15 UTC
+ * (16:15 CET / 17:15 CEST). Earlier calls (e.g. inline in week-close at 14:30) still report `missing`
+ * but open NO tasks: a division is not "missing" before the post deadline.
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
-import { closedOrgWeek, orgWeekLabel, weekBoundaryStart } from '@/lib/dabos/org-week';
+import {
+  berlinLocalToUtc,
+  closedOrgWeek,
+  type OrgStatWeek,
+} from '@/lib/dabos/org-week';
+
+/** Berlin hour on the closing Thursday by which stats must be posted (standing orders, Rhythm). */
+export const STAT_POST_DEADLINE_HOUR = 16;
+
+/** Earliest instant the crawl may open Missing tasks for `closed`: its closing Thursday at 16:00 Berlin. */
+export function statCrawlEarliest(closed: OrgStatWeek): Date {
+  const [y, m, d] = closed.endDate.split('-').map(Number) as [number, number, number];
+  return berlinLocalToUtc(y, m, d, STAT_POST_DEADLINE_HOUR, 0);
+}
 
 export type MissingPrimary = {
   division_id: string;
@@ -18,6 +36,8 @@ export type StatCrawlResult = {
   missing: MissingPrimary[];
   tasks_created: string[];
   reported_pct: number;
+  /** Set when the run is before the Thu 16:00 Berlin post deadline: missing is reported, no tasks opened. */
+  tasks_deferred_until?: string;
 };
 
 export async function runStatCrawl(opts: {
@@ -26,13 +46,15 @@ export async function runStatCrawl(opts: {
 }): Promise<StatCrawlResult> {
   const now = opts.now ?? new Date();
   const sql = opts.dabosSql;
-  const weekStart = weekBoundaryStart(now);
   // Crawl the stat week that CLOSED at the most recent Thu 14:00 Berlin (org-week.ts), matching
   // the posters; iso_year/iso_week keep their names and are that week's YYYY-Www label.
   const closed = closedOrgWeek(now);
   const isoYear = closed.isoYear;
   const isoWeek = closed.isoWeek;
-  const orgWeek = orgWeekLabel(weekStart);
+  // Label the week actually checked (the closed week), not the running week that started at the close.
+  const orgWeek = closed.label;
+  const earliest = statCrawlEarliest(closed);
+  const deferTasks = now.getTime() < earliest.getTime();
 
   const divisions = (await sql`
     SELECT id, primary_metric_key
@@ -99,7 +121,7 @@ export async function runStatCrawl(opts: {
     }
   }
 
-  for (const m of missing) {
+  for (const m of deferTasks ? [] : missing) {
     const title =
       m.reason === 'missing_emit'
         ? `[Dept3 crawl] Missing ${m.division_id} primary ${m.metric_key} for ${orgWeek}`
@@ -151,6 +173,7 @@ export async function runStatCrawl(opts: {
           iso_week: isoWeek,
           missing,
           tasks_created: tasksCreated,
+          ...(deferTasks ? { tasks_deferred_until: earliest.toISOString() } : {}),
           reported_pct: reportedPct,
           division_count: divisions.length,
         })}::jsonb
@@ -167,5 +190,6 @@ export async function runStatCrawl(opts: {
     missing,
     tasks_created: tasksCreated,
     reported_pct: reportedPct,
+    ...(deferTasks ? { tasks_deferred_until: earliest.toISOString() } : {}),
   };
 }

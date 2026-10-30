@@ -4,9 +4,9 @@
  * Boundary: Thursday 14:00 Europe/Berlin (WEEK_BOUNDARY_WEEKDAY / WEEK_BOUNDARY_HOUR), which is
  * also the stats cutoff. Green Volumes: stat period 14:00 Thu -> 14:00 Thu.
  * Founder ruling 2026-10-30 (relayed by LDW Communicator / Div7): "the stat week closes on
- * Thursday and Friday starts the new week". The ruling does not state an hour; this module
- * keeps the existing Thu 14:00 boundary (OPEN QUESTION for Dept13 / Logan: 14:00 vs end of
- * Thursday). Change WEEK_BOUNDARY_HOUR here and every stat-week consumer follows.
+ * Thursday and Friday starts the new week". The hour is on record in DABOS
+ * .agents/roles/_standing-orders.md (Rhythm): "Thursday 14:00 Europe/Berlin close; stats posted
+ * by 16:00". Change WEEK_BOUNDARY_HOUR here and every stat-week consumer follows.
  *
  * Week = [Thu 14:00, next Thu 14:00) Berlin. Label `YYYY-Www` = ISO week-year / week of the
  * CLOSING Thursday (2026-W44 = Thu 2026-10-22 14:00 -> Thu 2026-10-29 14:00 Berlin). Every ISO

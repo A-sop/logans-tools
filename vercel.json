@@ -15,7 +15,7 @@
     },
     {
       "path": "/api/dabos/cron/stat-crawl",
-      "schedule": "0 14 * * 4"
+      "schedule": "15 15 * * 4"
     }
   ]
 }
