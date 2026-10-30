@@ -14,11 +14,24 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '@/lib/dabos/org-week';
+import { closedOrgWeek } from '@/lib/dabos/org-week-window';
 import { runStatCrawl } from '@/lib/dabos/stat-crawl';
+import { loadReportedDivisionConditions } from '@/lib/dabos/week-close-conditions';
+import { conditionRefreshEnabled, runOptInConditionRefresh } from '@/lib/dabos/week-close-refresh';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
+/**
+ * Cloud-only is INTENTIONAL on Vercel (default when VERCEL is set): the Div2/3/4/5/7 sources
+ * (ship-log, Dept13 checklist register, establishment checklist, Proviso SQLite) are local
+ * files on the office machine / ln02 and do not exist in the Vercel sandbox. Posting from
+ * here would at best skip every metric and, because inserts are idempotent (first row per
+ * workspace+division+metric wins), could pre-empt the ln02 poster with wrong values. The ln02
+ * timer (Thu 14:30 Berlin, scripts/dabos/week-close.ts) owns division stats; this route
+ * posts the GFP stats, runs the stat crawl and reports conditions. Set
+ * DABOS_WEEK_CLOSE_CLOUD_ONLY=0 only on a host that has the local registers.
+ */
 function cloudOnly(): boolean {
   if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '1') return true;
   if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '0') return false;
@@ -66,18 +79,20 @@ export async function GET(request: Request) {
   if (skipLocal) {
     divisionPoster = {
       skipped: true,
-      reason: 'cloud-only — office Good Thursday owns local metrics',
+      reason:
+        'cloud-only (intended): division stats need local registers; the ln02 week-close timer posts them',
+      owner: 'ln02 dabos-week-close-ln02.timer',
     };
   } else {
     try {
       const div = await postDivisionWeeklyStats({
         dabosSql: sql,
-        year,
-        week,
+        window: closedOrgWeek(now),
         includeProvisoMonths: 12,
       });
       divisionPoster = {
         workspace_id: div.workspaceId,
+        window: div.window,
         inserted: div.inserted,
         notes: div.notes,
       };
@@ -88,7 +103,17 @@ export async function GET(request: Request) {
     }
   }
 
-  const result = await refreshAllConditionsFromBoardWithSql(sql);
+  // Week-close reports recorded conditions; it does not assign them (Dept13 FAIL W44).
+  let reportedConditions: Awaited<ReturnType<typeof loadReportedDivisionConditions>> = [];
+  try {
+    reportedConditions = await loadReportedDivisionConditions(sql);
+  } catch {
+    /* reported as empty */
+  }
+  // Opt-in only; a failure is captured and must not abort the crawl / role_run / response.
+  const conditionRefresh = await runOptInConditionRefresh(conditionRefreshEnabled(), () =>
+    refreshAllConditionsFromBoardWithSql(sql)
+  );
 
   let crawl: Record<string, unknown> | null = null;
   try {
@@ -113,7 +138,9 @@ export async function GET(request: Request) {
           past_stats_deadline: isPastStatsDeadline(now),
           cloud_only: skipLocal,
           cutoff: getStatCutoffSnapshot(now),
-          conditions: result.samples,
+          conditions: reportedConditions,
+          conditions_assigned: false,
+          condition_refresh: conditionRefresh,
           gfp_poster: gfpPoster,
           division_poster: divisionPoster,
           stat_crawl: crawl,
@@ -133,8 +160,9 @@ export async function GET(request: Request) {
     job: 'week_close',
     cloud_only: skipLocal,
     org_week: orgWeekLabel(weekStart),
-    week: result.week.label,
-    persisted: result.persisted,
+    conditions: reportedConditions,
+    conditions_assigned: false,
+    condition_refresh: conditionRefresh,
     gfp_poster: gfpPoster,
     division_poster: divisionPoster,
     stat_crawl: crawl,

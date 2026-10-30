@@ -1,5 +1,5 @@
 /**
- * Thursday week-close: GFP + division weekly posters + refresh conditions +
+ * Thursday week-close: GFP + division weekly posters + condition report (refresh opt-in) +
  * Dept3 stat crawl + role_run.
  * Run on office PC (Good Thursday): npm run dabos:week-close
  * Soft rehearsal (other days / pre-Thu): DABOS_WEEK_CLOSE_SOFT=1 — same pipeline,
@@ -19,7 +19,13 @@ import {
   orgWeekLabel,
   weekBoundaryStart,
 } from '../../src/lib/dabos/org-week';
+import { closedOrgWeek } from '../../src/lib/dabos/org-week-window';
 import { runStatCrawl } from '../../src/lib/dabos/stat-crawl';
+import { loadReportedDivisionConditions } from '../../src/lib/dabos/week-close-conditions';
+import {
+  conditionRefreshEnabled,
+  runOptInConditionRefresh,
+} from '../../src/lib/dabos/week-close-refresh';
 import { loadEnvLocal, requireDatabaseUrl } from './load-env';
 
 function cloudOnly(): boolean {
@@ -27,6 +33,13 @@ function cloudOnly(): boolean {
   if (process.env.DABOS_WEEK_CLOSE_CLOUD_ONLY === '0') return false;
   return Boolean(process.env.VERCEL);
 }
+
+/**
+ * Condition refresh (board evaluation -> entity_condition_state + conditions rows) is NOT
+ * part of the week-close by default: the poster reports recorded conditions, it does not
+ * assign them (Dept13 FAIL W44, 2026-10-29). Opt in with DABOS_WEEK_CLOSE_REFRESH_CONDITIONS=1;
+ * the standalone refresh-conditions script/cron is unchanged. See week-close-refresh.ts.
+ */
 
 function softClose(): boolean {
   return process.env.DABOS_WEEK_CLOSE_SOFT === '1';
@@ -43,6 +56,7 @@ async function main() {
   const hoursLeft = hoursUntilStatsDeadline(now);
   const skipLocal = cloudOnly();
   const soft = softClose();
+  const closed = closedOrgWeek(now);
 
   console.log(soft ? `# DABOS week close (SOFT rehearsal)` : `# DABOS week close`);
   console.log(label);
@@ -98,16 +112,17 @@ async function main() {
     try {
       const div = await postDivisionWeeklyStats({
         dabosSql: sql,
-        year,
-        week,
+        window: closed,
         includeProvisoMonths: 12,
       });
       divisionPoster = {
         workspace_id: div.workspaceId,
+        window: div.window,
         inserted: div.inserted,
         notes: div.notes,
       };
       console.log(`\nDivision poster ${div.workspaceId}: inserted=${div.inserted.length}`);
+      console.log(`  ${closed.label}`);
       for (const note of div.notes) console.log(`  ${note}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -116,14 +131,30 @@ async function main() {
     }
   }
 
-  const result = await refreshAllConditionsFromBoardWithSql(sql);
+  // Report recorded conditions only (founder ruling / formula); else to-report. Never assign.
+  let reportedConditions: Awaited<ReturnType<typeof loadReportedDivisionConditions>> = [];
+  try {
+    reportedConditions = await loadReportedDivisionConditions(sql);
+  } catch (err) {
+    console.log(`\nConditions read failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+  console.log('\nConditions (reported from recorded rulings; the poster does not assign conditions):');
+  for (const row of reportedConditions) {
+    console.log(`  ${row.entity_id}: ${row.condition} [${row.source}]`);
+  }
 
-  console.log(`\nConditions (${result.week.label}):`);
-  console.log(
-    `  Persisted ${result.persisted.divisions} division + ${result.persisted.departments} department`
+  // Opt-in; errors are captured (not thrown) so the crawl + role_run still run.
+  const conditionRefresh = await runOptInConditionRefresh(conditionRefreshEnabled(), () =>
+    refreshAllConditionsFromBoardWithSql(sql)
   );
-  for (const row of result.samples) {
-    console.log(`  ${row.entity_id}: ${row.condition}`);
+  if ('persisted' in conditionRefresh) {
+    console.log(
+      `  Condition refresh: persisted ${conditionRefresh.persisted.divisions} division + ${conditionRefresh.persisted.departments} department`
+    );
+  } else if ('error' in conditionRefresh) {
+    console.log(`  Condition refresh FAILED: ${conditionRefresh.error}`);
+  } else {
+    console.log('  Condition refresh skipped (not part of week-close by default)');
   }
 
   let crawl: Record<string, unknown> | null = null;
@@ -159,7 +190,14 @@ async function main() {
         org_week: label,
         past_stats_deadline: pastDeadline,
         cloud_only: skipLocal,
-        conditions: result.samples,
+        closed_week: {
+          start: closed.start.toISOString(),
+          end: closed.end.toISOString(),
+          label: closed.label,
+        },
+        conditions: reportedConditions,
+        conditions_assigned: false,
+        condition_refresh: conditionRefresh,
         gfp_poster: gfpPoster,
         division_poster: divisionPoster,
         stat_crawl: crawl,

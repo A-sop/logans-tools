@@ -5,8 +5,8 @@
  * Div map (STAT-MAP):
  *  Div2 leads_or_touchpoints_created + Dept4 content_pieces_shipped (content factory = Div2)
  *  Div3 taxable_income_eur (Proviso commission Abrechnung + other incomes as added)
- *  Div4 shipped_outputs (ship-log Counts=yes rows)
- *  Div5 qa_pass_rate (Dept13 checklist PASS / decided instances)
+ *  Div4 shipped_outputs (ship-log rows with Validated (Dept13) = PASS <date> and Counts=yes)
+ *  Div5 qa_pass_rate (Dept13 checklist PASS / decided verdict instances - per instance, not per PR/SHA)
  *  Div6 conversions — GFP poster (separate module)
  *  Div7 plan_completion_rate (establishment checklist reported / total depts)
  *
@@ -15,12 +15,20 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
-import { endOfISOWeek, getISOWeek, getISOWeekYear, parseISO, setISOWeek, startOfYear } from 'date-fns';
+import { getISOWeek, getISOWeekYear, parseISO } from 'date-fns';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
+import {
+  closedOrgWeekForIsoWeek,
+  isEntryInClosedOrgWeek,
+  recordedAtForClosedOrgWeek,
+  REGISTER_DATE_TIME_SOURCE,
+  type ClosedOrgWeek,
+} from '@/lib/dabos/org-week-window';
 
 export type DivisionWeeklyResult = {
   workspaceId: string;
   recordedAt: string;
+  window: { start: string; end: string; label: string };
   inserted: string[];
   notes: string[];
 };
@@ -41,10 +49,6 @@ const ESTABLISHMENT = path.join(
 );
 const DEFAULT_PROVISO_DB = path.join('C:', 'Dev', 'proviso', 'data', 'proviso.db');
 const LW_VB = 2106750;
-
-function weekEndIso(year: number, week: number): string {
-  return endOfISOWeek(setISOWeek(startOfYear(new Date(year, 0, 4)), week)).toISOString();
-}
 
 function readText(filePath: string): string | null {
   if (!existsSync(filePath)) return null;
@@ -85,8 +89,47 @@ export function countPipelineTouchpoints(pipelineMd: string | null): number {
   return n;
 }
 
-/** Ship-log rows with Counts = yes (case-insensitive). */
-export function countShippedOutputs(shipLogMd: string | null): number {
+type WeekWindow = Pick<ClosedOrgWeek, 'start' | 'end' | 'startDate' | 'endDate'>;
+
+/**
+ * A 'pending' qualifier placed IMMEDIATELY after a PASS token, e.g. 'PASS** (pending formal',
+ * 'PASS (pending', 'PASS - pending'. A later mention of 'pending' in the reason text does not
+ * qualify the verdict (Instance 1 in the real register is a FAIL whose reason says "pending").
+ */
+const PENDING_QUALIFIER_RE = /^\s*\**\s*(?:[([]\s*|[\u2014\u2013:,;-]\s*)?pending\b/i;
+
+/** Token boundary: 'PASS-conditional', 'PASS/FAIL', 'PASSED' are not a bare PASS / FAIL. */
+const BARE_TOKEN_END = '(?![\\w/-])';
+
+/** Ship-log cell: uppercase PASS only (outside a 'Verdict:' line, case matters). */
+const PASS_CELL_RE = new RegExp('^PASS' + BARE_TOKEN_END + '(.*)$');
+const LEADING_DATE_RE = new RegExp('^\\s*(' + REGISTER_DATE_TIME_SOURCE + ')(.*)$');
+
+/**
+ * PASS date from a ship-log 'Validated (Dept13)' cell, e.g. '**PASS 2026-07-11** (instance 3)'.
+ * Returns null for FAIL, CONDITIONAL, 'PASS-conditional', lowercase 'pass', 'pending PASS',
+ * a PASS qualified as pending right after the token or its date, or a PASS without a date.
+ */
+export function shipLogPassDate(validatedCell: string): string | null {
+  const cell = validatedCell.trim().replace(/^\*+/, '');
+  const m = PASS_CELL_RE.exec(cell);
+  if (!m) return null;
+  const afterPass = m[1] ?? '';
+  if (PENDING_QUALIFIER_RE.test(afterPass)) return null;
+  const d = LEADING_DATE_RE.exec(afterPass.replace(/^\*+/, ''));
+  if (!d?.[1]) return null;
+  if (PENDING_QUALIFIER_RE.test(d[2] ?? '')) return null;
+  return d[1];
+}
+/**
+ * shipped_outputs: ship-log rows where 'Validated (Dept13)' is PASS <date> (not pending, FAIL,
+ * CONDITIONAL) AND Counts = yes. Columns:
+ * | # | Date | What shipped | Acceptance line | Venture | Validated (Dept13) | Counts |
+ * With window (weekly poster path) the row is bucketed by its Dept13 PASS date, not the ship
+ * Date column (see isEntryInClosedOrgWeek: timestamps exact 14:00 cutoff; date-only provisional
+ * Thu..Wed pending Dept14). Without window: all-time (ship-gate), same PASS requirement.
+ */
+export function countShippedOutputs(shipLogMd: string | null, window?: WeekWindow): number {
   if (!shipLogMd) return 0;
   const tableStart = shipLogMd.indexOf('| # | Date |');
   if (tableStart < 0) return 0;
@@ -95,18 +138,50 @@ export function countShippedOutputs(shipLogMd: string | null): number {
   return rows.filter((row) => {
     const cells = row.split('|').map((c) => c.trim());
     const counts = (cells[cells.length - 2] ?? '').toLowerCase().replace(/\*/g, '');
-    return counts === 'yes' || counts.startsWith('yes');
+    if (!(counts === 'yes' || counts.startsWith('yes'))) return false;
+    const passDate = shipLogPassDate(cells[cells.length - 3] ?? '');
+    if (!passDate) return false;
+    return window ? isEntryInClosedOrgWeek(passDate, window) : true;
   }).length;
 }
 
+/** First 'Verdict:' line of an instance (bold, bold-label or plain; list / quote prefixes ok). */
+const VERDICT_LINE_RE = /^[\s>*-]*\**\s*Verdict\s*:(.*)$/im;
+/** Inside a Verdict: line the token may be any case; it must be a bare PASS / FAIL. */
+const VERDICT_TOKEN_RE = new RegExp('^\\s*(?:\\*+\\s*)*(PASS|FAIL)' + BARE_TOKEN_END + '(.*)$', 'i');
+const VALIDATED_ON_RE = new RegExp(
+  '\\**\\s*Validated on\\s*:\\s*\\**\\s*(' + REGISTER_DATE_TIME_SOURCE + ')',
+  'i'
+);
+
 /**
- * qa_pass_rate = PASS verdicts / (PASS+FAIL) among filled Instance verdicts.
- * When year+week are provided (weekly post path), only count instances whose
- * **Validated on:** date falls in that ISO week — not the all-time register.
+ * Decided verdict of one Dept13 checklist instance, read from its FIRST 'Verdict:' line:
+ * PASS / FAIL, or null when absent, empty template, CONDITIONAL, a qualified token
+ * ('PASS-conditional'), or a PASS qualified as pending immediately after the token
+ * ('**Verdict: PASS** (pending formal Dept13 ...)'). 'pending' later in a reason never drops a
+ * verdict, and FAIL is never dropped for 'pending'.
+ * Accepts '**Verdict: PASS**', '**Verdict:** FAIL', unbolded 'Verdict: FAIL', 'Verdict: fail'.
+ */
+export function instanceVerdict(block: string): 'PASS' | 'FAIL' | null {
+  const line = VERDICT_LINE_RE.exec(block);
+  if (!line) return null;
+  const m = VERDICT_TOKEN_RE.exec(line[1] ?? '');
+  if (!m?.[1]) return null;
+  const verdict = m[1].toUpperCase() as 'PASS' | 'FAIL';
+  if (verdict === 'PASS' && PENDING_QUALIFIER_RE.test(m[2] ?? '')) return null;
+  return verdict;
+}
+/**
+ * qa_pass_rate = PASS / (PASS + FAIL), counted PER VERDICT INSTANCE ('## Instance N' block in
+ * the Dept13 checklist register) - not per PR and not per SHA: two instances for the same PR
+ * (e.g. FAIL then PASS on a re-review) are two verdicts.
+ * Weekly poster path: pass { window } and only instances whose 'Validated on:' value is inside
+ * the closed org week count (isEntryInClosedOrgWeek). Legacy { year, week } scopes to the ISO
+ * Mon-Sun week. Without opts: all-time. 0 verdicts in scope -> null (to-report).
  */
 export function computeQaPassRate(
   validationMd: string | null,
-  opts?: { year: number; week: number }
+  opts?: { year: number; week: number } | { window: WeekWindow }
 ): number | null {
   if (!validationMd) return null;
 
@@ -115,22 +190,24 @@ export function computeQaPassRate(
 
   const verdicts: string[] = [];
   for (const block of blocks) {
-    const verdictMatch = block.match(/\*\*Verdict:\s*(PASS|FAIL)\b/i);
-    if (!verdictMatch?.[1]) continue;
+    const verdict = instanceVerdict(block);
+    if (!verdict) continue;
 
     if (opts) {
-      const dateMatch =
-        block.match(/\*\*Validated on:\*\*\s*(\d{4}-\d{2}-\d{2})/i) ??
-        block.match(/Validated on:\s*(\d{4}-\d{2}-\d{2})/i);
+      const dateMatch = VALIDATED_ON_RE.exec(block);
       if (!dateMatch?.[1]) continue;
-      const validated = parseISO(dateMatch[1]);
-      if (Number.isNaN(validated.getTime())) continue;
-      if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
-        continue;
+      if ('window' in opts) {
+        if (!isEntryInClosedOrgWeek(dateMatch[1], opts.window)) continue;
+      } else {
+        const validated = parseISO(dateMatch[1].slice(0, 10));
+        if (Number.isNaN(validated.getTime())) continue;
+        if (getISOWeekYear(validated) !== opts.year || getISOWeek(validated) !== opts.week) {
+          continue;
+        }
       }
     }
 
-    verdicts.push(verdictMatch[1].toUpperCase());
+    verdicts.push(verdict);
   }
 
   if (verdicts.length === 0) return null;
@@ -154,6 +231,15 @@ export type ProvisoMonthIncome = {
   lineCount: number;
 };
 
+/** Minimal shape of node:sqlite DatabaseSync used below (params _-prefixed for no-unused-vars). */
+type NodeSqliteDatabaseCtor = new (
+  _dbPath: string,
+  _options?: { readOnly?: boolean }
+) => {
+  prepare: (_sql: string) => { all: (..._params: unknown[]) => unknown[] };
+  close: () => void;
+};
+
 /** Sum Diskont-Konto (Abrechnung residual EUR) for Logan VB — local Proviso only. */
 export function readProvisoMonthlyIncome(
   dbPath = process.env.PROVISO_DB_PATH?.trim() || DEFAULT_PROVISO_DB,
@@ -162,16 +248,7 @@ export function readProvisoMonthlyIncome(
   if (!existsSync(dbPath)) return [];
   // Node 22+ built-in SQLite — no native addon; scripts/office only.
   // Avoid `import('node:sqlite')` types — Vercel/tsc may not have @types for it.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { DatabaseSync } = require('node:sqlite') as {
-    DatabaseSync: new (
-      path: string,
-      opts?: { readOnly?: boolean }
-    ) => {
-      prepare: (sql: string) => { all: (...params: unknown[]) => unknown[] };
-      close: () => void;
-    };
-  };
+  const { DatabaseSync } = require('node:sqlite') as { DatabaseSync: NodeSqliteDatabaseCtor };
   const db = new DatabaseSync(dbPath, { readOnly: true });
   try {
     const rows = db
@@ -206,11 +283,15 @@ async function insertStat(
     metricKey: string;
     value: number;
     recordedAt: string;
+    basis?: Record<string, unknown> | null;
+    recordedBy?: string | null;
   }
 ): Promise<boolean> {
+  const basis = row.basis ? JSON.stringify(row.basis) : null;
+  const recordedBy = row.recordedBy ?? null;
   const res = await dabosSql`
-    insert into stats (workspace_id, division_id, department_id, metric_key, value, recorded_at)
-    select ${row.workspaceId}, ${row.divisionId}, ${row.departmentId}, ${row.metricKey}, ${row.value}, ${row.recordedAt}::timestamptz
+    insert into stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
+    select ${row.workspaceId}, ${row.divisionId}, ${row.departmentId}, ${row.metricKey}, ${row.value}, ${row.recordedAt}::timestamptz, ${basis}::jsonb, ${recordedBy}
     where not exists (
       select 1 from stats s
       where s.workspace_id = ${row.workspaceId}
@@ -225,13 +306,29 @@ async function insertStat(
 
 export async function postDivisionWeeklyStats(opts: {
   dabosSql: DabosSql;
-  year: number;
-  week: number;
+  /** Closed org week to post (preferred). Week-close passes closedOrgWeek(now). */
+  window?: ClosedOrgWeek;
+  /** Legacy: ISO week of the closing Thursday; resolved to that closed org week. */
+  year?: number;
+  week?: number;
   includeProvisoMonths?: number;
 }): Promise<DivisionWeeklyResult> {
-  const { dabosSql, year, week } = opts;
-  const workspaceId = `div-live-${year}-W${String(week).padStart(2, '0')}`;
-  const recordedAt = weekEndIso(year, week);
+  const { dabosSql } = opts;
+  let window = opts.window;
+  if (!window) {
+    if (opts.year == null || opts.week == null) {
+      throw new Error('postDivisionWeeklyStats: pass window, or year + week');
+    }
+    window = closedOrgWeekForIsoWeek(opts.year, opts.week);
+  }
+  const workspaceId = `div-live-${window.isoYear}-W${String(window.isoWeek).padStart(2, '0')}`;
+  const recordedAt = recordedAtForClosedOrgWeek(window);
+  const windowBasis = {
+    org_week_start: window.start.toISOString(),
+    org_week_end: window.end.toISOString(),
+    window_rule:
+      'Thu 14:00 -> Thu 14:00 Europe/Berlin; timestamped entries exact cutoff; date-only entries Thu..Wed (provisional, pending Dept14); shipped_outputs by Dept13 PASS date; qa per verdict instance',
+  };
   const notes: string[] = [];
   const inserted: string[] = [];
 
@@ -245,8 +342,8 @@ export async function postDivisionWeeklyStats(opts: {
 
   const contentPieces = countContentPiecesShipped(contentStatus);
   const touchpoints = countPipelineTouchpoints(pipeline);
-  const shipped = countShippedOutputs(shipLog);
-  const qaRate = computeQaPassRate(validation, { year, week });
+  const shipped = countShippedOutputs(shipLog, window);
+  const qaRate = computeQaPassRate(validation, { window });
   const planRate = computePlanCompletionRate(checklist);
 
   const rows: Array<{
@@ -254,6 +351,7 @@ export async function postDivisionWeeklyStats(opts: {
     departmentId: string | null;
     metricKey: string;
     value: number;
+    source: string;
   }> = [];
 
   if (contentStatus != null) {
@@ -262,6 +360,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: 'Dept4',
       metricKey: 'content_pieces_shipped',
       value: contentPieces,
+      source: 'content-status-table.md (all-time snapshot, not windowed)',
     });
     notes.push(
       `Div2 content_pieces_shipped=${contentPieces} (content factory / Dept4 submit-for-validation)`
@@ -276,6 +375,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'leads_or_touchpoints_created',
       value: touchpoints,
+      source: 'pipeline-register.md (open prospects snapshot, not windowed)',
     });
     notes.push(`Div2 leads_or_touchpoints_created=${touchpoints}`);
   } else {
@@ -289,15 +389,17 @@ export async function postDivisionWeeklyStats(opts: {
         departmentId: null,
         metricKey: 'shipped_outputs',
         value: shipped,
+        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
       },
       {
         divisionId: 'Div4',
         departmentId: 'Dept12',
         metricKey: 'shipped_outputs',
         value: shipped,
+        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
       }
     );
-    notes.push(`Div4 shipped_outputs=${shipped} (ship-log Counts=yes)`);
+    notes.push(`Div4 shipped_outputs=${shipped} (ship-log Counts=yes, dated in closed week)`);
   } else {
     notes.push(`Div4 shipped_outputs skipped — missing ${SHIP_LOG}`);
   }
@@ -308,10 +410,11 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'qa_pass_rate',
       value: qaRate,
+      source: 'docs/registers/dept13-validation-checklists.md Validated on in closed week',
     });
     notes.push(`Div5 qa_pass_rate=${qaRate}`);
   } else {
-    notes.push('Div5 qa_pass_rate skipped — no Verdict lines in validation checklists');
+    notes.push('Div5 qa_pass_rate to-report (no row posted): 0 Dept13 verdicts validated in the closed week');
   }
 
   if (planRate != null) {
@@ -320,6 +423,7 @@ export async function postDivisionWeeklyStats(opts: {
       departmentId: null,
       metricKey: 'plan_completion_rate',
       value: planRate,
+      source: 'establishment-checklist.md (snapshot)',
     });
     notes.push(`Div7 plan_completion_rate=${planRate}`);
   } else {
@@ -334,6 +438,8 @@ export async function postDivisionWeeklyStats(opts: {
       metricKey: row.metricKey,
       value: row.value,
       recordedAt,
+      basis: { ...windowBasis, source: row.source },
+      recordedBy: 'week-close-poster',
     });
     if (ok) inserted.push(`${row.divisionId}.${row.metricKey}`);
   }
@@ -375,5 +481,11 @@ export async function postDivisionWeeklyStats(opts: {
     notes.push(`Proviso income skipped: ${err instanceof Error ? err.message : String(err)}`);
   }
 
-  return { workspaceId, recordedAt, inserted, notes };
+  return {
+    workspaceId,
+    recordedAt,
+    window: { start: window.start.toISOString(), end: window.end.toISOString(), label: window.label },
+    inserted,
+    notes,
+  };
 }
