@@ -1,10 +1,22 @@
 /**
  * GFP funnel weekly stats → DABOS Neon `stats` (Dept16/17 + Div6).
  * termin_clicks uses Cal booked count as labelled proxy until PostHog ingest.
+ *
+ * Week bucketing (founder ruling 2026-10-30, relayed by Div7): the stat week is Thu -> Thu with the
+ * close at Thu 14:00 Europe/Berlin, and a lead counts in the week it ARRIVED. All week maths comes
+ * from org-week.ts (single source): a lead with `created_at` t belongs to `statWeekOf(t)`, and the
+ * `gfp-live-YYYY-Www` row for a week counts `created_at` in that week's [start, end) window.
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import { emitStat } from '@/lib/dabos/stats-emit';
-import { closedOrgWeek, recordedAtForClosedOrgWeek, statWeekWindow } from '@/lib/dabos/org-week';
+import {
+  closedOrgWeek,
+  formatStatWeekId,
+  recordedAtForClosedOrgWeek,
+  statWeekOf,
+  statWeekWindow,
+  type OrgStatWeek,
+} from '@/lib/dabos/org-week';
 import postgres from 'postgres';
 
 export const GUIDE_CAMPAIGN_SLUGS = ['guide-get-set-up-en', 'guide-finanzleben-de'] as const;
@@ -31,33 +43,50 @@ export function resolveGfpStatWeek(now = new Date()): { year: number; week: numb
 /** @deprecated Old name kept for callers; same as resolveGfpStatWeek (closed stat week, not ISO week of now). */
 export const resolveGfpIsoWeek = resolveGfpStatWeek;
 
+/** Stat week a lead counts in: the org week containing its arrival (`campaign_leads.created_at`). */
+export function gfpLeadStatWeek(arrivedAt: Date): OrgStatWeek {
+  return statWeekOf(arrivedAt);
+}
+
+/** `gfp-live-YYYY-Www` workspace id for a stat week (label from org-week.ts). */
+export function gfpWorkspaceId(year: number, week: number): string {
+  return `gfp-live-${formatStatWeekId(year, week)}`;
+}
+
 export async function postGfpWeeklyStats(opts: {
   dabosSql: DabosSql;
-  gfpDatabaseUrl: string;
+  /** GFP Neon URL. Ignored when `gfpSql` is given. */
+  gfpDatabaseUrl?: string;
+  /** Injected GFP connection (tests). The caller owns it; it is not closed here. */
+  gfpSql?: DabosSql;
   year: number;
   week: number;
 }): Promise<GfpWeeklyStatsResult> {
   const { dabosSql, gfpDatabaseUrl, year, week } = opts;
-  const workspaceId = `gfp-live-${year}-W${String(week).padStart(2, '0')}`;
+  const workspaceId = gfpWorkspaceId(year, week);
   // Stat week window [Thu 14:00, next Thu 14:00) Berlin; rows recorded 1 ms before the close.
   const window = statWeekWindow(year, week);
   const recordedAt = recordedAtForClosedOrgWeek(window);
   const weekStart = window.start;
   const weekEndExclusive = window.end.toISOString();
 
-  const gfpSql = postgres(gfpDatabaseUrl, { max: 1 });
+  if (!opts.gfpSql && !gfpDatabaseUrl) {
+    throw new Error('postGfpWeeklyStats: gfpDatabaseUrl or gfpSql is required');
+  }
+  const ownSql = opts.gfpSql ? null : postgres(gfpDatabaseUrl!, { max: 1 });
+  const gfpSql = (opts.gfpSql ?? ownSql) as unknown as DabosSql;
   try {
     const guideSlugs = [...GUIDE_CAMPAIGN_SLUGS];
 
-    let magnetRows: { n: number }[];
+    let magnetRows: Array<{ n: number }>;
     try {
-      [magnetRows] = await gfpSql`
+      magnetRows = (await gfpSql`
         select count(*)::int as n
         from campaign_leads
         where campaign_slug = any(${guideSlugs})
           and created_at >= ${weekStart.toISOString()}::timestamptz
           and created_at < ${weekEndExclusive}::timestamptz
-      `;
+      `) as Array<{ n: number }>;
     } catch (e) {
       const err = e as { code?: string };
       if (err.code === '42P01') {
@@ -68,16 +97,18 @@ export async function postGfpWeeklyStats(opts: {
       throw e;
     }
 
-    const [bookedRows] = await gfpSql`
+    const [bookedRows] = (await gfpSql`
       select count(*)::int as n
       from campaign_leads
       where status = 'booked'
         and updated_at >= ${weekStart.toISOString()}::timestamptz
         and updated_at < ${weekEndExclusive}::timestamptz
-    `;
+    `) as Array<{ n: number }>;
 
-    const leadMagnetsShipped = magnetRows[0]?.n ?? 0;
-    const terminClicksBookedProxy = bookedRows?.n ?? 0;
+    // (Before this change `[magnetRows] = rows` took the first ROW, so `magnetRows[0]?.n` was always
+    // undefined and lead_magnets_shipped was always posted as 0.)
+    const leadMagnetsShipped = Number(magnetRows[0]?.n ?? 0);
+    const terminClicksBookedProxy = Number(bookedRows?.n ?? 0);
 
     const inserts = [
       {
@@ -133,6 +164,6 @@ export async function postGfpWeeklyStats(opts: {
       inserted,
     };
   } finally {
-    await gfpSql.end({ timeout: 5 });
+    if (ownSql) await ownSql.end({ timeout: 5 });
   }
 }
