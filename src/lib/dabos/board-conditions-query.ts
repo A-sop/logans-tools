@@ -1,3 +1,5 @@
+// RUNTIME REQUIREMENT: readers below filter `superseded_at IS NULL`; migration
+// 021_stats_conditions_superseded.sql must be applied before this code is deployed (README > Deploy).
 import { getISOWeek, getISOWeekYear } from 'date-fns';
 
 import {
@@ -189,6 +191,7 @@ export async function evaluateBoardConditionsWithSql(
     FROM stats
     WHERE recorded_at >= ${start.toISOString()}::timestamptz
       AND recorded_at <= ${end.toISOString()}::timestamptz
+      AND superseded_at IS NULL
     ORDER BY recorded_at ASC
   `;
 

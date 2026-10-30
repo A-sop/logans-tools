@@ -314,6 +314,7 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
     SELECT metric_key, value, recorded_at, workspace_id
     FROM stats
     WHERE department_id = ${deptId}
+      AND superseded_at IS NULL
     ORDER BY recorded_at DESC
     LIMIT 20
   `;

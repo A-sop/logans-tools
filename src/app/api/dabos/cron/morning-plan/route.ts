@@ -23,6 +23,7 @@ export async function GET(request: Request) {
     SELECT DISTINCT ON (entity_id) entity_id, condition
     FROM conditions
     WHERE entity_type = 'division'
+      AND superseded_at IS NULL
     ORDER BY entity_id, created_at DESC
   `;
 

@@ -69,6 +69,7 @@ export async function fetchDeptEstablishmentMap(
         FROM stats s
         WHERE s.department_id = e.department_id
           AND s.metric_key = e.stat_metric_key
+          AND s.superseded_at IS NULL
         ORDER BY s.recorded_at DESC
         LIMIT 1
       ) latest ON e.stat_metric_key IS NOT NULL

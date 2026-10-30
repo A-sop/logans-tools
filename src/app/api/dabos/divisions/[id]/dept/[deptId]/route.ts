@@ -35,6 +35,7 @@ export async function GET(_request: Request, context: RouteContext) {
     SELECT id, metric_key, value, recorded_at
     FROM stats
     WHERE department_id = ${deptId}
+      AND superseded_at IS NULL
     ORDER BY recorded_at DESC
     LIMIT 20
   `;
