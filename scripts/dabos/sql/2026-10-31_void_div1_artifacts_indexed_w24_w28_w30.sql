@@ -5,8 +5,9 @@
 --           2026-W24..W28 (the 7 Jul backfill of registry and log counts). NO repost.
 --   Part 2: supersede both active div-live-2026-W30 Div1 artifacts_indexed rows (75, artifact-index
 --           register count; division row + Dept3 row) and repost ONE Div1 division row (department
---           NULL) for W30 = 0 on the current rule, exactly as #49 posts W31-W44. No Dept3 row (Div7:
---           Div1 has no Dept3 rows).
+--           NULL) for W30 = 0 on the current rule, exactly as #49 posts W31-W44. No Dept3 repost:
+--           #49's rule posts Div1 division rows only and W31-W44 have no Dept3 rows (Dept3 is a Div1
+--           department; dd2b66e2 is a Div1 Dept3 row, superseded here and not reposted).
 -- Acceptance: docs/acceptance/2026-10-31_void_div1_artifacts_indexed_w24_w28_w30.ACCEPTANCE.md
 -- NOT a migration (lives outside ./migrations so `npm run dabos:migrate` never runs it).
 -- NOT EXECUTED by this PR. Runs only after Dept13 PASS and Logan's own yes to merge and apply,
