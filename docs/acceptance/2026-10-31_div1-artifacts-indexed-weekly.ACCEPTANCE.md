@@ -39,7 +39,11 @@ Acceptance lines:
      Only in the first week (no previous row) are both snapshots read from git, first-parent.
      Git is used only when `origin/main` was fetched at or after the close: a reflog entry of
      `refs/remotes/origin/main` at or after the close, or a `FETCH_HEAD` (this worktree's) modified
-     at or after the close whose `branch 'main'` line names the current `origin/main` commit.
+     at or after the close with a line `<sha>` / `branch 'main' of <url>` where `<sha>` is the current
+     `origin/main` commit AND `<url>` is origin's own URL (`git remote get-url origin`; both sides
+     normalised: scheme and user-info dropped, `host:path` -> `host/path`, `\` -> `/`, trailing `/` and
+     `.git` dropped, host / Windows drive paths compared case-insensitively). A line fetched from any
+     other remote, or for another branch of origin, never counts (AMENDED 2026-10-31, Dept13 FAIL v2).
      Otherwise git is not trusted (NOT POSTED unless (b) applies).
    - (b) no usable git (e.g. ln02, whose Seagate mirror excludes `.git`): the previous row's
      fingerprints as the start and the current index file as the end, refused if the file was modified
@@ -58,3 +62,9 @@ read from the previous row (so the backfill PR #49 can write it byte-for-byte): 
 = JSON array of strings, each the lowercase hex SHA-256 of the UTF-8 normalised target (rule of line 2,
 no salt), first 16 hex chars, unique, sorted ascending; exported as `pageFingerprint` /
 `wikiPageFingerprints` from `src/lib/dabos/artifacts-indexed.ts`.
+
+Amendment 2 (2026-10-31, after Dept13 FAIL v2 at a20da8a): line 7(a) FETCH_HEAD signal amended above
+(must come from origin's URL and name branch main); reflog of refs/remotes/origin/main unchanged. Tests: a
+second remote holding the same commit fetched after the close, and another branch of origin at the same
+commit, are both NOT POSTED; the URL and branch checks each have a mutation check. The remote URL is never
+logged or stored (user-info is dropped before comparing).
