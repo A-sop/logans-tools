@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { PGlite } from '@electric-sql/pglite';
+import { createHash } from 'crypto';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { recordedAtForClosedOrgWeek, statWeekWindow } from '@/lib/dabos/org-week';
@@ -37,6 +38,48 @@ const EXPECTED: Record<number, { value: number; before: number; after: number }>
   44: { value: 60, before: 232, after: 292 },
 };
 const WEEKS = Object.keys(EXPECTED).map(Number);
+/**
+ * sha256 of JSON.stringify(W44 page_fingerprints): #50's wikiPageFingerprints (sha256 of the
+ * normalised target, first 16 hex, sorted) over docs/wiki/index.md at 37aff075, GitHub main at the
+ * W44 close (Thu 29 Oct 14:00 CET). 292 pages.
+ */
+const W44_FPS_SHA256 = 'e439ef57e21f610844cf0b098e03493952e6343db9ba0df5e186d8e555587306';
+/** #50 a20da8a: FINGERPRINT_RULE verbatim, and readWikiIndexFromGit's W44 close commit. */
+const FINGERPRINT_RULE =
+  'sha256(utf8 normalised target), no salt, first 16 lowercase hex; unique, sorted; added = end - start';
+const W44_GIT_END_COMMIT = '679c7de07be913bfd3f607bb9f250864370d11f5';
+/** #50 a20da8a FINGERPRINT_RE and its pageFingerprint (sha256 utf8, no salt, first 16 hex). */
+const FINGERPRINT_RE = /^[0-9a-f]{16}$/;
+const pageFingerprint = (target: string) => createHash('sha256').update(target, 'utf8').digest('hex').slice(0, 16);
+
+/**
+ * Copy of #50's loadPreviousDiv1Fingerprints (division-weekly-stats.ts at a20da8a) on PGlite: the
+ * same row lookup and the same validation, so #49's W44 row is proven to be a valid W45 start point.
+ */
+async function loadPreviousDiv1FingerprintsLikePr50(db: PGlite, prevWorkspace: string) {
+  const res = await db.query<{ basis: unknown }>(
+    `select basis from stats
+      where workspace_id = $1 and division_id = 'Div1' and department_id is null
+        and metric_key = 'artifacts_indexed' and superseded_at is null
+      order by recorded_at desc limit 1`,
+    [prevWorkspace]
+  );
+  if (res.rows.length === 0) return null;
+  const raw = res.rows[0]!.basis;
+  const basis = (typeof raw === 'string' ? JSON.parse(raw) : raw) as {
+    page_fingerprints?: unknown;
+    git_end_commit?: unknown;
+  } | null;
+  const fps = basis?.page_fingerprints;
+  if (!Array.isArray(fps) || !fps.every((x) => typeof x === 'string' && FINGERPRINT_RE.test(x))) {
+    throw new Error(`${prevWorkspace} Div1 row has no valid basis.page_fingerprints (16 lowercase hex strings)`);
+  }
+  const end = basis?.git_end_commit;
+  return {
+    fingerprints: fps as string[],
+    gitEndCommit: typeof end === 'string' && /^[0-9a-f]{40}$/.test(end) ? end : null,
+  };
+}
 const ws = (week: number) => `div-live-2026-W${week}`;
 
 async function seed(db: PGlite, opts: { noDiv1?: boolean } = {}) {
@@ -196,6 +239,68 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     // Every pre-existing row (W30 x2, Div2 rows, workspace-less Div1 row) is byte-identical.
     const ids = new Set(rows.map((r) => r.id));
     expect(after.filter((r) => !ids.has(r.id))).toEqual(before);
+  });
+
+  it('W44 row stores the end-of-week page fingerprints in the #50 basis format (W45 snapshot start)', async () => {
+    await seed(db);
+    await runBackfill(db);
+    const rows = await div1Rows(db);
+    const w44 = rows.find((r) => r.workspace_id === ws(44))!;
+    const fps = w44.basis!.page_fingerprints as string[];
+    expect(Array.isArray(fps)).toBe(true);
+    expect(fps).toHaveLength(292);
+    expect(new Set(fps).size).toBe(292);
+    expect(fps.every((x) => /^[0-9a-f]{16}$/.test(x))).toBe(true);
+    expect(fps).toEqual([...fps].sort());
+    expect(createHash('sha256').update(JSON.stringify(fps)).digest('hex')).toBe(W44_FPS_SHA256);
+    expect(w44.basis!.fingerprint_rule).toBe(FINGERPRINT_RULE);
+    expect(w44.basis!.git_end_commit).toBe(W44_GIT_END_COMMIT);
+    expect(w44.basis!.dabos_main_at_close).toBe('37aff075');
+    for (const r of rows.filter((x) => x.workspace_id !== ws(44))) {
+      expect(r.basis).not.toHaveProperty('page_fingerprints');
+      expect(r.basis).not.toHaveProperty('git_end_commit');
+    }
+    // Same lookup as #50 loadPreviousDiv1Fingerprints for the W45 window.
+    const prev = await db.query<{ basis: { page_fingerprints?: unknown } }>(
+      `SELECT basis FROM stats WHERE workspace_id = 'div-live-2026-W44' AND division_id = 'Div1'
+          AND department_id IS NULL AND metric_key = 'artifacts_indexed' AND superseded_at IS NULL
+        ORDER BY recorded_at DESC LIMIT 1`
+    );
+    expect(prev.rows[0]!.basis.page_fingerprints).toEqual(fps);
+  });
+
+  it("#50's loader (a20da8a) accepts the W44 row as the W45 start point; known-answer hash present", async () => {
+    await seed(db);
+    await runBackfill(db);
+    const loaded = await loadPreviousDiv1FingerprintsLikePr50(db, 'div-live-2026-W44');
+    expect(loaded).not.toBeNull();
+    expect(loaded!.gitEndCommit).toBe(W44_GIT_END_COMMIT);
+    expect(loaded!.fingerprints).toHaveLength(292);
+    expect(createHash('sha256').update(JSON.stringify(loaded!.fingerprints)).digest('hex')).toBe(W44_FPS_SHA256);
+    // #50 known answer: pageFingerprint('schema.md') === 'f52e28bb16f63c2f', and schema.md is in the index.
+    expect(pageFingerprint('schema.md')).toBe('f52e28bb16f63c2f');
+    expect(loaded!.fingerprints).toContain('f52e28bb16f63c2f');
+    // Only the live row counts: a superseded W44 row is ignored by the loader.
+    await db.query(`UPDATE stats SET superseded_at = now() WHERE workspace_id = 'div-live-2026-W44' AND division_id = 'Div1'`);
+    expect(await loadPreviousDiv1FingerprintsLikePr50(db, 'div-live-2026-W44')).toBeNull();
+  });
+
+  it('aborts when the W44 git_end_commit is not a 40-hex sha', async () => {
+    await seed(db);
+    const before = await allRows(db);
+    const bad = BACKFILL_SQL.replace(`'${W44_GIT_END_COMMIT}'`, `'${W44_GIT_END_COMMIT.slice(0, 8)}'`);
+    expect(bad).not.toBe(BACKFILL_SQL);
+    await expect(db.exec(bad).catch(async (e) => { await db.exec('ROLLBACK'); throw e; })).rejects.toThrow(/guard 0c: git_end_commit/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('aborts when the W44 fingerprint list is not 292 distinct sorted fingerprints', async () => {
+    await seed(db);
+    const before = await allRows(db);
+    const dropped = BACKFILL_SQL.replace(/"([0-9a-f]{16})", /, '');
+    expect(dropped).not.toBe(BACKFILL_SQL);
+    await expect(db.exec(dropped).catch(async (e) => { await db.exec('ROLLBACK'); throw e; })).rejects.toThrow(/guard 0c/);
+    expect(await allRows(db)).toEqual(before);
   });
 
   it('leaves both W30 rows untouched and does not duplicate them', async () => {
