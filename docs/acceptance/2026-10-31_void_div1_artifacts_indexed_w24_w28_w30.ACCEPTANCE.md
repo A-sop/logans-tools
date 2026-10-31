@@ -10,7 +10,9 @@ docs/wiki/index.md during the stat week, as a set difference |targets at the clo
 previous close|, removals not subtracted (Logan ruling 2026-10-21 "unique link targets"; Dept14
 2026-10-31; same rule as #49 and #50). The stat week closes Thu 14:00 Europe/Berlin (org-week.ts).
 The index at a close is read on A-sop/DABOS main as published on GitHub at that close, following
-parent 2 at sync merges (as #49). Div7: Div1 has no Dept3 rows.
+parent 2 at sync merges (as #49). Department rows follow #49's rule: it posts Div1 division rows only
+(department NULL), and W31-W44 have no Dept3 rows. Dept3 is a Div1 department (prod departments
+table), and dd2b66e2 below is a Div1 Dept3 row; it is superseded and not reposted.
 
 ## Scope
 
@@ -33,7 +35,8 @@ dd2b66e2-1390-44b2-b2a4-d1829ff09400 (Dept3) and 252780ef-4988-428a-ad3b-5eb6a6c
 (425fe92f322d67bf1f810cfb29b1328e and 6f6139ecf5cbfb94289272c706d9fe9d).
 Then post ONE row: div-live-2026-W30 / Div1 / department NULL / artifacts_indexed = **0**,
 recorded_at 2026-07-23T11:59:59.999Z (recordedAtForClosedOrgWeek(statWeekWindow(2026, 30)), Thu
-23 Jul 14:00 CEST - 1 ms), recorded_by week-close-poster (as #49). No Dept3 row.
+23 Jul 14:00 CEST - 1 ms), recorded_by week-close-poster (as #49). No Dept3 row is reposted: #49 posts Div1 division rows only,
+and W31-W44 have no Dept3 rows.
 
 W30 value (verified 2026-10-31 on a fresh read-only clone of A-sop/DABOS):
 
