@@ -12,8 +12,11 @@ countUniqueWikiPages); the weekly value is the pages ADDED during the stat week
 (Thu 14:00 -> Thu 14:00 Berlin), i.e. unique count at the close minus unique count at the
 previous close. A re-pointed link adds no page.
 
-Basis of "the index at a close": docs/wiki/index.md on A-sop/DABOS main (first parent) as of the
-closing Thursday 14:00 Berlin, i.e. merge time onto main, not the commit time of a branch commit.
+Basis of "the index at a close": docs/wiki/index.md on A-sop/DABOS main as published on GitHub at
+the closing Thursday 14:00 Berlin. History is NOT read first-parent-only: a sync merge of GitHub
+main into a stale local copy ("Merge origin/main ...", "Merge branch 'main' of
+https://github.com/A-sop/DABOS") has GitHub main as its SECOND parent, so the walk follows parent 2
+at those merges (abf625a1, 133ea3be, 1025d6c7, 72baf3c7).
 
 ## Acceptance lines
 
@@ -34,7 +37,7 @@ closing Thursday 14:00 Berlin, i.e. merge time onto main, not the commit time of
    No row outside the 14 inserted ones changes.
 5. One transaction; any guard failure aborts and changes nothing. Not a migration (lives under
    scripts/dabos/sql/, never run by dabos:migrate).
-6. PGlite tests cover lines 1-5, including W42 = 0 and exactly 14 rows; full vitest, tsc and eslint
+6. PGlite tests cover lines 1-5, including W38 = 3, W40 = 0, W42 = 0 and exactly 14 rows; full vitest, tsc and eslint
    pass.
 7. Not applied to any database. Applying needs a Dept13 PASS and Logan's own yes to merge and apply.
 
@@ -48,10 +51,10 @@ closing Thursday 14:00 Berlin, i.e. merge time onto main, not the commit time of
 | W34 | 13 Aug -> 20 Aug | 227 | 229 | 2 | f7cb1800 (d5293918, 15 Aug) |
 | W35 | 20 Aug -> 27 Aug | 229 | 229 | 0 | 000d2f2e |
 | W36 | 27 Aug -> 3 Sep | 229 | 229 | 0 | b92b8e64 |
-| W37 | 3 Sep -> 10 Sep | 229 | 229 | 0 | b92b8e64 |
-| W38 | 10 Sep -> 17 Sep | 229 | 229 | 0 | b92b8e64 |
-| W39 | 17 Sep -> 24 Sep | 229 | 229 | 0 | b92b8e64 |
-| W40 | 24 Sep -> 1 Oct | 229 | 232 | 3 | a49b6d10 (merge 133ea3be, 29 Sep) |
+| W37 | 3 Sep -> 10 Sep | 229 | 229 | 0 | a21c2dda |
+| W38 | 10 Sep -> 17 Sep | 229 | 232 | 3 | eef8b6e5 (2e1696fe, Fri 11 Sep 00:19 Berlin) |
+| W39 | 17 Sep -> 24 Sep | 232 | 232 | 0 | f85b987f |
+| W40 | 24 Sep -> 1 Oct | 232 | 232 | 0 | a49b6d10 |
 | W41 | 1 Oct -> 8 Oct | 232 | 232 | 0 | 6dc58670 |
 | W42 | 8 Oct -> 15 Oct | 232 | 232 | 0 | 7814e757 (dea83ac1, 9 Oct, re-point only) |
 | W43 | 15 Oct -> 22 Oct | 232 | 232 | 0 | 368cfd9e |
@@ -60,9 +63,17 @@ closing Thursday 14:00 Berlin, i.e. merge time onto main, not the commit time of
 W44 = 60 matches the Dept13-passed register (DABOS 2026-W44.md via #186). 19190099's commit message
 says "231->291"; the index itself counts 232 -> 292 unique targets (237 -> 297 table rows).
 
-W40 = 3 on the merge-time basis: 2e1696fe (2026-09-11) brought the 3 new pages, but it reached main
-only with merge 133ea3be on Tue 29 Sep 12:42 Berlin, inside W40. On a commit-time basis the 3 would
-fall in W38.
+W38 = 3, W40 = 0 (amended after Dept13 FAIL v1 on d851f16; v1 had W38 = 0, W40 = 3 on a misread
+"merge-time" basis). 2e1696fe (Thu 10 Sep 22:19Z = Fri 11 Sep 00:19 Berlin, "Collapse mail
+open-loops onto vendor SSOTs and land the 400 FK host-gift card.") took the index 229 -> 232
+(two youtube source pages + concepts/koerner-foot-in-door-400fk.md) and was on GitHub main from
+then: 36fa8134 (17 Sep) and eef8b6e5 (17 Sep, GitHub main at the W38 close, 232 unique) build on it.
+133ea3be (Tue 29 Sep 12:42 Berlin, "Merge origin/main; keep session-log End for paperless ingest.")
+did NOT bring the pages to main: it merged GitHub main (parent 2, ca868487, which already contains
+2e1696fe) into a stale local copy (parent 1, e7c26854 on b92b8e64 of 2 Sep, which does not).
+Following first parents through 133ea3be misreads main between 2 and 29 Sep. Re-verified
+2026-10-31 on a fresh read-only clone walking parent 2 at sync merges: W37 close 229 (a21c2dda),
+W38 close 232 (eef8b6e5), W39 and W40 closes 232. The sum stays 74.
 
 W42 = 0, not 1 (Div7's draft value; decision 2026-10-31 applying the existing pages-added rule).
 dea83ac1 (Fri 9 Oct 15:14 Berlin, "Point reference stubs at their department homes.") changed one
