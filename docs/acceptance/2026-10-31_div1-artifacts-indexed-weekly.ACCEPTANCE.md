@@ -37,13 +37,19 @@ Acceptance lines:
      in the week its commit was made even when it reached main through a merge into a stale copy
      (133ea3be shape). It must descend from the previous row's `git_end_commit` when that is recorded.
      Only in the first week (no previous row) are both snapshots read from git, first-parent.
-     Git is used only when `origin/main` was fetched at or after the close: a reflog entry of
-     `refs/remotes/origin/main` at or after the close, or a `FETCH_HEAD` (this worktree's) modified
+     Git is used only when `origin/main` was fetched at or after the close: (i) the NEWEST reflog entry
+     of `refs/remotes/origin/main` whose subject starts with `fetch` or `pull` is at or after the close
+     AND its new value is the current `origin/main` commit (entries from `update-ref`, `remote rename`,
+     push etc. are skipped, never counted as a fetch); or (ii) a `FETCH_HEAD` (this worktree's) modified
      at or after the close with a line `<sha>` / `branch 'main' of <url>` where `<sha>` is the current
-     `origin/main` commit AND `<url>` is origin's own URL (`git remote get-url origin`; both sides
-     normalised: scheme and user-info dropped, `host:path` -> `host/path`, `\` -> `/`, trailing `/` and
-     `.git` dropped, host / Windows drive paths compared case-insensitively). A line fetched from any
-     other remote, or for another branch of origin, never counts (AMENDED 2026-10-31, Dept13 FAIL v2).
+     `origin/main` commit AND `<url>` is origin's own URL (`git remote get-url origin`). URLs are
+     normalised keeping their class: a host URL (`scheme://` other than `file://`, or scp `host:path`)
+     drops scheme and user-info, `host:path` -> `host/path`, trailing `/` and `.git` dropped, host
+     case-insensitive; a local path (no scheme, `file://`, or a drive path) is a different class and
+     never equals a host URL. When origin itself is a local path, FETCH_HEAD is not trusted at all
+     (git writes local paths without `.git`, so `/x/repo.git` and `/x/repo` would be confused): only
+     (i) counts. A line fetched from any other remote, or for another branch of origin, never counts
+     (AMENDED 2026-10-31, Dept13 FAIL v2 and v3).
      Otherwise git is not trusted (NOT POSTED unless (b) applies).
    - (b) no usable git (e.g. ln02, whose Seagate mirror excludes `.git`): the previous row's
      fingerprints as the start and the current index file as the end, refused if the file was modified
@@ -68,3 +74,12 @@ Amendment 2 (2026-10-31, after Dept13 FAIL v2 at a20da8a): line 7(a) FETCH_HEAD 
 second remote holding the same commit fetched after the close, and another branch of origin at the same
 commit, are both NOT POSTED; the URL and branch checks each have a mutation check. The remote URL is never
 logged or stored (user-info is dropped before comparing).
+
+Amendment 3 (2026-10-31, after Dept13 FAIL v3 at e5ed683): line 7(a) amended above. Reflog: the newest
+`fetch`/`pull` entry, whose new sha must equal the current `origin/main` (a newer non-fetch entry is
+ignored). URLs keep their class (host URL vs local path); a local-path origin never trusts FETCH_HEAD.
+Tests: `update-ref` of origin/main to a local commit after the close -> NOT POSTED; `remote rename`
+origin -> o2 -> origin after the close -> NOT POSTED (and correct when a real fetch followed); a host
+origin `.../dabos.git` with FETCH_HEAD from a local path `.../dabos` -> not trusted; a relative directory
+named like the host URL never equals it; fetch exactly at the close ms counts (at or after). Each fix has a
+mutation check. Real DABOS W44 still 232 -> 292 = 60.
