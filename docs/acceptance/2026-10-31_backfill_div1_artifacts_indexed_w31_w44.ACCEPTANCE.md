@@ -40,6 +40,14 @@ at those merges (abf625a1, 133ea3be, 1025d6c7, 72baf3c7).
 6. PGlite tests cover lines 1-5, including W38 = 3, W40 = 0, W42 = 0 and exactly 14 rows; full vitest, tsc and eslint
    pass.
 7. Not applied to any database. Applying needs a Dept13 PASS and Logan's own yes to merge and apply.
+8. (Dept13 request, 2026-10-31) The W44 row's basis also carries the end-of-week page fingerprints in
+   the format #50 reads as the W45 snapshot start: `page_fingerprints` = sorted array of
+   sha256(normalised target) first 16 hex, one per unique page linked from docs/wiki/index.md on
+   GitHub main at the W44 close (37aff075; 292 entries = index_unique_after), and
+   `fingerprint_rule` = #50's rule string. Hashes only, never page names. W31-W43 rows carry no
+   fingerprints. A malformed list (not 292 distinct sorted 16-hex values) aborts the script.
+   #50's loader query (previous week, Div1, department NULL, artifacts_indexed, not superseded)
+   returns exactly this list.
 
 ## Values (verified 2026-10-31 from a fresh read-only clone of A-sop/DABOS)
 
