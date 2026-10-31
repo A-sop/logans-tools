@@ -15,7 +15,11 @@ const BACKFILL_SQL = readRepoFile(SQL_PATH);
 const TAG = '2026-10-31_backfill_div1_artifacts_indexed_w31_w44';
 const W30_IDS = ['dd2b66e2-1390-44b2-b2a4-d1829ff09400', '252780ef-4988-428a-ad3b-5eb6a6cf43db'];
 
-/** Weekly additions to DABOS docs/wiki/index.md (unique targets) at each Thu 14:00 Berlin close. */
+/**
+ * Weekly additions to DABOS docs/wiki/index.md (unique targets) at each Thu 14:00 Berlin close, on
+ * DABOS main as published on GitHub (parent 2 at sync merges, never first-parent-only). Dept13 FAIL
+ * v1: 2e1696fe (Fri 11 Sep 00:19 Berlin) added 3 pages in W38; sync merge 133ea3be (29 Sep) did not.
+ */
 const EXPECTED: Record<number, { value: number; before: number; after: number }> = {
   31: { value: 0, before: 218, after: 218 },
   32: { value: 9, before: 218, after: 227 },
@@ -24,9 +28,9 @@ const EXPECTED: Record<number, { value: number; before: number; after: number }>
   35: { value: 0, before: 229, after: 229 },
   36: { value: 0, before: 229, after: 229 },
   37: { value: 0, before: 229, after: 229 },
-  38: { value: 0, before: 229, after: 229 },
-  39: { value: 0, before: 229, after: 229 },
-  40: { value: 3, before: 229, after: 232 },
+  38: { value: 3, before: 229, after: 232 },
+  39: { value: 0, before: 232, after: 232 },
+  40: { value: 0, before: 232, after: 232 },
   41: { value: 0, before: 232, after: 232 },
   42: { value: 0, before: 232, after: 232 },
   43: { value: 0, before: 232, after: 232 },
@@ -146,11 +150,13 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
       expect(e.value).toBe(e.after - e.before);
       prevAfter = e.after;
     }
+    expect(EXPECTED[38]!.value).toBe(3);
+    expect(EXPECTED[40]!.value).toBe(0);
     expect(EXPECTED[42]!.value).toBe(0);
     expect(WEEKS.reduce((s, w) => s + EXPECTED[w]!.value, 0)).toBe(74);
   });
 
-  it('inserts exactly 14 Div1 division rows with the right value, recorded_at and basis; W42 = 0', async () => {
+  it('inserts exactly 14 Div1 division rows with the right value, recorded_at and basis; W38 = 3, W40 = 0, W42 = 0', async () => {
     await seed(db);
     const before = await allRows(db);
     await runBackfill(db);
@@ -178,6 +184,12 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
       });
       expect(String(r.basis!.note)).toContain('pages added to docs/wiki/index.md during the stat week');
     }
+    const w38 = rows.find((r) => r.workspace_id === ws(38))!;
+    expect(w38.value).toBe('3');
+    expect(w38.basis).toMatchObject({ index_unique_before: 229, index_unique_after: 232, dabos_main_at_close: 'eef8b6e5' });
+    const w40 = rows.find((r) => r.workspace_id === ws(40))!;
+    expect(w40.value).toBe('0');
+    expect(w40.basis).toMatchObject({ index_unique_before: 232, index_unique_after: 232 });
     expect(rows.find((r) => r.workspace_id === ws(42))!.value).toBe('0');
     expect(rows.find((r) => r.workspace_id === ws(44))!.value).toBe('60');
 
@@ -210,14 +222,14 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     await seed(db);
     await db.query(
       `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at, recorded_by)
-       VALUES ('div-live-2026-W40', 'Div1', 'artifacts_indexed', 3, '2026-10-01T11:59:59.999Z', 'week-close-poster')`
+       VALUES ('div-live-2026-W38', 'Div1', 'artifacts_indexed', 3, '2026-09-17T11:59:59.999Z', 'week-close-poster')`
     );
     const before = (await allRows(db)).length;
     await runBackfill(db);
     expect((await allRows(db)).length).toBe(before + 13);
     const rows = await div1Rows(db);
     expect(rows).toHaveLength(14);
-    expect(rows.filter((r) => r.workspace_id === ws(40))).toHaveLength(1);
+    expect(rows.filter((r) => r.workspace_id === ws(38))).toHaveLength(1);
   });
 
   it('a Dept3 row in a backfill week is left alone and does not block the division row', async () => {
@@ -239,6 +251,17 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     await db.query(
       `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at)
        VALUES ('div-live-2026-W42', 'Div1', 'artifacts_indexed', 1, '2026-10-15T11:59:59.999Z')`
+    );
+    const before = await allRows(db);
+    await expect(runBackfill(db)).rejects.toThrow(/guard 1:/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('aborts on the v1 (Dept13 FAIL) placement: an existing W40 row of 3 differs from W40 = 0', async () => {
+    await seed(db);
+    await db.query(
+      `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at)
+       VALUES ('div-live-2026-W40', 'Div1', 'artifacts_indexed', 3, '2026-10-01T11:59:59.999Z')`
     );
     const before = await allRows(db);
     await expect(runBackfill(db)).rejects.toThrow(/guard 1:/);
