@@ -1,6 +1,7 @@
 -- One-off data correction: non-Div1 div-live W31-W43 stat rows onto the Thursday-close basis
 -- (Div7 2026-10-31, applying existing rulings: stat week closes Thu 14:00 Europe/Berlin; a stat
--- counts in the week the event happened).
+-- counts in the week the event happened), amended per the Dept14 ruling of 2026-10-31 (Div5
+-- qa_pass_rate and Div7 plan_completion_rate superseded without repost).
 -- Acceptance: docs/acceptance/2026-10-31_supersede_div_live_w31_w43.ACCEPTANCE.md
 -- NOT a migration (lives outside ./migrations so `npm run dabos:migrate` never runs it).
 -- NOT EXECUTED by this PR. Runs only after Dept13 PASS and Logan's own yes to merge and apply,
@@ -17,22 +18,29 @@
 --      Div2/Dept4, Div2, Div4, Div4/Dept12, Div5, Div7) superseded. They sit at the old ISO-week
 --      end: W31 2026-08-02T21:59:59.999Z, W40 2026-10-04T21:59:59.999Z (Sun 23:59:59.999 Berlin),
 --      W41-W43 Sun 23:59:59.999Z UTC (= Mon 01:59:59.999 Berlin). recorded_by and basis are NULL.
---   2. Reposts each with the same workspace, division, department, metric and value, keeping the
+--      superseded_reason per row:
+--        Div2/Div4 (20 rows): 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)'
+--        Div7 plan_completion_rate 28.6 (5 rows): 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling'
+--        Div5 qa_pass_rate 80 (5 rows): 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts'
+--   2. Reposts ONLY the 20 Div2/Div4 rows (Div5/Div7 get NO repost: those weeks stay missing),
+--      each with the same workspace, division, department, metric and value, keeping the
 --      workspace label's week (as board-conditions-query.ts bucketStatWeek does), recorded_at =
 --      that week's Thu 14:00 Berlin close - 1 ms (org-week.ts recordedAtForClosedOrgWeek):
 --        W31 2026-07-30T11:59:59.999Z   W40 2026-10-01T11:59:59.999Z   W41 2026-10-08T11:59:59.999Z
 --        W42 2026-10-15T11:59:59.999Z   W43 2026-10-22T11:59:59.999Z
 --      recorded_by 'div-live-correction-2026-10-31'; basis = old basis (NULL -> {}) + correction
 --      tag, superseded row id and old recorded_at.
---   Values are NOT recomputed. W32-W39 have no div-live rows. W44 is out of scope (its 6 rows were
+--   Values are NOT recomputed. End state: 4 active non-Div1 rows per workspace. W32-W39 have no div-live rows. W44 is out of scope (its 6 rows were
 --   superseded with no replacement by 2026-10-29_supersede_w44_poster_rows.sql, #38: to-report).
---   Untouched: every row outside the 30 (Div1 incl. #49's backfill, W30, W44, gfp-live #45/#47).
+--   Untouched: every row outside the 30 (Div1 incl. #49's backfill, W30 and W44 incl. #53 and the
+--   Div5 W44 qa_pass_rate post, gfp-live #45/#47). No guard here reads W30 or W44, so the order
+--   against those PRs does not matter.
 --
 -- Undo (manual, if ever needed):
 --   BEGIN;
 --   DELETE FROM stats WHERE basis->>'correction' = '2026-10-31_supersede_div_live_w31_w43' AND superseded_at IS NULL;
 --   UPDATE stats SET superseded_at = NULL, superseded_reason = NULL
---     WHERE superseded_reason = 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+--     WHERE id IN (<the 30 ids listed below>);   -- id-scoped: the Dept14 reasons are shared with #53's W30 rows
 --   COMMIT;
 
 BEGIN;
@@ -45,11 +53,20 @@ CREATE TEMP TABLE div_live_w31_w43_fix (
   metric text NOT NULL,
   val numeric NOT NULL,
   old_rec text NOT NULL,
-  new_rec text NOT NULL
+  new_rec text NOT NULL,
+  repost boolean NOT NULL,
+  reason text NOT NULL
 ) ON COMMIT DROP;
 
-INSERT INTO div_live_w31_w43_fix (id, ws, division, dept, metric, val, old_rec, new_rec)
-SELECT v.id::uuid, v.ws, v.division, v.dept, v.metric, v.val, v.old_rec, c.new_rec
+-- Div5 qa_pass_rate and Div7 plan_completion_rate: superseded without repost (Dept14 2026-10-31).
+INSERT INTO div_live_w31_w43_fix (id, ws, division, dept, metric, val, old_rec, new_rec, repost, reason)
+SELECT v.id::uuid, v.ws, v.division, v.dept, v.metric, v.val, v.old_rec, c.new_rec,
+       v.division NOT IN ('Div5', 'Div7'),
+       CASE v.division
+         WHEN 'Div7' THEN 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling'
+         WHEN 'Div5' THEN 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts'
+         ELSE 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)'
+       END
   FROM (VALUES
     ('56b705f1-90fe-497f-9323-66ac9e6439a5', 'div-live-2026-W31', 'Div2', 'Dept4', 'content_pieces_shipped', 0, '2026-08-02T21:59:59.999Z'),
     ('1a8c8673-e138-4e2e-a1f4-94297890a897', 'div-live-2026-W31', 'Div2', NULL, 'leads_or_touchpoints_created', 0, '2026-08-02T21:59:59.999Z'),
@@ -93,7 +110,9 @@ SELECT v.id::uuid, v.ws, v.division, v.dept, v.metric, v.val, v.old_rec, c.new_r
 DO $$
 DECLARE
   tag constant text := '2026-10-31_supersede_div_live_w31_w43';
-  reason constant text := 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+  reason_redate constant text := 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+  reason_div7 constant text := 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling';
+  reason_div5 constant text := 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts';
   by_tag constant text := 'div-live-correction-2026-10-31';
   wss constant text[] := ARRAY['div-live-2026-W31', 'div-live-2026-W40', 'div-live-2026-W41',
                                'div-live-2026-W42', 'div-live-2026-W43'];
@@ -120,6 +139,19 @@ BEGIN
   IF n <> 5 OR (SELECT count(*) FROM div_live_w31_w43_fix) <> 30 THEN
     RAISE EXCEPTION 'guard 0b: fix set is not 30 rows, 6 in each of 5 workspaces';
   END IF;
+  -- Guard 0c: per workspace 4 re-dated Div2/Div4 rows, 1 Div5 qa_pass_rate 80 and 1 Div7
+  -- plan_completion_rate 28.6 superseded without repost, each with its exact reason.
+  SELECT count(*) INTO n FROM (
+    SELECT ws FROM div_live_w31_w43_fix GROUP BY ws
+    HAVING count(*) FILTER (WHERE repost AND division IN ('Div2', 'Div4') AND reason = reason_redate) = 4
+       AND count(*) FILTER (WHERE NOT repost AND division = 'Div5' AND dept IS NULL AND metric = 'qa_pass_rate'
+                              AND val = 80 AND reason = reason_div5) = 1
+       AND count(*) FILTER (WHERE NOT repost AND division = 'Div7' AND dept IS NULL AND metric = 'plan_completion_rate'
+                              AND val = 28.6 AND reason = reason_div7) = 1
+  ) t;
+  IF n <> 5 THEN
+    RAISE EXCEPTION 'guard 0c: fix set is not 4 re-dated + Div5/Div7 supersede-only rows in each of 5 workspaces';
+  END IF;
 
   -- State: before (30 active old rows at the old recorded_at, nothing tagged) or after (all done).
   SELECT count(*) INTO active_old FROM stats s JOIN div_live_w31_w43_fix f ON f.id = s.id
@@ -127,7 +159,7 @@ BEGIN
      AND s.department_id IS NOT DISTINCT FROM f.dept AND s.metric_key = f.metric
      AND s.value = f.val AND s.recorded_at = f.old_rec::timestamptz;
   SELECT count(*) INTO done_old FROM stats s JOIN div_live_w31_w43_fix f ON f.id = s.id
-   WHERE s.superseded_at IS NOT NULL AND s.superseded_reason = reason;
+   WHERE s.superseded_at IS NOT NULL AND s.superseded_reason = f.reason;
   SELECT count(*) INTO reposts FROM stats WHERE basis->>'correction' = tag;
 
   IF active_old = 30 AND done_old = 0 AND reposts = 0 THEN
@@ -150,14 +182,15 @@ BEGIN
               FROM stats WHERE id IN (SELECT id FROM div_live_w31_w43_fix)) t;
 
     -- 1. Supersede (never delete, never change the value).
-    UPDATE stats SET superseded_at = now(), superseded_reason = reason
-     WHERE id IN (SELECT id FROM div_live_w31_w43_fix) AND superseded_at IS NULL;
+    UPDATE stats s SET superseded_at = now(), superseded_reason = f.reason
+      FROM div_live_w31_w43_fix f
+     WHERE s.id = f.id AND s.superseded_at IS NULL;
     GET DIAGNOSTICS n = ROW_COUNT;
     IF n <> 30 THEN
       RAISE EXCEPTION 'guard 2: supersede touched % rows, expected 30', n;
     END IF;
 
-    -- 2. Repost at the Thursday close of the same labelled week.
+    -- 2. Repost the 20 Div2/Div4 rows at the Thursday close of the same labelled week (no Div5/Div7).
     INSERT INTO stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
     SELECT s.workspace_id, s.division_id, s.department_id, s.metric_key, s.value, f.new_rec::timestamptz,
            coalesce(s.basis, '{}'::jsonb) || jsonb_build_object(
@@ -167,13 +200,14 @@ BEGIN
              'note', 'reposted at the Thu 14:00 Europe/Berlin close of the labelled week (org-week.ts); value unchanged, not recomputed'
            ),
            by_tag
-      FROM stats s JOIN div_live_w31_w43_fix f ON f.id = s.id;
+      FROM stats s JOIN div_live_w31_w43_fix f ON f.id = s.id
+     WHERE f.repost;
     GET DIAGNOSTICS n = ROW_COUNT;
-    IF n <> 30 THEN
-      RAISE EXCEPTION 'guard 3: reposted % rows, expected 30', n;
+    IF n <> 20 THEN
+      RAISE EXCEPTION 'guard 3: reposted % rows, expected 20', n;
     END IF;
 
-    -- Guard 4: nothing outside the 30 + 30 changed; the 30 old rows changed only in the supersede columns.
+    -- Guard 4: nothing outside the 30 + 20 changed; the 30 old rows changed only in the supersede columns.
     SELECT coalesce(md5(string_agg(t::text, '|' ORDER BY t.id)), 'none') INTO other_after
       FROM (SELECT * FROM stats WHERE id NOT IN (SELECT id FROM div_live_w31_w43_fix)
                                   AND (basis->>'correction' IS DISTINCT FROM tag)) t;
@@ -186,17 +220,18 @@ BEGIN
     IF listed_after <> listed_before THEN
       RAISE EXCEPTION 'guard 4b: a superseded row changed beyond superseded_at/superseded_reason';
     END IF;
-  ELSIF active_old = 0 AND done_old = 30 AND reposts = 30 THEN
+  ELSIF active_old = 0 AND done_old = 30 AND reposts = 20 THEN
     RAISE NOTICE 'div-live W31-W43 correction already applied; verifying end state, writing nothing';
   ELSE
-    RAISE EXCEPTION 'guard 1: unexpected state (active old rows %, superseded by this correction %, reposts %); expected 30/0/0 or 0/30/30',
+    RAISE EXCEPTION 'guard 1: unexpected state (active old rows %, superseded by this correction %, reposts %); expected 30/0/0 or 0/30/20',
       active_old, done_old, reposts;
   END IF;
 
-  -- Guard 5: end state. 30 old rows superseded with the reason, each with exactly one active repost
-  -- that matches it and sits at the close.
+  -- Guard 5: end state. 30 old rows superseded with their row's reason; each of the 20 Div2/Div4
+  -- rows has exactly one active repost that matches it and sits at the close; the 10 Div5/Div7
+  -- rows have none.
   SELECT count(*) INTO n FROM stats s JOIN div_live_w31_w43_fix f ON f.id = s.id
-   WHERE s.superseded_at IS NOT NULL AND s.superseded_reason = reason;
+   WHERE s.superseded_at IS NOT NULL AND s.superseded_reason = f.reason;
   IF n <> 30 THEN
     RAISE EXCEPTION 'guard 5: expected 30 superseded old rows, found %', n;
   END IF;
@@ -206,28 +241,41 @@ BEGIN
                   AND r.superseded_at IS NULL AND r.workspace_id = f.ws AND r.division_id = f.division
                   AND r.department_id IS NOT DISTINCT FROM f.dept AND r.metric_key = f.metric
                   AND r.value = f.val AND r.recorded_at = f.new_rec::timestamptz AND r.recorded_by = by_tag
+     WHERE f.repost
      GROUP BY f.id HAVING count(*) = 1
   ) t;
-  IF n <> 30 THEN
-    RAISE EXCEPTION 'guard 5b: expected 30 old rows with exactly one matching repost at the close, found %', n;
+  IF n <> 20 THEN
+    RAISE EXCEPTION 'guard 5b: expected 20 Div2/Div4 old rows with exactly one matching repost at the close, found %', n;
   END IF;
-  -- Guard 6: each workspace holds exactly 6 active non-Div1 rows, all at its close.
+  SELECT count(*) INTO n FROM stats r JOIN div_live_w31_w43_fix f ON r.basis->>'supersedes' = f.id::text
+   WHERE NOT f.repost;
+  IF n <> 0 THEN
+    RAISE EXCEPTION 'guard 5c: % repost(s) of Div5/Div7 supersede-only rows found, expected none', n;
+  END IF;
+  SELECT count(*) INTO n FROM stats
+   WHERE workspace_id = ANY(wss) AND superseded_at IS NULL
+     AND ((division_id = 'Div5' AND metric_key = 'qa_pass_rate')
+       OR (division_id = 'Div7' AND metric_key = 'plan_completion_rate'));
+  IF n <> 0 THEN
+    RAISE EXCEPTION 'guard 5d: % active Div5 qa_pass_rate / Div7 plan_completion_rate row(s) in W31/W40-W43, expected none', n;
+  END IF;
+  -- Guard 6: each workspace holds exactly 4 active non-Div1 rows, all at its close.
   SELECT count(*) INTO n FROM (
     SELECT s.workspace_id FROM stats s
      WHERE s.workspace_id = ANY(wss) AND s.division_id <> 'Div1' AND s.superseded_at IS NULL
      GROUP BY s.workspace_id
-    HAVING count(*) = 6
+    HAVING count(*) = 4
        AND bool_and(s.recorded_at = (SELECT min(f.new_rec)::timestamptz FROM div_live_w31_w43_fix f WHERE f.ws = s.workspace_id))
   ) t;
   IF n <> 5 THEN
-    RAISE EXCEPTION 'guard 6: expected 5 workspaces with exactly 6 active non-Div1 rows at the close, found %', n;
+    RAISE EXCEPTION 'guard 6: expected 5 workspaces with exactly 4 active non-Div1 rows at the close, found %', n;
   END IF;
   SELECT count(*) INTO n FROM stats WHERE basis->>'correction' = tag;
-  IF n <> 30 THEN
-    RAISE EXCEPTION 'guard 6b: expected 30 rows tagged %, found %', tag, n;
+  IF n <> 20 THEN
+    RAISE EXCEPTION 'guard 6b: expected 20 rows tagged %, found %', tag, n;
   END IF;
 
-  RAISE NOTICE 'div-live W31-W43 correction ok: 30 rows superseded, 30 reposted at the Thu 14:00 Berlin close';
+  RAISE NOTICE 'div-live W31-W43 correction ok: 30 rows superseded, 20 Div2/Div4 reposted at the Thu 14:00 Berlin close, 10 Div5/Div7 not reposted (Dept14 2026-10-31)';
 END
 $$;
 
