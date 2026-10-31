@@ -10,11 +10,12 @@
 --   Re-running after success inserts nothing and succeeds (WHERE NOT EXISTS, same key as
 --   emitStat insert_if_absent: workspace + division + department IS NOT DISTINCT FROM + metric).
 --
--- Basis (existing rules, no new ruling): Div1 artifacts_indexed = unique pages linked from
--- DABOS docs/wiki/index.md (Logan ruling 2026-10-21; #32 countUniqueWikiPages normalisation).
--- Weekly value = pages ADDED during the stat week (Thu 14:00 -> Thu 14:00 Europe/Berlin,
--- event-week rule) = unique count at the close minus unique count at the previous close, on
--- DABOS main as published on GitHub at each close. A re-pointed link adds no page.
+-- Basis: Div1 artifacts_indexed = unique normalised link targets in DABOS docs/wiki/index.md
+-- (Logan ruling 2026-10-21 "unique link targets"; #32/#50 normalisation). Weekly value = targets
+-- ADDED during the stat week (Thu 14:00 -> Thu 14:00 Europe/Berlin, event-week rule) as a set
+-- difference |targets at the close \ targets at the previous close|; removals are not subtracted,
+-- a re-pointed link counts as 1 added (Dept14 ruling 2026-10-31; same as #50's added = end - start).
+-- Read on DABOS main as published on GitHub at each close.
 -- History is not read first-parent-only: at sync merges of GitHub main into a stale local copy
 -- (abf625a1, 133ea3be, 1025d6c7, 72baf3c7) GitHub main is parent 2.
 -- recorded_at = close - 1 ms (org-week.ts recordedAtForClosedOrgWeek): 11:59:59.999Z for
@@ -26,13 +27,15 @@
 --   W39 0 (232)  W40 0 (232->232)  W41 0
 --   Dept13 FAIL v1 fixed: v1 had W38 0 / W40 3 from a first-parent read. 133ea3be (29 Sep) merged
 --   GitHub main (parent 2, already containing 2e1696fe) into a stale local copy (parent 1); it did
---   not bring the 3 pages to main.
---   W42 0 (232->232; dea83ac1 only re-pointed one link, no page added)  W43 0
+--   not bring the 3 targets to main.
+--   W42 1 (232->232; dea83ac1 re-pointed one link: 1 target added, 1 removed)  W43 0
+--   Dept13 FAIL v2 fixed: W42 was 0. Every week re-checked as a set difference; W42 is the only
+--   week with a removal. Sum W31-W44 = 75.
 --   W44 basis also carries page_fingerprints (292), fingerprint_rule and git_end_commit
 --   679c7de07be913bfd3f607bb9f250864370d11f5 in #50's final format (a20da8a), the W45 start point.
---   W44 60 (232->292, 19190099 via DABOS #112; Dept13-passed in 2026-W44.md via #186)
+--   W44 60 (232->292, 0 removed; 19190099 via DABOS #112; Dept13-passed in the DABOS W44 register via #186)
 --
--- Untouched: both div-live-2026-W30 Div1 artifacts_indexed rows (75, old artifact-index.md basis,
+-- Untouched: both div-live-2026-W30 Div1 artifacts_indexed rows (75, old artifact index basis,
 -- division row + Dept3 row), any Dept3 rows, any row outside the 14 inserted ones.
 --
 -- Undo (manual, if ever needed):
@@ -49,6 +52,8 @@ CREATE TEMP TABLE div1_backfill_w31_w44 (
   win_end text NOT NULL,
   unique_before integer NOT NULL,
   unique_after integer NOT NULL,
+  -- Targets in the previous close's set missing at this close (not subtracted from val).
+  targets_removed integer NOT NULL,
   dabos_main_at_close text NOT NULL,
   -- W44 only (#50 final spec, a20da8a): end-of-week page fingerprints and the close commit, the
   -- W45 start point. NULL otherwise.
@@ -57,20 +62,20 @@ CREATE TEMP TABLE div1_backfill_w31_w44 (
 ) ON COMMIT DROP;
 
 INSERT INTO div1_backfill_w31_w44 VALUES
-  (31, 'div-live-2026-W31',  0, '2026-07-30T11:59:59.999Z', '2026-07-23T12:00:00.000Z', '2026-07-30T12:00:00.000Z', 218, 218, '5bd5a00b', NULL, NULL),
-  (32, 'div-live-2026-W32',  9, '2026-08-06T11:59:59.999Z', '2026-07-30T12:00:00.000Z', '2026-08-06T12:00:00.000Z', 218, 227, 'd2fb4bfb', NULL, NULL),
-  (33, 'div-live-2026-W33',  0, '2026-08-13T11:59:59.999Z', '2026-08-06T12:00:00.000Z', '2026-08-13T12:00:00.000Z', 227, 227, '72baf3c7', NULL, NULL),
-  (34, 'div-live-2026-W34',  2, '2026-08-20T11:59:59.999Z', '2026-08-13T12:00:00.000Z', '2026-08-20T12:00:00.000Z', 227, 229, 'f7cb1800', NULL, NULL),
-  (35, 'div-live-2026-W35',  0, '2026-08-27T11:59:59.999Z', '2026-08-20T12:00:00.000Z', '2026-08-27T12:00:00.000Z', 229, 229, '000d2f2e', NULL, NULL),
-  (36, 'div-live-2026-W36',  0, '2026-09-03T11:59:59.999Z', '2026-08-27T12:00:00.000Z', '2026-09-03T12:00:00.000Z', 229, 229, 'b92b8e64', NULL, NULL),
-  (37, 'div-live-2026-W37',  0, '2026-09-10T11:59:59.999Z', '2026-09-03T12:00:00.000Z', '2026-09-10T12:00:00.000Z', 229, 229, 'a21c2dda', NULL, NULL),
-  (38, 'div-live-2026-W38',  3, '2026-09-17T11:59:59.999Z', '2026-09-10T12:00:00.000Z', '2026-09-17T12:00:00.000Z', 229, 232, 'eef8b6e5', NULL, NULL),
-  (39, 'div-live-2026-W39',  0, '2026-09-24T11:59:59.999Z', '2026-09-17T12:00:00.000Z', '2026-09-24T12:00:00.000Z', 232, 232, 'f85b987f', NULL, NULL),
-  (40, 'div-live-2026-W40',  0, '2026-10-01T11:59:59.999Z', '2026-09-24T12:00:00.000Z', '2026-10-01T12:00:00.000Z', 232, 232, 'a49b6d10', NULL, NULL),
-  (41, 'div-live-2026-W41',  0, '2026-10-08T11:59:59.999Z', '2026-10-01T12:00:00.000Z', '2026-10-08T12:00:00.000Z', 232, 232, '6dc58670', NULL, NULL),
-  (42, 'div-live-2026-W42',  0, '2026-10-15T11:59:59.999Z', '2026-10-08T12:00:00.000Z', '2026-10-15T12:00:00.000Z', 232, 232, '7814e757', NULL, NULL),
-  (43, 'div-live-2026-W43',  0, '2026-10-22T11:59:59.999Z', '2026-10-15T12:00:00.000Z', '2026-10-22T12:00:00.000Z', 232, 232, '368cfd9e', NULL, NULL),
-  (44, 'div-live-2026-W44', 60, '2026-10-29T12:59:59.999Z', '2026-10-22T12:00:00.000Z', '2026-10-29T13:00:00.000Z', 232, 292, '37aff075',
+  (31, 'div-live-2026-W31',  0, '2026-07-30T11:59:59.999Z', '2026-07-23T12:00:00.000Z', '2026-07-30T12:00:00.000Z', 218, 218, 0, '5bd5a00b', NULL, NULL),
+  (32, 'div-live-2026-W32',  9, '2026-08-06T11:59:59.999Z', '2026-07-30T12:00:00.000Z', '2026-08-06T12:00:00.000Z', 218, 227, 0, 'd2fb4bfb', NULL, NULL),
+  (33, 'div-live-2026-W33',  0, '2026-08-13T11:59:59.999Z', '2026-08-06T12:00:00.000Z', '2026-08-13T12:00:00.000Z', 227, 227, 0, '72baf3c7', NULL, NULL),
+  (34, 'div-live-2026-W34',  2, '2026-08-20T11:59:59.999Z', '2026-08-13T12:00:00.000Z', '2026-08-20T12:00:00.000Z', 227, 229, 0, 'f7cb1800', NULL, NULL),
+  (35, 'div-live-2026-W35',  0, '2026-08-27T11:59:59.999Z', '2026-08-20T12:00:00.000Z', '2026-08-27T12:00:00.000Z', 229, 229, 0, '000d2f2e', NULL, NULL),
+  (36, 'div-live-2026-W36',  0, '2026-09-03T11:59:59.999Z', '2026-08-27T12:00:00.000Z', '2026-09-03T12:00:00.000Z', 229, 229, 0, 'b92b8e64', NULL, NULL),
+  (37, 'div-live-2026-W37',  0, '2026-09-10T11:59:59.999Z', '2026-09-03T12:00:00.000Z', '2026-09-10T12:00:00.000Z', 229, 229, 0, 'a21c2dda', NULL, NULL),
+  (38, 'div-live-2026-W38',  3, '2026-09-17T11:59:59.999Z', '2026-09-10T12:00:00.000Z', '2026-09-17T12:00:00.000Z', 229, 232, 0, 'eef8b6e5', NULL, NULL),
+  (39, 'div-live-2026-W39',  0, '2026-09-24T11:59:59.999Z', '2026-09-17T12:00:00.000Z', '2026-09-24T12:00:00.000Z', 232, 232, 0, 'f85b987f', NULL, NULL),
+  (40, 'div-live-2026-W40',  0, '2026-10-01T11:59:59.999Z', '2026-09-24T12:00:00.000Z', '2026-10-01T12:00:00.000Z', 232, 232, 0, 'a49b6d10', NULL, NULL),
+  (41, 'div-live-2026-W41',  0, '2026-10-08T11:59:59.999Z', '2026-10-01T12:00:00.000Z', '2026-10-08T12:00:00.000Z', 232, 232, 0, '6dc58670', NULL, NULL),
+  (42, 'div-live-2026-W42',  1, '2026-10-15T11:59:59.999Z', '2026-10-08T12:00:00.000Z', '2026-10-15T12:00:00.000Z', 232, 232, 1, '7814e757', NULL, NULL),
+  (43, 'div-live-2026-W43',  0, '2026-10-22T11:59:59.999Z', '2026-10-15T12:00:00.000Z', '2026-10-22T12:00:00.000Z', 232, 232, 0, '368cfd9e', NULL, NULL),
+  (44, 'div-live-2026-W44', 60, '2026-10-29T12:59:59.999Z', '2026-10-22T12:00:00.000Z', '2026-10-29T13:00:00.000Z', 232, 292, 0, '37aff075',
    '[
     "0006b81567e02432", "0014015ebf9a8ca1", "0108832c50780998", "014a6841fae904be", "01737aaee926a474", "01a039640e762c62",
     "01b413a4fe0d9970", "05551775ea5919e6", "056d8fa9d4c26fe9", "07260adda6526f91", "08eb7bfb93b7d618", "0921e87a32dca891",
@@ -134,11 +139,12 @@ DECLARE
   n integer;
   inserted integer;
 BEGIN
-  -- Guard 0: the backfill set is the 14 weeks W31..W44, values sum 74, Div1 exists (FK).
+  -- Guard 0: the backfill set is the 14 weeks W31..W44, values sum 75, Div1 exists (FK).
   SELECT count(*) INTO n FROM div1_backfill_w31_w44
    WHERE week BETWEEN 31 AND 44 AND ws = 'div-live-2026-W' || week;
-  IF n <> 14 OR (SELECT sum(val) FROM div1_backfill_w31_w44) <> 74 THEN
-    RAISE EXCEPTION 'guard 0: backfill set is not the 14 weeks W31..W44 summing to 74';
+  IF n <> 14 OR (SELECT sum(val) FROM div1_backfill_w31_w44) <> 75
+     OR EXISTS (SELECT 1 FROM div1_backfill_w31_w44 WHERE val - targets_removed <> unique_after - unique_before) THEN
+    RAISE EXCEPTION 'guard 0: backfill set is not the 14 weeks W31..W44 summing to 75 (added - removed = unique after - before)';
   END IF;
   SELECT count(*) INTO n FROM divisions WHERE id = 'Div1';
   IF n <> 1 THEN
@@ -201,12 +207,13 @@ BEGIN
          jsonb_build_object(
            'ssot', 'DABOS/docs/wiki/index.md',
            'rule', 'unique link targets (Logan ruling 2026-10-21)',
-           'note', 'Div1 basis: pages added to docs/wiki/index.md during the stat week (Thu 14:00 -> Thu 14:00 Europe/Berlin; event-week rule); a re-pointed link adds no page',
+           'note', 'Div1 basis: link targets added to docs/wiki/index.md during the stat week as a set difference (Thu 14:00 -> Thu 14:00 Europe/Berlin; event-week rule); removals not subtracted, a re-pointed link counts as added',
            'year', 2026,
            'week', b.week,
            'window', jsonb_build_object('start', b.win_start, 'end', b.win_end),
            'index_unique_before', b.unique_before,
            'index_unique_after', b.unique_after,
+           'index_targets_removed', b.targets_removed,
            'dabos_main_at_close', b.dabos_main_at_close,
            'correction', tag
          ) || CASE WHEN b.page_fingerprints IS NULL THEN '{}'::jsonb ELSE jsonb_build_object(
