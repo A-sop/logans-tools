@@ -14,7 +14,14 @@ import { createDabosTestDb, readRepoFile } from '@/test/pglite-dabos';
 const SQL_PATH = 'scripts/dabos/sql/2026-10-31_supersede_div_live_w31_w43.sql';
 const CORRECTION_SQL = readRepoFile(SQL_PATH);
 const TAG = '2026-10-31_supersede_div_live_w31_w43';
-const REASON = 'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+const REASON_REDATE =
+  'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+// Dept14 ruling 2026-10-31: these two are superseded with NO repost.
+const REASON_DIV7 = 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling';
+const REASON_DIV5 = 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts';
+const reasonFor = (div: string) =>
+  div === 'Div7' ? REASON_DIV7 : div === 'Div5' ? REASON_DIV5 : REASON_REDATE;
+const reposted = (div: string) => div !== 'Div5' && div !== 'Div7';
 const BY = 'div-live-correction-2026-10-31';
 
 const OLD_AT: Record<number, string> = {
@@ -62,6 +69,8 @@ const OLD: Old[] = [
   ['31340bab-e56e-43de-b2cf-6c0af3fe8c3e', 43, 'Div7', null, 'plan_completion_rate', 28.6],
 ];
 const OLD_IDS = OLD.map((o) => o[0]);
+const REPOST = OLD.filter((o) => reposted(o[2]));
+const VOID = OLD.filter((o) => !reposted(o[2]));
 
 async function seed(db: PGlite, opts: { skip?: string; bump?: string } = {}) {
   await db.query(
@@ -80,14 +89,17 @@ async function seed(db: PGlite, opts: { skip?: string; bump?: string } = {}) {
     );
   }
   // Out of scope, must stay byte-identical: W30 rows, Div1 rows in the same workspaces (#49-style
-  // backfill), the superseded W44 rows (#38: to-report), and gfp-live rows (#45/#47).
+  // backfill), the superseded W44 rows (#38: to-report), the W30 Div5 row superseded by #53 with
+  // the same Dept14 reason, the Div5 W44 qa_pass_rate post (separate PR), and gfp-live rows (#45/#47).
   await db.query(
     `INSERT INTO stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by, superseded_at, superseded_reason) VALUES
        ('div-live-2026-W30', 'Div1', 'Dept3', 'artifacts_indexed', 75, '2026-07-26T21:59:59.999Z', '{"note":"old"}', 'week-close-poster', NULL, NULL),
        ('div-live-2026-W30', 'Div2', NULL, 'leads_or_touchpoints_created', 0, '2026-07-26T21:59:59.999Z', NULL, NULL, NULL, NULL),
        ('div-live-2026-W31', 'Div1', NULL, 'artifacts_indexed', 0, '2026-07-30T11:59:59.999Z', '{"correction":"2026-10-31_backfill_div1_artifacts_indexed_w31_w44"}', 'week-close-poster', NULL, NULL),
        ('div-live-2026-W42', 'Div1', NULL, 'artifacts_indexed', 0, '2026-10-15T11:59:59.999Z', '{"correction":"2026-10-31_backfill_div1_artifacts_indexed_w31_w44"}', 'week-close-poster', NULL, NULL),
+       ('div-live-2026-W30', 'Div5', NULL, 'qa_pass_rate', 80, '2026-07-26T21:59:59.999Z', NULL, NULL, '2026-10-31T20:00:00Z', '${REASON_DIV5}'),
        ('div-live-2026-W44', 'Div5', NULL, 'qa_pass_rate', 75, '2026-11-01T23:59:59.999Z', NULL, NULL, '2026-10-30T21:53:34.457Z', 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)'),
+       ('div-live-2026-W44', 'Div5', NULL, 'qa_pass_rate', 66.7, '2026-10-29T12:59:59.999Z', '{"correction":"2026-10-31_post_div5_qa_pass_rate_w44"}', 'div-live-correction-2026-10-31', NULL, NULL),
        ('gfp-live-2026-W40', 'Div6', NULL, 'conversions', 0, '2026-10-04T21:59:59.999Z', NULL, 'gfp-poster', NULL, NULL)`
   );
 }
@@ -153,7 +165,9 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
   it('documents the defect: every old recorded_at lies in the stat week after its label', () => {
     for (const week of WEEKS) {
       expect(statWeekOf(new Date(OLD_AT[week]!)).isoWeek).toBe(week + 1);
-      expect(statWeekOf(new Date(recordedAtForClosedOrgWeek(statWeekWindow(2026, week)))).isoWeek).toBe(week);
+      expect(
+        statWeekOf(new Date(recordedAtForClosedOrgWeek(statWeekWindow(2026, week)))).isoWeek
+      ).toBe(week);
     }
   });
 
@@ -166,12 +180,24 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
     expect(CORRECTION_SQL.match(/\('[0-9a-f-]{36}', 'div-live-2026-W\d\d'/g)).toHaveLength(30);
   });
 
-  it('supersedes the 30 rows (not deleted, unchanged otherwise) and reposts each at the close, same value', async () => {
+  it('carries the Dept14 2026-10-31 reasons verbatim and reposts only Div2/Div4', () => {
+    expect(CORRECTION_SQL).toContain(`WHEN 'Div7' THEN '${REASON_DIV7}'`);
+    expect(CORRECTION_SQL).toContain(`WHEN 'Div5' THEN '${REASON_DIV5}'`);
+    expect(CORRECTION_SQL).toContain(`ELSE '${REASON_REDATE}'`);
+    expect(CORRECTION_SQL).toContain(`v.division NOT IN ('Div5', 'Div7')`);
+    expect(REPOST).toHaveLength(20);
+    expect(VOID.map((o) => o[2]).sort()).toEqual([
+      ...Array(5).fill('Div5'),
+      ...Array(5).fill('Div7'),
+    ]);
+  });
+
+  it('supersedes the 30 rows (not deleted, unchanged otherwise), reposts the 20 Div2/Div4 at the close, none for Div5/Div7', async () => {
     await seed(db);
     const before = await allRows(db);
     await run(db);
     const after = await allRows(db);
-    expect(after).toHaveLength(before.length + 30);
+    expect(after).toHaveLength(before.length + 20);
 
     const byId = new Map(after.map((r) => [r.id, r]));
     for (const b of before) {
@@ -179,26 +205,31 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
       if (OLD_IDS.includes(b.id)) {
         expect(stripSupersede(a)).toEqual(stripSupersede(b));
         expect(a.superseded_at).not.toBeNull();
-        expect(a.superseded_reason).toBe(REASON);
+        expect(a.superseded_reason).toBe(reasonFor(b.division_id));
       } else {
         expect(a).toEqual(b); // out-of-scope rows byte-identical
       }
     }
 
     const reposts = after.filter((r) => r.basis?.correction === TAG);
-    expect(reposts).toHaveLength(30);
-    for (const [id, week, div, dept, metric, value] of OLD) {
+    expect(reposts).toHaveLength(20);
+    for (const [id] of VOID) {
+      expect(after.filter((r) => r.basis?.supersedes === id)).toHaveLength(0);
+    }
+    for (const [id, week, div, dept, metric, value] of REPOST) {
       const mine = reposts.filter((r) => r.basis!.supersedes === id);
       expect(mine).toHaveLength(1);
       const r = mine[0]!;
-      expect([r.workspace_id, r.division_id, r.department_id, r.metric_key, Number(r.value)]).toEqual([
-        ws(week),
-        div,
-        dept,
-        metric,
-        value,
-      ]);
-      expect(r.recorded_at.toISOString()).toBe(recordedAtForClosedOrgWeek(statWeekWindow(2026, week)));
+      expect([
+        r.workspace_id,
+        r.division_id,
+        r.department_id,
+        r.metric_key,
+        Number(r.value),
+      ]).toEqual([ws(week), div, dept, metric, value]);
+      expect(r.recorded_at.toISOString()).toBe(
+        recordedAtForClosedOrgWeek(statWeekWindow(2026, week))
+      );
       expect(r.recorded_by).toBe(BY);
       expect(r.superseded_at).toBeNull();
       expect(r.basis!.old_recorded_at).toBe(OLD_AT[week]);
@@ -212,7 +243,12 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
         WHERE division_id <> 'Div1' AND superseded_at IS NULL AND workspace_id ~ '^div-live-2026-W(3[1-9]|4[0-3])$'
         GROUP BY 1 ORDER BY 1`
     );
-    expect(active.rows).toEqual(WEEKS.map((w) => ({ ws: ws(w), n: 6 })));
+    expect(active.rows).toEqual(WEEKS.map((w) => ({ ws: ws(w), n: 4 })));
+    const liveVoid = await db.query(
+      `SELECT 1 FROM stats WHERE superseded_at IS NULL AND workspace_id ~ '^div-live-2026-W(3[1-9]|4[0-3])$'
+          AND division_id IN ('Div5', 'Div7')`
+    );
+    expect(liveVoid.rows).toHaveLength(0);
   });
 
   it('a second run is a no-op and succeeds', async () => {
@@ -250,9 +286,10 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
 
   it('aborts on a partial state (a listed row already superseded for another reason)', async () => {
     await seed(db);
-    await db.query(`UPDATE stats SET superseded_at = now(), superseded_reason = 'other' WHERE id = $1`, [
-      OLD_IDS[0],
-    ]);
+    await db.query(
+      `UPDATE stats SET superseded_at = now(), superseded_reason = 'other' WHERE id = $1`,
+      [OLD_IDS[0]]
+    );
     const before = await allRows(db);
     await expect(run(db)).rejects.toThrow(/guard 1: unexpected state/);
     expect(await allRows(db)).toEqual(before);
@@ -261,7 +298,7 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
   it('aborts after a partial apply (reposts deleted by hand) instead of reposting twice', async () => {
     await seed(db);
     await run(db);
-    await db.query(`DELETE FROM stats WHERE basis->>'supersedes' = $1`, [OLD_IDS[5]]);
+    await db.query(`DELETE FROM stats WHERE basis->>'supersedes' = $1`, [OLD_IDS[2]]);
     const before = await allRows(db);
     await expect(run(db)).rejects.toThrow(/guard 1: unexpected state/);
     expect(await allRows(db)).toEqual(before);
@@ -270,12 +307,48 @@ describe('2026-10-31 div-live W31-W43 supersede-and-repost SQL', { timeout: 30_0
   it('a guard fires if the repost step is dropped (mutation)', async () => {
     await seed(db);
     const mutated = CORRECTION_SQL.replace(
-      /INSERT INTO stats \(workspace_id[\s\S]*?FROM stats s JOIN div_live_w31_w43_fix f ON f\.id = s\.id;/,
+      /INSERT INTO stats \(workspace_id[\s\S]*?FROM stats s JOIN div_live_w31_w43_fix f ON f\.id = s\.id\n\s*WHERE f\.repost;/,
       'PERFORM 1 WHERE false;'
     );
     expect(mutated).not.toBe(CORRECTION_SQL);
     const before = await allRows(db);
     await expect(run(db, mutated)).rejects.toThrow(/guard 3: reposted 0 rows/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('a guard fires if Div5/Div7 get reposted after all (mutation)', async () => {
+    await seed(db);
+    const mutated = CORRECTION_SQL.replace(
+      /(FROM stats s JOIN div_live_w31_w43_fix f ON f\.id = s\.id)\n\s*WHERE f\.repost;/,
+      '$1;'
+    );
+    expect(mutated).not.toBe(CORRECTION_SQL);
+    const before = await allRows(db);
+    await expect(run(db, mutated)).rejects.toThrow(/guard 3: reposted 30 rows, expected 20/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('a guard fires if a Div5/Div7 row gets the re-date reason (mutation)', async () => {
+    await seed(db);
+    const mutated = CORRECTION_SQL.replace(
+      `WHEN 'Div5' THEN '${REASON_DIV5}'`,
+      `WHEN 'Div5' THEN '${REASON_REDATE}'`
+    );
+    expect(mutated).not.toBe(CORRECTION_SQL);
+    const before = await allRows(db);
+    await expect(run(db, mutated)).rejects.toThrow(/guard 0c/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('a re-run aborts if an active Div5 qa_pass_rate row reappears in W40', async () => {
+    await seed(db);
+    await run(db);
+    await db.query(
+      `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at)
+       VALUES ('div-live-2026-W40', 'Div5', 'qa_pass_rate', 80, '2026-10-01T11:59:59.999Z')`
+    );
+    const before = await allRows(db);
+    await expect(run(db)).rejects.toThrow(/guard 5d: 1 active Div5/);
     expect(await allRows(db)).toEqual(before);
   });
 
