@@ -21,8 +21,12 @@ const W44_OLD = '2026-11-01T23:59:59.999Z';
 const REASON_38 = 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)';
 const ID_38 = '2683a636-bb19-46f4-a800-1f73d5ba16ed';
 
-/** Dept13 register backfill Instances 6-25 (W44), verdict per instance (DABOS #191 @ 248056df). */
-const W44_VERDICTS: Record<number, 'PASS' | 'FAIL'> = {
+type Verdict = 'PASS' | 'FAIL' | 'CONDITIONAL' | 'PASS-conditional';
+/**
+ * All 47 W44 Dept13 verdict events, one per verdict on one PR at one SHA, from the Dept13
+ * validation register W44 rebuild (Instances 6-26 and 36-61; DABOS #201 @651c1c6c).
+ */
+const W44_VERDICTS: Record<number, Verdict> = {
   6: 'PASS',
   7: 'FAIL',
   8: 'PASS',
@@ -32,7 +36,7 @@ const W44_VERDICTS: Record<number, 'PASS' | 'FAIL'> = {
   12: 'PASS',
   13: 'FAIL',
   14: 'PASS',
-  15: 'PASS',
+  15: 'PASS-conditional',
   16: 'PASS',
   17: 'FAIL',
   18: 'FAIL',
@@ -43,9 +47,45 @@ const W44_VERDICTS: Record<number, 'PASS' | 'FAIL'> = {
   23: 'PASS',
   24: 'FAIL',
   25: 'PASS',
+  26: 'PASS',
+  36: 'CONDITIONAL',
+  37: 'CONDITIONAL',
+  38: 'CONDITIONAL',
+  39: 'PASS',
+  40: 'FAIL',
+  41: 'CONDITIONAL',
+  42: 'FAIL',
+  43: 'CONDITIONAL',
+  44: 'PASS',
+  45: 'CONDITIONAL',
+  46: 'CONDITIONAL',
+  47: 'CONDITIONAL',
+  48: 'CONDITIONAL',
+  49: 'PASS',
+  50: 'CONDITIONAL',
+  51: 'FAIL',
+  52: 'CONDITIONAL',
+  53: 'CONDITIONAL',
+  54: 'PASS',
+  55: 'CONDITIONAL',
+  56: 'CONDITIONAL',
+  57: 'CONDITIONAL',
+  58: 'PASS',
+  59: 'PASS',
+  60: 'PASS',
+  61: 'PASS-conditional',
 };
-/** Dept14 2026-10-31: not closed. */
-const EXCLUDED = [15, 25];
+const DABOS_REGISTER = 'DABOS #201 @651c1c6c0c2782595217dad8a8b394b06c0e1a02';
+/** Dept14 2026-10-31: only PASS / FAIL are closed verdicts. */
+const isClosed = (v: Verdict) => v === 'PASS' || v === 'FAIL';
+const EXCLUDED = Object.entries(W44_VERDICTS)
+  .filter(([, v]) => !isClosed(v))
+  .map(([i]) => Number(i));
+const rate = (verdicts: Record<number, Verdict>) => {
+  const closed = Object.values(verdicts).filter(isClosed);
+  const pass = closed.filter((v) => v === 'PASS').length;
+  return { pass, closed: closed.length, value: Math.round((pass / closed.length) * 1000) / 10 };
+};
 
 async function seed(db: PGlite) {
   await db.query(
@@ -119,18 +159,61 @@ describe('2026-10-31 Div5 W44 qa_pass_rate post SQL', { timeout: 30_000 }, () =>
     await db.close();
   });
 
-  it('66.7 = 12/18 closed W44 verdicts from Instances 6-25 without #15 and #25 (poster rounding)', () => {
-    const closed = Object.entries(W44_VERDICTS).filter(([i]) => !EXCLUDED.includes(Number(i)));
-    const pass = closed.filter(([, v]) => v === 'PASS').map(([i]) => Number(i));
-    const fail = closed.filter(([, v]) => v === 'FAIL').map(([i]) => Number(i));
-    expect(Object.keys(W44_VERDICTS)).toHaveLength(20);
-    expect([pass.length, closed.length]).toEqual([12, 18]);
-    expect(Math.round((pass.length / closed.length) * 1000) / 10).toBe(66.7);
-    expect(CORRECTION_SQL).toContain(`'pass_instances', jsonb_build_array(${pass.join(', ')})`);
-    expect(CORRECTION_SQL).toContain(`'fail_instances', jsonb_build_array(${fail.join(', ')})`);
+  it('70.0 = 21/30 closed W44 verdicts from the W44 rebuild (Instances 6-26, 36-61) without PASS-conditional and CONDITIONAL', () => {
+    const entries = Object.entries(W44_VERDICTS).map(([i, v]) => [Number(i), v] as const);
+    const of = (k: Verdict) => entries.filter(([, v]) => v === k).map(([i]) => i);
+    expect(entries).toHaveLength(47);
+    expect([
+      of('PASS').length,
+      of('FAIL').length,
+      of('CONDITIONAL').length,
+      of('PASS-conditional').length,
+    ]).toEqual([21, 9, 15, 2]);
+    expect(EXCLUDED).toHaveLength(17);
+    const r = rate(W44_VERDICTS);
+    expect([r.pass, r.closed]).toEqual([21, 30]);
+    expect(r.value).toBe(70);
+    expect(CORRECTION_SQL).toContain('num constant integer := 21;');
+    expect(CORRECTION_SQL).toContain('den constant integer := 30;');
+    expect(CORRECTION_SQL).toContain('val constant numeric := 70.0;');
+    expect(CORRECTION_SQL).toContain(
+      `'pass_instances', jsonb_build_array(${of('PASS').join(', ')})`
+    );
+    expect(CORRECTION_SQL).toContain(
+      `'fail_instances', jsonb_build_array(${of('FAIL').join(', ')})`
+    );
     expect(CORRECTION_SQL).toContain(`jsonb_build_object('instance', 15,`);
-    expect(CORRECTION_SQL).toContain(`jsonb_build_object('instance', 25,`);
+    expect(CORRECTION_SQL).toContain(`jsonb_build_object('instance', 61,`);
+    expect(CORRECTION_SQL).toContain(
+      `jsonb_build_object('instances', jsonb_build_array(${of('CONDITIONAL').join(', ')}), 'why', 'not closed (CONDITIONAL)')`
+    );
+    expect(CORRECTION_SQL).toContain(DABOS_REGISTER);
   });
+
+  it('mutation: dropping Instance 25 (20/29 = 69.0) or counting 61 as PASS (22/31 = 71.0) does not give 70.0', () => {
+    const without25 = { ...W44_VERDICTS };
+    delete without25[25];
+    expect(rate(without25)).toEqual({ pass: 20, closed: 29, value: 69 });
+    const with61 = { ...W44_VERDICTS, 61: 'PASS' as const };
+    expect(rate(with61)).toEqual({ pass: 22, closed: 31, value: 71 });
+  });
+
+  for (const [label, num, den] of [
+    ['dropping Instance 25', 20, 29],
+    ['counting 61 as PASS', 22, 31],
+  ] as const) {
+    it(`guard 0b fires on the SQL when ${label} (${num}/${den}) but the value stays 70.0 (mutation)`, async () => {
+      await seed(db);
+      const mutated = CORRECTION_SQL.replace(
+        'num constant integer := 21;',
+        `num constant integer := ${num};`
+      ).replace('den constant integer := 30;', `den constant integer := ${den};`);
+      expect(mutated).not.toBe(CORRECTION_SQL);
+      const before = await allRows(db);
+      await expect(run(db, mutated)).rejects.toThrow(/guard 0b/);
+      expect(await allRows(db)).toEqual(before);
+    });
+  }
 
   it('recorded_at is the W44 close from org-week.ts (CET) and buckets into W44', () => {
     expect(W44_CLOSE).toBe('2026-10-29T12:59:59.999Z');
@@ -155,23 +238,34 @@ describe('2026-10-31 Div5 W44 qa_pass_rate post SQL', { timeout: 30_000 }, () =>
       'Div5',
       null,
       'qa_pass_rate',
-      '66.7',
+      '70.0',
     ]);
     expect(r.recorded_at.toISOString()).toBe(W44_CLOSE);
     expect(r.recorded_by).toBe(BY);
     expect(r.superseded_at).toBeNull();
     expect(bucketStatWeek(2026, r.recorded_at, r.workspace_id)).toBe(44);
     expect(r.basis).toMatchObject({
-      numerator: 12,
-      denominator: 18,
+      numerator: 21,
+      denominator: 30,
       ruling: 'Dept14 ruling 2026-10-31',
       week: 44,
+      pass_instances: [
+        6, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 23, 25, 26, 39, 44, 49, 54, 58, 59, 60,
+      ],
+      fail_instances: [7, 13, 17, 18, 22, 24, 40, 42, 51],
       excluded_instances: [
-        { instance: 15, why: 'not closed (PASS conditional on #171)' },
-        { instance: 25, why: 'not closed (W44 only if pre-merge)' },
+        { instance: 15, why: 'not closed (PASS conditional: merge #171 first)' },
+        { instance: 61, why: 'not closed (PASS conditional: conditions before recreating calcom)' },
+        {
+          instances: [36, 37, 38, 41, 43, 45, 46, 47, 48, 50, 52, 53, 55, 56, 57],
+          why: 'not closed (CONDITIONAL)',
+        },
       ],
     });
-    expect(String(r.basis!.rule)).toMatch(/closed Dept13 verdicts .* Instances 6-25/);
+    expect(String(r.basis!.rule)).toMatch(
+      /closed Dept13 verdicts .* dated by when Div5 sent the verdict, from all 47 W44 events .*\(Instances 6-26 and 36-61\)/
+    );
+    expect(String(r.basis!.register)).toContain(DABOS_REGISTER);
 
     const live = after.filter(
       (x) => x.workspace_id === W44 && x.division_id === 'Div5' && x.superseded_at === null
@@ -210,7 +304,7 @@ describe('2026-10-31 Div5 W44 qa_pass_rate post SQL', { timeout: 30_000 }, () =>
   it('a re-run aborts if the posted row was later superseded or changed', async () => {
     await seed(db);
     await run(db);
-    await db.query(`UPDATE stats SET value = 70 WHERE basis->>'correction' = $1`, [TAG]);
+    await db.query(`UPDATE stats SET value = 71 WHERE basis->>'correction' = $1`, [TAG]);
     const before = await allRows(db);
     await expect(run(db)).rejects.toThrow(/guard 4: expected exactly one active Div5/);
     expect(await allRows(db)).toEqual(before);
@@ -231,8 +325,8 @@ describe('2026-10-31 Div5 W44 qa_pass_rate post SQL', { timeout: 30_000 }, () =>
   it('a guard fires if the value drifts from numerator/denominator (mutation)', async () => {
     await seed(db);
     const mutated = CORRECTION_SQL.replace(
-      'val constant numeric := 66.7;',
-      'val constant numeric := 70;'
+      'val constant numeric := 70.0;',
+      'val constant numeric := 66.7;'
     );
     expect(mutated).not.toBe(CORRECTION_SQL);
     await expect(run(db, mutated)).rejects.toThrow(/guard 0b/);
