@@ -1,4 +1,4 @@
--- One-off data correction: Div5 qa_pass_rate for div-live-2026-W44 = 66.7 (12/18), per the Dept14
+-- One-off data correction: Div5 qa_pass_rate for div-live-2026-W44 = 70.0 (21/30), per the Dept14
 -- ruling of 2026-10-31 (item 3). One guarded insert.
 -- Acceptance: docs/acceptance/2026-10-31_post_div5_qa_pass_rate_w44.ACCEPTANCE.md
 -- NOT a migration (lives outside ./migrations so `npm run dabos:migrate` never runs it).
@@ -10,12 +10,17 @@
 --   One transaction; every guard RAISEs, so any mismatch aborts and nothing is changed.
 --   Re-running after success is a no-op (end state re-verified, nothing written).
 --
--- Value: closed Dept13 verdicts (PASS or FAIL) in stat week W44 by commit time, one per verdict
---   event, from the Dept13 validation register backfill Instances 6-25 (DABOS #191, DABOS main
---   248056df). PASS 6, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 23 (12); FAIL 7, 13, 17, 18, 22, 24 (6).
---   Excluded as not closed: #15 (PASS conditional on #171), #25 (W44 only if pre-merge).
---   12 / 18 = 66.7 (poster rounding, one decimal).
--- Row: div-live-2026-W44 / Div5 / NULL / qa_pass_rate = 66.7 at 2026-10-29T12:59:59.999Z (W44 close
+-- Value: closed Dept13 verdicts (PASS or FAIL) in stat week W44, one per verdict event (one verdict
+--   on one PR at one SHA), dated by when Div5 sent the verdict, from all 47 W44 events in the Dept13
+--   validation register W44 rebuild (Instances 6-26 and 36-61; DABOS #201 @651c1c6c, on DABOS
+--   main 248056df).
+--   PASS 6, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 23, 25, 26, 39, 44, 49, 54, 58, 59, 60 (21);
+--   FAIL 7, 13, 17, 18, 22, 24, 40, 42, 51 (9).
+--   Excluded as not closed: PASS-conditional 15 (#172, merge #171 first) and 61 (#179 @89141e1e,
+--   conditions before recreate); CONDITIONAL 36, 37, 38, 41, 43, 45, 46, 47, 48, 50, 52, 53, 55, 56, 57.
+--   #25 (#180 @389600c8) counts: PASS sent before the 21:50 merge from that head.
+--   21 / 30 = 70.0 (poster rounding, one decimal).
+-- Row: div-live-2026-W44 / Div5 / NULL / qa_pass_rate = 70.0 at 2026-10-29T12:59:59.999Z (W44 close
 --   Thu 29 Oct 14:00 CET - 1 ms, org-week.ts), recorded_by 'div-live-correction-2026-10-31'.
 -- Reads and writes only the Div5 / NULL / qa_pass_rate key in div-live-2026-W44. The #38-superseded
 --   row 2683a636 (75) stays as it is. #49, #51 and #53 are not read, so order does not matter.
@@ -35,9 +40,9 @@ DECLARE
   w44_close constant timestamptz := '2026-10-29T12:59:59.999Z';
   id_38 constant uuid := '2683a636-bb19-46f4-a800-1f73d5ba16ed';
   reason_38 constant text := 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)';
-  num constant integer := 12;
-  den constant integer := 18;
-  val constant numeric := 66.7;
+  num constant integer := 21;
+  den constant integer := 30;
+  val constant numeric := 70.0;
   n integer;
   posts integer;
   other_before text;
@@ -85,12 +90,14 @@ BEGIN
               'correction', tag,
               'numerator', num,
               'denominator', den,
-              'rule', 'closed Dept13 verdicts (PASS or FAIL) in stat week W44 by commit time, one per verdict event, from the Dept13 validation register backfill Instances 6-25 (DABOS #191, DABOS main 248056df). Not-closed verdicts excluded',
-              'pass_instances', jsonb_build_array(6, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 23),
-              'fail_instances', jsonb_build_array(7, 13, 17, 18, 22, 24),
+              'rule', 'closed Dept13 verdicts (PASS or FAIL) in stat week W44, one per verdict event (one verdict on one PR at one SHA), dated by when Div5 sent the verdict, from all 47 W44 events in the Dept13 validation register W44 rebuild (Instances 6-26 and 36-61). Not-closed verdicts (CONDITIONAL, PASS-conditional) excluded',
+              'register', 'Dept13 validation register W44 rebuild, DABOS #201 @651c1c6c0c2782595217dad8a8b394b06c0e1a02 (on DABOS main 248056df)',
+              'pass_instances', jsonb_build_array(6, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 23, 25, 26, 39, 44, 49, 54, 58, 59, 60),
+              'fail_instances', jsonb_build_array(7, 13, 17, 18, 22, 24, 40, 42, 51),
               'excluded_instances', jsonb_build_array(
-                jsonb_build_object('instance', 15, 'why', 'not closed (PASS conditional on #171)'),
-                jsonb_build_object('instance', 25, 'why', 'not closed (W44 only if pre-merge)')
+                jsonb_build_object('instance', 15, 'why', 'not closed (PASS conditional: merge #171 first)'),
+                jsonb_build_object('instance', 61, 'why', 'not closed (PASS conditional: conditions before recreating calcom)'),
+                jsonb_build_object('instances', jsonb_build_array(36, 37, 38, 41, 43, 45, 46, 47, 48, 50, 52, 53, 55, 56, 57), 'why', 'not closed (CONDITIONAL)')
               ),
               'ruling', 'Dept14 ruling 2026-10-31',
               'year', 2026,
@@ -125,7 +132,7 @@ BEGIN
   IF n <> 1 OR (SELECT count(*) FROM stats
                  WHERE workspace_id = w44 AND division_id = 'Div5' AND department_id IS NULL
                    AND metric_key = 'qa_pass_rate' AND superseded_at IS NULL) <> 1 THEN
-    RAISE EXCEPTION 'guard 4: expected exactly one active Div5 qa_pass_rate W44 row (this script''s, 66.7 at the close)';
+    RAISE EXCEPTION 'guard 4: expected exactly one active Div5 qa_pass_rate W44 row (this script''s, 70.0 at the close)';
   END IF;
   -- Guard 4b: #38's row still superseded with #38's reason.
   SELECT count(*) INTO n FROM stats
@@ -134,7 +141,7 @@ BEGIN
     RAISE EXCEPTION 'guard 4b: the #38-superseded Div5 W44 row 2683a636 changed';
   END IF;
 
-  RAISE NOTICE 'Div5 W44 qa_pass_rate ok: 66.7 (12/18) at the Thu 29 Oct 14:00 CET close';
+  RAISE NOTICE 'Div5 W44 qa_pass_rate ok: 70.0 (21/30) at the Thu 29 Oct 14:00 CET close';
 END
 $$;
 
