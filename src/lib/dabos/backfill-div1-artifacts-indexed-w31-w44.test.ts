@@ -17,11 +17,13 @@ const TAG = '2026-10-31_backfill_div1_artifacts_indexed_w31_w44';
 const W30_IDS = ['dd2b66e2-1390-44b2-b2a4-d1829ff09400', '252780ef-4988-428a-ad3b-5eb6a6cf43db'];
 
 /**
- * Weekly additions to DABOS docs/wiki/index.md (unique targets) at each Thu 14:00 Berlin close, on
- * DABOS main as published on GitHub (parent 2 at sync merges, never first-parent-only). Dept13 FAIL
- * v1: 2e1696fe (Fri 11 Sep 00:19 Berlin) added 3 pages in W38; sync merge 133ea3be (29 Sep) did not.
+ * Weekly link targets ADDED to DABOS docs/wiki/index.md as a set difference (end \ start; removals
+ * not subtracted, Dept14 ruling 2026-10-31) at each Thu 14:00 Berlin close, on DABOS main as
+ * published on GitHub (parent 2 at sync merges, never first-parent-only). Dept13 FAIL v1:
+ * 2e1696fe (Fri 11 Sep 00:19 Berlin) added 3 targets in W38; sync merge 133ea3be (29 Sep) did not.
+ * Dept13 FAIL v2: dea83ac1 re-pointed one link in W42 (1 added, 1 removed) -> W42 = 1.
  */
-const EXPECTED: Record<number, { value: number; before: number; after: number }> = {
+const EXPECTED: Record<number, { value: number; before: number; after: number; removed?: number }> = {
   31: { value: 0, before: 218, after: 218 },
   32: { value: 9, before: 218, after: 227 },
   33: { value: 0, before: 227, after: 227 },
@@ -33,7 +35,7 @@ const EXPECTED: Record<number, { value: number; before: number; after: number }>
   39: { value: 0, before: 232, after: 232 },
   40: { value: 0, before: 232, after: 232 },
   41: { value: 0, before: 232, after: 232 },
-  42: { value: 0, before: 232, after: 232 },
+  42: { value: 1, before: 232, after: 232, removed: 1 },
   43: { value: 0, before: 232, after: 232 },
   44: { value: 60, before: 232, after: 292 },
 };
@@ -90,7 +92,7 @@ async function seed(db: PGlite, opts: { noDiv1?: boolean } = {}) {
     await db.query(
       `INSERT INTO departments (id, division_id, legacy_name, operational_name) VALUES ('Dept3', 'Div1', 'x', 'x')`
     );
-    // The two W30 rows on the old artifact-index.md basis (division row + Dept3 row). Must stay as is.
+    // The two W30 rows on the old artifact index basis (division row + Dept3 row). Must stay as is.
     for (const [id, dept] of [
       [W30_IDS[0], 'Dept3'],
       [W30_IDS[1], null],
@@ -98,7 +100,7 @@ async function seed(db: PGlite, opts: { noDiv1?: boolean } = {}) {
       await db.query(
         `INSERT INTO stats (id, workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
          VALUES ($1, 'div-live-2026-W30', 'Div1', $2, 'artifacts_indexed', 75, '2026-07-26T21:59:59.999Z',
-                 '{"note":"artifact-index.md counting basis"}'::jsonb, 'week-close-poster')`,
+                 '{"note":"artifact index counting basis"}'::jsonb, 'week-close-poster')`,
         [id, dept]
       );
     }
@@ -176,7 +178,7 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
       const w = statWeekWindow(2026, week);
       const rec = recordedAtForClosedOrgWeek(w);
       expect(BACKFILL_SQL).toContain(
-        `'${ws(week)}', ${String(EXPECTED[week]!.value).padStart(2)}, '${rec}', '${w.start.toISOString()}', '${w.end.toISOString()}', ${EXPECTED[week]!.before}, ${EXPECTED[week]!.after},`
+        `'${ws(week)}', ${String(EXPECTED[week]!.value).padStart(2)}, '${rec}', '${w.start.toISOString()}', '${w.end.toISOString()}', ${EXPECTED[week]!.before}, ${EXPECTED[week]!.after}, ${EXPECTED[week]!.removed ?? 0},`
       );
     }
     // CEST weeks close 11:59:59.999Z, W44 (CET, after 25 Oct) 12:59:59.999Z.
@@ -185,21 +187,22 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     expect(recordedAtForClosedOrgWeek(statWeekWindow(2026, 44))).toBe('2026-10-29T12:59:59.999Z');
   });
 
-  it('every value is the unique-page count added in the week (after - before) and weeks chain', () => {
+  it('every value is the targets added in the week (added - removed = after - before) and weeks chain', () => {
     let prevAfter = EXPECTED[31]!.before;
     for (const week of WEEKS) {
       const e = EXPECTED[week]!;
       expect(e.before).toBe(prevAfter);
-      expect(e.value).toBe(e.after - e.before);
+      expect(e.value - (e.removed ?? 0)).toBe(e.after - e.before);
       prevAfter = e.after;
     }
     expect(EXPECTED[38]!.value).toBe(3);
     expect(EXPECTED[40]!.value).toBe(0);
-    expect(EXPECTED[42]!.value).toBe(0);
-    expect(WEEKS.reduce((s, w) => s + EXPECTED[w]!.value, 0)).toBe(74);
+    expect(EXPECTED[42]!.value).toBe(1);
+    expect(WEEKS.filter((w) => (EXPECTED[w]!.removed ?? 0) > 0)).toEqual([42]);
+    expect(WEEKS.reduce((s, w) => s + EXPECTED[w]!.value, 0)).toBe(75);
   });
 
-  it('inserts exactly 14 Div1 division rows with the right value, recorded_at and basis; W38 = 3, W40 = 0, W42 = 0', async () => {
+  it('inserts exactly 14 Div1 division rows with the right value, recorded_at and basis; W38 = 3, W40 = 0, W42 = 1', async () => {
     await seed(db);
     const before = await allRows(db);
     await runBackfill(db);
@@ -223,9 +226,11 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
         window: { start: w.start.toISOString(), end: w.end.toISOString() },
         index_unique_before: e.before,
         index_unique_after: e.after,
+        index_targets_removed: e.removed ?? 0,
         correction: TAG,
       });
-      expect(String(r.basis!.note)).toContain('pages added to docs/wiki/index.md during the stat week');
+      expect(String(r.basis!.note)).toContain('link targets added to docs/wiki/index.md during the stat week as a set difference');
+      expect(String(r.basis!.note)).toContain('removals not subtracted');
     }
     const w38 = rows.find((r) => r.workspace_id === ws(38))!;
     expect(w38.value).toBe('3');
@@ -233,7 +238,9 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     const w40 = rows.find((r) => r.workspace_id === ws(40))!;
     expect(w40.value).toBe('0');
     expect(w40.basis).toMatchObject({ index_unique_before: 232, index_unique_after: 232 });
-    expect(rows.find((r) => r.workspace_id === ws(42))!.value).toBe('0');
+    const w42 = rows.find((r) => r.workspace_id === ws(42))!;
+    expect(w42.value).toBe('1');
+    expect(w42.basis).toMatchObject({ index_unique_before: 232, index_unique_after: 232, index_targets_removed: 1, dabos_main_at_close: '7814e757' });
     expect(rows.find((r) => r.workspace_id === ws(44))!.value).toBe('60');
 
     // Every pre-existing row (W30 x2, Div2 rows, workspace-less Div1 row) is byte-identical.
@@ -277,8 +284,9 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     expect(loaded!.gitEndCommit).toBe(W44_GIT_END_COMMIT);
     expect(loaded!.fingerprints).toHaveLength(292);
     expect(createHash('sha256').update(JSON.stringify(loaded!.fingerprints)).digest('hex')).toBe(W44_FPS_SHA256);
-    // #50 known answer: pageFingerprint('schema.md') === 'f52e28bb16f63c2f', and schema.md is in the index.
-    expect(pageFingerprint('schema.md')).toBe('f52e28bb16f63c2f');
+    // #50's known-answer fingerprint is in the W44 list (hash only; no page names in this repo).
+    // Hash rule check on the standard SHA-256 test vector (empty string), truncated to 16 hex.
+    expect(pageFingerprint('')).toBe('e3b0c44298fc1c14');
     expect(loaded!.fingerprints).toContain('f52e28bb16f63c2f');
     // Only the live row counts: a superseded W44 row is ignored by the loader.
     await db.query(`UPDATE stats SET superseded_at = now() WHERE workspace_id = 'div-live-2026-W44' AND division_id = 'Div1'`);
@@ -355,8 +363,9 @@ describe('2026-10-31 Div1 artifacts_indexed backfill SQL (div-live W31-W44)', { 
     await seed(db);
     await db.query(
       `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at)
-       VALUES ('div-live-2026-W42', 'Div1', 'artifacts_indexed', 1, '2026-10-15T11:59:59.999Z')`
+       VALUES ('div-live-2026-W42', 'Div1', 'artifacts_indexed', 0, '2026-10-15T11:59:59.999Z')`
     );
+    // W42 = 0 is the pre-FAIL-v2 value; it differs from W42 = 1 and must abort.
     const before = await allRows(db);
     await expect(runBackfill(db)).rejects.toThrow(/guard 1:/);
     expect(await allRows(db)).toEqual(before);
