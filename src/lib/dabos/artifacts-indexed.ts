@@ -152,11 +152,35 @@ export const FINGERPRINT_RULE =
 const REMOTE_REF_RE = /^([A-Za-z0-9._-]+)\/([A-Za-z0-9._/-]+)$/;
 
 /**
+ * Remote URL in a comparable form: scheme and user-info dropped (so a token never takes part),
+ * scp-style `host:path` -> `host/path`, `\` -> `/`, trailing `/` and `.git` dropped; the host (or a
+ * Windows drive path) compared case-insensitively. Mirrors how git writes the URL into FETCH_HEAD
+ * (as configured, anonymised, without a trailing `/` or `.git`). Never log the input.
+ */
+export function normaliseRemoteUrl(raw: string): string {
+  let u = raw.trim().replace(/\\/g, '/');
+  u = u.replace(/^[a-z][a-z0-9+.-]*:\/\//i, ''); // https://, ssh://, git://, file://
+  if (/^\/[a-z]:\//i.test(u)) u = u.slice(1); // file:///C:/x -> C:/x
+  const windowsPath = /^[a-z]:\//i.test(u);
+  if (!windowsPath) {
+    u = u.replace(/^[^@/]*@/, ''); // user-info
+    u = u.replace(/^([^/:]+):(?!\d+\/)/, '$1/'); // scp-like host:path (not host:port/)
+  }
+  u = u.replace(/\/+$/, '').replace(/\.git$/i, '').replace(/\/+$/, '');
+  if (windowsPath) return u.toLowerCase();
+  const slash = u.indexOf('/');
+  return slash < 0 ? u.toLowerCase() : u.slice(0, slash).toLowerCase() + u.slice(slash);
+}
+
+/**
  * When `<remote>/<branch>` was last fetched, from two signals (the later wins):
  *  - reflog of refs/remotes/<remote>/<branch>: written whenever a fetch MOVES the ref;
  *  - this worktree's FETCH_HEAD mtime: rewritten by every fetch/pull even when nothing moved; only
- *    counted when it has a `branch '<branch>' of ...` line naming the current ref commit.
- * Null when neither signal exists (never fetched).
+ *    counted when it has a `branch '<branch>' of <url>` line naming the current ref commit AND
+ *    whose <url> is <remote>'s own URL (a fetch of another remote or of another branch of
+ *    <remote> that happens to hold the same commit says nothing about <remote>/<branch>).
+ * Reflog alone would turn every quiet week (fetch, nothing moved) into NOT POSTED; FETCH_HEAD
+ * alone is ambiguous without the URL. Null when neither signal exists (never fetched).
  */
 export function originFetchedAt(
   repoRoot: string,
@@ -166,6 +190,7 @@ export function originFetchedAt(
   const git = opts.git ?? defaultGitRunner;
   const m = REMOTE_REF_RE.exec(ref);
   if (!m) return null;
+  const remote = m[1]!;
   const branch = m[2]!;
   const run = (args: string[]) => git(['-C', repoRoot, ...args]).trim();
   let best: { at: Date; signal: 'reflog' | 'FETCH_HEAD' } | null = null;
@@ -180,11 +205,17 @@ export function originFetchedAt(
     const tip = run(['rev-parse', '--verify', '--quiet', `refs/remotes/${ref}^{commit}`]);
     const fetchHead = path.resolve(repoRoot, run(['rev-parse', '--git-path', 'FETCH_HEAD']));
     if (existsSync(fetchHead)) {
+      const remoteUrl = normaliseRemoteUrl(run(['remote', 'get-url', remote]));
+      const prefix = `branch '${branch}' of `;
       const names = readFileSync(fetchHead, 'utf8')
         .split(/\r?\n/)
         .some((line) => {
-          const [sha, , desc] = line.split('\t');
-          return sha === tip && (desc ?? '').startsWith(`branch '${branch}' of `);
+          const [sha, , desc = ''] = line.split('\t');
+          return (
+            sha === tip &&
+            desc.startsWith(prefix) &&
+            normaliseRemoteUrl(desc.slice(prefix.length)) === remoteUrl
+          );
         });
       const mtime = statSync(fetchHead).mtime;
       if (names && (!best || mtime.getTime() > best.at.getTime())) best = { at: mtime, signal: 'FETCH_HEAD' };
