@@ -40,14 +40,21 @@ at those merges (abf625a1, 133ea3be, 1025d6c7, 72baf3c7).
 6. PGlite tests cover lines 1-5, including W38 = 3, W40 = 0, W42 = 0 and exactly 14 rows; full vitest, tsc and eslint
    pass.
 7. Not applied to any database. Applying needs a Dept13 PASS and Logan's own yes to merge and apply.
-8. (Dept13 request, 2026-10-31) The W44 row's basis also carries the end-of-week page fingerprints in
-   the format #50 reads as the W45 snapshot start: `page_fingerprints` = sorted array of
-   sha256(normalised target) first 16 hex, one per unique page linked from docs/wiki/index.md on
-   GitHub main at the W44 close (37aff075; 292 entries = index_unique_after), and
-   `fingerprint_rule` = #50's rule string. Hashes only, never page names. W31-W43 rows carry no
-   fingerprints. A malformed list (not 292 distinct sorted 16-hex values) aborts the script.
-   #50's loader query (previous week, Div1, department NULL, artifacts_indexed, not superseded)
-   returns exactly this list.
+8. (Dept13 request, 2026-10-31; matched to #50 final spec at a20da8ad) The W44 row's basis also
+   carries the end-of-week state #50 reads as the W45 start point:
+   - `page_fingerprints`: JSON array of 292 unique strings sorted ascending (plain ASCII), each the
+     first 16 chars of the lowercase hex SHA-256 (no salt) of the UTF-8 normalised link target, i.e.
+     #50's `wikiPageFingerprints` over docs/wiki/index.md at the W44 close (known answer:
+     pageFingerprint('schema.md') = 'f52e28bb16f63c2f'). Hashes only, never page names.
+   - `fingerprint_rule`: #50's FINGERPRINT_RULE string, verbatim.
+   - `git_end_commit`: 679c7de07be913bfd3f607bb9f250864370d11f5, the commit #50's own
+     readWikiIndexFromGit returns for the W44 close (newest commit touching the index on
+     origin/main before Thu 29 Oct 14:00 CET, full history; DABOS #112 merge, 23 Oct). Its index is
+     identical to 37aff075 (GitHub main at the close, dabos_main_at_close) and it is an ancestor of it.
+   W31-W43 rows carry none of these keys. A list that is not 292 distinct sorted 16-hex values, or a
+   git_end_commit that is not 40 hex, aborts the script. #50's loader (div-live-2026-W44, Div1,
+   department_id NULL, artifacts_indexed, superseded_at IS NULL, newest recorded_at) accepts the
+   row and returns exactly this list and commit.
 
 ## Values (verified 2026-10-31 from a fresh read-only clone of A-sop/DABOS)
 
