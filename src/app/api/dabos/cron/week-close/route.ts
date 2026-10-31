@@ -66,8 +66,10 @@ export async function GET(request: Request) {
       workspace_id: gfp.workspaceId,
       lead_magnets_shipped: gfp.leadMagnetsShipped,
       termin_clicks_booked_proxy: gfp.terminClicksBookedProxy,
+      booked_without_booked_at: gfp.bookedWithoutBookedAt,
+      bookings_skipped: gfp.bookingsSkipped,
       inserted: gfp.inserted,
-      note: 'termin_clicks is Cal booked proxy until PostHog CTA ingest',
+      note: 'termin_clicks is Cal booked proxy (by booked_at) until PostHog CTA ingest',
     };
   } catch (err) {
     gfpPoster = {
