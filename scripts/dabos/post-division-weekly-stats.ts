@@ -1,6 +1,8 @@
 /**
- * Post Div2/3/4/5/7 primary stats from local registers + Proviso Abrechnung.
- * Run: npm run dabos:post-division-weekly-stats [--week=2026-W30]
+ * Post Div1/2/3/4/5/7 primary stats from local registers, the DABOS wiki index + Proviso Abrechnung.
+ * Run: npm run dabos:post-division-weekly-stats [--week=2026-W30] [--only=Div1]
+ * --only=DivN[,DivM] posts only those divisions (e.g. a Logan-approved one-off Div1 backfill);
+ * Proviso (Div3) is not read unless Div3 is listed.
  *
  * Content factory metrics live under Div2 (not Div6). Div6 stays GFP poster.
  */
@@ -33,14 +35,28 @@ function parseWeekArg(): ClosedOrgWeek {
   return w;
 }
 
+/** --only=Div1[,Div2] -> ['Div1', 'Div2']; absent -> undefined (all divisions). */
+function parseOnlyArg(): string[] | undefined {
+  const args = process.argv.filter((a) => a === '--only' || a.startsWith('--only='));
+  if (args.length === 0) return undefined;
+  if (args.length > 1) throw new Error('--only given more than once');
+  const list = args[0]!.slice('--only='.length).split(',').map((s) => s.trim()).filter(Boolean);
+  if (list.length === 0 || !list.every((d) => /^Div[1-7]$/.test(d))) {
+    throw new Error(`Invalid --only '${args[0]}': expected e.g. --only=Div1 or --only=Div1,Div4`);
+  }
+  return list;
+}
+
 async function main() {
   const window = parseWeekArg();
+  const only = parseOnlyArg();
   const dabosSql = createDabosSql(requireDatabaseUrl());
 
   const result = await postDivisionWeeklyStats({
     dabosSql,
     window,
     includeProvisoMonths: 12,
+    only,
   });
 
   console.log(`${result.workspaceId} @ ${result.recordedAt}`);
