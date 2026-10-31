@@ -1,5 +1,5 @@
 import { execFileSync } from 'child_process';
-import { mkdirSync, mkdtempSync, rmSync, utimesSync, writeFileSync } from 'fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
 
@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   computeArtifactsIndexedWeekly,
   gitBeforeArg,
+  normaliseRemoteUrl,
   pageFingerprint,
   pagesAddedBetween,
   type PreviousDiv1Row,
@@ -156,6 +157,8 @@ beforeAll(() => {
   writeIndex(up, [1, 2, 3, 4, 5, 6, 20], dupOf5);
   g(up, ['add', '-A']);
   g(up, ['commit', '-q', '-m', 'synthetic merge side'], '2026-10-26T10:00:00Z');
+  ids.M = g(up, ['rev-parse', 'HEAD']);
+  g(up, ['branch', 'frozen', ids.M]); // another branch of origin that stays at M
   ids.c4 = commit(up, [2, 3, 4, 5, 6, 20, 7], '2026-10-29T12:59:59Z', dupOf5);
   commit(up, [2, 3, 4, 5, 6, 20, 7, 8, 9, 10], '2026-10-29T13:00:00Z', dupOf5);
 
@@ -301,11 +304,55 @@ describe('git: stale or wrong-ref checkouts are NOT POSTED, never a silent 0 (F2
       value: 3,
       basis: { git_fetch_signal: 'FETCH_HEAD', git_fetched_at: '2026-11-05T13:10:00.000Z' },
     });
-    // A FETCH_HEAD that does not name the current origin/main commit is not a fetch of main.
-    writeFileSync(fh, `${'0'.repeat(40)}\t\tbranch 'main' of file:///synthetic\n`);
+    // A FETCH_HEAD line from origin's URL for branch main, but not naming the current origin/main
+    // commit, is not a fetch of that commit (only the sha differs from the real line).
+    const real = readFileSync(fh, 'utf8').split('\n').find((l) => l.includes("branch 'main' of "))!;
+    writeFileSync(fh, `${'0'.repeat(40)}${real.slice(40)}\n`);
     utimesSync(fh, new Date('2026-11-05T13:10:00Z'), new Date('2026-11-05T13:10:00Z'));
     const r = await computeArtifactsIndexedWeekly({ window: W45, repoRoot: copy });
     expect(r.ok).toBe(false);
+  });
+  /**
+   * origin/main last fetched 28 Oct at M (W44 mid-week); origin then gained c4 (+page 7) on 29 Oct.
+   * Something else holding M is fetched after the close: that is not a fetch of origin/main.
+   */
+  function staleAtM(prefix: string) {
+    const copy = cloneAt(up, '2026-10-28T10:00:00Z', prefix);
+    g(copy, ['update-ref', '-d', 'refs/remotes/origin/main']);
+    g(copy, ['update-ref', '-m', 'fetch: synthetic', 'refs/remotes/origin/main', ids.M!], '2026-10-28T10:00:00Z');
+    rmSync(path.join(copy, '.git', 'FETCH_HEAD'), { force: true });
+    return copy;
+  }
+  const afterClose = new Date('2026-10-29T13:10:00Z');
+  it('a second remote holding the same commit, fetched after the close, is not a fetch of origin -> NOT POSTED', async () => {
+    const mirror = cloneAt(up, '2026-10-28T10:00:00Z', 'div1-wiki-mirror-');
+    g(mirror, ['reset', '-q', '--hard', ids.M!]); // the second remote's main = the stale M
+    const copy = staleAtM('div1-wiki-2nd-');
+    g(copy, ['remote', 'add', 'backup', mirror]);
+    g(copy, ['fetch', '-q', 'backup']);
+    const fh = path.join(copy, '.git', 'FETCH_HEAD');
+    utimesSync(fh, afterClose, afterClose);
+    const r = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy });
+    expect(r.ok).toBe(false); // (counted, it would post 3 instead of 4: page 7 is missing)
+    if (!r.ok) expect(r.reason).toMatch(/not fetched since the close .*last fetch 2026-10-28T10:00:00\.000Z/);
+  });
+  it('another branch of origin at the same commit, fetched after the close, is not a fetch of main -> NOT POSTED', async () => {
+    const copy = staleAtM('div1-wiki-otherbranch-');
+    g(copy, ['fetch', '-q', 'origin', 'frozen']);
+    const fh = path.join(copy, '.git', 'FETCH_HEAD');
+    utimesSync(fh, afterClose, afterClose);
+    const r = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toMatch(/not fetched since the close/);
+  });
+  it('remote URLs compare after dropping scheme, user-info, .git and trailing slash', () => {
+    const gh = normaliseRemoteUrl('https://user:synthetic-token@GitHub.com/Example-Org/example-repo.git/');
+    expect(gh).toBe('github.com/Example-Org/example-repo');
+    expect(normaliseRemoteUrl('git@github.com:Example-Org/example-repo.git')).toBe(gh);
+    expect(normaliseRemoteUrl('ssh://git@github.com/Example-Org/example-repo')).toBe(gh);
+    expect(normaliseRemoteUrl('https://github.com/Example-Org/other-repo')).not.toBe(gh);
+    expect(normaliseRemoteUrl('C:\\Dev\\Synthetic\\Repo.git')).toBe(normaliseRemoteUrl('file:///c:/dev/synthetic/repo/'));
+    expect(gh).not.toMatch(/token|user/);
   });
   it('HEAD or a local branch is never counted; the default is origin/main, not the checkout', async () => {
     for (const ref of ['HEAD', 'main']) {
