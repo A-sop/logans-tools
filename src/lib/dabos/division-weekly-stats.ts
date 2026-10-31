@@ -3,6 +3,7 @@
  * Reads local registers + Proviso Abrechnung (read-only). Never invents ship counts.
  *
  * Div map (STAT-MAP):
+ *  Div1 artifacts_indexed (DABOS docs/wiki/index.md pages ADDED in the closed week; artifacts-indexed.ts)
  *  Div2 leads_or_touchpoints_created + Dept4 content_pieces_shipped (content factory = Div2)
  *  Div3 taxable_income_eur (Proviso commission Abrechnung + other incomes as added)
  *  Div4 shipped_outputs (ship-log rows with Validated (Dept13) = PASS <date> and Counts=yes)
@@ -15,8 +16,16 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
+import {
+  computeArtifactsIndexedWeekly,
+  DEFAULT_WIKI_GIT_REF,
+  FINGERPRINT_RE,
+  type GitRunner,
+  type PreviousDiv1Row,
+} from '@/lib/dabos/artifacts-indexed';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import {
+  closedOrgWeek,
   closedOrgWeekForIsoWeek,
   isEntryInClosedOrgWeek,
   recordedAtForClosedOrgWeek,
@@ -296,6 +305,46 @@ async function insertStat(
   return Boolean(res[0]?.metric_key);
 }
 
+/**
+ * The previous stat week's ACTIVE live Div1 row (superseded_at is null; any recorded_by, e.g. the
+ * week-close poster or a backfill such as #49): its basis.page_fingerprints are this week's start
+ * point. Null when no such row exists; throws when the row's fingerprints are malformed (a wrong
+ * format would silently count every page as added).
+ */
+export async function loadPreviousDiv1Fingerprints(
+  dabosSql: DabosSql,
+  window: Pick<ClosedOrgWeek, 'start'>
+): Promise<PreviousDiv1Row | null> {
+  const prev = closedOrgWeek(window.start);
+  const prevWorkspace = `div-live-${prev.isoYear}-W${String(prev.isoWeek).padStart(2, '0')}`;
+  const res = (await dabosSql`
+    select basis from stats
+    where workspace_id = ${prevWorkspace}
+      and division_id = 'Div1'
+      and department_id is null
+      and metric_key = 'artifacts_indexed'
+      and superseded_at is null
+    order by recorded_at desc
+    limit 1
+  `) as Array<{ basis: unknown }>;
+  const raw = res[0]?.basis;
+  if (res.length === 0) return null;
+  const basis = (typeof raw === 'string' ? JSON.parse(raw) : raw) as {
+    page_fingerprints?: unknown;
+    git_end_commit?: unknown;
+  } | null;
+  const fps = basis?.page_fingerprints;
+  if (!Array.isArray(fps) || !fps.every((f) => typeof f === 'string' && FINGERPRINT_RE.test(f))) {
+    throw new Error(`${prevWorkspace} Div1 row has no valid basis.page_fingerprints (16 lowercase hex strings)`);
+  }
+  const end = basis?.git_end_commit;
+  return {
+    week: prev.id,
+    fingerprints: fps as string[],
+    gitEndCommit: typeof end === 'string' && /^[0-9a-f]{40}$/.test(end) ? end : null,
+  };
+}
+
 export async function postDivisionWeeklyStats(opts: {
   dabosSql: DabosSql;
   /** Closed org week to post (preferred). Week-close passes closedOrgWeek(now). */
@@ -304,6 +353,13 @@ export async function postDivisionWeeklyStats(opts: {
   year?: number;
   week?: number;
   includeProvisoMonths?: number;
+  /** Post only these divisions (e.g. ['Div1'] for a one-off backfill). Default: all. */
+  only?: string[];
+  /** Test hooks: DABOS checkout root (default DABOS_REPO_ROOT) and git runner. */
+  dabosRepoRoot?: string;
+  git?: GitRunner;
+  /** Div1 wiki source (default env DABOS_WIKI_SOURCE, else 'auto'); see artifacts-indexed.ts. */
+  wikiSource?: 'auto' | 'snapshot';
 }): Promise<DivisionWeeklyResult> {
   const { dabosSql } = opts;
   let window = opts.window;
@@ -344,7 +400,33 @@ export async function postDivisionWeeklyStats(opts: {
     metricKey: string;
     value: number;
     source: string;
+    basis?: Record<string, unknown>;
   }> = [];
+
+  // Div1: wiki pages ADDED in the closed week (never the running total, never a silent 0).
+  const div1 = await computeArtifactsIndexedWeekly({
+    window,
+    repoRoot: opts.dabosRepoRoot ?? DABOS_REPO_ROOT,
+    gitRef: process.env.DABOS_WIKI_GIT_REF?.trim() || DEFAULT_WIKI_GIT_REF,
+    source: opts.wikiSource ?? (process.env.DABOS_WIKI_SOURCE?.trim() === 'snapshot' ? 'snapshot' : 'auto'),
+    git: opts.git,
+    loadPreviousFingerprints: () => loadPreviousDiv1Fingerprints(dabosSql, window),
+  });
+  if (div1.ok) {
+    rows.push({
+      divisionId: 'Div1',
+      departmentId: null,
+      metricKey: 'artifacts_indexed',
+      value: div1.value,
+      source: `DABOS docs/wiki/index.md: unique pages added in the closed week (${div1.basis.method})`,
+      basis: div1.basis,
+    });
+    notes.push(
+      `Div1 artifacts_indexed=${div1.value} (wiki pages added in the closed week; ${div1.basis.pages_at_start} -> ${div1.basis.pages_at_end} pages, ${div1.basis.pages_removed} removed, method ${div1.basis.method})`
+    );
+  } else {
+    notes.push(`Div1 artifacts_indexed NOT POSTED - ${div1.reason}`);
+  }
 
   if (contentStatus != null) {
     rows.push({
@@ -422,7 +504,9 @@ export async function postDivisionWeeklyStats(opts: {
     notes.push('Div7 plan_completion_rate skipped — establishment checklist unreadable');
   }
 
+  const only = opts.only ? new Set(opts.only) : null;
   for (const row of rows) {
+    if (only && !only.has(row.divisionId)) continue;
     const ok = await insertStat(dabosSql, {
       workspaceId,
       divisionId: row.divisionId,
@@ -430,17 +514,18 @@ export async function postDivisionWeeklyStats(opts: {
       metricKey: row.metricKey,
       value: row.value,
       recordedAt,
-      basis: { ...windowBasis, source: row.source },
+      basis: { ...windowBasis, source: row.source, ...(row.basis ?? {}) },
       recordedBy: 'week-close-poster',
     });
     if (ok) inserted.push(`${row.divisionId}.${row.metricKey}`);
   }
 
   // Proviso Abrechnung monthly income → Div3 (workspace per Monat)
-  const monthsToPost = opts.includeProvisoMonths ?? 6;
+  const monthsToPost = only && !only.has('Div3') ? 0 : (opts.includeProvisoMonths ?? 6);
   try {
-    const months = readProvisoMonthlyIncome().slice(0, monthsToPost);
-    if (months.length === 0) {
+    // --only without Div3 (e.g. a Div1 backfill) never opens the Proviso DB.
+    const months = monthsToPost > 0 ? readProvisoMonthlyIncome().slice(0, monthsToPost) : [];
+    if (monthsToPost > 0 && months.length === 0) {
       notes.push('Proviso income skipped — DB missing or no commission_events for VB');
     }
     for (const m of months) {
