@@ -8,23 +8,37 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createDabosTestDb, readRepoFile } from '@/test/pglite-dabos';
 
 /**
- * Order check for the three div-live data corrections that touch the same workspaces:
+ * Order check for the four div-live data corrections that touch the same workspaces:
  *   #49 2026-10-31_backfill_div1_artifacts_indexed_w31_w44.sql (Div1 W31-W44 inserts)
- *   #51 2026-10-31_supersede_div_live_w31_w43.sql (non-Div1 W31-W43 supersede-and-repost)
- *   this PR 2026-10-31_repost_div_live_w44_and_w30_close.sql (non-Div1 W44 posts + W30 fold-in)
- * Seeded with a copy of every div-live-* stats row on DABOS Neon (read-only SELECT, 2026-10-31,
- * 44 rows). Runs only when all three SQL files are on the branch (after #49 and #51 merge); until
- * then it is skipped. Nothing here connects to any network database.
+ *   #51 2026-10-31_supersede_div_live_w31_w43.sql (non-Div1 W31-W43: Div2/Div4 re-dated,
+ *       Div5/Div7 superseded without repost per Dept14 2026-10-31)
+ *   this PR 2026-10-31_repost_div_live_w44_and_w30_close.sql (Div4 W44 posts + W30 fold-in,
+ *       W30 Div5/Div7 superseded without repost)
+ *   #54 2026-10-31_post_div5_qa_pass_rate_w44.sql (Div5 W44 qa_pass_rate 66.7, one insert)
+ * Seeded with a copy of every div-live-* stats row on DABOS Neon (read-only SELECT, re-read
+ * Sat 31 Oct 2026 ~15:40 CET, 44 rows, 38 active; SNAPSHOT_MD5 below is the digest prod returned
+ * and the seeded copy must reproduce it). Runs only when all four SQL files are on the branch
+ * (after #49, #51 and #54 merge); until then it is skipped. Nothing here connects to any network
+ * database.
  */
 const FILES = {
   pr49: 'scripts/dabos/sql/2026-10-31_backfill_div1_artifacts_indexed_w31_w44.sql',
   pr51: 'scripts/dabos/sql/2026-10-31_supersede_div_live_w31_w43.sql',
   w44w30: 'scripts/dabos/sql/2026-10-31_repost_div_live_w44_and_w30_close.sql',
+  div5w44: 'scripts/dabos/sql/2026-10-31_post_div5_qa_pass_rate_w44.sql',
 } as const;
 type Key = keyof typeof FILES;
 const repoRoot = path.resolve(__dirname, '../../..');
 const allPresent = Object.values(FILES).every((f) => fs.existsSync(path.join(repoRoot, f)));
 
+/** md5 over every div-live row, as returned by the read-only prod SELECT (see DIGEST_SQL). */
+const SNAPSHOT_MD5 = '3ec6ced03789e4d46213a54533705ac6';
+const DIGEST_SQL = `SELECT md5(string_agg(concat_ws('|', id, workspace_id, division_id, coalesce(department_id,'-'),
+    metric_key, value::text, to_char(recorded_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS'),
+    coalesce(basis::text,'-'), coalesce(recorded_by,'-'),
+    coalesce(to_char(superseded_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS'),'-'),
+    coalesce(superseded_reason,'-')), E'\\n' ORDER BY id)) AS digest
+  FROM stats WHERE workspace_id LIKE 'div-live-%'`;
 const R38 = 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)';
 const S38 = '2026-10-30T21:53:34.457Z';
 const W30_DIV1_BASIS = (note: string) => ({
@@ -265,23 +279,32 @@ async function picture(db: PGlite): Promise<string[]> {
   return r.rows.map((x) => x.row);
 }
 
-const ORDERS: Key[][] = [
-  ['pr49', 'pr51', 'w44w30'],
-  ['pr49', 'w44w30', 'pr51'],
-  ['pr51', 'pr49', 'w44w30'],
-  ['pr51', 'w44w30', 'pr49'],
-  ['w44w30', 'pr49', 'pr51'],
-  ['w44w30', 'pr51', 'pr49'],
-];
+const permutations = <T>(xs: T[]): T[][] =>
+  xs.length <= 1
+    ? [xs]
+    : xs.flatMap((x, i) =>
+        permutations([...xs.slice(0, i), ...xs.slice(i + 1)]).map((p) => [x, ...p])
+      );
+const ORDERS: Key[][] = permutations(Object.keys(FILES) as Key[]);
 /** Rows added / rows newly superseded by each script on the prod snapshot. */
 const DELTA: Record<Key, { total: number; active: number }> = {
   pr49: { total: 14, active: 14 }, // 14 Div1 inserts W31-W44
-  pr51: { total: 30, active: 0 }, // 30 superseded + 30 reposts
-  w44w30: { total: 8, active: 2 }, // 6 W30 superseded + 6 reposts, 2 W44 posts
+  pr51: { total: 20, active: -10 }, // 30 superseded, 20 Div2/Div4 reposts (Div5/Div7 none)
+  w44w30: { total: 6, active: 0 }, // 6 W30 superseded, 4 Div2/Div4 reposts, 2 Div4 W44 posts
+  div5w44: { total: 1, active: 1 }, // Div5 W44 qa_pass_rate 66.7
 };
 
+async function doubleLiveKeys(db: PGlite): Promise<number> {
+  const dup = await db.query<{ n: number }>(
+    `SELECT count(*)::int AS n FROM (
+       SELECT workspace_id, division_id, department_id, metric_key FROM stats WHERE superseded_at IS NULL
+        GROUP BY 1, 2, 3, 4 HAVING count(*) > 1) t`
+  );
+  return dup.rows[0]!.n;
+}
+
 describe.skipIf(!allPresent)(
-  'div-live corrections #49, #51 and the W44/W30 repost in any order',
+  'div-live corrections #49, #51, the W44/W30 repost and #54 in any order',
   { timeout: 120_000 },
   () => {
     let db: PGlite;
@@ -299,13 +322,20 @@ describe.skipIf(!allPresent)(
       await db.close();
     });
 
-    it('the snapshot is the 44 prod div-live rows (38 active, 6 superseded by #38)', async () => {
+    it('the snapshot is the 44 prod div-live rows (38 active, 6 superseded by #38), byte-for-byte', async () => {
       expect(await counts(db)).toEqual({ total: 44, active: 38 });
+      const d = await db.query<{ digest: string }>(DIGEST_SQL);
+      expect(d.rows[0]!.digest).toBe(SNAPSHOT_MD5);
+    });
+
+    it('covers all 24 orders', () => {
+      expect(ORDERS).toHaveLength(24);
+      expect(new Set(ORDERS.map((o) => o.join())).size).toBe(24);
     });
 
     let reference: string[] | null = null;
     for (const order of ORDERS) {
-      it(`applies ${order.join(' -> ')} with no guard abort, expected counts, the same end state, re-runs no-op`, async () => {
+      it(`applies ${order.join(' -> ')} with no guard abort, expected counts, no double-live key, the same end state, re-runs no-op`, async () => {
         let c = await counts(db);
         for (const k of order) {
           await run(db, sql[k]);
@@ -314,9 +344,10 @@ describe.skipIf(!allPresent)(
             k,
             ...DELTA[k],
           });
+          expect(await doubleLiveKeys(db)).toBe(0);
           c = next;
         }
-        expect(c).toEqual({ total: 96, active: 54 });
+        expect(c).toEqual({ total: 85, active: 43 });
         const pic = await picture(db);
         if (reference === null) reference = pic;
         else expect(pic).toEqual(reference);
@@ -332,22 +363,38 @@ describe.skipIf(!allPresent)(
          FROM stats GROUP BY 1, 2 HAVING count(*) FILTER (WHERE superseded_at IS NULL) > 0 ORDER BY 1, 2`
       );
       const active = Object.fromEntries(r.rows.map((x) => [`${x.ws} ${x.div}`, x.n_active]));
-      // W30: Div1 2 untouched; non-Div1 6 reposts. W31/W40-W43: Div1 1 (#49), non-Div1 6 (#51).
-      // W32-W39: Div1 1 (#49) only. W44: Div1 1 (#49), Div4 2 (this PR), nothing else active.
-      expect(active['div-live-2026-W30 Div1']).toBe(2);
-      expect(active['div-live-2026-W44 Div1']).toBe(1);
-      expect(active['div-live-2026-W44 Div4']).toBe(2);
+      // W30: Div1 2 untouched; Div2 2 + Div4 2 reposts; Div5/Div7 none (Dept14).
+      // W31/W40-W43: Div1 1 (#49), Div2 2 + Div4 2 (#51); Div5/Div7 none (Dept14).
+      // W32-W39: Div1 1 (#49) only. W44: Div1 1 (#49), Div4 2 (this PR), Div5 1 (#54), no Div7.
+      for (const w of [30, 31, 40, 41, 42, 43]) {
+        const ws = `div-live-2026-W${w}`;
+        expect([active[`${ws} Div1`], active[`${ws} Div2`], active[`${ws} Div4`]]).toEqual([
+          w === 30 ? 2 : 1,
+          2,
+          2,
+        ]);
+        expect(active[`${ws} Div5`]).toBeUndefined();
+        expect(active[`${ws} Div7`]).toBeUndefined();
+      }
       expect(
         Object.keys(active)
           .filter((k) => k.startsWith('div-live-2026-W44'))
+          .map((k) => [k, active[k]])
           .sort()
-      ).toEqual(['div-live-2026-W44 Div1', 'div-live-2026-W44 Div4']);
-      const dup = await db.query<{ n: number }>(
-        `SELECT count(*)::int AS n FROM (
-         SELECT workspace_id, division_id, department_id, metric_key FROM stats WHERE superseded_at IS NULL
-          GROUP BY 1, 2, 3, 4 HAVING count(*) > 1) t`
+      ).toEqual([
+        ['div-live-2026-W44 Div1', 1],
+        ['div-live-2026-W44 Div4', 2],
+        ['div-live-2026-W44 Div5', 1],
+      ]);
+      const reasons = await db.query<{ reason: string; n: number }>(
+        `SELECT superseded_reason AS reason, count(*)::int AS n FROM stats
+          WHERE superseded_reason LIKE 'Dept14 2026-10-31:%' GROUP BY 1 ORDER BY 1`
       );
-      expect(dup.rows[0]!.n).toBe(0); // never two active rows for one workspace/division/department/metric
+      expect(reasons.rows).toEqual([
+        { reason: 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts', n: 6 },
+        { reason: 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling', n: 6 },
+      ]);
+      expect(await doubleLiveKeys(db)).toBe(0); // never two active rows for one workspace/division/department/metric
     });
   }
 );

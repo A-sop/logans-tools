@@ -14,8 +14,15 @@ import { createDabosTestDb, readRepoFile } from '@/test/pglite-dabos';
 const SQL_PATH = 'scripts/dabos/sql/2026-10-31_repost_div_live_w44_and_w30_close.sql';
 const CORRECTION_SQL = readRepoFile(SQL_PATH);
 const TAG = '2026-10-31_repost_div_live_w44_and_w30_close';
-const REASON =
+const REASON_REDATE =
   'Div7 2026-10-31: W30 old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
+// Dept14 ruling 2026-10-31: superseded with NO repost.
+const REASON_DIV5 = 'Dept14 2026-10-31: all-time value, weekly count has no closed verdicts';
+const REASON_DIV7 = 'Dept14 2026-10-31: void basis per Logan 4 Oct ruling';
+const reasonFor = (div: string) =>
+  div === 'Div5' ? REASON_DIV5 : div === 'Div7' ? REASON_DIV7 : REASON_REDATE;
+const reposted = (div: string) => div !== 'Div5' && div !== 'Div7';
+const DIV5_W44_TAG = '2026-10-31_post_div5_qa_pass_rate_w44';
 const REASON_51 =
   'Div7 2026-10-31: old poster ISO-week-end recorded_at (not Thu 14:00 Berlin close)';
 const REASON_38 = 'Dept13 FAIL 2026-10-29: ln02 poster @2474654 (ISO window, all-time qa)';
@@ -38,6 +45,8 @@ const W30_ROWS: Old[] = [
   ['47cee040-8a64-44d3-8a1b-64cf6d9931c4', 'Div7', null, 'plan_completion_rate', 28.6],
 ];
 const W30_IDS = W30_ROWS.map((r) => r[0]);
+const W30_REPOST = W30_ROWS.filter((r) => reposted(r[1]));
+const W30_VOID = W30_ROWS.filter((r) => !reposted(r[1]));
 const W30_DIV1: [string, string | null][] = [
   ['252780ef-4988-428a-ad3b-5eb6a6cf43db', null],
   ['dd2b66e2-1390-44b2-b2a4-d1829ff09400', 'Dept3'],
@@ -58,7 +67,7 @@ const W44_POSTS: [string, string | null, string, number][] = [
 
 async function seed(
   db: PGlite,
-  opts: { skip?: string; bump?: string; withPr49W44?: boolean } = {}
+  opts: { skip?: string; bump?: string; withPr49W44?: boolean; withDiv5W44?: boolean } = {}
 ) {
   await db.query(
     `INSERT INTO divisions (id, operational_name) VALUES ('Div1','x'), ('Div2','x'), ('Div3','x'), ('Div4','x'), ('Div5','x'), ('Div6','x'), ('Div7','x')`
@@ -102,6 +111,14 @@ async function seed(
       `INSERT INTO stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
        VALUES ($1, 'Div1', NULL, 'artifacts_indexed', 60, $2, '{"correction":"2026-10-31_backfill_div1_artifacts_indexed_w31_w44"}', 'week-close-poster')`,
       [W44, W44_CLOSE]
+    );
+  }
+  if (opts.withDiv5W44) {
+    // The separate Div5 W44 qa_pass_rate PR, applied first: its key is read by no guard here.
+    await db.query(
+      `INSERT INTO stats (workspace_id, division_id, department_id, metric_key, value, recorded_at, basis, recorded_by)
+       VALUES ($1, 'Div5', NULL, 'qa_pass_rate', 66.7, $2, $3, $4)`,
+      [W44, W44_CLOSE, JSON.stringify({ correction: DIV5_W44_TAG }), BY]
     );
   }
 }
@@ -159,9 +176,12 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
   it('closes come from org-week.ts: W30 CEST 11:59:59.999Z, W44 CET 12:59:59.999Z', () => {
     expect(W30_CLOSE).toBe('2026-07-23T11:59:59.999Z');
     expect(W44_CLOSE).toBe('2026-10-29T12:59:59.999Z');
-    expect(CORRECTION_SQL.match(new RegExp(`'${W30_OLD}', '${W30_CLOSE}'\\)`, 'g'))).toHaveLength(
-      6
-    );
+    expect(
+      CORRECTION_SQL.match(new RegExp(`'${W30_OLD}', '${W30_CLOSE}', (true|false), '`, 'g'))
+    ).toHaveLength(6);
+    expect(
+      CORRECTION_SQL.match(new RegExp(`'${W30_OLD}', '${W30_CLOSE}', true, '`, 'g'))
+    ).toHaveLength(4);
     expect(
       CORRECTION_SQL.match(new RegExp(`'shipped_outputs', 0, '${W44_CLOSE}'`, 'g'))
     ).toHaveLength(2);
@@ -177,7 +197,7 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
   it('lists exactly the 6 W30 rows and the 2 W44 posts, and no Div1 row to write', () => {
     for (const [id, div, dept, metric, value] of W30_ROWS) {
       expect(CORRECTION_SQL).toContain(
-        `('${id}', '${W30}', '${div}', ${dept ? `'${dept}'` : 'NULL'}, '${metric}', ${value}, '${W30_OLD}', '${W30_CLOSE}')`
+        `('${id}', '${W30}', '${div}', ${dept ? `'${dept}'` : 'NULL'}, '${metric}', ${value}, '${W30_OLD}', '${W30_CLOSE}', ${reposted(div)}, '${reasonFor(div)}')`
       );
     }
     expect(CORRECTION_SQL.match(/\('[0-9a-f-]{36}', 'div-live-2026-W30'/g)).toHaveLength(6);
@@ -189,12 +209,12 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
     expect(CORRECTION_SQL).not.toMatch(/^ {2}\('Div1',/m);
   });
 
-  it('supersedes the 6 W30 rows, reposts each at the W30 close, posts the 2 W44 rows; nothing else changes', async () => {
+  it('supersedes the 6 W30 rows, reposts the 4 Div2/Div4 at the W30 close (Div5/Div7 none), posts the 2 W44 rows; nothing else changes', async () => {
     await seed(db);
     const before = await allRows(db);
     await run(db);
     const after = await allRows(db);
-    expect(after).toHaveLength(before.length + 8);
+    expect(after).toHaveLength(before.length + 6);
 
     const byId = new Map(after.map((r) => [r.id, r]));
     for (const b of before) {
@@ -202,21 +222,28 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
       if (W30_IDS.includes(b.id)) {
         expect(stripSupersede(a)).toEqual(stripSupersede(b));
         expect(a.superseded_at).not.toBeNull();
-        expect(a.superseded_reason).toBe(REASON);
+        expect(a.superseded_reason).toBe(reasonFor(b.division_id));
       } else {
         expect(a).toEqual(b); // out-of-scope rows byte-identical (W30 Div1, #38 W44, #49/#51-style, gfp-live)
       }
     }
 
     const tagged = after.filter((r) => r.basis?.correction === TAG);
-    expect(tagged).toHaveLength(8);
+    expect(tagged).toHaveLength(6);
     expect(
       tagged.every(
         (r) => r.division_id !== 'Div1' && r.recorded_by === BY && r.superseded_at === null
       )
     ).toBe(true);
 
-    for (const [id, div, dept, metric, value] of W30_ROWS) {
+    expect(W30_VOID.map((r) => r[0])).toEqual([
+      'ddb587d9-08e9-4f53-9112-957df3ebf1f7',
+      '47cee040-8a64-44d3-8a1b-64cf6d9931c4',
+    ]);
+    for (const [id] of W30_VOID) {
+      expect(after.filter((r) => r.basis?.supersedes === id)).toHaveLength(0);
+    }
+    for (const [id, div, dept, metric, value] of W30_REPOST) {
       const mine = tagged.filter((r) => r.basis!.supersedes === id);
       expect(mine).toHaveLength(1);
       const r = mine[0]!;
@@ -257,9 +284,9 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
         WHERE superseded_at IS NULL AND workspace_id IN ($1, $2) GROUP BY 1 ORDER BY 1`,
       [W30, W44]
     );
-    // W30: 6 reposts + 2 untouched Div1 rows. W44: the 2 Div4 posts only.
+    // W30: 4 Div2/Div4 reposts + 2 untouched Div1 rows. W44: the 2 Div4 posts only.
     expect(active.rows).toEqual([
-      { ws: W30, n: 8 },
+      { ws: W30, n: 6 },
       { ws: W44, n: 2 },
     ]);
   });
@@ -271,6 +298,17 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
     const after = await allRows(db);
     expect(after.filter((r) => r.division_id === 'Div1')).toEqual(before);
     expect(after.filter((r) => r.workspace_id === W44 && r.division_id === 'Div1')).toHaveLength(1);
+  });
+
+  it('tolerates the separate Div5 W44 qa_pass_rate post (applied before or after) and leaves it alone', async () => {
+    await seed(db, { withDiv5W44: true });
+    const div5 = (await allRows(db)).filter((r) => r.basis?.correction === DIV5_W44_TAG);
+    expect(div5).toHaveLength(1);
+    await run(db);
+    await run(db); // no-op re-run with the Div5 row present
+    const after = await allRows(db);
+    expect(after.filter((r) => r.basis?.correction === DIV5_W44_TAG)).toEqual(div5);
+    expect(after.filter((r) => r.basis?.correction === TAG)).toHaveLength(6);
   });
 
   it('a second run is a no-op and succeeds', async () => {
@@ -340,7 +378,7 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
     );
     const before = await allRows(db);
     await expect(run(db)).rejects.toThrow(
-      /guard 1d: expected 6 non-Div1 rows in div-live-2026-W44/
+      /guard 1d: expected 5 non-Div1 rows in div-live-2026-W44 outside the Div5 qa_pass_rate key/
     );
     expect(await allRows(db)).toEqual(before);
   });
@@ -370,12 +408,36 @@ describe('2026-10-31 div-live W44 repost + W30 close SQL', { timeout: 30_000 }, 
   it('a guard fires if the W30 repost step is dropped (mutation)', async () => {
     await seed(db);
     const mutated = CORRECTION_SQL.replace(
-      /INSERT INTO stats \(workspace_id[\s\S]*?FROM stats s JOIN div_live_w30_fix f ON f\.id = s\.id;/,
+      /INSERT INTO stats \(workspace_id[\s\S]*?FROM stats s JOIN div_live_w30_fix f ON f\.id = s\.id\n\s*WHERE f\.repost;/,
       'PERFORM 1 WHERE false;'
     );
     expect(mutated).not.toBe(CORRECTION_SQL);
     const before = await allRows(db);
     await expect(run(db, mutated)).rejects.toThrow(/guard 3: reposted 0 W30 rows/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('a guard fires if W30 Div5/Div7 get reposted after all (mutation)', async () => {
+    await seed(db);
+    const mutated = CORRECTION_SQL.replace(
+      /(FROM stats s JOIN div_live_w30_fix f ON f\.id = s\.id)\n\s*WHERE f\.repost;/,
+      '$1;'
+    );
+    expect(mutated).not.toBe(CORRECTION_SQL);
+    const before = await allRows(db);
+    await expect(run(db, mutated)).rejects.toThrow(/guard 3: reposted 6 W30 rows, expected 4/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
+  it('a guard fires if a W30 Div7 row loses its Dept14 reason (mutation)', async () => {
+    await seed(db);
+    const mutated = CORRECTION_SQL.replace(
+      `false, '${REASON_DIV7}')`,
+      `false, '${REASON_REDATE}')`
+    );
+    expect(mutated).not.toBe(CORRECTION_SQL);
+    const before = await allRows(db);
+    await expect(run(db, mutated)).rejects.toThrow(/guard 0c/);
     expect(await allRows(db)).toEqual(before);
   });
 
