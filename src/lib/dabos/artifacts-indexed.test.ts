@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   computeArtifactsIndexedWeekly,
   gitBeforeArg,
+  isLocalRemote,
   normaliseRemoteUrl,
   pageFingerprint,
   pagesAddedBetween,
@@ -244,8 +245,8 @@ describe('git: first week (no previous row) reads both ends first-parent from or
     execFileSync('git', ['clone', '-q', '--depth=2', '--branch', 'main', `file://${up.replace(/\\/g, '/')}`, shallow], {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
-    g(shallow, ['fetch', '-q', 'origin']);
-    utimesSync(path.join(shallow, '.git', 'FETCH_HEAD'), new Date('2026-11-06T09:00:00Z'), new Date('2026-11-06T09:00:00Z'));
+    g(shallow, ['update-ref', '-d', 'refs/remotes/origin/main']);
+    g(shallow, ['fetch', '-q', 'origin'], '2026-11-06T09:00:00Z'); // reflog: fetch entry at the current tip
     expect(await computeArtifactsIndexedWeekly({ window: W45, repoRoot: shallow })).toMatchObject({ ok: true, value: 3 });
     const w44 = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: shallow });
     expect(w44.ok).toBe(false);
@@ -294,11 +295,72 @@ describe('git: stale or wrong-ref checkouts are NOT POSTED, never a silent 0 (F2
       expect(r.reason).toMatch(/last fetch 2026-10-28T10:00:00\.000Z/);
     }
   });
-  it('FETCH_HEAD written at/after the close and naming the origin/main commit counts as a fetch', async () => {
-    const copy = cloneAt(up, '2026-10-28T10:00:00Z', 'div1-wiki-fh-');
+  // A host-URL origin without network: `ssh://git@synthetic.invalid/org/<name>.git`, served by a
+  // fake ssh (core.sshCommand) that runs `git upload-pack` on bare repos under `srv`. Git writes
+  // FETCH_HEAD for it exactly as for GitHub (`ssh://synthetic.invalid/org/<name>`).
+  const SSH_ORIGIN = 'ssh://git@synthetic.invalid/org/dabos.git';
+  const SSH_MIRROR = 'ssh://git@synthetic.invalid/org/mirror.git';
+  let srv = '';
+  let sshCmd = '';
+  beforeAll(() => {
+    srv = newDir('div1-wiki-srv-');
+    const bare = (name: string) => {
+      const d = path.join(srv, 'org', name);
+      execFileSync('git', ['clone', '-q', '--bare', up, d], { stdio: ['ignore', 'pipe', 'pipe'] });
+      return d;
+    };
+    bare('dabos.git');
+    g(bare('mirror.git'), ['update-ref', 'refs/heads/main', ids.M!]); // a second repo whose main = M
+    writeFileSync(
+      path.join(srv, 'fake-ssh.cjs'),
+      [
+        "const { spawnSync } = require('child_process');",
+        "const path = require('path');",
+        'const [base, , cmd] = process.argv.slice(2);',
+        "const m = /^git[ -]upload-pack '(\\/org\\/[a-z]+\\.git)'$/.exec(cmd || '');",
+        "if (!m) { process.stderr.write('fake-ssh: refused\\n'); process.exit(1); }",
+        "const r = spawnSync('git', ['upload-pack', path.join(base, m[1])], { stdio: 'inherit' });",
+        'process.exit(r.status === null ? 1 : r.status);',
+      ].join('\n')
+    );
+    const q = (s: string) => `"${s.replace(/\\/g, '/')}"`;
+    sshCmd = `${q(process.execPath)} ${q(path.join(srv, 'fake-ssh.cjs'))} ${q(srv)}`;
+  });
+  /** Repo whose origin is the host URL SSH_ORIGIN, last fetched (reflog + FETCH_HEAD) at `fetchedAt`. */
+  function sshCloneAt(fetchedAt: string, prefix: string) {
+    const d = newDir(prefix);
+    g(d, ['init', '-q']);
+    g(d, ['config', 'core.sshCommand', sshCmd]);
+    g(d, ['config', 'ssh.variant', 'simple']);
+    g(d, ['remote', 'add', 'origin', SSH_ORIGIN]);
+    g(d, ['fetch', '-q', 'origin'], fetchedAt);
+    g(d, ['checkout', '-q', '-b', 'main', 'origin/main']); // a work tree like any clone
+    utimesSync(path.join(d, '.git', 'FETCH_HEAD'), new Date(fetchedAt), new Date(fetchedAt));
+    return d;
+  }
+  /**
+   * origin/main last fetched 28 Oct at M (W44 mid-week); origin then gained c4 (+page 7) on 29 Oct,
+   * so the truth for W44 (first week) is 4 and the stale M would give 3.
+   */
+  function staleAtM(prefix: string, host = false) {
+    const copy = host ? sshCloneAt('2026-10-28T10:00:00Z', prefix) : cloneAt(up, '2026-10-28T10:00:00Z', prefix);
+    g(copy, ['update-ref', '-d', 'refs/remotes/origin/main']);
+    g(copy, ['update-ref', '-m', 'fetch: synthetic', 'refs/remotes/origin/main', ids.M!], '2026-10-28T10:00:00Z');
+    rmSync(path.join(copy, '.git', 'FETCH_HEAD'), { force: true });
+    return copy;
+  }
+  const afterClose = new Date('2026-10-29T13:10:00Z');
+  const touch = (copy: string, d = afterClose) => utimesSync(path.join(copy, '.git', 'FETCH_HEAD'), d, d);
+  const notFetched = async (copy: string) => {
+    const r = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toMatch(/^git: origin\/main not fetched since the close/);
+  };
+
+  it('host origin: FETCH_HEAD written at/after the close and naming the origin/main commit counts as a fetch', async () => {
+    const copy = sshCloneAt('2026-10-28T10:00:00Z', 'div1-wiki-fh-');
     g(copy, ['fetch', '-q', 'origin']); // nothing moved: no new reflog entry, FETCH_HEAD rewritten
-    const fh = path.join(copy, '.git', 'FETCH_HEAD');
-    utimesSync(fh, new Date('2026-11-05T13:10:00Z'), new Date('2026-11-05T13:10:00Z'));
+    touch(copy, new Date('2026-11-05T13:10:00Z'));
     expect(await computeArtifactsIndexedWeekly({ window: W45, repoRoot: copy })).toMatchObject({
       ok: true,
       value: 3,
@@ -306,55 +368,101 @@ describe('git: stale or wrong-ref checkouts are NOT POSTED, never a silent 0 (F2
     });
     // A FETCH_HEAD line from origin's URL for branch main, but not naming the current origin/main
     // commit, is not a fetch of that commit (only the sha differs from the real line).
+    const fh = path.join(copy, '.git', 'FETCH_HEAD');
     const real = readFileSync(fh, 'utf8').split('\n').find((l) => l.includes("branch 'main' of "))!;
     writeFileSync(fh, `${'0'.repeat(40)}${real.slice(40)}\n`);
-    utimesSync(fh, new Date('2026-11-05T13:10:00Z'), new Date('2026-11-05T13:10:00Z'));
-    const r = await computeArtifactsIndexedWeekly({ window: W45, repoRoot: copy });
-    expect(r.ok).toBe(false);
+    touch(copy, new Date('2026-11-05T13:10:00Z'));
+    expect((await computeArtifactsIndexedWeekly({ window: W45, repoRoot: copy })).ok).toBe(false);
   });
-  /**
-   * origin/main last fetched 28 Oct at M (W44 mid-week); origin then gained c4 (+page 7) on 29 Oct.
-   * Something else holding M is fetched after the close: that is not a fetch of origin/main.
-   */
-  function staleAtM(prefix: string) {
-    const copy = cloneAt(up, '2026-10-28T10:00:00Z', prefix);
-    g(copy, ['update-ref', '-d', 'refs/remotes/origin/main']);
-    g(copy, ['update-ref', '-m', 'fetch: synthetic', 'refs/remotes/origin/main', ids.M!], '2026-10-28T10:00:00Z');
-    rmSync(path.join(copy, '.git', 'FETCH_HEAD'), { force: true });
-    return copy;
-  }
-  const afterClose = new Date('2026-10-29T13:10:00Z');
-  it('a second remote holding the same commit, fetched after the close, is not a fetch of origin -> NOT POSTED', async () => {
-    const mirror = cloneAt(up, '2026-10-28T10:00:00Z', 'div1-wiki-mirror-');
-    g(mirror, ['reset', '-q', '--hard', ids.M!]); // the second remote's main = the stale M
-    const copy = staleAtM('div1-wiki-2nd-');
-    g(copy, ['remote', 'add', 'backup', mirror]);
+  it('a second host remote holding the same commit, fetched after the close, is not a fetch of origin -> NOT POSTED', async () => {
+    const copy = staleAtM('div1-wiki-2nd-', true);
+    g(copy, ['remote', 'add', 'backup', SSH_MIRROR]);
     g(copy, ['fetch', '-q', 'backup']);
-    const fh = path.join(copy, '.git', 'FETCH_HEAD');
-    utimesSync(fh, afterClose, afterClose);
-    const r = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy });
-    expect(r.ok).toBe(false); // (counted, it would post 3 instead of 4: page 7 is missing)
-    if (!r.ok) expect(r.reason).toMatch(/not fetched since the close .*last fetch 2026-10-28T10:00:00\.000Z/);
+    touch(copy);
+    await notFetched(copy); // (counted, it would post 3 instead of 4: page 7 is missing)
   });
   it('another branch of origin at the same commit, fetched after the close, is not a fetch of main -> NOT POSTED', async () => {
-    const copy = staleAtM('div1-wiki-otherbranch-');
+    const copy = staleAtM('div1-wiki-otherbranch-', true);
     g(copy, ['fetch', '-q', 'origin', 'frozen']);
-    const fh = path.join(copy, '.git', 'FETCH_HEAD');
-    utimesSync(fh, afterClose, afterClose);
-    const r = await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy });
-    expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toMatch(/not fetched since the close/);
+    touch(copy);
+    await notFetched(copy);
   });
-  it('remote URLs compare after dropping scheme, user-info, .git and trailing slash', () => {
+  it('a relative directory named like the host URL is a local path, never origin -> NOT POSTED', async () => {
+    const copy = staleAtM('div1-wiki-reldir-', true);
+    const rel = path.join(copy, 'synthetic.invalid', 'org', 'dabos');
+    execFileSync('git', ['clone', '-q', up, rel], { stdio: ['ignore', 'pipe', 'pipe'] });
+    g(rel, ['reset', '-q', '--hard', ids.M!]);
+    g(copy, ['fetch', '-q', 'synthetic.invalid/org/dabos', 'main']); // FETCH_HEAD: "... of synthetic.invalid/org/dabos"
+    touch(copy);
+    await notFetched(copy);
+  });
+  it('local-path origin: FETCH_HEAD is never trusted (`/x/dabos.git` vs `/x/dabos`, or even origin itself)', async () => {
+    const local = newDir('div1-wiki-local-');
+    const bareRepo = path.join(local, 'dabos.git');
+    execFileSync('git', ['clone', '-q', '--bare', up, bareRepo], { stdio: ['ignore', 'pipe', 'pipe'] });
+    g(bareRepo, ['update-ref', 'refs/heads/main', ids.M!]);
+    const other = path.join(local, 'dabos'); // a different repository, same main commit
+    execFileSync('git', ['clone', '-q', up, other], { stdio: ['ignore', 'pipe', 'pipe'] });
+    g(other, ['reset', '-q', '--hard', ids.M!]);
+    const copy = cloneAt(bareRepo, '2026-10-28T10:00:00Z', 'div1-wiki-localorigin-');
+    g(copy, ['fetch', '-q', other, 'main']); // FETCH_HEAD: "branch 'main' of <local>/dabos" (git drops .git)
+    touch(copy);
+    await notFetched(copy);
+    g(copy, ['fetch', '-q', 'origin']); // origin itself, nothing moved: still only the 28 Oct reflog entry
+    touch(copy);
+    await notFetched(copy);
+  });
+  it('update-ref of origin/main after the close is not a fetch -> NOT POSTED (no page that is not on origin)', async () => {
+    const copy = staleAtM('div1-wiki-updref-');
+    g(copy, ['checkout', '-q', '--detach', ids.M!]);
+    const local = commit(copy, [1, 2, 3, 4, 5, 6, 20, 99], '2026-10-27T10:00:00Z'); // page 99 never on origin
+    g(copy, ['update-ref', 'refs/remotes/origin/main', local], '2026-10-29T13:10:00Z');
+    await notFetched(copy);
+    // Even after a real fetch after the close, a later update-ref leaves the fetch entry stale.
+    const copy2 = staleAtM('div1-wiki-updref2-');
+    g(copy2, ['fetch', '-q', 'origin'], '2026-10-29T13:05:00Z'); // M -> c5, a real fetch after the close
+    g(copy2, ['checkout', '-q', '--detach', ids.M!]);
+    const local2 = commit(copy2, [1, 2, 3, 4, 5, 6, 20, 99], '2026-10-27T10:00:00Z');
+    g(copy2, ['update-ref', '-m', 'manual', 'refs/remotes/origin/main', local2], '2026-10-29T13:10:00Z');
+    await notFetched(copy2);
+  });
+  it('remote rename origin -> o2 -> origin after the close is not a fetch; a real fetch then counts correctly', async () => {
+    const copy = staleAtM('div1-wiki-rename-');
+    g(copy, ['remote', 'rename', 'origin', 'o2'], '2026-10-29T13:10:00Z');
+    g(copy, ['remote', 'rename', 'o2', 'origin'], '2026-10-29T13:11:00Z');
+    await notFetched(copy); // (counted, it would post the stale 3 instead of 4)
+    g(copy, ['fetch', '-q', 'origin'], '2026-10-29T13:20:00Z');
+    expect(await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy })).toMatchObject({
+      ok: true,
+      value: 4,
+      basis: { git_fetch_signal: 'reflog', git_fetched_at: '2026-10-29T13:20:00.000Z' },
+    });
+  });
+  it('a fetch at exactly the close (same ms) counts: at or after the close', async () => {
+    const copy = staleAtM('div1-wiki-exact-');
+    g(copy, ['fetch', '-q', 'origin'], '2026-10-29T13:00:00Z');
+    expect(await computeArtifactsIndexedWeekly({ window: W44, repoRoot: copy })).toMatchObject({
+      ok: true,
+      value: 4,
+      basis: { git_fetched_at: W44.end.toISOString() },
+    });
+  });
+  it('remote URLs keep their class (host URL vs local path); scheme, user-info, .git, trailing / dropped for hosts', () => {
     const gh = normaliseRemoteUrl('https://user:synthetic-token@GitHub.com/Example-Org/example-repo.git/');
-    expect(gh).toBe('github.com/Example-Org/example-repo');
+    expect(gh).toBe('url:github.com/Example-Org/example-repo');
     expect(normaliseRemoteUrl('git@github.com:Example-Org/example-repo.git')).toBe(gh);
     expect(normaliseRemoteUrl('ssh://git@github.com/Example-Org/example-repo')).toBe(gh);
     expect(normaliseRemoteUrl('https://github.com/Example-Org/other-repo')).not.toBe(gh);
-    expect(normaliseRemoteUrl('C:\\Dev\\Synthetic\\Repo.git')).toBe(normaliseRemoteUrl('file:///c:/dev/synthetic/repo/'));
+    expect(normaliseRemoteUrl('github.com/Example-Org/example-repo')).not.toBe(gh); // relative directory
+    expect(normaliseRemoteUrl('./github.com/Example-Org/example-repo')).not.toBe(gh);
+    expect(normaliseRemoteUrl('file://github.com/Example-Org/example-repo')).not.toBe(gh);
+    expect(normaliseRemoteUrl('/srv/x/dabos.git')).not.toBe(normaliseRemoteUrl('/srv/x/dabos'));
+    expect(normaliseRemoteUrl('C:\\Dev\\Synthetic\\Repo')).toBe(normaliseRemoteUrl('file:///c:/dev/synthetic/repo/'));
+    expect(isLocalRemote(normaliseRemoteUrl('C:\\Dev\\Synthetic\\Repo'))).toBe(true);
+    expect(isLocalRemote(normaliseRemoteUrl('../up'))).toBe(true);
+    expect(isLocalRemote(gh)).toBe(false);
     expect(gh).not.toMatch(/token|user/);
-  });
-  it('HEAD or a local branch is never counted; the default is origin/main, not the checkout', async () => {
+  });  it('HEAD or a local branch is never counted; the default is origin/main, not the checkout', async () => {
     for (const ref of ['HEAD', 'main']) {
       const r = await computeArtifactsIndexedWeekly({ window: W45, repoRoot: repo, gitRef: ref });
       expect(r.ok).toBe(false);
