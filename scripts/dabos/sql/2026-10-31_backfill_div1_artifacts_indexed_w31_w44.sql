@@ -14,13 +14,19 @@
 -- DABOS docs/wiki/index.md (Logan ruling 2026-10-21; #32 countUniqueWikiPages normalisation).
 -- Weekly value = pages ADDED during the stat week (Thu 14:00 -> Thu 14:00 Europe/Berlin,
 -- event-week rule) = unique count at the close minus unique count at the previous close, on
--- DABOS main (first parent) as of each close (merge time). A re-pointed link adds no page.
+-- DABOS main as published on GitHub at each close. A re-pointed link adds no page.
+-- History is not read first-parent-only: at sync merges of GitHub main into a stale local copy
+-- (abf625a1, 133ea3be, 1025d6c7, 72baf3c7) GitHub main is parent 2.
 -- recorded_at = close - 1 ms (org-week.ts recordedAtForClosedOrgWeek): 11:59:59.999Z for
 -- W31-W43 (CEST), 12:59:59.999Z for W44 (CET).
 --
 -- Values (verified 2026-10-31, fresh read-only clone of A-sop/DABOS):
---   W31 0 (218->218)  W32 9 (218->227)  W33 0  W34 2 (227->229)  W35-W39 0 (229)
---   W40 3 (229->232, merge 133ea3be 29 Sep; merge-time basis)  W41 0
+--   W31 0 (218->218)  W32 9 (218->227)  W33 0  W34 2 (227->229)  W35-W37 0 (229)
+--   W38 3 (229->232; 2e1696fe, Fri 11 Sep 00:19 Berlin, on GitHub main from then)
+--   W39 0 (232)  W40 0 (232->232)  W41 0
+--   Dept13 FAIL v1 fixed: v1 had W38 0 / W40 3 from a first-parent read. 133ea3be (29 Sep) merged
+--   GitHub main (parent 2, already containing 2e1696fe) into a stale local copy (parent 1); it did
+--   not bring the 3 pages to main.
 --   W42 0 (232->232; dea83ac1 only re-pointed one link, no page added)  W43 0
 --   W44 60 (232->292, 19190099 via DABOS #112; Dept13-passed in 2026-W44.md via #186)
 --
@@ -51,10 +57,10 @@ INSERT INTO div1_backfill_w31_w44 VALUES
   (34, 'div-live-2026-W34',  2, '2026-08-20T11:59:59.999Z', '2026-08-13T12:00:00.000Z', '2026-08-20T12:00:00.000Z', 227, 229, 'f7cb1800'),
   (35, 'div-live-2026-W35',  0, '2026-08-27T11:59:59.999Z', '2026-08-20T12:00:00.000Z', '2026-08-27T12:00:00.000Z', 229, 229, '000d2f2e'),
   (36, 'div-live-2026-W36',  0, '2026-09-03T11:59:59.999Z', '2026-08-27T12:00:00.000Z', '2026-09-03T12:00:00.000Z', 229, 229, 'b92b8e64'),
-  (37, 'div-live-2026-W37',  0, '2026-09-10T11:59:59.999Z', '2026-09-03T12:00:00.000Z', '2026-09-10T12:00:00.000Z', 229, 229, 'b92b8e64'),
-  (38, 'div-live-2026-W38',  0, '2026-09-17T11:59:59.999Z', '2026-09-10T12:00:00.000Z', '2026-09-17T12:00:00.000Z', 229, 229, 'b92b8e64'),
-  (39, 'div-live-2026-W39',  0, '2026-09-24T11:59:59.999Z', '2026-09-17T12:00:00.000Z', '2026-09-24T12:00:00.000Z', 229, 229, 'b92b8e64'),
-  (40, 'div-live-2026-W40',  3, '2026-10-01T11:59:59.999Z', '2026-09-24T12:00:00.000Z', '2026-10-01T12:00:00.000Z', 229, 232, 'a49b6d10'),
+  (37, 'div-live-2026-W37',  0, '2026-09-10T11:59:59.999Z', '2026-09-03T12:00:00.000Z', '2026-09-10T12:00:00.000Z', 229, 229, 'a21c2dda'),
+  (38, 'div-live-2026-W38',  3, '2026-09-17T11:59:59.999Z', '2026-09-10T12:00:00.000Z', '2026-09-17T12:00:00.000Z', 229, 232, 'eef8b6e5'),
+  (39, 'div-live-2026-W39',  0, '2026-09-24T11:59:59.999Z', '2026-09-17T12:00:00.000Z', '2026-09-24T12:00:00.000Z', 232, 232, 'f85b987f'),
+  (40, 'div-live-2026-W40',  0, '2026-10-01T11:59:59.999Z', '2026-09-24T12:00:00.000Z', '2026-10-01T12:00:00.000Z', 232, 232, 'a49b6d10'),
   (41, 'div-live-2026-W41',  0, '2026-10-08T11:59:59.999Z', '2026-10-01T12:00:00.000Z', '2026-10-08T12:00:00.000Z', 232, 232, '6dc58670'),
   (42, 'div-live-2026-W42',  0, '2026-10-15T11:59:59.999Z', '2026-10-08T12:00:00.000Z', '2026-10-15T12:00:00.000Z', 232, 232, '7814e757'),
   (43, 'div-live-2026-W43',  0, '2026-10-22T11:59:59.999Z', '2026-10-15T12:00:00.000Z', '2026-10-22T12:00:00.000Z', 232, 232, '368cfd9e'),
