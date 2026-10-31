@@ -1,4 +1,4 @@
-﻿import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DVAG_KEYWORD_REGEX, formatIngestAck, ingestCapture, parseIngestText } from '@/lib/dabos/ingest';
 
@@ -261,5 +261,48 @@ describe('classifyCapture (hat table)', () => {
     expect(mixed.department_id).toBeNull();
     expect(mixed.candidates.sort()).toEqual(['Dept10', 'Dept15']);
     expect(classifyCapture('[link]').department_id).toBeNull();
+  });
+});
+
+describe('ingestCapture routing (Dept1 intake rule: captures never go to the founder)', () => {
+  // INSERT values: 1 workspace_id, 2 division_id, 3 department_id, 4 title, 5 description,
+  // 6 type, 7 status, 8 priority, 9 assigned_to, 10 assigned_agent, 11 basket, 12 ingest_source
+  async function insertFor(mouth: 'telegram' | 'slack' | 'buzz' | 'api', text: string) {
+    const mockSql = vi.fn() as any;
+    mockSql.mockResolvedValueOnce([]); // existing check
+    mockSql.mockResolvedValueOnce([{ id: 'Dept1', division_id: 'Div1' }]); // dept lookup
+    mockSql.mockResolvedValueOnce([
+      { id: 'route-test-id', basket: 'in', department_id: 'Dept1', division_id: 'Div1', title: 't' },
+    ]);
+    mockSql.mockResolvedValueOnce([]); // role_runs
+    await ingestCapture(mockSql, { mouth, external_id: `${mouth}-route-test`, text });
+    expect(mockSql).toHaveBeenCalledTimes(4);
+    const call = mockSql.mock.calls[2];
+    return { type: call[6], assigned_to: call[9], assigned_agent: call[10], ingest_source: call[12] };
+  }
+
+  it.each(['telegram', 'slack', 'buzz'] as const)(
+    'a plain %s capture becomes agent work, unassigned (not founder)',
+    async (mouth) => {
+      const r = await insertFor(mouth, 'interesting idea about something');
+      expect(r.ingest_source).toBe(mouth);
+      expect(r.type).toBe('agent');
+      expect(r.assigned_to).toBeNull();
+      expect(r.assigned_agent).toBeNull();
+    }
+  );
+
+  it('an api item without a work prefix stays human/founder', async () => {
+    const r = await insertFor('api', 'please look at this yourself');
+    expect(r.type).toBe('human');
+    expect(r.assigned_to).toBe('founder');
+    expect(r.assigned_agent).toBeNull();
+  });
+
+  it.each(['api', 'telegram'] as const)('a task: item from %s stays agent/research, unassigned', async (mouth) => {
+    const r = await insertFor(mouth, 'task: summarize the week');
+    expect(r.type).toBe('agent');
+    expect(r.assigned_to).toBeNull();
+    expect(r.assigned_agent).toBe('research');
   });
 });
