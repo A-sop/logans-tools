@@ -219,6 +219,16 @@ describe('2026-10-31 Div1 artifacts_indexed void W24-W28 + W30 repost SQL', () =
     expect(await allRows(db)).toEqual(once);
   });
 
+  it('a re-run aborts unchanged (guard 5b) if a new workspace-less Div1 artifacts_indexed row appeared after success', async () => {
+    await run(db, SQL);
+    await db.query(
+      `INSERT INTO stats (workspace_id, division_id, metric_key, value, recorded_at) VALUES (NULL, 'Div1', 'artifacts_indexed', 7, '2026-07-16T12:00:00.000Z')`
+    );
+    const before = await allRows(db);
+    await expect(run(db, SQL)).rejects.toThrow(/guard 5b/);
+    expect(await allRows(db)).toEqual(before);
+  });
+
   it('the header undo restores the table exactly and touches no other row', async () => {
     const before = await allRows(db);
     await run(db, SQL);
