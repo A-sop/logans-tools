@@ -55,7 +55,39 @@ close; both Div1 rows (artifacts_indexed 75, division row and Dept3 row) stay un
 New recorded_at = recordedAtForClosedOrgWeek(statWeekWindow(2026, 30)) = Thu 23 Jul 14:00 CEST - 1 ms.
 Values are not recomputed (Div5 80 / Div7 28.6 carried forward as they stand; Dept14 is ruling).
 
-## Acceptance lines
+## Amendment 2026-10-31 (Dept14 ruling, 31 Oct 15:40 Berlin), recorded before the code change
+
+Dept14 (Div5) ruled on the carried-forward Div5/Div7 values. This replaces lines 2, 3 and the
+"Not posted" Div5/Div7 rows above where they differ; everything else stands.
+
+- W30 Div5 `qa_pass_rate` 80, ddb587d9-08e9-4f53-9112-957df3ebf1f7: superseded with NO repost,
+  superseded_reason exactly "Dept14 2026-10-31: all-time value, weekly count has no closed verdicts".
+  W30 Div5 stays missing.
+- W30 Div7 `plan_completion_rate` 28.6, 47cee040-8a64-44d3-8a1b-64cf6d9931c4: superseded with NO
+  repost, superseded_reason exactly "Dept14 2026-10-31: void basis per Logan 4 Oct ruling".
+- The other four W30 rows (Div2 x2, Div4 x2) are re-dated as before, reason unchanged.
+- W44 Part 1 is unchanged (Div4 / NULL and Div4 / Dept12 shipped_outputs 0). Div7 posts no W44 row
+  (ruling item 1). Div5 W44 `qa_pass_rate` 66.7 goes in a separate one-row PR, not here; its key
+  (Div5 / NULL / qa_pass_rate in div-live-2026-W44) is left out of every guard in this script, so
+  the two PRs apply in either order.
+
+Amended acceptance lines (replace 2-3; line 1 reads "exactly 2 active non-Div1 rows apart from the
+Div5 qa_pass_rate key"):
+
+2. Part 2: each of the 6 listed W30 rows is still present with value, workspace, division,
+   department, metric, basis and recorded_by unchanged and superseded_at set. superseded_reason is
+   this script's W30 re-date reason for the 4 Div2/Div4 rows (distinct from #51's), and the
+   matching Dept14 reason above for ddb587d9 and 47cee040. Nothing is deleted.
+3. Part 2: each of the 4 Div2/Div4 rows has exactly one new active row (same workspace, division,
+   department, metric, value) at 2026-07-23T11:59:59.999Z, recorded_by
+   'div-live-correction-2026-10-31', basis = old basis (NULL as {}) + correction tag, superseded
+   row id and old recorded_at. ddb587d9 and 47cee040 have NO repost. End state: div-live-2026-W30
+   has exactly 4 active non-Div1 rows, all at the W30 close, no active Div5 qa_pass_rate or Div7
+   plan_completion_rate row, and both Div1 W30 rows unchanged. 6 rows carry this script's tag.
+Line 5 now covers #49, #51, this PR and the Div5 W44 PR in all 24 orders, from a fresh read-only
+prod snapshot. Undo is scoped to the 6 W30 ids (the Dept14 reasons are shared with #51).
+
+## Acceptance lines (original; 2-3 replaced by the amendment above)
 
 1. Part 1: after applying, div-live-2026-W44 has exactly 2 active non-Div1 rows: Div4/NULL and
    Div4/Dept12 shipped_outputs = 0 at 2026-10-29T12:59:59.999Z, recorded_by
