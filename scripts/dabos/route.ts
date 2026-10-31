@@ -191,10 +191,10 @@ async function main() {
       ${'Dept1'},
       ${title},
       ${description},
-      ${'human'},
+      ${'agent'}, // Dept1 intake rule: a captured tangent is agent work, never the founder's
       ${'todo'},
       ${3},
-      ${'founder'},
+      ${null},
       ${'in'},
       ${'api'},
       ${externalId},
