@@ -1,4 +1,4 @@
-# Acceptance: 2026-10-31 div-live W31-W43 supersede-and-repost onto the Thu 14:00 Berlin close (Div4, not applied)
+# Acceptance: 2026-10-31 div-live W31-W43 correction: re-date onto the Thu 14:00 Berlin close, Div5/Div7 superseded without repost (Div4, not applied)
 
 Recorded before any code for this correction (Dept13 criterion 2). Requested by Div7 2026-10-31,
 applying existing rulings only: the stat week closes Thu 14:00 Europe/Berlin (org-week.ts) and a
@@ -30,7 +30,46 @@ already does (board-conditions-query.ts bucketStatWeek: a labelled row keeps its
 recorded_at lies after that label's Thursday close, i.e. inside the NEXT stat week by timestamp;
 that is the defect being corrected, not a re-labelling.
 
-## Acceptance lines
+## Amendment 2026-10-31 (Dept14 ruling, 31 Oct 15:40 Berlin), recorded before the code change
+
+Dept14 (Div5) ruled on the carried-forward Div5/Div7 values. This replaces the Div5/Div7 part of
+the scope and lines 1-3 below; everything else stands.
+
+- Div7 `plan_completion_rate` 28.6 (W31, W40-W43, 5 rows): void basis (Logan ruling 4 Oct,
+  decision sheet item 4). Superseded with NO repost, superseded_reason exactly
+  "Dept14 2026-10-31: void basis per Logan 4 Oct ruling".
+- Div5 `qa_pass_rate` 80 (W31, W40-W43, 5 rows): all-time value; the weekly count has no closed
+  Dept13 verdicts in those weeks. Superseded with NO repost, superseded_reason exactly
+  "Dept14 2026-10-31: all-time value, weekly count has no closed verdicts". Those weeks stay missing.
+- The other 20 rows (Div2 leads_or_touchpoints_created, Div2/Dept4 content_pieces_shipped, Div4
+  shipped_outputs, Div4/Dept12 shipped_outputs) are re-dated as before, reason unchanged.
+
+Rows moving from re-date to supersede-only:
+
+| Workspace | Div5 qa_pass_rate (80) | Div7 plan_completion_rate (28.6) |
+|---|---|---|
+| div-live-2026-W31 | b312891e-5735-4e40-8a5e-66a054e62ac4 | 8c2598a7-9dd6-48da-8532-e3fa2aa59a66 |
+| div-live-2026-W40 | 9a1ccdf4-7f37-45d0-89d8-ced170267147 | 95a6ea9d-c030-44d4-b043-92e36064350d |
+| div-live-2026-W41 | d15efd9b-4e55-4bd1-a549-a6497d5077d6 | 2aba1b75-1d92-460a-ab4e-553fa5e259b2 |
+| div-live-2026-W42 | bc8cea02-b519-4044-8bee-6000b2f03c94 | 45c29d6e-9b82-4250-8a30-c67c1813ec1c |
+| div-live-2026-W43 | 6f0b4f31-828c-4656-9b9d-4e2787fc0472 | 31340bab-e56e-43de-b2cf-6c0af3fe8c3e |
+
+Amended acceptance lines (replace 1-3):
+
+1. After applying, each of the 30 listed rows is still present, with value, workspace, division,
+   department, metric, basis and recorded_by unchanged, and superseded_at set. superseded_reason is
+   the re-date reason for the 20 Div2/Div4 rows, and the matching Dept14 reason above for the 5 Div5
+   and 5 Div7 rows. Nothing is deleted.
+2. Each of the 20 Div2/Div4 rows has exactly one new active row (same workspace, division,
+   department, metric, value) at its workspace label's Thursday close minus 1 ms, recorded_by
+   'div-live-correction-2026-10-31', basis = old basis (NULL as {}) plus correction tag, the
+   superseded row id and its old recorded_at. The 10 Div5/Div7 rows have NO repost.
+3. End state: each of the 5 workspaces has exactly 4 active non-Div1 rows, all at the close, and no
+   active Div5 qa_pass_rate or Div7 plan_completion_rate row.
+Line 5 also covers the Div5 W44 qa_pass_rate PR (separate) and #53: order does not matter.
+Undo is scoped to the 30 ids (the Dept14 reasons are shared with #53's W30 rows).
+
+## Acceptance lines (original; 1-3 replaced by the amendment above)
 
 1. After applying, each of the 30 rows listed in the script is still present, with value,
    workspace, division, department, metric, basis and recorded_by unchanged, and superseded_at set
