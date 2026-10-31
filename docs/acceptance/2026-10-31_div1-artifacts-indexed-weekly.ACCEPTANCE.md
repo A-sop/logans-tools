@@ -26,12 +26,35 @@ Acceptance lines:
    `Div1 artifacts_indexed NOT POSTED - <reason>` note is returned (stat crawl keeps showing missing_emit).
 6. No PII in logs: notes and logs carry counts, commit SHAs and the index path only; page names are never
    logged. The row basis stores page fingerprints (truncated SHA-256), not page names.
-7. Sources, in order: (a) git history of `DABOS_REPO_ROOT` when its working-tree index equals the index
-   at the git ref (first-parent history, committer time, so the week a change landed on the branch);
-   (b) otherwise (e.g. ln02, whose Seagate mirror excludes `.git`) the previous stat week's Div1 row
-   fingerprints as the start baseline and the current index file as the end, refused if the file was
-   modified at or after the close.
-8. Tests: the new tests fail on main (mutation check); targeted tests, full vitest, tsc and eslint on
+7. Sources, in order (AMENDED 2026-10-31, Dept13 FAIL v1 F1/F2; the original 7(a) first-parent rule is
+   replaced):
+   - Start point: the previous stat week's active Div1 row (`superseded_at is null`, any
+     `recorded_by`, `department_id` NULL) `basis.page_fingerprints`, whenever that row exists, in
+     BOTH methods.
+   - (a) git: the end-of-week snapshot is the index on `origin/main` (a remote-tracking ref; never
+     `HEAD` or a local branch) as it was at the close: the newest commit touching the index with
+     committer time strictly before the close, over full history (not first-parent), so a page counts
+     in the week its commit was made even when it reached main through a merge into a stale copy
+     (133ea3be shape). It must descend from the previous row's `git_end_commit` when that is recorded.
+     Only in the first week (no previous row) are both snapshots read from git, first-parent.
+     Git is used only when `origin/main` was fetched at or after the close: a reflog entry of
+     `refs/remotes/origin/main` at or after the close, or a `FETCH_HEAD` (this worktree's) modified
+     at or after the close whose `branch 'main'` line names the current `origin/main` commit.
+     Otherwise git is not trusted (NOT POSTED unless (b) applies).
+   - (b) no usable git (e.g. ln02, whose Seagate mirror excludes `.git`): the previous row's
+     fingerprints as the start and the current index file as the end, refused if the file was modified
+     at or after the close.
+   A page that was counted once is never counted again because of a first-parent or stale-copy view.
+8. Tests (AMENDED: also a test reproducing the 133ea3be merge shape (truth W38 = 3, W40 = 0), a stale /
+   never-fetched clone and a non-remote ref posting NOT POSTED, the `--only` filter, and the
+   `superseded_at is null` lookup; each fix has its own mutation check): the new tests fail on main (mutation check); targeted tests, full vitest, tsc and eslint on
    touched files pass.
 9. No merge without Dept13 PASS and Logan's own yes. After merge ln02 must pull main before
    Thu 5 Nov 14:30 Berlin. #32 is not closed here; its branch history still holds the leaked fixture.
+
+Amendment 1 (2026-10-31, after Dept13 FAIL v1 at de28d7a): lines 7 and 8 amended above; line 5 is
+unchanged and now also covers a never-fetched or non-`origin/main` git checkout. Fingerprint format
+read from the previous row (so the backfill PR #49 can write it byte-for-byte): `basis.page_fingerprints`
+= JSON array of strings, each the lowercase hex SHA-256 of the UTF-8 normalised target (rule of line 2,
+no salt), first 16 hex chars, unique, sorted ascending; exported as `pageFingerprint` /
+`wikiPageFingerprints` from `src/lib/dabos/artifacts-indexed.ts`.
