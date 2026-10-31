@@ -12,6 +12,7 @@ import crypto from 'crypto';
 
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
 import { requireDatabaseUrl } from './load-env';
+import { insertRoutedCapture } from './route-insert';
 
 type Rule = { glob: string; dept: string };
 
@@ -170,40 +171,9 @@ async function main() {
     ownership_file: ownershipPath,
   };
 
-  const inserted = await sql`
-    INSERT INTO tasks (
-      workspace_id,
-      division_id,
-      department_id,
-      title,
-      description,
-      type,
-      status,
-      priority,
-      assigned_to,
-      basket,
-      ingest_source,
-      ingest_external_id,
-      ingest_meta
-    ) VALUES (
-      ${'ingest-api'},
-      ${divisionId},
-      ${'Dept1'},
-      ${title},
-      ${description},
-      ${'human'},
-      ${'todo'},
-      ${3},
-      ${'founder'},
-      ${'in'},
-      ${'api'},
-      ${externalId},
-      ${JSON.stringify(meta)}::jsonb
-    )
-    RETURNING id::text AS id
-  `;
+  const insertedId = await insertRoutedCapture(sql, { divisionId, title, description, externalId, meta });
 
-  console.log(String(inserted[0].id));
+  console.log(insertedId);
 
   if ('end' in sql && typeof sql.end === 'function') {
     await sql.end({ timeout: 5 });
