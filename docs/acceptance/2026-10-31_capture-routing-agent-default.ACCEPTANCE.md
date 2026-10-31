@@ -18,3 +18,9 @@ Acceptance lines:
 5. `src/lib/dabos/ingest.test.ts` covers lines 1-3; the full vitest suite passes.
 6. No merge or production redeploy without Dept13 PASS and Logan's own yes. Production is behind
    main (#36 routing fields missing), so a redeploy also ships #36.
+
+Amendment after Dept13 FAIL v1 (3584b566: a `//` comment sat inside route.ts's `sql` template and was sent to Postgres):
+
+7. `scripts/dabos/route.ts`'s INSERT must parse and execute against Postgres (PGlite, `$n` params) and
+   write `type = 'agent'`, `assigned_to = NULL`; a test runs the real INSERT template (not a copy) and covers it.
+   No comments inside any `sql` template literal touched by this PR.
