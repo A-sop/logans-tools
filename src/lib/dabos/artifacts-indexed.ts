@@ -9,18 +9,23 @@
  *
  * Window = org-week.ts stat week [Thu 14:00, next Thu 14:00) Europe/Berlin.
  *
- * Sources, in order:
- *  1. git: DABOS_REPO_ROOT is its own git work tree (a shallow clone only if cut off before the\n *     window start) AND its working-tree index equals
- *     the index at the git ref (so the history is not stale). Start/end snapshots are the index at
- *     the last first-parent commit (committer time) before the window start / end, i.e. the week
- *     the change landed on the branch.
- *  2. snapshot: no trustworthy git history (ln02 reads a Seagate mirror whose backup excludes .git).
- *     Start = the page fingerprints stored on the previous stat week's Div1 row; end = the current
- *     index file, refused when the file was modified at or after the close.
+ * Start point (acceptance line 7, amendment 1): the previous stat week's active Div1 row
+ * `basis.page_fingerprints` whenever it exists, so a page counted once is never counted again.
+ * End point, in order:
+ *  1. git: the index on `origin/main` (a remote-tracking ref, never HEAD) as it was at the close =
+ *     the newest commit touching the index with committer time strictly before the close, over
+ *     full history (a page made in week N that reached main by a merge into a stale copy still
+ *     counts in week N). It must descend from the previous row's git_end_commit when recorded.
+ *     Only in the first week (no previous row) are start AND end read from git, first-parent.
+ *     Git is trusted only when origin/main was fetched at or after the close (see originFetchedAt).
+ *     A git work tree that fails any check is NOT POSTED: it never falls back to its working copy.
+ *  2. snapshot: DABOS_REPO_ROOT is not a git work tree, or source 'snapshot' is set explicitly
+ *     (DABOS_WIKI_SOURCE=snapshot, for ln02's Seagate mirror, whose .git is a stale leftover): the
+ *     current index file, refused when it was modified at or after the close.
  *  Neither available -> NOT POSTED with a reason (never a silent 0).
  *
  * Privacy: callers log counts, commit SHAs and the index path only. The basis keeps page
- * fingerprints (truncated SHA-256 of the normalised target), never page names.
+ * fingerprints (see pageFingerprint), never page names.
  *
  * W44 check (DABOS main, Thu 2026-10-22 14:00 -> Thu 2026-10-29 14:00 Berlin): 232 -> 292 = 60 added.
  */
@@ -33,6 +38,9 @@ import type { ClosedOrgWeek } from '@/lib/dabos/org-week';
 
 /** Index path relative to the DABOS repo root (git paths use forward slashes). */
 export const WIKI_INDEX_REL = 'docs/wiki/index.md';
+
+/** Default git ref: the fetched GitHub main, never the local checkout's HEAD or branch. */
+export const DEFAULT_WIKI_GIT_REF = 'origin/main';
 
 const LINK_RE = /\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
 
@@ -60,14 +68,20 @@ export function countUniqueWikiPages(indexText: string): number {
   return wikiPageTargets(indexText).size;
 }
 
-/** Truncated SHA-256 of a normalised target: stored instead of the page name. */
-export function pageFingerprint(target: string): string {
-  return createHash('sha256').update(target, 'utf8').digest('hex').slice(0, 16);
+/**
+ * Page fingerprint stored instead of the page name: lowercase hex SHA-256 (no salt) of the UTF-8
+ * normalised target (normaliseWikiTarget), first 16 hex chars.
+ */
+export function pageFingerprint(normalisedTarget: string): string {
+  return createHash('sha256').update(normalisedTarget, 'utf8').digest('hex').slice(0, 16);
 }
 
+/** `basis.page_fingerprints`: unique fingerprints of every page in the index, sorted ascending. */
 export function wikiPageFingerprints(indexText: string): string[] {
-  return [...wikiPageTargets(indexText)].map(pageFingerprint).sort();
+  return [...new Set([...wikiPageTargets(indexText)].map(pageFingerprint))].sort();
 }
+
+export const FINGERPRINT_RE = /^[0-9a-f]{16}$/;
 
 /** Pages in `end` not in `start` (added) and in `start` not in `end` (removed). */
 export function pagesAddedBetween(
@@ -105,46 +119,111 @@ export function gitBeforeArg(t: Date): string {
 
 type Window = Pick<ClosedOrgWeek, 'start' | 'end'>;
 
+/** The previous stat week's active Div1 row, as read by loadPreviousDiv1Fingerprints. */
+export type PreviousDiv1Row = { week: string; fingerprints: string[]; gitEndCommit?: string | null };
+
 export type Div1WeeklyBasis = {
   wiki_index: string;
   method: 'git' | 'snapshot';
+  /** Where the start point came from. */
+  start_source: 'previous_row' | 'git_first_parent';
   pages_at_start: number;
   pages_at_end: number;
   pages_added: number;
   pages_removed: number;
-  /** Sorted fingerprints of the pages at the window end: next week's snapshot baseline. */
+  /** Sorted unique fingerprints of the pages at the window end: next week's start point. */
   page_fingerprints: string[];
   fingerprint_rule: string;
+  snapshot_baseline_week?: string;
   git_ref?: string;
   git_start_commit?: string | null;
   git_end_commit?: string | null;
-  snapshot_baseline_week?: string;
+  git_fetched_at?: string;
+  git_fetch_signal?: 'reflog' | 'FETCH_HEAD';
 };
 
 export type Div1WeeklyResult =
   | { ok: true; value: number; basis: Div1WeeklyBasis }
   | { ok: false; reason: string };
 
-const FINGERPRINT_RULE = 'sha256(normalised target) first 16 hex; added = end - start';
+export const FINGERPRINT_RULE =
+  'sha256(utf8 normalised target), no salt, first 16 lowercase hex; unique, sorted; added = end - start';
+
+const REMOTE_REF_RE = /^([A-Za-z0-9._-]+)\/([A-Za-z0-9._/-]+)$/;
+
+/**
+ * When `<remote>/<branch>` was last fetched, from two signals (the later wins):
+ *  - reflog of refs/remotes/<remote>/<branch>: written whenever a fetch MOVES the ref;
+ *  - this worktree's FETCH_HEAD mtime: rewritten by every fetch/pull even when nothing moved; only
+ *    counted when it has a `branch '<branch>' of ...` line naming the current ref commit.
+ * Null when neither signal exists (never fetched).
+ */
+export function originFetchedAt(
+  repoRoot: string,
+  ref: string,
+  opts: { git?: GitRunner } = {}
+): { at: Date; signal: 'reflog' | 'FETCH_HEAD' } | null {
+  const git = opts.git ?? defaultGitRunner;
+  const m = REMOTE_REF_RE.exec(ref);
+  if (!m) return null;
+  const branch = m[2]!;
+  const run = (args: string[]) => git(['-C', repoRoot, ...args]).trim();
+  let best: { at: Date; signal: 'reflog' | 'FETCH_HEAD' } | null = null;
+  try {
+    const gd = run(['reflog', 'show', '-n', '1', '--date=unix', '--format=%gd', `refs/remotes/${ref}`]);
+    const secs = /@\{(\d+)\}/.exec(gd)?.[1];
+    if (secs) best = { at: new Date(Number(secs) * 1000), signal: 'reflog' };
+  } catch {
+    // no reflog
+  }
+  try {
+    const tip = run(['rev-parse', '--verify', '--quiet', `refs/remotes/${ref}^{commit}`]);
+    const fetchHead = path.resolve(repoRoot, run(['rev-parse', '--git-path', 'FETCH_HEAD']));
+    if (existsSync(fetchHead)) {
+      const names = readFileSync(fetchHead, 'utf8')
+        .split(/\r?\n/)
+        .some((line) => {
+          const [sha, , desc] = line.split('\t');
+          return sha === tip && (desc ?? '').startsWith(`branch '${branch}' of `);
+        });
+      const mtime = statSync(fetchHead).mtime;
+      if (names && (!best || mtime.getTime() > best.at.getTime())) best = { at: mtime, signal: 'FETCH_HEAD' };
+    }
+  } catch {
+    // no FETCH_HEAD
+  }
+  return best;
+}
 
 type GitHistory =
-  | { ok: true; startText: string; endText: string; startCommit: string | null; endCommit: string | null }
-  | { ok: false; reason: string };
+  | {
+      ok: true;
+      endText: string;
+      endCommit: string | null;
+      startText?: string;
+      startCommit?: string | null;
+      fetched: { at: Date; signal: 'reflog' | 'FETCH_HEAD' };
+    }
+  | { ok: false; reason: string; notGit?: boolean };
 
-/** Start/end index text from git, or why git history cannot be trusted here. */
+/**
+ * Index text from git at the close (and, in the first week, at the opening), or why git cannot be
+ * trusted here.
+ */
 export function readWikiIndexFromGit(
   repoRoot: string,
   window: Window,
-  opts: { ref?: string; git?: GitRunner } = {}
+  opts: { ref?: string; git?: GitRunner; firstWeek?: boolean; previousEndCommit?: string | null } = {}
 ): GitHistory {
   const git = opts.git ?? defaultGitRunner;
-  const ref = opts.ref ?? 'HEAD';
+  const ref = opts.ref ?? DEFAULT_WIKI_GIT_REF;
+  const firstWeek = opts.firstWeek ?? false;
   const run = (args: string[]) => git(['-C', repoRoot, ...args]).trim();
   let top: string;
   try {
     top = run(['rev-parse', '--show-toplevel']);
   } catch {
-    return { ok: false, reason: 'not a git work tree' };
+    return { ok: false, reason: 'not a git work tree', notGit: true };
   }
   // realpath: Windows short (8.3) names and symlinks must not make the same dir look different.
   const real = (p: string) => {
@@ -155,12 +234,29 @@ export function readWikiIndexFromGit(
     }
   };
   if (path.relative(real(top), real(repoRoot)) !== '') {
-    return { ok: false, reason: 'DABOS_REPO_ROOT is not the git top level' };
+    return { ok: false, reason: 'DABOS_REPO_ROOT is not the git top level', notGit: true };
+  }
+  const fullRef = `refs/remotes/${ref}`;
+  try {
+    if (!REMOTE_REF_RE.test(ref)) throw new Error('bad ref');
+    run(['rev-parse', '--verify', '--quiet', `${fullRef}^{commit}`]);
+  } catch {
+    return { ok: false, reason: `git ref ${ref} is not a remote-tracking ref (HEAD and local branches are never counted)` };
+  }
+  const fetched = originFetchedAt(repoRoot, ref, { git });
+  if (!fetched || fetched.at.getTime() < window.end.getTime()) {
+    return {
+      ok: false,
+      reason: `${ref} not fetched since the close ${window.end.toISOString()} (last fetch ${
+        fetched ? fetched.at.toISOString() : 'unknown'
+      }); git fetch after Thu 14:00 Berlin`,
+    };
   }
   try {
+    // Snapshots read: the close, plus the opening in the first week. Every shallow cut-off must be
+    // older than the earliest of them, or that snapshot could read as a truncated history.
+    const earliest = firstWeek ? window.start : window.end;
     if (run(['rev-parse', '--is-shallow-repository']) === 'true') {
-      // A shallow clone is fine only when every cut-off commit is older than the window start
-      // (then the start snapshot is still visible); otherwise the start would read as empty.
       const shallowFile = path.resolve(repoRoot, run(['rev-parse', '--git-path', 'shallow']));
       const cuts = existsSync(shallowFile)
         ? readFileSync(shallowFile, 'utf8').split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
@@ -168,23 +264,40 @@ export function readWikiIndexFromGit(
       if (cuts.length === 0) return { ok: false, reason: 'shallow git history (cut-off unknown)' };
       for (const c of cuts) {
         const ct = Number(run(['show', '-s', '--format=%ct', c])) * 1000;
-        if (!(ct < window.start.getTime())) {
-          return { ok: false, reason: 'shallow git history does not reach the window start' };
+        if (!(ct < earliest.getTime())) {
+          return { ok: false, reason: 'shallow git history does not reach the snapshot time' };
         }
       }
     }
-    const refBlob = run(['rev-parse', `${ref}:${WIKI_INDEX_REL}`]);
-    const worktreeBlob = run(['hash-object', '--', WIKI_INDEX_REL]);
-    if (refBlob !== worktreeBlob) {
-      return { ok: false, reason: `working-tree index differs from ${ref} (git history stale or uncommitted)` };
-    }
-    const lastBefore = (t: Date) =>
-      run(['rev-list', '-1', '--first-parent', `--before=${gitBeforeArg(t)}`, ref, '--', WIKI_INDEX_REL]) ||
-      null;
-    const startCommit = lastBefore(window.start);
-    const endCommit = lastBefore(window.end);
+    const lastBefore = (t: Date, history: '--first-parent' | '--full-history') =>
+      run(['rev-list', '-1', history, `--before=${gitBeforeArg(t)}`, fullRef, '--', WIKI_INDEX_REL]) || null;
     const show = (c: string | null) => (c ? git(['-C', repoRoot, 'show', `${c}:${WIKI_INDEX_REL}`]) : '');
-    return { ok: true, startText: show(startCommit), endText: show(endCommit), startCommit, endCommit };
+
+    if (firstWeek) {
+      const startCommit = lastBefore(window.start, '--first-parent');
+      const endCommit = lastBefore(window.end, '--first-parent');
+      return { ok: true, startText: show(startCommit), startCommit, endText: show(endCommit), endCommit, fetched };
+    }
+    const endCommit = lastBefore(window.end, '--full-history');
+    const prev = opts.previousEndCommit;
+    if (prev) {
+      // The close snapshot must continue last week's line of history; a jump to another line (e.g.
+      // a stale copy's commit) could drop pages that would then be counted again later.
+      let descends = false;
+      try {
+        run(['merge-base', '--is-ancestor', prev, endCommit ?? '']);
+        descends = true;
+      } catch {
+        descends = false;
+      }
+      if (!descends) {
+        return {
+          ok: false,
+          reason: `close snapshot ${endCommit ?? 'none'} does not descend from last week's git_end_commit ${prev}`,
+        };
+      }
+    }
+    return { ok: true, endText: show(endCommit), endCommit, fetched };
   } catch (err) {
     const code = err instanceof Error && 'status' in err ? ` (git exit ${String(err.status)})` : '';
     return { ok: false, reason: `git history unreadable${code}` };
@@ -196,8 +309,10 @@ export async function computeArtifactsIndexedWeekly(opts: {
   repoRoot: string;
   gitRef?: string;
   git?: GitRunner;
-  /** Previous stat week's Div1 row fingerprints (null = no usable row). Only used without git. */
-  loadPreviousFingerprints?: () => Promise<{ week: string; fingerprints: string[] } | null>;
+  /** Previous stat week's active Div1 row (null = none): the start point in both methods. */
+  loadPreviousFingerprints?: () => Promise<PreviousDiv1Row | null>;
+  /** 'auto' (default): git when DABOS_REPO_ROOT is a git work tree, else snapshot. */
+  source?: 'auto' | 'snapshot';
 }): Promise<Div1WeeklyResult> {
   const { window, repoRoot } = opts;
   const indexAbs = path.join(repoRoot, ...WIKI_INDEX_REL.split('/'));
@@ -205,10 +320,34 @@ export async function computeArtifactsIndexedWeekly(opts: {
     return { ok: false, reason: `wiki index missing at ${indexAbs}` };
   }
 
-  const ref = opts.gitRef ?? 'HEAD';
-  const fromGit = readWikiIndexFromGit(repoRoot, window, { ref, git: opts.git });
+  let previous: PreviousDiv1Row | null = null;
+  try {
+    previous = (await opts.loadPreviousFingerprints?.()) ?? null;
+  } catch (err) {
+    return {
+      ok: false,
+      reason: `previous-week Div1 row lookup failed: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+  const startFps = previous ? [...new Set(previous.fingerprints)].sort() : null;
+
+  const ref = opts.gitRef ?? DEFAULT_WIKI_GIT_REF;
+  const fromGit: GitHistory =
+    opts.source === 'snapshot'
+      ? { ok: false, reason: 'source snapshot requested', notGit: true }
+      : readWikiIndexFromGit(repoRoot, window, {
+          ref,
+          git: opts.git,
+          firstWeek: !previous,
+          previousEndCommit: previous?.gitEndCommit ?? null,
+        });
+  if (!fromGit.ok && !fromGit.notGit) {
+    // A git checkout that is stale, unfetched, on the wrong ref or off last week's line: its
+    // working copy is not trusted either (that would be a silent stale count).
+    return { ok: false, reason: `git: ${fromGit.reason}` };
+  }
   if (fromGit.ok) {
-    const start = wikiPageFingerprints(fromGit.startText);
+    const start = startFps ?? wikiPageFingerprints(fromGit.startText ?? '');
     const end = wikiPageFingerprints(fromGit.endText);
     const { added, removed } = pagesAddedBetween(start, end);
     return {
@@ -217,31 +356,23 @@ export async function computeArtifactsIndexedWeekly(opts: {
       basis: {
         wiki_index: WIKI_INDEX_REL,
         method: 'git',
+        start_source: previous ? 'previous_row' : 'git_first_parent',
         pages_at_start: start.length,
         pages_at_end: end.length,
         pages_added: added,
         pages_removed: removed,
         page_fingerprints: end,
         fingerprint_rule: FINGERPRINT_RULE,
+        ...(previous ? { snapshot_baseline_week: previous.week } : { git_start_commit: fromGit.startCommit ?? null }),
         git_ref: ref,
-        git_start_commit: fromGit.startCommit,
         git_end_commit: fromGit.endCommit,
+        git_fetched_at: fromGit.fetched.at.toISOString(),
+        git_fetch_signal: fromGit.fetched.signal,
       },
     };
   }
 
-  let previous: { week: string; fingerprints: string[] } | null = null;
-  try {
-    previous = (await opts.loadPreviousFingerprints?.()) ?? null;
-  } catch (err) {
-    return {
-      ok: false,
-      reason: `git unavailable (${fromGit.reason}); previous-week baseline lookup failed: ${
-        err instanceof Error ? err.message : String(err)
-      }`,
-    };
-  }
-  if (!previous) {
+  if (!previous || !startFps) {
     return {
       ok: false,
       reason: `git unavailable (${fromGit.reason}) and no previous-week Div1 baseline row; cannot tell which pages were added this week`,
@@ -255,14 +386,15 @@ export async function computeArtifactsIndexedWeekly(opts: {
     };
   }
   const end = wikiPageFingerprints(readFileSync(indexAbs, 'utf8'));
-  const { added, removed } = pagesAddedBetween(previous.fingerprints, end);
+  const { added, removed } = pagesAddedBetween(startFps, end);
   return {
     ok: true,
     value: added,
     basis: {
       wiki_index: WIKI_INDEX_REL,
       method: 'snapshot',
-      pages_at_start: new Set(previous.fingerprints).size,
+      start_source: 'previous_row',
+      pages_at_start: startFps.length,
       pages_at_end: end.length,
       pages_added: added,
       pages_removed: removed,

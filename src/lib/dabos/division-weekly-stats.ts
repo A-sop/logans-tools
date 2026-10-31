@@ -16,7 +16,13 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
-import { computeArtifactsIndexedWeekly, type GitRunner } from '@/lib/dabos/artifacts-indexed';
+import {
+  computeArtifactsIndexedWeekly,
+  DEFAULT_WIKI_GIT_REF,
+  FINGERPRINT_RE,
+  type GitRunner,
+  type PreviousDiv1Row,
+} from '@/lib/dabos/artifacts-indexed';
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import {
   closedOrgWeek,
@@ -300,13 +306,15 @@ async function insertStat(
 }
 
 /**
- * Page fingerprints on the previous stat week's live Div1 row (snapshot baseline when the DABOS
- * checkout has no trustworthy git history, e.g. ln02's Seagate mirror). Null when absent.
+ * The previous stat week's ACTIVE live Div1 row (superseded_at is null; any recorded_by, e.g. the
+ * week-close poster or a backfill such as #49): its basis.page_fingerprints are this week's start
+ * point. Null when no such row exists; throws when the row's fingerprints are malformed (a wrong
+ * format would silently count every page as added).
  */
 export async function loadPreviousDiv1Fingerprints(
   dabosSql: DabosSql,
   window: Pick<ClosedOrgWeek, 'start'>
-): Promise<{ week: string; fingerprints: string[] } | null> {
+): Promise<PreviousDiv1Row | null> {
   const prev = closedOrgWeek(window.start);
   const prevWorkspace = `div-live-${prev.isoYear}-W${String(prev.isoWeek).padStart(2, '0')}`;
   const res = (await dabosSql`
@@ -320,10 +328,21 @@ export async function loadPreviousDiv1Fingerprints(
     limit 1
   `) as Array<{ basis: unknown }>;
   const raw = res[0]?.basis;
-  const basis = (typeof raw === 'string' ? JSON.parse(raw) : raw) as { page_fingerprints?: unknown } | null;
+  if (res.length === 0) return null;
+  const basis = (typeof raw === 'string' ? JSON.parse(raw) : raw) as {
+    page_fingerprints?: unknown;
+    git_end_commit?: unknown;
+  } | null;
   const fps = basis?.page_fingerprints;
-  if (!Array.isArray(fps) || !fps.every((f) => typeof f === 'string')) return null;
-  return { week: prev.id, fingerprints: fps as string[] };
+  if (!Array.isArray(fps) || !fps.every((f) => typeof f === 'string' && FINGERPRINT_RE.test(f))) {
+    throw new Error(`${prevWorkspace} Div1 row has no valid basis.page_fingerprints (16 lowercase hex strings)`);
+  }
+  const end = basis?.git_end_commit;
+  return {
+    week: prev.id,
+    fingerprints: fps as string[],
+    gitEndCommit: typeof end === 'string' && /^[0-9a-f]{40}$/.test(end) ? end : null,
+  };
 }
 
 export async function postDivisionWeeklyStats(opts: {
@@ -339,6 +358,8 @@ export async function postDivisionWeeklyStats(opts: {
   /** Test hooks: DABOS checkout root (default DABOS_REPO_ROOT) and git runner. */
   dabosRepoRoot?: string;
   git?: GitRunner;
+  /** Div1 wiki source (default env DABOS_WIKI_SOURCE, else 'auto'); see artifacts-indexed.ts. */
+  wikiSource?: 'auto' | 'snapshot';
 }): Promise<DivisionWeeklyResult> {
   const { dabosSql } = opts;
   let window = opts.window;
@@ -386,7 +407,8 @@ export async function postDivisionWeeklyStats(opts: {
   const div1 = await computeArtifactsIndexedWeekly({
     window,
     repoRoot: opts.dabosRepoRoot ?? DABOS_REPO_ROOT,
-    gitRef: process.env.DABOS_WIKI_GIT_REF?.trim() || 'HEAD',
+    gitRef: process.env.DABOS_WIKI_GIT_REF?.trim() || DEFAULT_WIKI_GIT_REF,
+    source: opts.wikiSource ?? (process.env.DABOS_WIKI_SOURCE?.trim() === 'snapshot' ? 'snapshot' : 'auto'),
     git: opts.git,
     loadPreviousFingerprints: () => loadPreviousDiv1Fingerprints(dabosSql, window),
   });
