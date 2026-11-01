@@ -47,4 +47,5 @@ prompt **path** only), `run.log`. One lock per job name under `_locks/`.
 
 - One prompt file, one job, a hard stop.
 - Start from `ops/cli-jobs/prompt-template.md`.
-- Keep jobs lean; split large work into separate job names.
+- Keep jobs and Cursor CLI sessions lean (no chat chains, no lingering agent sessions); split large work into separate job names.
+- PII / restricted work runs on **HZR52** only; everything else runs on **ln02**.
