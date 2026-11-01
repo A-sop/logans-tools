@@ -91,10 +91,31 @@ BEGIN
     RAISE EXCEPTION 'guard 3a: % lacks USAGE on schema public', r;
   END IF;
 
-  -- 3b: no role memberships in either direction (no inherited or SET ROLE privileges).
-  SELECT count(*) INTO n FROM pg_auth_members WHERE member = roid OR roleid = roid;
+  -- 3b: the role must not be a member of any other role (no inherited / SET ROLE privileges).
+  -- Other roles must not be members of it either, except the single PG16+ CREATEROLE implicit
+  -- ADMIN OPTION grant to the non-superuser creator (grantor = bootstrap superuser oid 10 or the
+  -- creator itself). Without that exception, apply always aborts on Neon when neondb_owner
+  -- (CREATEROLE, not superuser) creates the role.
+  SELECT count(*) INTO n FROM pg_auth_members WHERE member = roid;
   IF n > 0 THEN
-    RAISE EXCEPTION 'guard 3b: % has % role membership(s); refusing', r, n;
+    RAISE EXCEPTION 'guard 3b: % is a member of % other role(s); refusing', r, n;
+  END IF;
+  SELECT count(*) INTO n
+    FROM pg_auth_members m
+    JOIN pg_roles cr ON cr.oid = m.member
+   WHERE m.roleid = roid
+     AND NOT (
+       m.admin_option
+       AND (m.grantor = 10 OR m.grantor = m.member)
+       AND cr.rolcreaterole
+       AND NOT cr.rolsuper
+     );
+  IF n > 0 THEN
+    RAISE EXCEPTION 'guard 3b: % has % unexpected member role(s); refusing', r, n;
+  END IF;
+  SELECT count(*) INTO n FROM pg_auth_members WHERE roleid = roid;
+  IF n > 1 THEN
+    RAISE EXCEPTION 'guard 3b: % has % member roles (only the CREATEROLE creator grant is allowed); refusing', r, n;
   END IF;
 
   -- 3c: the role owns nothing (an owner has every privilege on its object).

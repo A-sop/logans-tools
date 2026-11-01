@@ -695,11 +695,40 @@ describe('grants SQL (not applied by this PR) on PGlite', () => {
       /guard 3b/
     );
   });
-  it('guard 3 refuses another role being a member of it', async () => {
+  it('guard 3 refuses another role being a member of it (beyond the CREATEROLE creator grant)', async () => {
     await refusesWith(
       'CREATE ROLE digest_probe_child NOLOGIN; GRANT dabos_status_digest TO digest_probe_child',
       /guard 3b/
     );
+  });
+  it('grants succeed when the role was created by a non-superuser CREATEROLE owner (PG16+ implicit admin grant)', async () => {
+    await db.exec('CREATE ROLE digest_createrole_owner NOLOGIN CREATEROLE');
+    await db.exec('SET ROLE digest_createrole_owner');
+    await db.exec('CREATE ROLE dabos_status_digest NOLOGIN');
+    await db.exec('RESET ROLE');
+    const mem = await db.query<{ member: string; grantor: string; admin_option: boolean }>(
+      `SELECT mem.rolname AS member, g.rolname AS grantor, a.admin_option
+         FROM pg_auth_members a
+         JOIN pg_roles r ON r.oid = a.roleid
+         JOIN pg_roles mem ON mem.oid = a.member
+         JOIN pg_roles g ON g.oid = a.grantor
+        WHERE r.rolname = 'dabos_status_digest'`
+    );
+    expect(mem.rows).toEqual([
+      { member: 'digest_createrole_owner', grantor: 'postgres', admin_option: true },
+    ]);
+    await db.exec(GRANTS);
+    expect(await priv('tasks', 'SELECT')).toBe(true);
+    expect(await priv('role_runs', 'INSERT')).toBe(true);
+  });
+  it('guard 3 still refuses an extra real membership on top of the CREATEROLE creator grant', async () => {
+    await db.exec('CREATE ROLE digest_createrole_owner NOLOGIN CREATEROLE');
+    await db.exec('SET ROLE digest_createrole_owner');
+    await db.exec('CREATE ROLE dabos_status_digest NOLOGIN');
+    await db.exec('RESET ROLE');
+    await db.exec('CREATE ROLE digest_probe_child NOLOGIN; GRANT dabos_status_digest TO digest_probe_child');
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 3b/);
+    await db.exec('ROLLBACK');
   });
   it('guard 3 refuses an object owned by the role', async () => {
     await refusesWith(
