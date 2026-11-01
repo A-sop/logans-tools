@@ -1,0 +1,14 @@
+# Placeholder 3×/day Berlin — confirm against Grok routine panel before cutover.
+[Unit]
+Description=DABOS wake-if-new mail triage timer (3×/day Berlin)
+
+[Timer]
+OnCalendar=*-*-* 09:00:00 Europe/Berlin
+OnCalendar=*-*-* 13:00:00 Europe/Berlin
+OnCalendar=*-*-* 17:00:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=dabos-wake-mail-triage.service
+
+[Install]
+WantedBy=timers.target

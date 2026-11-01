@@ -1,0 +1,9 @@
+[Unit]
+Description=DABOS wake-if-new: mail triage gate
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/.config/dabos/wake-if-new.env
+ExecStart=%h/bin/dabos-wake-if-new mail_triage
+Nice=10
