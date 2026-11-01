@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { PGlite } from '@electric-sql/pglite';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { buildInsertSql, insertSend, type SendInput } from '@/lib/dabos/agent-inbox';
 import {
@@ -112,6 +112,17 @@ describe('gate rules (AC3)', () => {
     expect(d(row({ urgencyClaim: 'deadline_today', urgencyReason: 'x' }))).toBe('batch:default;downgrade:no_deadline_at');
     // the claim is ignored but rule (c) still holds on the facts
     expect(d(row({ urgencyClaim: 'deadline_today', deadlineAt: NOW }))).toBe('wake:deadline_today;downgrade:missing_reason');
+  });
+
+  it('failed deadline_today claim batches with downgrade:deadline_not_today', () => {
+    const tomorrow = new Date('2026-11-02T12:00:00Z');
+    const yesterday = new Date('2026-10-31T12:00:00Z');
+    expect(d(row({ urgencyClaim: 'deadline_today', urgencyReason: 'ship', deadlineAt: tomorrow }))).toBe(
+      'batch:default;downgrade:deadline_not_today'
+    );
+    expect(d(row({ urgencyClaim: 'deadline_today', urgencyReason: 'ship', deadlineAt: yesterday }))).toBe(
+      'batch:default;downgrade:deadline_not_today'
+    );
   });
 
   it('batches FYIs and suppresses bare acknowledgements, never waking for either', () => {
@@ -255,7 +266,9 @@ describe('failure state (Dept13 rule 4)', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// SQL file and full ticks on PGlite (never Neon)
+// SQL file and full ticks on PGlite (never Neon).
+// Sequential + one shared DB per suite: parallel PGlite instances contended with other heavy
+// correction tests and caused 10s hook timeouts in the full suite.
 // ---------------------------------------------------------------------------------------------
 
 const SQL_FILE = readRepoFile('scripts/dabos/sql/2026-11-01_watchman_agent_inbox.sql');
@@ -268,13 +281,12 @@ async function freshDb(withRole = true): Promise<PGlite> {
   return db;
 }
 
-describe('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000 }, () => {
+describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000 }, () => {
   let db: PGlite;
   afterEach(async () => {
-    await db.close();
+    if (db) await db.close();
   });
   const can = async (q: string, args: unknown[]) => (await db.query<{ ok: boolean }>(q, args)).rows[0]!.ok;
-
   it('refuses when the role is missing, is a superuser, or is a member of another role', async () => {
     db = await freshDb(false);
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 0/);
@@ -301,7 +313,80 @@ describe('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000
     await db.exec('ROLLBACK');
   });
 
-  it('creates the table with exact grants, re-runs cleanly, refuses a foreign shape, and undoes', async () => {
+  it('guard 4h refuses PUBLIC privileges on other tables', async () => {
+    db = await freshDb();
+    await db.exec('GRANT INSERT ON public.tasks TO PUBLIC');
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4h/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4i refuses PUBLIC CREATE on schema public', async () => {
+    db = await freshDb();
+    await db.exec('GRANT CREATE ON SCHEMA public TO PUBLIC');
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4i refuses PUBLIC CREATE on the database', async () => {
+    db = await freshDb();
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`GRANT CREATE ON DATABASE "${dbName}" TO PUBLIC`);
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4i refuses PUBLIC TEMP on the database', async () => {
+    db = await freshDb();
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`GRANT TEMP ON DATABASE "${dbName}" TO PUBLIC`);
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4f refuses EXECUTE on a function granted to dabos_watchman', async () => {
+    db = await freshDb();
+    await db.exec(
+      `CREATE FUNCTION public.watchman_probe() RETURNS int LANGUAGE sql AS $f$ SELECT 1 $f$; GRANT EXECUTE ON FUNCTION public.watchman_probe() TO dabos_watchman`
+    );
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4f/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4e refuses an object owned by the role', async () => {
+    db = await freshDb();
+    await db.exec(
+      `CREATE TABLE public.watchman_probe_owned (x int); ALTER TABLE public.watchman_probe_owned OWNER TO dabos_watchman`
+    );
+    // 1b catches ownership before CREATE TABLE; 4e re-checks after GRANTs.
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard (1b|4e)/);
+    await db.exec('ROLLBACK');
+  });
+  it('guard 4g refuses default privileges for the role', async () => {
+    db = await freshDb();
+    await db.exec(`ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO dabos_watchman`);
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4g/);
+    await db.exec('ROLLBACK');
+  });
+
+  it('grants succeed when the role was created by a non-superuser CREATEROLE owner; extra membership still aborts', async () => {
+    db = await freshDb(false);
+    await db.exec('CREATE ROLE watchman_createrole_owner NOLOGIN CREATEROLE');
+    await db.exec('SET ROLE watchman_createrole_owner');
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
+    await db.exec('RESET ROLE');
+    await db.exec(SQL_FILE);
+    expect(
+      (await db.query<{ ok: boolean }>(`SELECT has_table_privilege('dabos_watchman', 'public.agent_inbox', 'SELECT') AS ok`))
+        .rows[0]!.ok
+    ).toBe(true);
+    await db.close();
+
+    db = await freshDb(false);
+    await db.exec('CREATE ROLE watchman_createrole_owner NOLOGIN CREATEROLE');
+    await db.exec('SET ROLE watchman_createrole_owner');
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
+    await db.exec('RESET ROLE');
+    await db.exec('CREATE ROLE watchman_probe_child NOLOGIN; GRANT dabos_watchman TO watchman_probe_child');
+    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4d/);
+    await db.exec('ROLLBACK');
+  });
+
+  it('creates the table with exact grants, re-runs cleanly, refuses logan from_agent, refuses a foreign shape, and undoes', async () => {
     db = await freshDb();
     await db.exec(SQL_FILE);
     await db.exec(SQL_FILE);
@@ -321,6 +406,9 @@ describe('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000
       db.exec(`INSERT INTO agent_inbox (from_agent, to_agent, subject, dedupe_key) VALUES ('div4','logan','x','div4:x')`)
     ).rejects.toThrow(/agent_inbox_to_format/);
     await expect(
+      db.exec(`INSERT INTO agent_inbox (from_agent, to_agent, subject, dedupe_key) VALUES ('logan','div5','x','logan:x')`)
+    ).rejects.toThrow(/agent_inbox_from_format/);
+    await expect(
       db.exec(`INSERT INTO agent_inbox (from_agent, to_agent, subject, dedupe_key, status) VALUES ('div4','div5','x','div4:x','done')`)
     ).rejects.toThrow(/agent_inbox_status/);
 
@@ -339,7 +427,7 @@ describe('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000
   });
 });
 
-describe('send, dedupe and full ticks on PGlite', { timeout: 60_000 }, () => {
+describe.sequential('send, dedupe and full ticks on PGlite', { timeout: 60_000 }, () => {
   let db: PGlite;
   let calls: Array<{ url: string; body: string; headers: Record<string, string> }>;
   let status: number;
@@ -376,15 +464,19 @@ describe('send, dedupe and full ticks on PGlite', { timeout: 60_000 }, () => {
       `SELECT subject, status, gate_decision, batch_id FROM agent_inbox ORDER BY created_at, id`
     )).rows;
 
-  beforeEach(async () => {
+  // One shared PGlite for the whole suite; truncate between tests instead of open/close thrash.
+  beforeAll(async () => {
     db = await freshDb();
     await db.exec(SQL_FILE);
+  });
+  beforeEach(async () => {
+    await db.exec(`DELETE FROM agent_inbox; DELETE FROM role_runs WHERE role_id LIKE 'watchman%'`);
     calls = [];
     status = 200;
     lines = [];
   });
-  afterEach(async () => {
-    await db.close();
+  afterAll(async () => {
+    if (db) await db.close();
   });
 
   it('the documented one-statement INSERT works and drops exact duplicates', async () => {

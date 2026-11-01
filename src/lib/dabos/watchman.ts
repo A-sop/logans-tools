@@ -167,8 +167,12 @@ export function classify(row: GateRow, now: Date): Decision {
       } else {
         notes.push('downgrade:reason_not_allowlisted');
       }
-    } else if (row.urgencyClaim === 'deadline_today' && !row.deadlineAt) {
-      notes.push('downgrade:no_deadline_at');
+    } else if (row.urgencyClaim === 'deadline_today') {
+      if (!row.deadlineAt) {
+        notes.push('downgrade:no_deadline_at');
+      } else if (berlinDate(row.deadlineAt) !== berlinDate(now)) {
+        notes.push('downgrade:deadline_not_today');
+      }
     }
   }
 

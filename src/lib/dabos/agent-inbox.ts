@@ -28,7 +28,8 @@ export type SendInput = {
   dedupeKey: string;
 };
 
-export const SENDERS: ReadonlySet<string> = new Set<string>([LOGAN, WATCHMAN_SENDER, ...AGENT_IDS]);
+/** CLI / validateSend allowlist. `logan` is refused (Amendment 2 A7); `watchman` is script-only. */
+export const SENDERS: ReadonlySet<string> = new Set<string>([...AGENT_IDS]);
 export const DEDUPE_KEY_FORMAT = /^[a-z0-9][a-z0-9_.:#@/-]{2,199}$/;
 
 /**
@@ -64,7 +65,11 @@ export function parseDeadline(raw: string): Date {
 
 export function validateSend(input: SendInput): string[] {
   const errors: string[] = [];
-  if (!SENDERS.has(input.from)) errors.push(`from must be one of ${[...SENDERS].join(', ')}`);
+  if (input.from === LOGAN)
+    errors.push("from cannot be logan: Logan's words go through an ldw relay (logan_order / logan_decision)");
+  else if (input.from === WATCHMAN_SENDER)
+    errors.push('from cannot be watchman: only the watchman script files failure rows');
+  else if (!SENDERS.has(input.from)) errors.push(`from must be one of ${[...SENDERS].join(', ')}`);
   if (input.to === LOGAN) errors.push('to cannot be logan: put Logan\'s yes/no in approval_queue');
   else if (!(AGENT_IDS as readonly string[]).includes(input.to))
     errors.push(`to must be one of ${AGENT_IDS.join(', ')}`);

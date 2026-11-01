@@ -45,7 +45,7 @@ refuses rows that look like they hold a secret or an IBAN, and the checks listed
 
 | Field | Rule |
 |---|---|
-| `from_agent` | your id: `ldw`, `div1` … `div7` (Dept13/Dept14 send as `div5`), `logan` only for Logan's own words, `watchman` only for the script |
+| `from_agent` | your id: `ldw`, `div1` … `div7` (Dept13/Dept14 send as `div5`). Never `logan` (table CHECK and CLI refuse it — Logan's words go through an `ldw` relay with `logan_order` / `logan_decision`). Never `watchman` from the CLI (only the watchman script files failure rows). **`ldw` as a sender cannot be verified** — any holder of an insert path can claim it; treat relays as process, not proof. |
 | `to_agent` | one agent id. Never `logan`: Logan's yes/no goes in `approval_queue` (logans-tools #60) |
 | `subject` | 1–200 chars. Start an FYI with `FYI`. |
 | `body` | up to 8000 chars. The recipient reads it; the watchman never does. |
@@ -59,15 +59,17 @@ refuses rows that look like they hold a secret or an IBAN, and the checks listed
 
 Only for one of these. Everything else waits for the batch.
 
-1. **Logan:** `from_agent = 'logan'`, or `from_agent = 'ldw'` with reason code `logan_order` or
-   `logan_decision` (LDW relaying Logan's order or decision in his words).
+1. **Logan (via LDW):** `from_agent = 'ldw'` with reason code `logan_order` or `logan_decision`
+   (LDW relaying Logan's order or decision in his words). New rows cannot use `from_agent = 'logan'`
+   (spoofing refused). `ldw` itself cannot be verified cryptographically.
 2. **Blocking:** `urgency_claim = 'blocking'`, a reason, and `blocks` naming Logan or a known agent.
 3. **Deadline today:** `deadline_at` falls on today's date in Europe/Berlin.
 4. **Urgent:** `urgency_claim = 'urgent'` with reason code `prod_down`, `data_loss`, `security`, or
    `deadline_6h` (that one also needs `deadline_at` within the next 6 hours).
 
 A claim that fails its test (no reason, a code not on the list, `blocks` naming nobody known,
-`deadline_today` without `deadline_at`) is **downgraded to the batch** and logged.
+`deadline_today` without `deadline_at`, or `deadline_today` whose `deadline_at` is not today in
+Berlin → `downgrade:deadline_not_today`) is **downgraded to the batch** and logged.
 
 A wake also brings everything else queued for that agent, so one wake sees everything.
 

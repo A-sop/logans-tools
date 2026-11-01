@@ -51,6 +51,12 @@ describe('dabos-inbox send (AC2)', () => {
     expect(validateSend({ ...base, claim: 'deadline_today', reason: 'x' })[0]).toMatch(/needs --deadline/);
   });
 
+  it('refuses from_agent logan (spoofing) and watchman (script-only)', () => {
+    expect(validateSend({ ...base, from: 'logan' })[0]).toMatch(/from cannot be logan/);
+    expect(validateSend({ ...base, from: 'watchman' })[0]).toMatch(/from cannot be watchman/);
+    expect(() => buildInsertSql({ ...base, from: 'logan' })).toThrow(/from cannot be logan/);
+  });
+
   it('refuses bodies that look like secrets or bank data, with fake values only', () => {
     const fakes = [
       'crsr_' + 'a'.repeat(20),
