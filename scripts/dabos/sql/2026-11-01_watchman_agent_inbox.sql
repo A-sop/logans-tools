@@ -305,7 +305,8 @@ BEGIN
     END IF;
   END LOOP;
 
-  -- Guard 4i: no CREATE on any schema; no CREATE on the database; refuse PUBLIC CREATE/TEMP ACL on DB.
+  -- Guard 4i: no CREATE on any schema; no CREATE on the database; refuse PUBLIC CREATE ACL on DB.
+  -- PUBLIC TEMPORARY (and CONNECT) on the database are normal (Neon prod =Tc/owner) and are allowed.
   SELECT count(*) INTO n FROM pg_namespace ns WHERE has_schema_privilege(r, ns.oid, 'CREATE');
   IF n > 0 THEN
     RAISE EXCEPTION 'guard 4i: % can CREATE in % schema(s); refusing', r, n;
@@ -317,9 +318,9 @@ BEGIN
     SELECT 1 FROM pg_database d, LATERAL aclexplode(d.datacl) a
      WHERE d.datname = current_database()
        AND a.grantee = 0
-       AND a.privilege_type IN ('CREATE', 'TEMPORARY')
+       AND a.privilege_type = 'CREATE'
   ) THEN
-    RAISE EXCEPTION 'guard 4i: PUBLIC has CREATE or TEMPORARY on database %; refusing', current_database();
+    RAISE EXCEPTION 'guard 4i: PUBLIC has CREATE on database %; refusing', current_database();
   END IF;
 
   RAISE NOTICE 'agent_inbox and watchman grants in place for %', r;

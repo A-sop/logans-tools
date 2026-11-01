@@ -361,9 +361,9 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     await db.exec('ROLLBACK');
     await resetRole();
 
+    // PUBLIC TEMPORARY alone must NOT trip guard 4i (Amendment 3).
     await db.exec(`CREATE ROLE dabos_watchman NOLOGIN; GRANT TEMP ON DATABASE "${dbName}" TO PUBLIC`);
-    await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
-    await db.exec('ROLLBACK');
+    await db.exec(SQL_FILE);
     await resetRole();
 
     await db.exec(
@@ -385,6 +385,46 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     );
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4g/);
     await db.exec('ROLLBACK');
+    await resetRole();
+  });
+
+  it('applies with prod-like PUBLIC =Tc datacl (TEMPORARY+CONNECT) without pre-revoking TEMPORARY', async () => {
+    // Mimic Neon prod `=Tc/neondb_owner`: leave PUBLIC TEMPORARY in place (Amendment 3).
+    // Deliberately do NOT run resetRole's REVOKE TEMPORARY — that was masking the over-refusal.
+    await db.exec(`
+      DROP TABLE IF EXISTS public.agent_inbox CASCADE;
+      DROP TABLE IF EXISTS public.watchman_probe_owned;
+      DROP FUNCTION IF EXISTS public.watchman_probe();
+      DO $$
+      DECLARE r text;
+      BEGIN
+        FOREACH r IN ARRAY ARRAY['dabos_watchman', 'some_group', 'watchman_createrole_owner', 'watchman_probe_child']
+        LOOP
+          IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r) THEN
+            EXECUTE format('DROP OWNED BY %I CASCADE', r);
+            EXECUTE format('DROP ROLE %I', r);
+          END IF;
+        END LOOP;
+      END $$;
+      REVOKE INSERT ON public.tasks FROM PUBLIC;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+    `);
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`GRANT CONNECT, TEMPORARY ON DATABASE "${dbName}" TO PUBLIC`);
+    const acl = (
+      await db.query<{ a: string | null }>(
+        `SELECT COALESCE(datacl::text, '') AS a FROM pg_database WHERE datname = current_database()`
+      )
+    ).rows[0]!.a;
+    expect(acl).toMatch(/=T/); // TEMPORARY for PUBLIC present (prod-like)
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
+    await db.exec(SQL_FILE);
+    expect(
+      (await db.query<{ ok: boolean }>(`SELECT has_table_privilege('dabos_watchman', 'public.agent_inbox', 'SELECT') AS ok`))
+        .rows[0]!.ok
+    ).toBe(true);
+    await db.exec(`SET dabos.watchman_undo_drop_rows = 'on'`);
+    await db.exec(UNDO_FILE);
     await resetRole();
   });
 
