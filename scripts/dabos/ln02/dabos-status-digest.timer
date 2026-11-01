@@ -1,0 +1,14 @@
+# RR-010 step 3: every 2 h on the even hour, plus 12:25 and 20:40 Berlin (LDW reads 12:30 and 20:45).
+[Unit]
+Description=DABOS status digest timer (2-hourly + 12:25 + 20:40 Berlin)
+
+[Timer]
+OnCalendar=*-*-* 00/2:00:00 Europe/Berlin
+OnCalendar=*-*-* 12:25:00 Europe/Berlin
+OnCalendar=*-*-* 20:40:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=dabos-status-digest.service
+
+[Install]
+WantedBy=timers.target
