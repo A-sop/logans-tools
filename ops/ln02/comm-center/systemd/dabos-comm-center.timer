@@ -1,0 +1,14 @@
+[Unit]
+Description=DABOS comm-center pick-up timer (Europe/Berlin clocks from env)
+Documentation=file:%h/Dev/logans-tools/src/docs/dabos/comm-center.md
+
+[Timer]
+# Every minute; slot-runner decides which posts are due from COMM_CLOCK_* config.
+# Courier runs one minute before each configured pick-up.
+OnCalendar=*-*-* *:0/1:00
+Persistent=true
+AccuracySec=30s
+Unit=dabos-comm-center.service
+
+[Install]
+WantedBy=timers.target

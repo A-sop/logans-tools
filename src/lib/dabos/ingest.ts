@@ -6,6 +6,8 @@
 import { createHash } from 'crypto';
 
 import type { Sql } from '@/lib/dabos/db';
+import { preparePendingIngestMeta } from '@/lib/dabos/comm-center/write-pending';
+import type { PendingMeta } from '@/lib/dabos/comm-center/pending';
 
 export function urlHash(url: string): string {
   return createHash('sha256').update(url).digest('hex').slice(0, 32);
@@ -37,6 +39,10 @@ export type IngestInput = {
   title?: string;
   sha256?: string;
   store_path?: string;
+  /** Default 'in'. 'pending' requires pending fields (P1). */
+  basket?: IngestBasket;
+  /** Required when basket='pending'. */
+  pending?: PendingMeta | Record<string, unknown>;
 };
 
 export type IngestResult = {
@@ -139,6 +145,15 @@ export async function ingestCapture(
   const external_id = input.external_id.trim();
   if (!external_id) {
     throw new Error('external_id required');
+  }
+
+  const requestedBasket: IngestBasket = input.basket ?? 'in';
+  if (requestedBasket === 'out') {
+    throw new Error("ingestCapture refuses basket='out' (use hat-receipt / courier filing)");
+  }
+  // P1: validate before any DB write (and before optional lookups).
+  if (requestedBasket === 'pending') {
+    preparePendingIngestMeta({}, input.pending ?? {});
   }
 
   const existing = await sql`
@@ -286,6 +301,13 @@ export async function ingestCapture(
   const assignedTo = parsed.is_agent || isCapture ? null : 'founder';
   const assignedAgent = parsed.is_agent ? 'research' : null;
 
+  const basket = requestedBasket;
+  let ingestMeta: Record<string, unknown> = meta;
+  if (basket === 'pending') {
+    const prepared = preparePendingIngestMeta(meta, input.pending ?? meta.pending);
+    ingestMeta = prepared.ingestMeta;
+  }
+
   const rows = await sql`
     INSERT INTO tasks (
       workspace_id,
@@ -313,10 +335,10 @@ export async function ingestCapture(
       ${priority},
       ${assignedTo},
       ${assignedAgent},
-      ${'in'},
+      ${basket},
       ${input.mouth},
       ${external_id},
-      ${JSON.stringify(meta)}
+      ${JSON.stringify(ingestMeta)}
     )
     RETURNING id, basket, department_id, division_id, title
   `;

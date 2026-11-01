@@ -1,4 +1,19 @@
-# ln02 ops: checkout sync + week-close Div1 clone (RR-010 step 0)
+# ln02 ops
+
+## Comm center (three baskets)
+
+Courier + pick-up wake (Dept2 v3): `ops/ln02/comm-center/` + `install-comm-center.sh`.
+Runbook: `src/docs/dabos/comm-center.md`. Clocks in `comm-center/clocks.env.example`
+(not hardcoded). Env: `WAKE_<POST>_URL` / `WAKE_<POST>_KEY` (same Bearer contract as wake-if-new).
+Does not touch Thu 14:00/14:30 stat scripts or Div3's jobs.
+
+```
+bash ops/ln02/install-comm-center.sh                 # plan
+bash ops/ln02/install-comm-center.sh --apply         # install
+bash ops/ln02/install-comm-center.sh --undo --apply  # remove
+```
+
+## Checkout sync + week-close Div1 clone (RR-010 step 0)
 
 Files installed on ln02 (user `logancontrol`, systemd --user) by `install-ln02-checkout-sync.sh`:
 

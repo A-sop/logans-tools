@@ -1,6 +1,12 @@
 /**
  * Close a hat activation: role_runs receipt + task basket out.
  *
+ * Standard on-every-wake call (comm-center runbook):
+ *   npm run dabos:hat-receipt -- --dept DeptN --task <uuid> --summary "<one line>"
+ *
+ * Agents stamp pending.last_reviewed when reviewing PENDING (P5) via
+ * stampPendingReviewed() in src/lib/dabos/comm-center/write-pending.ts.
+ *
  *   npm run dabos:hat-receipt -- --dept Dept20 --task <id> --summary "text" [--artifact path]
  */
 import os from 'os';

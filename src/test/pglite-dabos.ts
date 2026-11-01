@@ -13,7 +13,9 @@ import type { DabosSql } from '@/lib/dabos/dabos-connection';
 const repoRoot = path.resolve(__dirname, '../..');
 
 export function readRepoFile(rel: string): string {
-  return fs.readFileSync(path.join(repoRoot, rel), 'utf8');
+  // SQL / script fixtures are authored with LF; normalize CRLF so mutation tests
+  // and psql-shaped exec stay stable on Windows checkouts.
+  return fs.readFileSync(path.join(repoRoot, rel), 'utf8').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 }
 
 /** Base schema (001) + stats provenance (017); optionally the supersede migration (021). */
