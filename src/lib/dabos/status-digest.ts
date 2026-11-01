@@ -50,20 +50,32 @@ export function divisionFromTitle(title: string): DivisionKey {
 // GitHub
 // ---------------------------------------------------------------------------------------------
 
-export type Dept13Verdict = 'PASS' | 'FAIL' | 'CONDITIONAL';
+/** Dept13 verdicts are PASS or FAIL only. */
+export type Dept13Verdict = 'PASS' | 'FAIL';
 export type VerdictLine = { verdict: Dept13Verdict; sha: string; at: string };
 
-const VERDICT_RE =
-  /^\s*\**\s*Dept\s?13\s+(PASS|FAIL|CONDITIONAL)\b[^@\n]*@\s*`?([0-9a-f]{7,40})`?/im;
+/** A full 40-hex git sha (GitHub returns lowercase). */
+export const FULL_SHA_RE = /^[0-9a-f]{40}$/;
 
-/** First `Dept13 PASS|FAIL|CONDITIONAL @<sha>` line in a review or comment body, if any. */
+/**
+ * The whole FIRST line of the body, exactly `Dept13 PASS @<40hex>` or `Dept13 FAIL @<40hex>`.
+ * Anchored at both ends: no markdown, no text between the verdict and `@`, no short or long sha.
+ */
+export const VERDICT_LINE_RE = /^Dept13 (PASS|FAIL) @([0-9a-f]{40})$/;
+
+/**
+ * The Dept13 verdict of a review or comment body. Only the first line is read (a CRLF line end is
+ * allowed); a verdict on any later line is not a verdict.
+ */
 export function parseDept13Verdict(
   body: string | null | undefined
 ): Omit<VerdictLine, 'at'> | null {
   if (!body) return null;
-  const m = VERDICT_RE.exec(body);
+  const nl = body.indexOf('\n');
+  const first = (nl === -1 ? body : body.slice(0, nl)).replace(/\r$/, '');
+  const m = VERDICT_LINE_RE.exec(first);
   if (!m) return null;
-  return { verdict: m[1]!.toUpperCase() as Dept13Verdict, sha: m[2]!.toLowerCase() };
+  return { verdict: m[1] as Dept13Verdict, sha: m[2]! };
 }
 
 /** Latest verdict across reviews and comments (by timestamp). */
@@ -79,10 +91,11 @@ export function latestVerdict(
   return best;
 }
 
+/** Current only when both are full 40-hex shas and equal. Never truncates, never prefix-matches. */
 export function shaMatches(verdictSha: string, headSha: string): boolean {
-  const a = verdictSha.toLowerCase();
-  const b = headSha.toLowerCase();
-  return a.length >= 7 && b.startsWith(a);
+  if (typeof verdictSha !== 'string' || typeof headSha !== 'string') return false;
+  const head = headSha.toLowerCase();
+  return FULL_SHA_RE.test(verdictSha) && FULL_SHA_RE.test(head) && verdictSha === head;
 }
 
 export type PrSummary = {
@@ -409,6 +422,100 @@ export async function readSystemdUserState(
 }
 
 // ---------------------------------------------------------------------------------------------
+// ln02 checkout sync (logans-tools #59: ops/ln02/bin/dabos-checkout-sync.sh)
+// ---------------------------------------------------------------------------------------------
+
+/** Owner post for a failed checkout sync and for a failed, missing or stale digest. */
+export const OWNER_POST = 'Dept12 Production (Div4)';
+export const CHECKOUT_SYNC_FAIL_FILE = 'checkout-sync.FAIL';
+export const CHECKOUT_SYNC_STATUS_FILE = 'checkout-sync.status.json';
+const SYNC_OK_STATES = new Set(['ok', 'up_to_date']);
+
+export type CheckoutSyncRepo = { repo: string; state: string; message: string };
+export type CheckoutSyncState = {
+  failFlag: boolean;
+  failFlagText: string | null;
+  lastRunState: string | null;
+  endedAt: string | null;
+  repos: CheckoutSyncRepo[];
+  failingRepos: CheckoutSyncRepo[];
+  statusError: string | null;
+};
+
+/** Reads a text file; resolves null when the file does not exist. */
+export type ReadText = (_path: string) => Promise<string | null>;
+
+function oneLine(v: unknown, max = 200): string {
+  return String(v ?? '')
+    .replace(/[\r\n]+/g, ' ')
+    .trim()
+    .slice(0, max);
+}
+
+function repoName(p: string): string {
+  const parts = p.replace(/\\/g, '/').split('/').filter(Boolean);
+  return parts[parts.length - 1] ?? p;
+}
+
+/** The FAIL flag and the status file in `dir` (ln02: ~/.local/state/dabos). Reads only those two. */
+export async function readCheckoutSyncState(
+  dir: string,
+  readText: ReadText
+): Promise<CheckoutSyncState> {
+  const join = (f: string) => `${dir.replace(/[\\/]+$/, '')}/${f}`;
+  const flag = await readText(join(CHECKOUT_SYNC_FAIL_FILE));
+  const raw = await readText(join(CHECKOUT_SYNC_STATUS_FILE));
+  const out: CheckoutSyncState = {
+    failFlag: flag !== null,
+    failFlagText: flag === null ? null : oneLine(flag) || null,
+    lastRunState: null,
+    endedAt: null,
+    repos: [],
+    failingRepos: [],
+    statusError: null,
+  };
+  if (raw === null) {
+    out.statusError = 'no status file';
+    return out;
+  }
+  try {
+    const j = JSON.parse(raw) as {
+      state?: unknown;
+      ended_at_utc?: unknown;
+      repos?: Array<{ repo?: unknown; state?: unknown; message?: unknown }>;
+    };
+    out.lastRunState = j.state == null ? null : oneLine(j.state, 60);
+    out.endedAt = j.ended_at_utc == null ? null : oneLine(j.ended_at_utc, 40);
+    out.repos = (Array.isArray(j.repos) ? j.repos : []).map((r) => ({
+      repo: repoName(oneLine(r.repo)),
+      state: oneLine(r.state, 40),
+      message: oneLine(r.message),
+    }));
+    out.failingRepos = out.repos.filter((r) => !SYNC_OK_STATES.has(r.state));
+  } catch {
+    out.statusError = 'status file is not valid JSON';
+  }
+  return out;
+}
+
+/** Alert lines for the digest: the FAIL flag, or an unreadable status. */
+export function checkoutSyncAlerts(c: CheckoutSyncState | null): string[] {
+  if (!c) return [];
+  const out: string[] = [];
+  if (c.failFlag) {
+    const failing = c.failingRepos.length
+      ? c.failingRepos.map((r) => `${r.repo} ${r.state}`).join(', ')
+      : 'see checkout-sync.status.json';
+    out.push(
+      `${CHECKOUT_SYNC_FAIL_FILE} present (${failing}); owner ${OWNER_POST}`
+    );
+  } else if (c.statusError === 'status file is not valid JSON') {
+    out.push(`${CHECKOUT_SYNC_STATUS_FILE} unreadable; owner ${OWNER_POST}`);
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------------------------------------
 // Builder
 // ---------------------------------------------------------------------------------------------
 
@@ -422,6 +529,7 @@ export type DigestInput = {
   stats: StatsPosted | null;
   cadence: CadenceRun[] | null;
   systemd: { timers: TimerState[]; failedUnits: string[] } | null;
+  checkoutSync: CheckoutSyncState | null;
   sourceErrors: Array<{ source: string; error: string }>;
 };
 
@@ -430,7 +538,7 @@ export type DivisionSummary = {
   openPrs: number;
   needsDept13: number;
   readyForLogan: number;
-  failedOrConditional: number;
+  failedAtHead: number;
   mergedLast24h: number;
   openTasks: number;
   reassessTasks: number;
@@ -449,6 +557,8 @@ export type StatusDigest = {
     needsLogan: string[];
     needsDept13: string[];
     machineAlerts: string[];
+    checkoutSync: CheckoutSyncState | null;
+    ownerPost: string;
     sourceErrors: Array<{ source: string; error: string }>;
   };
 };
@@ -501,7 +611,7 @@ export function buildDigest(input: DigestInput): StatusDigest {
       openPrs: openPrs.filter((p) => p.division === division).length,
       needsDept13: needs13.filter((p) => p.division === division).length,
       readyForLogan: ready.filter((p) => p.division === division).length,
-      failedOrConditional: failing.filter((p) => p.division === division).length,
+      failedAtHead: failing.filter((p) => p.division === division).length,
       mergedLast24h: merged.filter((p) => p.division === division).length,
       openTasks: tasks.filter((t) => t.status !== 'reassess').reduce((a, t) => a + t.n, 0),
       reassessTasks: tasks.filter((t) => t.status === 'reassess').reduce((a, t) => a + t.n, 0),
@@ -530,12 +640,16 @@ export function buildDigest(input: DigestInput): StatusDigest {
       );
   }
   for (const u of input.systemd?.failedUnits ?? []) machineAlerts.push(`failed unit ${u}`);
+  machineAlerts.push(...checkoutSyncAlerts(input.checkoutSync));
 
   const L: string[] = [];
   L.push(`# DABOS status digest — ${berlinStamp(input.now)}`);
   L.push('');
   L.push(`Host ${input.host}. Stat week closed last: ${input.week.id} (${input.week.label}).`);
   L.push('Read, not sent: nobody is woken by this file. LDW reads it at 12:30 and 20:45 Berlin.');
+  L.push(
+    `Owner if this digest failed, is missing or is older than 2 h 30 min: ${OWNER_POST}.`
+  );
   L.push('');
   L.push(`## Needs Logan (${needsLogan.length})`);
   L.push(...(needsLogan.length ? needsLogan.map((s) => `- ${s}`) : ['- nothing']));
@@ -544,7 +658,7 @@ export function buildDigest(input: DigestInput): StatusDigest {
   L.push(...(needsDept13.length ? needsDept13.map((s) => `- ${s}`) : ['- nothing']));
   if (failing.length) {
     L.push('');
-    L.push(`## FAIL / CONDITIONAL at current head (${failing.length})`);
+    L.push(`## FAIL at current head (${failing.length})`);
     L.push(...failing.map((p) => `- ${prLine(p)}`));
   }
   L.push('');
@@ -597,6 +711,22 @@ export function buildDigest(input: DigestInput): StatusDigest {
       );
     }
   } else L.push('- unavailable');
+  L.push('');
+  L.push(`## ${input.host} checkout sync (owner ${OWNER_POST})`);
+  const cs = input.checkoutSync;
+  if (cs) {
+    L.push(
+      cs.failFlag
+        ? `- ALERT ${CHECKOUT_SYNC_FAIL_FILE} present${cs.failFlagText ? `: ${cs.failFlagText}` : ''}`
+        : `- no ${CHECKOUT_SYNC_FAIL_FILE}`
+    );
+    if (cs.statusError) L.push(`- status: ${cs.statusError}`);
+    else
+      L.push(
+        `- last run ${cs.lastRunState ?? '?'}${cs.endedAt ? ` at ${cs.endedAt}` : ''}`,
+        ...cs.repos.map((r) => `- ${r.repo}: ${r.state}${r.message ? ` (${r.message})` : ''}`)
+      );
+  } else L.push('- unavailable');
   if (input.sourceErrors.length) {
     L.push('');
     L.push('## Source errors');
@@ -615,6 +745,8 @@ export function buildDigest(input: DigestInput): StatusDigest {
       needsLogan,
       needsDept13,
       machineAlerts,
+      checkoutSync: input.checkoutSync,
+      ownerPost: OWNER_POST,
       sourceErrors: input.sourceErrors,
     },
   };
@@ -629,6 +761,7 @@ export async function collectDigestInput(deps: {
   run: RunCommand | null;
   unitFilter?: RegExp;
   repos?: readonly string[];
+  checkoutSync?: { dir: string; readText: ReadText } | null;
 }): Promise<DigestInput> {
   const sourceErrors: DigestInput['sourceErrors'] = [];
   const week = closedOrgWeek(deps.now);
@@ -669,6 +802,12 @@ export async function collectDigestInput(deps: {
   if (!deps.run)
     sourceErrors.push({ source: 'systemd', error: 'disabled (DABOS_DIGEST_SYSTEMD=off)' });
 
+  const cs = deps.checkoutSync;
+  const checkoutSync = cs
+    ? await safe('checkout-sync', () => readCheckoutSyncState(cs.dir, cs.readText))
+    : null;
+  if (!cs) sourceErrors.push({ source: 'checkout-sync', error: 'not configured' });
+
   return {
     now: deps.now,
     host: deps.host,
@@ -679,6 +818,7 @@ export async function collectDigestInput(deps: {
     stats,
     cadence,
     systemd,
+    checkoutSync,
     sourceErrors,
   };
 }

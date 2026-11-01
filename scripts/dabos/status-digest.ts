@@ -15,6 +15,8 @@
  *   DABOS_DIGEST_SYSTEMD        user (default on Linux) | off
  *   DABOS_DIGEST_UNIT_FILTER    optional regex on timer/unit names, e.g. ^(dabos|chrome-guard)
  *   DABOS_DIGEST_HOST           default os.hostname()
+ *   DABOS_DIGEST_CHECKOUT_SYNC_DIR  default ~/.local/state/dabos (reads only checkout-sync.FAIL and
+ *                               checkout-sync.status.json from logans-tools #59's sync)
  */
 import { execFile } from 'child_process';
 import fs from 'fs';
@@ -28,8 +30,18 @@ import {
   errorText,
   insertDigestRow,
   type FetchLike,
+  type ReadText,
   type RunCommand,
 } from '../../src/lib/dabos/status-digest';
+
+const readText: ReadText = async (p) => {
+  try {
+    return await fs.promises.readFile(p, 'utf8');
+  } catch (e) {
+    if ((e as { code?: string }).code === 'ENOENT') return null;
+    throw e;
+  }
+};
 
 const runCommand: RunCommand = (cmd, args) =>
   new Promise((resolve, reject) => {
@@ -62,6 +74,9 @@ async function main() {
     path.join(os.homedir(), '.local', 'state', 'dabos-status-digest');
   const filter = process.env.DABOS_DIGEST_UNIT_FILTER?.trim();
   const host = process.env.DABOS_DIGEST_HOST?.trim() || os.hostname();
+  const checkoutSyncDir =
+    process.env.DABOS_DIGEST_CHECKOUT_SYNC_DIR?.trim() ||
+    path.join(os.homedir(), '.local', 'state', 'dabos');
 
   const sql = dbUrl ? createDabosSql(dbUrl) : null;
   const input = await collectDigestInput({
@@ -71,6 +86,7 @@ async function main() {
     github: token ? { fetchFn: fetch as unknown as FetchLike, token } : null,
     run: systemdMode === 'user' ? runCommand : null,
     unitFilter: filter ? new RegExp(filter) : undefined,
+    checkoutSync: { dir: checkoutSyncDir, readText },
   });
   const digest = buildDigest(input);
 

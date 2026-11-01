@@ -13,6 +13,7 @@ EnvironmentFile=%h/.config/dabos/status-digest.env
 Environment=PATH=@NODE_BIN@:/usr/local/bin:/usr/bin:/bin
 Environment=DABOS_DIGEST_OUT_DIR=%h/.local/state/dabos-status-digest
 Environment=DABOS_DIGEST_SYSTEMD=user
+Environment=DABOS_DIGEST_CHECKOUT_SYNC_DIR=%h/.local/state/dabos
 ExecStart=@NODE_BIN@/npm run --silent dabos:status-digest
 TimeoutStartSec=300
 Nice=10

@@ -24,6 +24,11 @@ import {
   readSystemdUserState,
   readTaskCounts,
   shaMatches,
+  VERDICT_LINE_RE,
+  OWNER_POST,
+  readCheckoutSyncState,
+  checkoutSyncAlerts,
+  type CheckoutSyncState,
   type DigestInput,
   type FetchLike,
   type PrSummary,
@@ -60,35 +65,72 @@ describe('division mapping', () => {
 });
 
 describe('Dept13 verdicts', () => {
-  it('parses the first verdict line', () => {
+  it('parses only an exact first line `Dept13 PASS|FAIL @<40hex>`', () => {
     expect(parseDept13Verdict(`Dept13 PASS @${HEAD}\n\nnotes`)).toEqual({
       verdict: 'PASS',
       sha: HEAD,
     });
-    expect(parseDept13Verdict('**Dept13 FAIL @abc1234** reasons')).toEqual({
+    expect(parseDept13Verdict(`Dept13 FAIL @${OLD}\r\n1. reasons`)).toEqual({
       verdict: 'FAIL',
-      sha: 'abc1234',
+      sha: OLD,
     });
-    expect(parseDept13Verdict('intro\nDept 13 CONDITIONAL @`ABCDEF1` x')).toEqual({
-      verdict: 'CONDITIONAL',
-      sha: 'abcdef1',
-    });
+    expect(parseDept13Verdict(`Dept13 FAIL @${OLD}`)).toEqual({ verdict: 'FAIL', sha: OLD });
+  });
+  it('has no third verdict', () => {
+    expect(parseDept13Verdict(`Dept13 CONDITIONAL @${HEAD}`)).toBeNull();
+    expect(VERDICT_LINE_RE.source).not.toMatch(/COND/i);
+  });
+  it('rejects free text, markdown or spacing variants on the first line', () => {
+    for (const body of [
+      `Dept13 PASS (conditional on #171) @${HEAD}`,
+      `Dept13 PASS, items below @${HEAD}`,
+      `**Dept13 PASS @${HEAD}**`,
+      `Dept 13 PASS @${HEAD}`,
+      `dept13 pass @${HEAD}`,
+      ` Dept13 PASS @${HEAD}`,
+      `Dept13 PASS @${HEAD} thanks`,
+      `Dept13 PASS @\`${HEAD}\``,
+      `Dept13  PASS @${HEAD}`,
+      `Dept13 PASS ${HEAD}`,
+    ])
+      expect(parseDept13Verdict(body), body).toBeNull();
+  });
+  it('rejects short, long, uppercase or non-hex shas without truncating', () => {
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD.slice(0, 7)}`)).toBeNull();
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD.slice(0, 39)}`)).toBeNull();
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD}ab`)).toBeNull();
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD}0`)).toBeNull();
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD.toUpperCase()}`)).toBeNull();
+    expect(parseDept13Verdict(`Dept13 PASS @${HEAD.slice(0, 39)}g`)).toBeNull();
+  });
+  it('reads the first line only', () => {
+    expect(parseDept13Verdict(`intro\nDept13 PASS @${HEAD}`)).toBeNull();
+    expect(parseDept13Verdict(`\nDept13 PASS @${HEAD}`)).toBeNull();
+    expect(parseDept13Verdict(`FYI\r\nDept13 FAIL @${HEAD}`)).toBeNull();
   });
   it('ignores bodies without a verdict line or sha', () => {
     expect(parseDept13Verdict('looks good to me')).toBeNull();
     expect(parseDept13Verdict('Dept13 PASS')).toBeNull();
     expect(parseDept13Verdict(null)).toBeNull();
   });
-  it('takes the latest verdict and compares it with the head', () => {
+  it('takes the latest valid verdict; a short-sha line is not a verdict', () => {
     const v = latestVerdict([
       { body: `Dept13 FAIL @${OLD}`, at: '2026-11-01T10:00:00Z' },
       { body: `Dept13 PASS @${HEAD.slice(0, 12)}`, at: '2026-11-01T12:00:00Z' },
       { body: 'thanks', at: '2026-11-01T13:00:00Z' },
     ]);
-    expect(v?.verdict).toBe('PASS');
-    expect(shaMatches(v!.sha, HEAD)).toBe(true);
+    expect(v).toEqual({ verdict: 'FAIL', sha: OLD, at: '2026-11-01T10:00:00Z' });
+  });
+  it('counts a verdict as current only for the full equal 40-hex head', () => {
+    expect(shaMatches(HEAD, HEAD)).toBe(true);
+    expect(shaMatches(HEAD, HEAD.toUpperCase())).toBe(true);
     expect(shaMatches(OLD, HEAD)).toBe(false);
-    expect(shaMatches('abc', HEAD)).toBe(false);
+    expect(shaMatches(HEAD.slice(0, 7), HEAD)).toBe(false);
+    expect(shaMatches(HEAD.slice(0, 39), HEAD)).toBe(false);
+    expect(shaMatches(`${HEAD}00`, HEAD)).toBe(false);
+    expect(shaMatches(HEAD, `${HEAD}00`)).toBe(false);
+    expect(shaMatches(HEAD.slice(0, 12), HEAD.slice(0, 12))).toBe(false);
+    expect(shaMatches('', '')).toBe(false);
   });
 });
 
@@ -155,7 +197,10 @@ describe('fetchRepoPulls', () => {
       '/repos/A-sop/DABOS/pulls/7/reviews': [
         { body: `Dept13 PASS @${OLD}`, submitted_at: '2026-11-01T10:00:00Z' },
       ],
-      '/repos/A-sop/DABOS/issues/7/comments': [],
+      '/repos/A-sop/DABOS/issues/7/comments': [
+        { body: `Dept13 PASS @${HEAD.slice(0, 7)}`, created_at: '2026-11-01T12:00:00Z' },
+        { body: `Dept13 PASS (conditional) @${HEAD}`, created_at: '2026-11-01T12:30:00Z' },
+      ],
       '/repos/A-sop/DABOS/pulls/8/reviews': [],
       '/repos/A-sop/DABOS/issues/8/comments': [
         { body: `Dept13 PASS @${HEAD}`, created_at: '2026-11-01T11:00:00Z' },
@@ -169,7 +214,7 @@ describe('fetchRepoPulls', () => {
     });
     const p7 = prs.find((p) => p.number === 7)!;
     const p8 = prs.find((p) => p.number === 8)!;
-    expect(p7.dept13).toMatchObject({ verdict: 'PASS', current: false });
+    expect(p7.dept13).toMatchObject({ verdict: 'PASS', sha: OLD, current: false });
     expect(p8.dept13).toMatchObject({ verdict: 'PASS', current: true });
     expect(p8.division).toBe('Div5');
     expect(prs.filter((p) => p.state === 'merged').map((p) => p.number)).toEqual([6]);
@@ -255,6 +300,7 @@ function baseInput(over: Partial<DigestInput> = {}): DigestInput {
     stats: { Div1: 1, Div2: 1, Div3: 0, Div4: 2, Div5: 1, Div6: 3, Div7: 1 },
     cadence: [],
     systemd: { timers: [], failedUnits: [] },
+    checkoutSync: null,
     sourceErrors: [],
     ...over,
   };
@@ -285,7 +331,9 @@ describe('buildDigest', () => {
       'logans-tools#3',
     ]);
     expect(d.markdown).toMatch(/STALE \(head abcdef12\)/);
-    expect(d.markdown).toMatch(/## FAIL \/ CONDITIONAL at current head \(1\)/);
+    expect(d.markdown).toMatch(/^## FAIL at current head \(1\)$/m);
+    expect(d.markdown).not.toMatch(/CONDITIONAL/);
+    expect(d.json.divisions.find((x) => x.division === 'Div1')!.failedAtHead).toBe(1);
     const div4 = d.json.divisions.find((x) => x.division === 'Div4')!;
     expect(div4).toMatchObject({ openPrs: 4, needsDept13: 2, readyForLogan: 1 });
     expect(d.json.divisions.find((x) => x.division === 'Div2')!.mergedLast24h).toBe(1);
@@ -347,6 +395,102 @@ describe('buildDigest', () => {
   });
 });
 
+describe('ln02 checkout sync (logans-tools #59) in the digest', () => {
+  const DIR = '/home/u/.local/state/dabos';
+  const files = (m: Record<string, string>) => {
+    const read: string[] = [];
+    const readText = async (p: string) => {
+      read.push(p);
+      return p in m ? m[p]! : null;
+    };
+    return { readText, read };
+  };
+  const status = (repos: Array<{ repo: string; state: string; message?: string }>) =>
+    JSON.stringify({ state: 'ok', ended_at_utc: '2026-11-01T14:07:30Z', repos });
+
+  it('reads only the FAIL flag and the status file', async () => {
+    const { readText, read } = files({});
+    const c = await readCheckoutSyncState(DIR, readText);
+    expect(read).toEqual([`${DIR}/checkout-sync.FAIL`, `${DIR}/checkout-sync.status.json`]);
+    expect(c).toMatchObject({ failFlag: false, statusError: 'no status file' });
+    expect(checkoutSyncAlerts(c)).toEqual([]);
+  });
+
+  it('FAIL flag -> machine alert naming the failing repo and the owner post', async () => {
+    const { readText } = files({
+      [`${DIR}/checkout-sync.FAIL`]: '2026-11-01T13:52:01Z see status\n',
+      [`${DIR}/checkout-sync.status.json`]: status([
+        { repo: '/home/u/Dev/logans-tools', state: 'diverged', message: 'left untouched' },
+        { repo: '/home/u/Dev/DABOS-weekclose', state: 'up_to_date' },
+      ]),
+    });
+    const c = await readCheckoutSyncState(DIR, readText);
+    expect(c.failFlag).toBe(true);
+    expect(c.failingRepos.map((r) => r.repo)).toEqual(['logans-tools']);
+    const d = buildDigest(baseInput({ checkoutSync: c }));
+    expect(OWNER_POST).toBe('Dept12 Production (Div4)');
+    expect(d.json.machineAlerts).toEqual([
+      'checkout-sync.FAIL present (logans-tools diverged); owner Dept12 Production (Div4)',
+    ]);
+    expect(d.markdown).toContain('## ln02 checkout sync (owner Dept12 Production (Div4))');
+    expect(d.markdown).toContain('- ALERT checkout-sync.FAIL present: 2026-11-01T13:52:01Z see status');
+    expect(d.markdown).toContain('- logans-tools: diverged (left untouched)');
+    expect(d.json.checkoutSync?.failFlag).toBe(true);
+  });
+
+  it('no flag and clean repos -> no alert; the section still renders', async () => {
+    const { readText } = files({
+      [`${DIR}/checkout-sync.status.json`]: status([
+        { repo: '/home/u/Dev/logans-tools', state: 'ok' },
+      ]),
+    });
+    const c = await readCheckoutSyncState(DIR, readText);
+    const d = buildDigest(baseInput({ checkoutSync: c }));
+    expect(d.json.machineAlerts).toEqual([]);
+    expect(d.markdown).toContain('- no checkout-sync.FAIL');
+    expect(d.markdown).toContain('- logans-tools: ok');
+  });
+
+  it('flag without a readable status still alerts; broken JSON alerts too', async () => {
+    const c1 = await readCheckoutSyncState(
+      DIR,
+      files({ [`${DIR}/checkout-sync.FAIL`]: 'x' }).readText
+    );
+    expect(checkoutSyncAlerts(c1)).toEqual([
+      'checkout-sync.FAIL present (see checkout-sync.status.json); owner Dept12 Production (Div4)',
+    ]);
+    const c2 = await readCheckoutSyncState(
+      DIR,
+      files({ [`${DIR}/checkout-sync.status.json`]: '{not json' }).readText
+    );
+    expect(checkoutSyncAlerts(c2)).toEqual([
+      'checkout-sync.status.json unreadable; owner Dept12 Production (Div4)',
+    ]);
+  });
+
+  it('collectDigestInput reads it when configured', async () => {
+    const { readText } = files({ [`${DIR}/checkout-sync.FAIL`]: 'x' });
+    const input = await collectDigestInput({
+      now: NOW,
+      host: 'ln02',
+      sql: null,
+      github: null,
+      run: null,
+      checkoutSync: { dir: DIR, readText },
+    });
+    expect((input.checkoutSync as CheckoutSyncState).failFlag).toBe(true);
+    expect(input.sourceErrors.map((e) => e.source)).not.toContain('checkout-sync');
+  });
+
+  it('the digest header names the owner post for a failed, missing or stale digest', () => {
+    const d = buildDigest(baseInput());
+    expect(d.markdown).toContain(
+      'Owner if this digest failed, is missing or is older than 2 h 30 min: Dept12 Production (Div4).'
+    );
+    expect(d.json.ownerPost).toBe('Dept12 Production (Div4)');
+  });
+});
+
 describe('collectDigestInput', () => {
   it('records failing or missing sources instead of crashing', async () => {
     const brokenSql = (() =>
@@ -366,6 +510,7 @@ describe('collectDigestInput', () => {
       'neon stats',
       'neon role_runs',
       'systemd',
+      'checkout-sync',
     ]);
     expect(d.markdown).toContain('## Source errors');
     expect(d.markdown).not.toContain('u:p@host');
@@ -502,6 +647,87 @@ describe('grants SQL (not applied by this PR) on PGlite', () => {
     expect(await priv('tasks', 'SELECT')).toBe(false);
     expect(await priv('role_runs', 'INSERT')).toBe(false);
   });
+
+  // Guard 3: no privilege beyond the intended ones on ANY object, and no role memberships.
+  const refusesWith = async (setup: string, re: RegExp) => {
+    await db.exec('CREATE ROLE dabos_status_digest NOLOGIN');
+    await db.exec(setup);
+    await expect(db.exec(GRANTS)).rejects.toThrow(re);
+    await db.exec('ROLLBACK');
+  };
+  it('guard 3 refuses a table grant beyond the six', async () => {
+    await refusesWith('GRANT SELECT ON public.conditions TO dabos_status_digest', /guard 3d/);
+  });
+  it('guard 3 refuses a write grant on an intended table', async () => {
+    await refusesWith('GRANT UPDATE ON public.tasks TO dabos_status_digest', /guard 3d/);
+  });
+  it('guard 3 refuses a column grant', async () => {
+    await refusesWith('GRANT UPDATE (summary_json) ON public.role_runs TO dabos_status_digest', /guard 3d/);
+  });
+  it('guard 3 refuses a sequence grant', async () => {
+    await refusesWith(
+      'CREATE SEQUENCE public.digest_probe_seq; GRANT USAGE ON SEQUENCE public.digest_probe_seq TO dabos_status_digest',
+      /guard 3d/
+    );
+  });
+  it('guard 3 refuses a function grant', async () => {
+    await refusesWith(
+      'CREATE FUNCTION public.digest_probe() RETURNS int LANGUAGE sql AS $f$ SELECT 1 $f$; GRANT EXECUTE ON FUNCTION public.digest_probe() TO dabos_status_digest',
+      /guard 3d/
+    );
+  });
+  it('guard 3 refuses CREATE on schema public', async () => {
+    await refusesWith('GRANT CREATE ON SCHEMA public TO dabos_status_digest', /guard 3d/);
+  });
+  it('guard 3 refuses USAGE on another schema', async () => {
+    await refusesWith(
+      'CREATE SCHEMA digest_probe; GRANT USAGE ON SCHEMA digest_probe TO dabos_status_digest',
+      /guard 3d/
+    );
+  });
+  it('guard 3 refuses a database grant', async () => {
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await refusesWith(`GRANT CREATE ON DATABASE "${dbName}" TO dabos_status_digest`, /guard 3d/);
+  });
+  it('guard 3 refuses membership in another role', async () => {
+    await refusesWith(
+      'CREATE ROLE digest_probe_parent NOLOGIN; GRANT digest_probe_parent TO dabos_status_digest',
+      /guard 3b/
+    );
+  });
+  it('guard 3 refuses another role being a member of it', async () => {
+    await refusesWith(
+      'CREATE ROLE digest_probe_child NOLOGIN; GRANT dabos_status_digest TO digest_probe_child',
+      /guard 3b/
+    );
+  });
+  it('guard 3 refuses an object owned by the role', async () => {
+    await refusesWith(
+      'CREATE TABLE public.digest_probe_owned (x int); ALTER TABLE public.digest_probe_owned OWNER TO dabos_status_digest',
+      /guard 3c/
+    );
+  });
+  it('guard 3 refuses default privileges for the role', async () => {
+    await refusesWith(
+      'ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO dabos_status_digest',
+      /guard 3e/
+    );
+  });
+  it('guard 3 refuses a PUBLIC write grant that reaches the role', async () => {
+    await refusesWith('GRANT INSERT ON public.conditions TO PUBLIC', /guard 3f/);
+  });
+  it('guard 3 refuses a PUBLIC sequence grant that reaches the role', async () => {
+    await refusesWith(
+      'CREATE SEQUENCE public.digest_probe_seq2; GRANT USAGE ON SEQUENCE public.digest_probe_seq2 TO PUBLIC',
+      /guard 3f/
+    );
+  });
+  it('a refused run leaves no grant behind (one transaction)', async () => {
+    await refusesWith('GRANT SELECT ON public.conditions TO dabos_status_digest', /guard 3d/);
+    // The setup ran outside the file's transaction; the file's own GRANTs were rolled back.
+    expect(await priv('tasks', 'SELECT')).toBe(false);
+    expect(await priv('role_runs', 'INSERT')).toBe(false);
+  });
 });
 
 describe('ln02 files and runner hygiene', () => {
@@ -557,8 +783,19 @@ describe('ln02 files and runner hygiene', () => {
         'DABOS_DIGEST_OUT_DIR',
         'DABOS_DIGEST_UNIT_FILTER',
         'DABOS_DIGEST_HOST',
+        'DABOS_DIGEST_CHECKOUT_SYNC_DIR',
       ])
     );
+  });
+  it('service points the digest at the checkout-sync state dir', () => {
+    expect(service).toMatch(/^Environment=DABOS_DIGEST_CHECKOUT_SYNC_DIR=%h\/\.local\/state\/dabos$/m);
+  });
+  it('doc names the owner post, the exact verdict line, and has no third verdict', () => {
+    const doc = readRepoFile('src/docs/dabos/status-digest.md');
+    expect(doc).toContain('Owner: **Dept12 Production (Div4)**');
+    expect(doc).toContain('checkout-sync.FAIL');
+    expect(doc).toContain('`Dept13 PASS @<sha>` or `Dept13 FAIL @<sha>`');
+    expect(doc).not.toMatch(/CONDITIONAL/);
   });
   it('package.json wires the npm script', () => {
     expect(readRepoFile('package.json')).toContain(
