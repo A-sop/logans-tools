@@ -4,44 +4,93 @@
 # the repo untouched, mark it failed. Versioned in logans-tools ops/ln02/ (RR-010 step 0).
 #
 # Env knobs (defaults in brackets):
-#   SYNC_REPOS            space-separated repo paths [~/Dev/logans-tools ~/Dev/DABOS-weekclose]
+#   SYNC_ALL_REPOS        the FULL set of synced repos [~/Dev/logans-tools ~/Dev/DABOS-weekclose]
+#   SYNC_REPOS            repos for this run [$SYNC_ALL_REPOS]. A run whose set equals SYNC_ALL_REPOS
+#                         is a FULL run; anything else (e.g. the week-close DABOS-only pre-sync) is NARROW.
 #   SYNC_BRANCH           branch that must be checked out and is fast-forwarded to origin/<it> [main]
 #   SYNC_NPM_CI           1 = run npm ci in a repo whose package-lock.json changed in the ff [1]
 #   SYNC_FROM_WEEK_CLOSE  1 = called by dabos-week-close-ln02's ExecStartPre (skip the "close running" guard)
 #   SYNC_SKIP_GUARDS      1 = skip the systemd and Thursday-window guards (tests only)
+#   SYNC_TEST_FORCE_THURSDAY_WINDOW  1 = behave as if inside the Thursday window (tests only)
 #   STATE_DIR [~/.local/state/dabos]   CONF_DIR [~/.config/dabos]
-# Outputs: $STATE_DIR/checkout-sync.status.json; $STATE_DIR/checkout-sync.FAIL while any repo failed.
+# Outputs: $STATE_DIR/checkout-sync.status.json (this run + the latest real state of EVERY repo);
+#          $STATE_DIR/checkout-sync.repos/<repo>.json (latest real state per repo);
+#          $STATE_DIR/checkout-sync.FAIL while any repo's latest state is a failure.
+# The FAIL flag is cleared ONLY by a FULL run in which EVERY repo synced cleanly (ok/up_to_date).
+# A narrow run, a skipped repo, a pause or a week-close-running skip never clears it, and never
+# overwrites another repo's recorded failure. Read by the ln02 status digest (logans-tools #61).
+# Owner of checkout-sync.FAIL: Dept12 Production (Div4).
 # Pause: touch $CONF_DIR/PAUSE-checkout-sync
 set -uo pipefail
 export GIT_TERMINAL_PROMPT=0 LC_ALL=C
 
 STATE_DIR="${STATE_DIR:-$HOME/.local/state/dabos}"
 CONF_DIR="${CONF_DIR:-$HOME/.config/dabos}"
-SYNC_REPOS="${SYNC_REPOS:-$HOME/Dev/logans-tools $HOME/Dev/DABOS-weekclose}"
+SYNC_ALL_REPOS="${SYNC_ALL_REPOS:-$HOME/Dev/logans-tools $HOME/Dev/DABOS-weekclose}"
+SYNC_REPOS="${SYNC_REPOS:-$SYNC_ALL_REPOS}"
+SYNC_TEST_FORCE_THURSDAY_WINDOW="${SYNC_TEST_FORCE_THURSDAY_WINDOW:-0}"
 SYNC_BRANCH="${SYNC_BRANCH:-main}"
 SYNC_NPM_CI="${SYNC_NPM_CI:-1}"
 SYNC_FROM_WEEK_CLOSE="${SYNC_FROM_WEEK_CLOSE:-0}"
 SYNC_SKIP_GUARDS="${SYNC_SKIP_GUARDS:-0}"
 STATUS="$STATE_DIR/checkout-sync.status.json"
 FAILFLAG="$STATE_DIR/checkout-sync.FAIL"
-mkdir -p "$STATE_DIR"
+RECDIR="$STATE_DIR/checkout-sync.repos"
+mkdir -p "$STATE_DIR" "$RECDIR"
 
 log() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" >&2; }
 json_str() { local s=${1//\\/\\\\}; s=${s//\"/\\\"}; s=${s//$'\n'/ }; printf '"%s"' "$s"; }
 
 STARTED_AT=$(date -u +%FT%TZ)
-RESULTS=""   # JSON objects joined by ,
-ANY_FAIL=0
+RESULTS=""   # this run's JSON objects joined by ,
+ANY_FAIL=0   # a repo failed in this run -> exit 1
+RUN_CLEAN=1  # 1 while every repo in this run is ok/up_to_date (a skip makes it 0)
+
+norm_set() { local p; for p in "$@"; do p="${p%/}"; [ -n "$p" ] && printf '%s\n' "$p"; done | LC_ALL=C sort -u; }
+if [ "$(norm_set $SYNC_REPOS)" = "$(norm_set $SYNC_ALL_REPOS)" ]; then RUN_KIND=full; else RUN_KIND=narrow; fi
+
+rec_file() { local k="${1%/}"; k=$(printf '%s' "$k" | tr -c 'A-Za-z0-9._-' '_'); printf '%s/%s.json' "$RECDIR" "$k"; }
+rec_failing() { # record file -> 0 when its state is a failure
+  [ -f "$1" ] || return 1
+  ! grep -qE '"state":"(ok|up_to_date|skipped)"' "$1"
+}
+
 add_result() { # repo state message before after
-  local obj
-  obj="{\"repo\":$(json_str "$1"),\"state\":$(json_str "$2"),\"message\":$(json_str "$3"),\"before\":$(json_str "${4:-}"),\"after\":$(json_str "${5:-}")}"
+  local obj rf
+  obj="{\"repo\":$(json_str "${1%/}"),\"state\":$(json_str "$2"),\"message\":$(json_str "$3"),\"before\":$(json_str "${4:-}"),\"after\":$(json_str "${5:-}"),\"at_utc\":$(json_str "$(date -u +%FT%TZ)"),\"run\":$(json_str "$RUN_KIND")}"
   RESULTS="${RESULTS:+$RESULTS,}$obj"
-  case "$2" in ok|up_to_date|skipped) ;; *) ANY_FAIL=1 ;; esac
+  case "$2" in ok|up_to_date) ;; skipped) RUN_CLEAN=0 ;; *) ANY_FAIL=1; RUN_CLEAN=0 ;; esac
+  rf=$(rec_file "$1")
+  # A skip records nothing over an existing record: the repo's last real state (a failure included) stays.
+  if [ "$2" != "skipped" ] || [ ! -f "$rf" ]; then
+    printf '%s\n' "$obj" > "$rf.tmp" && mv "$rf.tmp" "$rf"
+  fi
   log "$1: $2 - $3"
 }
-write_status() { # overall
-  printf '{"state":%s,"started_at_utc":%s,"ended_at_utc":%s,"repos":[%s]}\n' \
-    "$(json_str "$1")" "$(json_str "$STARTED_AT")" "$(json_str "$(date -u +%FT%TZ)")" "$RESULTS" > "$STATUS.tmp" \
+
+# Every known repo's latest record: the full set first, then this run's extras.
+all_records() {
+  local p seen="" out="" rf
+  for p in $(norm_set $SYNC_ALL_REPOS) $(norm_set $SYNC_REPOS); do
+    case " $seen " in *" $p "*) continue ;; esac
+    seen="$seen $p"; rf=$(rec_file "$p")
+    [ -f "$rf" ] && out="${out:+$out,}$(cat "$rf")"
+  done
+  printf '%s' "$out"
+}
+failing_repos() {
+  local p seen=""
+  for p in $(norm_set $SYNC_ALL_REPOS) $(norm_set $SYNC_REPOS); do
+    case " $seen " in *" $p "*) continue ;; esac
+    seen="$seen $p"; rec_failing "$(rec_file "$p")" && printf '%s ' "$p"
+  done
+}
+write_status() { # this run's outcome; repos = every repo's latest record, never wiped
+  local flag=false
+  [ -e "$FAILFLAG" ] && flag=true
+  printf '{"state":%s,"run":%s,"fail_flag":%s,"started_at_utc":%s,"ended_at_utc":%s,"this_run":[%s],"repos":[%s]}\n' \
+    "$(json_str "$1")" "$(json_str "$RUN_KIND")" "$flag" "$(json_str "$STARTED_AT")" "$(json_str "$(date -u +%FT%TZ)")" \
+    "$RESULTS" "$(all_records)" > "$STATUS.tmp" \
     && mv "$STATUS.tmp" "$STATUS"
 }
 
@@ -69,6 +118,7 @@ fi
 
 # Thursday 13:45-15:00 Berlin: do not touch logans-tools (npm ci must never overlap the close).
 in_thursday_window() {
+  [ "$SYNC_TEST_FORCE_THURSDAY_WINDOW" = "1" ] && return 0
   [ "$SYNC_SKIP_GUARDS" = "1" ] && return 1
   local dow hm
   dow=$(TZ=Europe/Berlin date +%u); hm=$(TZ=Europe/Berlin date +%H%M)
@@ -142,11 +192,24 @@ sync_repo() {
 
 for r in $SYNC_REPOS; do sync_repo "$r"; done
 
+FAILING=$(failing_repos)
+if [ "$RUN_KIND" = "full" ] && [ "$RUN_CLEAN" = "1" ] && [ -z "$FAILING" ]; then
+  # The only place the flag is cleared: a full run in which every repo synced cleanly.
+  rm -f "$FAILFLAG"
+  for rf in "$RECDIR"/*.json; do # forget repos that are no longer in the full set
+    [ -f "$rf" ] || continue
+    keep=0
+    for p in $(norm_set $SYNC_ALL_REPOS); do [ "$rf" = "$(rec_file "$p")" ] && keep=1; done
+    [ "$keep" = "1" ] || rm -f "$rf"
+  done
+elif [ -n "$FAILING" ]; then
+  printf '%s failing: %s- see %s\n' "$(date -u +%FT%TZ)" "$FAILING" "$STATUS" > "$FAILFLAG"
+fi
+# Narrow or skip runs with no recorded failure leave an existing flag exactly as it is.
+
 if [ "$ANY_FAIL" = "1" ]; then
-  printf '%s see %s\n' "$(date -u +%FT%TZ)" "$STATUS" > "$FAILFLAG"
   write_status failed
   exit 1
 fi
-rm -f "$FAILFLAG"
 write_status ok
 exit 0

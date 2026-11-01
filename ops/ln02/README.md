@@ -20,4 +20,20 @@ bash ops/ln02/install-ln02-checkout-sync.sh --undo --apply  # remove (clone kept
 touch ~/.config/dabos/PAUSE-checkout-sync                   # pause the sync
 ```
 
+## Owner and routing of `checkout-sync.FAIL`
+
+Owner post: **Dept12 Production (Div4)**.
+
+- The flag exists while any repo's latest recorded state is a failure (dirty, diverged, ahead, wrong
+  branch, fetch or `npm ci` failed). `checkout-sync.status.json` lists every repo's latest state, not
+  only this run's.
+- It is cleared ONLY by a full run (all repos in `SYNC_ALL_REPOS`) in which every repo synced
+  cleanly. The week-close DABOS-only pre-sync, the Thursday 13:45-15:00 skip of logans-tools, a pause
+  or a week-close-running skip never clear it.
+- Who reads it: the ln02 status digest (logans-tools #61) shows it as a machine alert naming the
+  failing repos and the owner post; later the watchman reads it too. Nothing else pages anyone.
+- What the owner does: read `~/.local/state/dabos/checkout-sync.status.json`, fix the named repo by
+  hand on ln02 (the sync never resets or forces), then
+  `systemctl --user start dabos-checkout-sync.service` (a full run) and check the flag is gone.
+
 Acceptance, apply, verify and undo steps: `docs/acceptance/2026-11-01_ln02-checkout-sync-week-close-dabos-clone.ACCEPTANCE.md`.
