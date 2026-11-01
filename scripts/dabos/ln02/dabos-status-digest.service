@@ -1,0 +1,19 @@
+# RR-010 step 3: DABOS Div1-7 status digest (ln02 user unit).
+# Installed by scripts/dabos/ln02/install-status-digest.sh, which replaces @REPO@ and @NODE_BIN@.
+# Secrets live only in the EnvironmentFile (mode 600, placed by Logan); none belong in this file.
+[Unit]
+Description=DABOS Div1-7 status digest (RR-010 step 3)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+EnvironmentFile=%h/.config/dabos/status-digest.env
+Environment=PATH=@NODE_BIN@:/usr/local/bin:/usr/bin:/bin
+Environment=DABOS_DIGEST_OUT_DIR=%h/.local/state/dabos-status-digest
+Environment=DABOS_DIGEST_SYSTEMD=user
+ExecStart=@NODE_BIN@/npm run --silent dabos:status-digest
+TimeoutStartSec=300
+Nice=10
+NoNewPrivileges=yes
