@@ -27,7 +27,8 @@ and say so in the title.
 - `title`: one line Logan can answer with yes or no, for example
   `Merge logans-tools #61 and apply its SQL on prod?`
 - `body`: at most a few lines: what changes, the risk, the undo.
-- `payload`: `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (`PASS @<full sha>`),
+- `payload`: `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (exactly `PASS @<full 40-hex head sha>`;
+  Dept13 verdicts are PASS or FAIL only),
   `apply_method` (for SQL), `host` (for machine changes), `order_ref` (e.g. `RR-010`), and, once
   decided, `logan_words` and `logan_at` (Berlin time) when the decision came through LDW
   Communicator.
@@ -60,7 +61,9 @@ and the status digest read pending rows.
 
 ## Acting (the doing agent)
 
-Act only when the row is `approved` **and** `payload.head_sha` is the PR's current head sha. If
+Act only when the row is `approved` **and** `payload.head_sha` and the PR's current head sha are
+both present, both the full 40-hex sha, and equal (`decisionState()` returns `act` only then; a
+missing, short or long sha on either side is `stale_sha`). If
 anything was pushed after the decision, set the row to `expired` (it needs a new Dept13 PASS and
 a new row). After acting, write the receipt (merge sha, apply method, digest) on the PR, not in
 a message. A `rejected` row closes the item.

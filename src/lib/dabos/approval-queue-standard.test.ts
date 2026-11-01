@@ -69,6 +69,17 @@ describe('decisionPayloadSchema', () => {
     expect(
       decisionPayloadSchema.safeParse({ ...merge, dept13_verdict: `FAIL @${SHA}` }).success
     ).toBe(false);
+    // PASS or FAIL only: no third verdict, no short sha, nothing after the sha.
+    expect(
+      decisionPayloadSchema.safeParse({ ...merge, dept13_verdict: `CONDITIONAL @${SHA}` }).success
+    ).toBe(false);
+    expect(
+      decisionPayloadSchema.safeParse({ ...merge, dept13_verdict: `PASS @${SHA.slice(0, 12)}` })
+        .success
+    ).toBe(false);
+    expect(
+      decisionPayloadSchema.safeParse({ ...merge, dept13_verdict: `PASS @${SHA}0` }).success
+    ).toBe(false);
   });
 
   it('needs apply_method for prod_apply and host for machine changes', () => {
@@ -98,5 +109,38 @@ describe('decisionState', () => {
     expect(decisionState({ status: 'pending', payload: null })).toBe('wait');
     expect(decisionState({ status: 'rejected', payload: null })).toBe('rejected');
     expect(decisionState({ status: 'expired', payload: null })).toBe('expired');
+  });
+
+  it('never acts when either sha is missing', () => {
+    expect(decisionState({ status: 'approved', payload: { head_sha: SHA } })).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: { head_sha: SHA } }, '')).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: {} }, SHA)).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: null }, SHA)).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: null })).toBe('stale_sha');
+  });
+
+  it('never acts on a short, long or non-hex sha, even as a prefix of the other', () => {
+    const short = SHA.slice(0, 7);
+    expect(decisionState({ status: 'approved', payload: { head_sha: short } }, SHA)).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: { head_sha: SHA } }, short)).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: { head_sha: short } }, short)).toBe('stale_sha');
+    expect(decisionState({ status: 'approved', payload: { head_sha: `${SHA}0` } }, `${SHA}0`)).toBe(
+      'stale_sha'
+    );
+    const nonHex = `${SHA.slice(0, 39)}g`;
+    expect(decisionState({ status: 'approved', payload: { head_sha: nonHex } }, nonHex)).toBe(
+      'stale_sha'
+    );
+  });
+
+  it('acts on equal full shas regardless of case', () => {
+    expect(
+      decisionState({ status: 'approved', payload: { head_sha: SHA.toUpperCase() } }, SHA)
+    ).toBe('act');
+  });
+
+  it('a pending or rejected row never acts even at the current head', () => {
+    expect(decisionState({ status: 'pending', payload: { head_sha: SHA } }, SHA)).toBe('wait');
+    expect(decisionState({ status: 'rejected', payload: { head_sha: SHA } }, SHA)).toBe('rejected');
   });
 });

@@ -64,7 +64,8 @@ export function isValidDedupeKey(key: string): boolean {
   return key.length <= DEDUPE_KEY_MAX && DEDUPE_KEY_PATTERN.test(key);
 }
 
-const verdict = z.string().regex(/^(PASS|FAIL|CONDITIONAL) @[0-9a-f]{40}$/);
+/** Dept13 verdicts are PASS or FAIL only, at the full 40-hex head sha. */
+const verdict = z.string().regex(/^(PASS|FAIL) @[0-9a-f]{40}$/);
 
 /** payload of a Logan decision row. Extra keys are allowed; these are checked when present. */
 export const decisionPayloadSchema = z
@@ -87,7 +88,7 @@ export const decisionPayloadSchema = z
         if (p[k] == null)
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: `${p.decision} needs ${k}` });
       }
-      if (p.dept13_verdict && p.head_sha && !p.dept13_verdict.startsWith(`PASS @${p.head_sha}`)) {
+      if (p.dept13_verdict && p.head_sha && p.dept13_verdict !== `PASS @${p.head_sha}`) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'a merge/apply row is filed only after a Dept13 PASS at the same head sha',
@@ -108,6 +109,8 @@ export type DecisionRow = { status: string; payload: { head_sha?: string } | nul
 /**
  * The doing agent acts only on an approved row whose head sha is the PR's current head; a push
  * after the decision means the row must be expired and re-filed after a new Dept13 PASS.
+ * 'act' needs BOTH payload.head_sha and currentHeadSha present, both full 40-hex, and equal
+ * (case-insensitive). Missing, short, long or non-hex on either side is 'stale_sha', never 'act'.
  */
 export function decisionState(
   row: DecisionRow,
@@ -116,7 +119,8 @@ export function decisionState(
   if (row.status === 'pending') return 'wait';
   if (row.status === 'rejected') return 'rejected';
   if (row.status !== 'approved') return 'expired';
-  const decided = row.payload?.head_sha?.toLowerCase();
-  if (currentHeadSha && decided && decided !== currentHeadSha.toLowerCase()) return 'stale_sha';
-  return 'act';
+  const decided = typeof row.payload?.head_sha === 'string' ? row.payload.head_sha.toLowerCase() : '';
+  const current = typeof currentHeadSha === 'string' ? currentHeadSha.toLowerCase() : '';
+  if (!SHA_FULL.test(decided) || !SHA_FULL.test(current)) return 'stale_sha';
+  return decided === current ? 'act' : 'stale_sha';
 }
