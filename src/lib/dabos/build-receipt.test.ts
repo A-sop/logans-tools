@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { PGlite } from '@electric-sql/pglite';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   berlinDay,
@@ -12,9 +12,10 @@ import {
   writeStartReceipt,
   type BuildReceiptRow,
 } from '@/lib/dabos/build-receipt';
-import { buildDigest } from '@/lib/dabos/status-digest';
+import { buildDigest, collectDigestInput } from '@/lib/dabos/status-digest';
 import { closedOrgWeek } from '@/lib/dabos/org-week';
 import { pgliteSql, readRepoFile } from '@/test/pglite-dabos';
+import { requireBuildReceiptDatabaseUrl } from '../../../scripts/dabos/build-receipt';
 
 async function setup(): Promise<PGlite> {
   const db = new PGlite();
@@ -326,5 +327,141 @@ describe('build-receipt grants ACL (prod datacl)', { timeout: 60_000 }, () => {
     await db.exec('RESET ROLE');
     await db.exec(GRANTS);
     await db.exec(UNDO);
+  });
+
+  it('guard 0 refuses when the role is missing', async () => {
+    await resetRole();
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 0/);
+    await db.exec('ROLLBACK');
+  });
+
+  it('guard 3 refuses a column grant (e.g. GRANT UPDATE (title) ON tasks)', async () => {
+    await resetRole();
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec('GRANT UPDATE (title) ON public.tasks TO dabos_build_receipt');
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 3d/);
+    await db.exec('ROLLBACK');
+  });
+});
+
+describe('DABOS_BUILD_RECEIPT_DATABASE_URL (no DATABASE_URL fallback)', () => {
+  it('returns the dedicated URL when set', () => {
+    expect(
+      requireBuildReceiptDatabaseUrl({
+        DABOS_BUILD_RECEIPT_DATABASE_URL: 'postgres://receipt-role@localhost/db',
+        DATABASE_URL: 'postgres://owner@localhost/db',
+      } as NodeJS.ProcessEnv)
+    ).toBe('postgres://receipt-role@localhost/db');
+  });
+
+  it('exits non-zero with a clear message when unset even if DATABASE_URL is set', () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((code?: number) => {
+      throw new Error(`process.exit ${code}`);
+    }) as never);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() =>
+      requireBuildReceiptDatabaseUrl({
+        DATABASE_URL: 'postgres://owner@localhost/db',
+        DATABASE_URL_UNPOOLED: 'postgres://owner@localhost/db',
+      } as NodeJS.ProcessEnv)
+    ).toThrow(/process\.exit 1/);
+    expect(errSpy.mock.calls.some((c) => String(c[0]).includes('DABOS_BUILD_RECEIPT_DATABASE_URL'))).toBe(
+      true
+    );
+    expect(errSpy.mock.calls.some((c) => String(c[0]).includes('no fallback to DATABASE_URL'))).toBe(true);
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+});
+
+describe('digest stays read-only; route-stalls uses receipt role', { timeout: 60_000 }, () => {
+  let db: PGlite;
+  afterEach(async () => {
+    await db.close();
+  });
+
+  it('collectDigestInput displays stalled orders but never INSERTs under dabos_status_digest', async () => {
+    db = await setup();
+    await db.exec('CREATE ROLE dabos_status_digest NOLOGIN');
+    await db.exec('GRANT USAGE ON SCHEMA public TO dabos_status_digest');
+    await db.exec('GRANT SELECT ON public.tasks TO dabos_status_digest');
+
+    const ownerSql = pgliteSql(db);
+    await writeStartReceipt(ownerSql, {
+      orderId: 'stall-digest',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T18:00:00Z',
+      startedAt: '2026-11-01T17:00:00Z',
+    });
+
+    await db.exec('SET ROLE dabos_status_digest');
+    const sql = pgliteSql(db);
+    const now = new Date('2026-11-01T20:00:00Z');
+    const input = await collectDigestInput({
+      now,
+      host: 'ln02',
+      sql,
+      github: null,
+      run: null,
+    });
+    expect(input.openOrders).toEqual([
+      expect.objectContaining({ orderId: 'stall-digest', status: 'stalled' }),
+    ]);
+    expect(input.sourceErrors.map((e) => e.source)).not.toContain('neon stall-route');
+    await db.exec('RESET ROLE');
+
+    const stalls = await db.query(
+      `SELECT id FROM tasks WHERE ingest_source = 'dept2-stall'`
+    );
+    expect(stalls.rows).toHaveLength(0);
+
+    // Confirm the digest role cannot INSERT (so a regression that re-adds routing would fail).
+    await db.exec('SET ROLE dabos_status_digest');
+    await expect(
+      db.exec(`INSERT INTO tasks (workspace_id, title, type, status, priority, basket, ingest_source, ingest_external_id)
+               VALUES ('x','x','agent','todo',3,'in','dept2-stall','probe')`)
+    ).rejects.toThrow(/permission denied/i);
+    await db.exec('RESET ROLE');
+  });
+
+  it('routeStalledBuildOrders INSERTs under dabos_build_receipt grants', async () => {
+    db = await setup();
+    const GRANTS = readRepoFile('scripts/dabos/sql/2026-11-01_build_receipt_role_grants.sql');
+    await db.exec(`
+      DO $$ BEGIN
+        EXECUTE 'REVOKE CREATE ON DATABASE "' || current_database() || '" FROM PUBLIC';
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+    `);
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec(GRANTS);
+
+    const ownerSql = pgliteSql(db);
+    await writeStartReceipt(ownerSql, {
+      orderId: 'stall-role',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T18:00:00Z',
+      startedAt: '2026-11-01T17:00:00Z',
+    });
+
+    await db.exec('SET ROLE dabos_build_receipt');
+    const sql = pgliteSql(db);
+    const now = new Date('2026-11-01T20:00:00Z');
+    const open = await readOpenOrders(sql, now);
+    expect(open[0]?.status).toBe('stalled');
+    const routed = await routeStalledBuildOrders(sql, open, now);
+    expect(routed[0]?.wrote).toBe(true);
+    await db.exec('RESET ROLE');
+
+    const stalls = await db.query<{ basket: string; src: string }>(
+      `SELECT basket, ingest_source AS src FROM tasks WHERE ingest_source = 'dept2-stall'`
+    );
+    expect(stalls.rows).toHaveLength(1);
+    expect(stalls.rows[0]).toMatchObject({ basket: 'in', src: 'dept2-stall' });
   });
 });

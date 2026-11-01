@@ -13,7 +13,6 @@ import type { DabosSql } from '@/lib/dabos/dabos-connection';
 import {
   buildOpenOrdersSection,
   readOpenOrders,
-  routeStalledBuildOrders,
   type OpenOrderLine,
 } from '@/lib/dabos/build-receipt';
 import { closedOrgWeek, type OrgStatWeek } from '@/lib/dabos/org-week';
@@ -812,13 +811,8 @@ export async function collectDigestInput(deps: {
     approvals = await safe('neon approval_queue', () => readPendingApprovals(sql));
     stats = await safe('neon stats', () => readStatsPosted(sql, week));
     cadence = await safe('neon role_runs', () => readLatestCadenceRuns(sql));
+    // Display only. Stall INSERTs run under dabos_build_receipt via `dabos:route-stalls`.
     openOrders = await safe('neon open-orders', () => readOpenOrders(sql, deps.now));
-    if (openOrders) {
-      const stalled = openOrders.filter((o) => o.status === 'stalled');
-      if (stalled.length) {
-        await safe('neon stall-route', () => routeStalledBuildOrders(sql, stalled, deps.now));
-      }
-    }
   } else sourceErrors.push({ source: 'neon', error: 'DABOS_DIGEST_DATABASE_URL not set' });
 
   const systemd = deps.run

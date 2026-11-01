@@ -1,10 +1,12 @@
 -- Div4 build-receipt + stall-route role grants (files only; not applied by this PR).
 -- Acceptance: docs/acceptance/2026-11-01_build_receipts_open_orders_stall.ACCEPTANCE.md
+--             + AMENDMENT-1.md
 --
 -- Before this file: Logan creates the role in the Neon SQL editor:
 --   CREATE ROLE dabos_build_receipt LOGIN PASSWORD '<chosen by Logan, never pasted into chat>';
--- Then puts the role's connection string where the HZR52 / digest stall-route runner can read it
--- (mode 600). Never commit secrets.
+-- Then puts the role's connection string in:
+--   HZR52 / ln02  ~/.config/dabos/build-receipt.env  as DABOS_BUILD_RECEIPT_DATABASE_URL (mode 600).
+-- Never commit secrets. No fallback to DATABASE_URL.
 --
 -- Run whole, as one transaction:
 --   psql "<owner DATABASE_URL>" -v ON_ERROR_STOP=1 -1 -f scripts/dabos/sql/2026-11-01_build_receipt_role_grants.sql
@@ -13,6 +15,8 @@
 -- Grants: USAGE on schema public; SELECT + INSERT on public.tasks. Nothing else.
 -- Guards refuse PUBLIC CREATE on the database but NOT PUBLIC TEMPORARY (prod datacl
 -- `=Tc/neondb_owner`). Membership uses member = role; PG16+ CREATEROLE creator ADMIN allowed.
+-- Guard 3 matches the #61 status-digest standard (column ACLs, FDW/server/LO, pg_parameter_acl,
+-- has_any_column_privilege).
 
 BEGIN;
 
@@ -103,6 +107,11 @@ BEGIN
     RAISE EXCEPTION 'guard 3d: % has % unintended table/view/sequence grant(s)', r, n;
   END IF;
   SELECT count(*) INTO n
+    FROM pg_attribute att, aclexplode(att.attacl) a WHERE a.grantee = roid;
+  IF n > 0 THEN
+    RAISE EXCEPTION 'guard 3d: % has % column grant(s)', r, n;
+  END IF;
+  SELECT count(*) INTO n
     FROM pg_namespace ns, aclexplode(ns.nspacl) a
    WHERE a.grantee = roid AND NOT (ns.nspname = 'public' AND a.privilege_type = 'USAGE');
   IF n > 0 THEN
@@ -113,9 +122,19 @@ BEGIN
        + (SELECT count(*) FROM pg_language l, aclexplode(l.lanacl) a WHERE a.grantee = roid)
        + (SELECT count(*) FROM pg_database d, aclexplode(d.datacl) a WHERE a.grantee = roid)
        + (SELECT count(*) FROM pg_tablespace sp, aclexplode(sp.spcacl) a WHERE a.grantee = roid)
+       + (SELECT count(*) FROM pg_foreign_data_wrapper w, aclexplode(w.fdwacl) a WHERE a.grantee = roid)
+       + (SELECT count(*) FROM pg_foreign_server fs, aclexplode(fs.srvacl) a WHERE a.grantee = roid)
+       + (SELECT count(*) FROM pg_largeobject_metadata lo, aclexplode(lo.lomacl) a WHERE a.grantee = roid)
     INTO n;
   IF n > 0 THEN
-    RAISE EXCEPTION 'guard 3d: % has % grant(s) on functions/types/languages/databases/tablespaces', r, n;
+    RAISE EXCEPTION 'guard 3d: % has % grant(s) on functions, types, languages, databases, tablespaces, foreign wrappers/servers or large objects', r, n;
+  END IF;
+  IF to_regclass('pg_catalog.pg_parameter_acl') IS NOT NULL THEN
+    EXECUTE 'SELECT count(*) FROM pg_catalog.pg_parameter_acl pa, aclexplode(pa.paracl) a WHERE a.grantee = $1'
+      INTO n USING roid;
+    IF n > 0 THEN
+      RAISE EXCEPTION 'guard 3d: % has % parameter grant(s)', r, n;
+    END IF;
   END IF;
 
   SELECT count(*) INTO n
@@ -145,6 +164,11 @@ BEGIN
         IF has_table_privilege(r, rel.oid, p)
            AND NOT (rel.oid = tasks_oid AND p IN ('SELECT', 'INSERT')) THEN
           RAISE EXCEPTION 'guard 3f: % has % on %; refusing', r, p, rel.name;
+        END IF;
+      END LOOP;
+      FOREACH p IN ARRAY ARRAY['SELECT', 'INSERT', 'UPDATE', 'REFERENCES'] LOOP
+        IF NOT has_table_privilege(r, rel.oid, p) AND has_any_column_privilege(r, rel.oid, p) THEN
+          RAISE EXCEPTION 'guard 3f: % has column % on %; refusing', r, p, rel.name;
         END IF;
       END LOOP;
     END IF;

@@ -42,6 +42,7 @@
     "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts",
     "dabos:hat-receipt": "tsx scripts/dabos/hat-receipt.ts",
     "dabos:build-receipt": "tsx scripts/dabos/build-receipt.ts",
+    "dabos:route-stalls": "tsx scripts/dabos/build-receipt.ts route-stalls",
     "dabos:comm-center-rollback-export": "tsx scripts/dabos/comm-center-rollback-export.ts",
     "dabos:route": "tsx scripts/dabos/route.ts",
     "intake:run": "tsx scripts/dabos-ops/run-local-intake.ts",

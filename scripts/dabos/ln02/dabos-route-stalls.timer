@@ -1,0 +1,12 @@
+# Div4: hourly Europe/Berlin stall scan (separate from the status digest timer).
+[Unit]
+Description=DABOS build-receipt route-stalls timer (hourly Berlin)
+
+[Timer]
+OnCalendar=*-*-* *:00:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=dabos-route-stalls.service
+
+[Install]
+WantedBy=timers.target
