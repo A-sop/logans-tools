@@ -22,7 +22,7 @@ import {
 
 /** Dedicated least-privilege URL. Never falls back to DATABASE_URL / .env.local owner. */
 export function requireBuildReceiptDatabaseUrl(
-  env: NodeJS.ProcessEnv = process.env
+  env: Record<string, string | undefined> = process.env
 ): string {
   const url = env.DABOS_BUILD_RECEIPT_DATABASE_URL?.trim();
   if (!url) {

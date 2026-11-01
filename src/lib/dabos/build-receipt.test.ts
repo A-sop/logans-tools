@@ -350,7 +350,7 @@ describe('DABOS_BUILD_RECEIPT_DATABASE_URL (no DATABASE_URL fallback)', () => {
       requireBuildReceiptDatabaseUrl({
         DABOS_BUILD_RECEIPT_DATABASE_URL: 'postgres://receipt-role@localhost/db',
         DATABASE_URL: 'postgres://owner@localhost/db',
-      } as NodeJS.ProcessEnv)
+      })
     ).toBe('postgres://receipt-role@localhost/db');
   });
 
@@ -363,7 +363,7 @@ describe('DABOS_BUILD_RECEIPT_DATABASE_URL (no DATABASE_URL fallback)', () => {
       requireBuildReceiptDatabaseUrl({
         DATABASE_URL: 'postgres://owner@localhost/db',
         DATABASE_URL_UNPOOLED: 'postgres://owner@localhost/db',
-      } as NodeJS.ProcessEnv)
+      })
     ).toThrow(/process\.exit 1/);
     expect(errSpy.mock.calls.some((c) => String(c[0]).includes('DABOS_BUILD_RECEIPT_DATABASE_URL'))).toBe(
       true
