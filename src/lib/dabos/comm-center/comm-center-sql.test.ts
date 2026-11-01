@@ -200,36 +200,35 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
         '{"from":"Div1","to":"Div4"}'::jsonb);
     `);
     await db.exec(courierSql);
-    let row = await db.query<{
+    const afterRoute = await db.query<{
       basket: string;
       division_id: string;
-      assigned_agent: string | null;
       ingest_meta: { to?: string; routed_at?: string; filed_at?: string };
-    }>(`SELECT basket, division_id, assigned_agent, ingest_meta FROM tasks WHERE title = 'round-trip'`);
-    expect(row.rows[0]?.basket).toBe('in');
-    expect(row.rows[0]?.division_id).toBe('Div4');
-    expect(row.rows[0]?.ingest_meta?.to).toBeUndefined();
+    }>(`SELECT basket, division_id, ingest_meta FROM tasks WHERE title = 'round-trip'`);
+    expect(afterRoute.rows[0]?.basket).toBe('in');
+    expect(afterRoute.rows[0]?.division_id).toBe('Div4');
+    expect(afterRoute.rows[0]?.ingest_meta?.to).toBeUndefined();
 
     // Hat receipt: recipient finishes → OUT, meta unchanged (no new to).
     await db.exec(`UPDATE tasks SET basket = 'out', updated_at = NOW() WHERE title = 'round-trip'`);
     await db.exec(courierSql);
-    row = await db.query<{
+    const afterReceipt = await db.query<{
       basket: string;
       division_id: string;
       ingest_meta: { to?: string; filed_at?: string; routed_at?: string };
     }>(`SELECT basket, division_id, ingest_meta FROM tasks WHERE title = 'round-trip'`);
     // Filed (no to), still OUT — not bounced back to IN.
-    expect(row.rows[0]?.basket).toBe('out');
-    expect(row.rows[0]?.ingest_meta?.filed_at).toBeTruthy();
-    expect(row.rows[0]?.ingest_meta?.to).toBeUndefined();
+    expect(afterReceipt.rows[0]?.basket).toBe('out');
+    expect(afterReceipt.rows[0]?.ingest_meta?.filed_at).toBeTruthy();
+    expect(afterReceipt.rows[0]?.ingest_meta?.to).toBeUndefined();
 
     // Another courier pass must not revive it.
     await db.exec(courierSql);
-    row = await db.query<{ basket: string; division_id: string }>(
+    const afterAgain = await db.query<{ basket: string; division_id: string }>(
       `SELECT basket, division_id FROM tasks WHERE title = 'round-trip'`
     );
-    expect(row.rows[0]?.basket).toBe('out');
-    expect(row.rows[0]?.division_id).toBe('Div4');
+    expect(afterAgain.rows[0]?.basket).toBe('out');
+    expect(afterAgain.rows[0]?.division_id).toBe('Div4');
   });
 
   it('excludes filed_at / done OUT from re-delivery (Amendment 2)', async () => {
