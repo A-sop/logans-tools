@@ -118,4 +118,42 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
     );
     expect(gone.rows.length).toBe(0);
   });
+
+  it('routing never sets basket=pending (courier OUT→recipient IN; Amendment 1)', async () => {
+    // CHAT-DRAIN L23 "pending when routed" must not be carried over.
+    const courier = readRepoFile('ops/ln02/comm-center/courier.sh');
+    const routeStart = courier.indexOf('-- 3) Route OUT');
+    const routeEnd = courier.indexOf('-- 4) P2:');
+    expect(routeStart).toBeGreaterThan(-1);
+    expect(routeEnd).toBeGreaterThan(routeStart);
+    const routeBlock = courier.slice(routeStart, routeEnd);
+    expect(routeBlock).toMatch(/SET basket = 'in'/);
+    expect(routeBlock).not.toMatch(/basket\s*=\s*'pending'/);
+
+    const sqlStart = courier.indexOf("COURIER_SQL=\"$(cat <<'SQL'");
+    const sqlBodyStart = courier.indexOf('\n', sqlStart) + 1;
+    const sqlBodyEnd = courier.indexOf('\nSQL\n', sqlBodyStart);
+    const courierSql = courier.slice(sqlBodyStart, sqlBodyEnd);
+
+    db = await setup();
+    // Sender writes OUT; courier delivers to recipient IN (never PENDING).
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, ingest_meta)
+      VALUES
+        ('Div1', 'Dept2', 'despatch-to-div4', 'todo', 'out',
+          '{"from":"Div1","to":"Div4"}'::jsonb),
+        ('Div4', 'Dept12', 'despatch-to-div1', 'todo', 'out',
+          '{"from":"Div4","to":"Div1"}'::jsonb);
+    `);
+    await db.exec(courierSql);
+    const rows = await db.query<{ title: string; basket: string; division_id: string }>(
+      `SELECT title, basket, division_id FROM tasks WHERE title LIKE 'despatch-%' ORDER BY title`
+    );
+    const by = Object.fromEntries(rows.rows.map((r) => [r.title, r]));
+    expect(by['despatch-to-div4']?.basket).toBe('in');
+    expect(by['despatch-to-div4']?.division_id).toBe('Div4');
+    expect(by['despatch-to-div1']?.basket).toBe('in');
+    expect(by['despatch-to-div1']?.division_id).toBe('Div1');
+    expect(rows.rows.every((r) => r.basket !== 'pending')).toBe(true);
+  });
 });
