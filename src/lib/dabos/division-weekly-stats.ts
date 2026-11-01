@@ -46,6 +46,17 @@ export type DivisionWeeklyResult = {
 const REGISTERS =
   process.env.DABOS_REGISTERS_ROOT?.trim() || path.join('C:', 'DATA', '10_WORK', 'dabos-registers');
 const DABOS_REPO_ROOT = process.env.DABOS_REPO_ROOT?.trim() || path.join('C:', 'Dev', 'DABOS');
+
+/**
+ * Div1 wiki source root: DABOS_WIKI_REPO_ROOT (e.g. ln02's dedicated clone fetched after the close),
+ * else DABOS_REPO_ROOT, else the office default. Only Div1 reads it; ship-log/validation/establishment
+ * stay on DABOS_REPO_ROOT (RR-010 step 0).
+ */
+export function resolveDiv1WikiRepoRoot(
+  env: Record<string, string | undefined> = process.env
+): string {
+  return env.DABOS_WIKI_REPO_ROOT?.trim() || env.DABOS_REPO_ROOT?.trim() || path.join('C:', 'Dev', 'DABOS');
+}
 const SHIP_LOG = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'ship-log.md');
 const VALIDATION = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'dept13-validation-checklists.md');
 const ESTABLISHMENT = path.join(
@@ -355,7 +366,7 @@ export async function postDivisionWeeklyStats(opts: {
   includeProvisoMonths?: number;
   /** Post only these divisions (e.g. ['Div1'] for a one-off backfill). Default: all. */
   only?: string[];
-  /** Test hooks: DABOS checkout root (default DABOS_REPO_ROOT) and git runner. */
+  /** Test hooks: Div1 DABOS checkout root (default resolveDiv1WikiRepoRoot()) and git runner. */
   dabosRepoRoot?: string;
   git?: GitRunner;
   /** Div1 wiki source (default env DABOS_WIKI_SOURCE, else 'auto'); see artifacts-indexed.ts. */
@@ -406,7 +417,7 @@ export async function postDivisionWeeklyStats(opts: {
   // Div1: wiki pages ADDED in the closed week (never the running total, never a silent 0).
   const div1 = await computeArtifactsIndexedWeekly({
     window,
-    repoRoot: opts.dabosRepoRoot ?? DABOS_REPO_ROOT,
+    repoRoot: opts.dabosRepoRoot ?? resolveDiv1WikiRepoRoot(),
     gitRef: process.env.DABOS_WIKI_GIT_REF?.trim() || DEFAULT_WIKI_GIT_REF,
     source: opts.wikiSource ?? (process.env.DABOS_WIKI_SOURCE?.trim() === 'snapshot' ? 'snapshot' : 'auto'),
     git: opts.git,

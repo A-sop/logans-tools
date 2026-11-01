@@ -1,0 +1,10 @@
+[Unit]
+Description=DABOS ln02: fetch + fast-forward-only for ~/Dev/logans-tools and ~/Dev/DABOS-weekclose (never resets or forces)
+After=network-online.target
+ConditionPathExists=%h/bin/dabos-checkout-sync.sh
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/dabos-checkout-sync.sh
+TimeoutStartSec=20min
+Nice=10

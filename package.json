@@ -37,6 +37,7 @@
     "dabos:post-gfp-weekly-stats": "tsx scripts/dabos/post-gfp-weekly-stats.ts",
     "dabos:post-gbp-presence": "tsx scripts/dabos/post-gbp-presence.ts",
     "dabos:post-division-weekly-stats": "tsx scripts/dabos/post-division-weekly-stats.ts",
+    "dabos:div1-dry-run": "tsx scripts/dabos/div1-artifacts-dry-run.ts",
     "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts",
     "dabos:hat-receipt": "tsx scripts/dabos/hat-receipt.ts",
     "dabos:route": "tsx scripts/dabos/route.ts",
