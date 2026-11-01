@@ -29,6 +29,9 @@ here (removed in a later step, only after ln02 is verified). No Neon writes in t
 
 ## Acceptance lines
 
+Amended 1 Nov 2026 after Dept13 FAIL on #59 @df41237758a314d1dd0ae0a985d04e967e42ae75: lines 4
+and 8 (FAIL flag cleared only by a full clean run), new line 11 (owner post and routing).
+
 1. `postDivisionWeeklyStats` reads the Div1 wiki source root from `DABOS_WIKI_REPO_ROOT` when set,
    else `DABOS_REPO_ROOT`, else `C:\Dev\DABOS` (unchanged default). Only Div1 uses it: ship-log,
    validation and establishment inputs stay on `DABOS_REPO_ROOT` (the mirror on ln02), unchanged.
@@ -46,9 +49,15 @@ here (removed in a later step, only after ln02 is verified). No Neon writes in t
    repo untouched, marks the repo failed. It never runs `reset`, `checkout -f`, `clean`, `push` or
    `--force`. For logans-tools, `npm ci` runs only when `package-lock.json` changed in the
    fast-forward, and `node_modules/.bin/tsx` must exist afterwards.
-4. The sync writes `~/.local/state/dabos/checkout-sync.status.json` and keeps
-   `~/.local/state/dabos/checkout-sync.FAIL` while any repo failed (removed on a clean run); exit code
-   non-zero when a repo failed. `~/.config/dabos/PAUSE-checkout-sync` present = nothing runs, exit 0.
+4. The sync records each repo's latest real state in `~/.local/state/dabos/checkout-sync.repos/`
+   and writes `~/.local/state/dabos/checkout-sync.status.json` with this run's results, the run kind
+   (`full` when `SYNC_REPOS` equals the full set `SYNC_ALL_REPOS`, else `narrow`), and the latest
+   state of EVERY repo, so a run never wipes another repo's failure. It keeps
+   `~/.local/state/dabos/checkout-sync.FAIL` while any repo's latest state is a failure. The flag is
+   cleared ONLY by a full run in which every repo synced cleanly (`ok` or `up_to_date`). A narrow run
+   (e.g. the week-close DABOS-only pre-sync), a skipped repo (the Thursday window), a pause or a
+   week-close-running skip never clears it, and a skip never overwrites a repo's recorded state.
+   Exit code non-zero when a repo failed in this run. `~/.config/dabos/PAUSE-checkout-sync` present = nothing runs, exit 0.
    It does not take the week-close lock. It skips everything while `dabos-week-close-ln02.service`
    is active/activating (except when called by that unit's ExecStartPre), and skips the logans-tools
    update (fetch included) on Thursdays 13:45-15:00 Berlin so `npm ci` never overlaps the close.
@@ -69,10 +78,16 @@ here (removed in a later step, only after ln02 is verified). No Neon writes in t
    nothing.
 8. A vitest runs the real sync script with bash on temporary git repos: behind -> fast-forwarded and
    status ok; diverged -> untouched, FAIL flag, non-zero; dirty tracked tree -> refused, untouched;
-   wrong branch -> refused; PAUSE file -> no-op. Skipped where no POSIX bash exists. Full suite passes.
+   wrong branch -> refused; PAUSE file -> no-op and keeps FAIL and the recorded states; a narrow run
+   keeps FAIL (and the other repo's failure in the status); a Thursday-window skip keeps FAIL; a full
+   run with every repo clean clears FAIL; a full run with one repo failing keeps it. Skipped where no POSIX bash exists. Full suite passes.
 9. Files under `ops/ln02/` are committed with LF line endings (`ops/ln02/.gitattributes`).
 10. No Neon write, no Vercel change, no secret read or printed. Nothing is applied on ln02 without a
     Dept13 PASS and Logan's merge yes; any push after a PASS needs re-validation.
+11. Owner and routing: `checkout-sync.FAIL` is owned by Dept12 Production (Div4), named in
+    `ops/ln02/README.md` and in the script header. It is routed so it is read: the ln02 status digest
+    (logans-tools #61) reads `checkout-sync.FAIL` and `checkout-sync.status.json` and shows the flag
+    as a machine alert naming the failing repos and the owner post; later the watchman also reads it.
 
 ## Apply steps (ln02, as logancontrol, after Dept13 PASS + merge)
 
