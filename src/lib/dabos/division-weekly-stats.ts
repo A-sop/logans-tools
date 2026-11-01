@@ -319,8 +319,10 @@ async function insertStat(
 /**
  * The previous stat week's ACTIVE live Div1 row (superseded_at is null; any recorded_by, e.g. the
  * week-close poster or a backfill such as #49): its basis.page_fingerprints are this week's start
- * point. Null when no such row exists; throws when the row's fingerprints are malformed (a wrong
- * format would silently count every page as added).
+ * point. Null when no such row exists. When the row lacks page_fingerprints (legacy pre-fingerprint
+ * poster), returns missingFingerprints so compute can reconstruct from wiki git history. Throws
+ * when fingerprints are present but malformed (a wrong format would silently count every page as
+ * added) — never reconstructs in that case.
  */
 export async function loadPreviousDiv1Fingerprints(
   dabosSql: DabosSql,
@@ -344,15 +346,22 @@ export async function loadPreviousDiv1Fingerprints(
     page_fingerprints?: unknown;
     git_end_commit?: unknown;
   } | null;
-  const fps = basis?.page_fingerprints;
+  const end = basis?.git_end_commit;
+  const gitEndCommit = typeof end === 'string' && /^[0-9a-f]{40}$/.test(end) ? end : null;
+  const hasFpsKey = basis != null && typeof basis === 'object' && 'page_fingerprints' in basis;
+  const fps = hasFpsKey ? basis.page_fingerprints : undefined;
+  // Absent / null / undefined = legacy row (W43 poster, W31–W43 backfill). Reconstruct later.
+  // Never treat as an empty fingerprint set.
+  if (!hasFpsKey || fps === null || fps === undefined) {
+    return { week: prev.id, fingerprints: [], gitEndCommit, missingFingerprints: true };
+  }
   if (!Array.isArray(fps) || !fps.every((f) => typeof f === 'string' && FINGERPRINT_RE.test(f))) {
     throw new Error(`${prevWorkspace} Div1 row has no valid basis.page_fingerprints (16 lowercase hex strings)`);
   }
-  const end = basis?.git_end_commit;
   return {
     week: prev.id,
     fingerprints: fps as string[],
-    gitEndCommit: typeof end === 'string' && /^[0-9a-f]{40}$/.test(end) ? end : null,
+    gitEndCommit,
   };
 }
 
