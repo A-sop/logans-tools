@@ -1,0 +1,11 @@
+[Unit]
+Description=Every 15 min at :07/:22/:37/:52: ln02 checkout sync (Thursday fetches land at 14:07 and 14:22 Berlin, before the 14:30 close)
+
+[Timer]
+OnCalendar=*-*-* *:07/15:00
+Persistent=false
+AccuracySec=30s
+Unit=dabos-checkout-sync.service
+
+[Install]
+WantedBy=timers.target
