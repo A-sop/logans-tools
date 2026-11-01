@@ -517,7 +517,7 @@ describe('send, dedupe and full ticks on PGlite', { timeout: 60_000 }, () => {
 describe('ln02 files and runner hygiene (AC6)', () => {
   const service = readRepoFile('scripts/dabos/ln02/dabos-watchman.service');
   const timer = readRepoFile('scripts/dabos/ln02/dabos-watchman.timer');
-  const install = readRepoFile('scripts/dabos/ln02/install-watchman.sh');
+  const install = readRepoFile('scripts/dabos/ln02/install-watchman.sh').replace(/\r\n/g, '\n'); // CRLF-safe on Windows checkouts
   const runner = readRepoFile('scripts/dabos/watchman.ts');
   const lib = readRepoFile('src/lib/dabos/watchman.ts');
 
