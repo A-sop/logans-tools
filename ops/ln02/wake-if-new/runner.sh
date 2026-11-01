@@ -37,6 +37,7 @@ fi
 
 wake_read_state "$JOB"
 export STATE_CURSOR STATE_LAST_WAKE JOB
+export STATE_CURSOR_TELEGRAM STATE_CURSOR_MAIL STATE_CURSOR_STATUS
 export WAKE_STATE_DIR WAKE_ENV_FILE
 
 # Resolve check module
@@ -79,11 +80,15 @@ parse_bool_ok() {
 }
 
 DECISION=""; NEW_CURSOR=""; REASON=""; OK=0
+NEW_CT=""; NEW_CM=""; NEW_CS=""
 if [ "$CHECK_RC" -eq 0 ] && parse_bool_ok "$CHECK_OUT"; then
   OK=1
   DECISION="$(parse_field "$CHECK_OUT" decision)"
   NEW_CURSOR="$(parse_field "$CHECK_OUT" cursor)"
   REASON="$(parse_field "$CHECK_OUT" reason)"
+  NEW_CT="$(parse_field "$CHECK_OUT" cursor_telegram)"
+  NEW_CM="$(parse_field "$CHECK_OUT" cursor_mail)"
+  NEW_CS="$(parse_field "$CHECK_OUT" cursor_status)"
 fi
 
 JOB_UPPER="$(wake_job_upper "$JOB")"
@@ -92,6 +97,23 @@ KEY_VAR="WAKE_${JOB_UPPER}_KEY"
 URL="${!URL_VAR:-}"
 KEY="${!KEY_VAR:-}"
 
+# Persist state keeping prior per-source cursors unless new ones are provided.
+write_ok_state() {
+  local cursor_out="$1" last_wake="$2" errors="$3"
+  local ct cm cs
+  ct="${NEW_CT:-$STATE_CURSOR_TELEGRAM}"
+  cm="${NEW_CM:-$STATE_CURSOR_MAIL}"
+  cs="${NEW_CS:-$STATE_CURSOR_STATUS}"
+  wake_write_state "$JOB" "$cursor_out" "$last_wake" "$errors" "$ct" "$cm" "$cs"
+}
+
+# Keep prior cursors on failure (do not advance).
+write_fail_state() {
+  local errors="$1"
+  wake_write_state "$JOB" "$STATE_CURSOR" "$STATE_LAST_WAKE" "$errors" \
+    "$STATE_CURSOR_TELEGRAM" "$STATE_CURSOR_MAIL" "$STATE_CURSOR_STATUS"
+}
+
 do_wake() {
   local reason="$1" cursor_out="$2"
   local body
@@ -99,18 +121,18 @@ do_wake() {
   if [ -z "$URL" ] || [ -z "$KEY" ]; then
     wake_log_json event=wake-missing-hook decision=error reason="$reason"
     wake_csv_append "$JOB" error
-    wake_write_state "$JOB" "${cursor_out:-$STATE_CURSOR}" "$STATE_LAST_WAKE" "$((STATE_ERRORS + 1))"
+    write_fail_state "$((STATE_ERRORS + 1))"
     return 1
   fi
   if ! wake_post_webhook "$URL" "$KEY" "$body"; then
     wake_log_json event=wake-post-failed decision=error reason="$reason"
     wake_csv_append "$JOB" error
-    wake_write_state "$JOB" "${cursor_out:-$STATE_CURSOR}" "$STATE_LAST_WAKE" "$((STATE_ERRORS + 1))"
+    write_fail_state "$((STATE_ERRORS + 1))"
     return 1
   fi
   wake_log_json event=woke decision=wake reason="$reason"
   wake_csv_append "$JOB" wake
-  wake_write_state "$JOB" "${cursor_out:-$STATE_CURSOR}" "$(wake_iso_now)" 0
+  write_ok_state "${cursor_out:-$STATE_CURSOR}" "$(wake_iso_now)" 0
   return 0
 }
 
@@ -121,16 +143,14 @@ if [ "$OK" -ne 1 ]; then
   NEXT_ERRORS=$((STATE_ERRORS + 1))
   wake_log_json event=check-error decision=error reason="$ERR_REASON" errors="$NEXT_ERRORS"
   if [ "$NEXT_ERRORS" -ge "$ERROR_WAKE_AFTER" ]; then
-    # Wake once with check-error so nothing is lost; reset counter after attempt
     if do_wake "check-error" "$STATE_CURSOR"; then
-      # do_wake already reset errors to 0 on success
       exit 0
     fi
-    wake_write_state "$JOB" "$STATE_CURSOR" "$STATE_LAST_WAKE" "$NEXT_ERRORS"
+    write_fail_state "$NEXT_ERRORS"
     exit 1
   fi
   wake_csv_append "$JOB" error
-  wake_write_state "$JOB" "$STATE_CURSOR" "$STATE_LAST_WAKE" "$NEXT_ERRORS"
+  write_fail_state "$NEXT_ERRORS"
   exit 0
 fi
 
@@ -140,7 +160,7 @@ case "$DECISION" in
   skip)
     wake_log_json event=checked decision=skip reason="${REASON:-none}"
     wake_csv_append "$JOB" skip
-    wake_write_state "$JOB" "$NEW_CURSOR" "$STATE_LAST_WAKE" 0
+    write_ok_state "$NEW_CURSOR" "$STATE_LAST_WAKE" 0
     exit 0
     ;;
   wake)
@@ -150,7 +170,7 @@ case "$DECISION" in
   *)
     wake_log_json event=bad-decision decision=error reason="${DECISION:-empty}"
     wake_csv_append "$JOB" error
-    wake_write_state "$JOB" "$STATE_CURSOR" "$STATE_LAST_WAKE" "$((STATE_ERRORS + 1))"
+    write_fail_state "$((STATE_ERRORS + 1))"
     exit 1
     ;;
 esac

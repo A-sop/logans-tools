@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Wake if this division has new Neon rows or matching GitHub PR activity since STATE_CURSOR.
 # Env: WAKE_STATUS_DATABASE_URL (or WAKE_DATABASE_URL), WAKE_GITHUB_TOKEN (read-only).
-# STATUS_DIVISION=Div1..Div7 (set by runner).
+# STATUS_DIVISION=Div1..Div7 (set by runner). Cursor is monotonic (max of Neon + GitHub).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck disable=SC1091
@@ -46,7 +46,7 @@ if [ -n "$DB" ]; then
     wake_emit_check_result 0 "" "" "" "psql-not-found"
     exit 1
   fi
-  ROW="$(psql "$DB" -v ON_ERROR_STOP=1 -tA -c "
+  ROW="$(wake_psql "$DB" -tA -c "
     WITH bounds AS (SELECT '${CURSOR}'::timestamptz AS c),
     hits AS (
       SELECT created_at AS ts FROM approval_queue, bounds
@@ -59,12 +59,15 @@ if [ -n "$DB" ]; then
       SELECT ran_at FROM role_runs, bounds
         WHERE ran_at > bounds.c AND role_id IN (${DEPTS})
     )
-    SELECT count(*)::text || '|' || coalesce(max(ts)::text,'') FROM hits;
+    SELECT count(*)::text || '|' || coalesce(to_char(max(ts) AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'),'') FROM hits;
   ")"
-  N="${ROW%%|*}"; MAX="${ROW#*|}"; N="${N//[[:space:]]/}"; MAX="${MAX//[[:space:]]/}"
+  N="$(wake_trim_psql_field "${ROW%%|*}")"
+  MAX="$(wake_trim_psql_field "${ROW#*|}")"
   if [ "${N:-0}" -gt 0 ]; then
     CHANGED=1
-    [ -n "$MAX" ] && NEW_CURSOR="$MAX"
+    if [ -n "$MAX" ]; then
+      NEW_CURSOR="$(wake_cursor_max "$NEW_CURSOR" "$MAX")"
+    fi
   fi
 fi
 
@@ -83,9 +86,13 @@ if [ -n "$GH" ]; then
     exit 1
   fi
   HN="${HIT%%|*}"; HM="${HIT#*|}"; HN="${HN:-0}"
+  HN="$(wake_trim_psql_field "$HN")"
+  HM="$(wake_trim_psql_field "$HM")"
   if [ "$HN" -gt 0 ]; then
     CHANGED=1
-    [ -n "$HM" ] && NEW_CURSOR="$HM"
+    if [ -n "$HM" ]; then
+      NEW_CURSOR="$(wake_cursor_max "$NEW_CURSOR" "$HM")"
+    fi
   fi
 fi
 
