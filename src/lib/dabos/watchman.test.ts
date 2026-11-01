@@ -282,15 +282,48 @@ async function freshDb(withRole = true): Promise<PGlite> {
 }
 
 describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { timeout: 60_000 }, () => {
+  // One PGlite for all refusal cases (drop/recreate the role between probes) so the full suite
+  // does not open a dozen WASM Postgres instances in parallel with other correction tests.
   let db: PGlite;
-  afterEach(async () => {
+  beforeAll(async () => {
+    db = await freshDb(false);
+  });
+  afterAll(async () => {
     if (db) await db.close();
   });
   const can = async (q: string, args: unknown[]) => (await db.query<{ ok: boolean }>(q, args)).rows[0]!.ok;
-  it('refuses when the role is missing, is a superuser, or is a member of another role', async () => {
-    db = await freshDb(false);
+  const resetRole = async () => {
+    await db.exec(`
+      DROP TABLE IF EXISTS public.agent_inbox CASCADE;
+      DROP TABLE IF EXISTS public.watchman_probe_owned;
+      DROP FUNCTION IF EXISTS public.watchman_probe();
+      DO $$
+      DECLARE r text;
+      BEGIN
+        FOREACH r IN ARRAY ARRAY['dabos_watchman', 'some_group', 'watchman_createrole_owner', 'watchman_probe_child']
+        LOOP
+          IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r) THEN
+            EXECUTE format('DROP OWNED BY %I CASCADE', r);
+            EXECUTE format('DROP ROLE %I', r);
+          END IF;
+        END LOOP;
+      END $$;
+      REVOKE INSERT ON public.tasks FROM PUBLIC;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+    `);
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`
+      DO $$ BEGIN
+        EXECUTE 'REVOKE CREATE, TEMPORARY ON DATABASE "${dbName}" FROM PUBLIC';
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
+    `);
+  };
+
+  it('refuses missing/superuser/member roles and every Amendment-2 footprint fault', async () => {
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 0/);
     await db.exec('ROLLBACK');
+
     await db.exec('CREATE ROLE dabos_watchman SUPERUSER');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 1/);
     await db.exec('ROLLBACK');
@@ -298,10 +331,9 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 1b/);
     await db.exec('ROLLBACK');
     expect((await db.query(`SELECT to_regclass('public.agent_inbox') AS t`)).rows[0]).toEqual({ t: null });
-  });
+    await resetRole();
 
-  it('refuses when the role already holds any other privilege (whole footprint)', async () => {
-    db = await freshDb();
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
     await db.exec('GRANT SELECT ON public.tasks TO dabos_watchman');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4a/);
     await db.exec('ROLLBACK');
@@ -311,60 +343,53 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     await db.exec('REVOKE UPDATE (title) ON public.tasks FROM dabos_watchman; GRANT CREATE ON SCHEMA public TO dabos_watchman');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4c/);
     await db.exec('ROLLBACK');
-  });
+    await resetRole();
 
-  it('guard 4h refuses PUBLIC privileges on other tables', async () => {
-    db = await freshDb();
-    await db.exec('GRANT INSERT ON public.tasks TO PUBLIC');
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN; GRANT INSERT ON public.tasks TO PUBLIC');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4h/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4i refuses PUBLIC CREATE on schema public', async () => {
-    db = await freshDb();
-    await db.exec('GRANT CREATE ON SCHEMA public TO PUBLIC');
+    await resetRole();
+
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN; GRANT CREATE ON SCHEMA public TO PUBLIC');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4i refuses PUBLIC CREATE on the database', async () => {
-    db = await freshDb();
+    await resetRole();
+
     const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
-    await db.exec(`GRANT CREATE ON DATABASE "${dbName}" TO PUBLIC`);
+    await db.exec(`CREATE ROLE dabos_watchman NOLOGIN; GRANT CREATE ON DATABASE "${dbName}" TO PUBLIC`);
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4i refuses PUBLIC TEMP on the database', async () => {
-    db = await freshDb();
-    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
-    await db.exec(`GRANT TEMP ON DATABASE "${dbName}" TO PUBLIC`);
+    await resetRole();
+
+    await db.exec(`CREATE ROLE dabos_watchman NOLOGIN; GRANT TEMP ON DATABASE "${dbName}" TO PUBLIC`);
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4i/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4f refuses EXECUTE on a function granted to dabos_watchman', async () => {
-    db = await freshDb();
+    await resetRole();
+
     await db.exec(
-      `CREATE FUNCTION public.watchman_probe() RETURNS int LANGUAGE sql AS $f$ SELECT 1 $f$; GRANT EXECUTE ON FUNCTION public.watchman_probe() TO dabos_watchman`
+      `CREATE ROLE dabos_watchman NOLOGIN; CREATE FUNCTION public.watchman_probe() RETURNS int LANGUAGE sql AS $f$ SELECT 1 $f$; GRANT EXECUTE ON FUNCTION public.watchman_probe() TO dabos_watchman`
     );
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4f/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4e refuses an object owned by the role', async () => {
-    db = await freshDb();
+    await resetRole();
+
     await db.exec(
-      `CREATE TABLE public.watchman_probe_owned (x int); ALTER TABLE public.watchman_probe_owned OWNER TO dabos_watchman`
+      `CREATE ROLE dabos_watchman NOLOGIN; CREATE TABLE public.watchman_probe_owned (x int); ALTER TABLE public.watchman_probe_owned OWNER TO dabos_watchman`
     );
-    // 1b catches ownership before CREATE TABLE; 4e re-checks after GRANTs.
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard (1b|4e)/);
     await db.exec('ROLLBACK');
-  });
-  it('guard 4g refuses default privileges for the role', async () => {
-    db = await freshDb();
-    await db.exec(`ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO dabos_watchman`);
+    await resetRole();
+
+    await db.exec(
+      `CREATE ROLE dabos_watchman NOLOGIN; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO dabos_watchman`
+    );
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4g/);
     await db.exec('ROLLBACK');
+    await resetRole();
   });
 
-  it('grants succeed when the role was created by a non-superuser CREATEROLE owner; extra membership still aborts', async () => {
-    db = await freshDb(false);
+  it('grants succeed for a CREATEROLE-created role; an extra membership still aborts', async () => {
+    await resetRole();
     await db.exec('CREATE ROLE watchman_createrole_owner NOLOGIN CREATEROLE');
     await db.exec('SET ROLE watchman_createrole_owner');
     await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
@@ -374,9 +399,10 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
       (await db.query<{ ok: boolean }>(`SELECT has_table_privilege('dabos_watchman', 'public.agent_inbox', 'SELECT') AS ok`))
         .rows[0]!.ok
     ).toBe(true);
-    await db.close();
+    await db.exec(`SET dabos.watchman_undo_drop_rows = 'on'`);
+    await db.exec(UNDO_FILE);
+    await resetRole();
 
-    db = await freshDb(false);
     await db.exec('CREATE ROLE watchman_createrole_owner NOLOGIN CREATEROLE');
     await db.exec('SET ROLE watchman_createrole_owner');
     await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
@@ -384,10 +410,12 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     await db.exec('CREATE ROLE watchman_probe_child NOLOGIN; GRANT dabos_watchman TO watchman_probe_child');
     await expect(db.exec(SQL_FILE)).rejects.toThrow(/guard 4d/);
     await db.exec('ROLLBACK');
+    await resetRole();
   });
 
   it('creates the table with exact grants, re-runs cleanly, refuses logan from_agent, refuses a foreign shape, and undoes', async () => {
-    db = await freshDb();
+    await resetRole();
+    await db.exec('CREATE ROLE dabos_watchman NOLOGIN');
     await db.exec(SQL_FILE);
     await db.exec(SQL_FILE);
     const tp = (t: string, p: string) => can(`SELECT has_table_privilege('dabos_watchman', $1, $2) AS ok`, [t, p]);
@@ -413,6 +441,7 @@ describe.sequential('agent_inbox SQL (not applied by this PR) on PGlite', { time
     ).rejects.toThrow(/agent_inbox_status/);
 
     await db.exec(`INSERT INTO agent_inbox (from_agent, to_agent, subject, dedupe_key) VALUES ('div4','div5','made-up','div4:x')`);
+    await db.exec(`SET dabos.watchman_undo_drop_rows = 'off'`);
     await expect(db.exec(UNDO_FILE)).rejects.toThrow(/has 1 rows/);
     await db.exec('ROLLBACK');
     await db.exec(`SET dabos.watchman_undo_drop_rows = 'on'`);
