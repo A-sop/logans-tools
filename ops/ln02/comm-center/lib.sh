@@ -8,13 +8,74 @@ cc_post_upper() {
   printf '%s' "$1" | tr '[:lower:]' '[:upper:]'
 }
 
+# Parse literal KEY=VALUE lines (no shell source / expansion). Refuses mode wider than 600
+# or owner ≠ current uid, except *.example files (clocks templates; no secrets).
 cc_load_env() {
   local f="${1:-}"
   [ -n "$f" ] && [ -f "$f" ] || return 0
-  set -a
-  # shellcheck disable=SC1090
-  . "$f"
-  set +a
+
+  local mode owner me base enforce=1
+  base="$(basename "$f")"
+  # NTFS under MSYS/MINGW often cannot honour chmod 600; ln02 is Linux and enforces.
+  case "$(uname -s 2>/dev/null || true)" in
+    MINGW*|MSYS*|CYGWIN*) enforce=0 ;;
+  esac
+
+  case "$base" in
+    *.example) enforce=0 ;;
+  esac
+
+  if [ "$enforce" = "1" ]; then
+    mode="$(stat -c '%a' "$f" 2>/dev/null || stat -f '%OLp' "$f" 2>/dev/null || echo "")"
+    owner="$(stat -c '%u' "$f" 2>/dev/null || stat -f '%u' "$f" 2>/dev/null || echo "")"
+    me="$(id -u)"
+    if [ -z "$mode" ] || [ -z "$owner" ]; then
+      echo "cc_load_env: cannot stat $f" >&2
+      return 1
+    fi
+    if [ "$owner" != "$me" ]; then
+      echo "cc_load_env: refusing $f (owner is not current user)" >&2
+      return 1
+    fi
+    # Wider than 600 ⇒ any group/other permission bit set (mode & 077 != 0).
+    case "$mode" in
+      *[!0-7]*|????*)
+        echo "cc_load_env: refusing $f (unrecognised mode $mode)" >&2
+        return 1
+        ;;
+    esac
+    if [ "$((8#$mode & 8#077))" -ne 0 ]; then
+      echo "cc_load_env: refusing $f (mode $mode wider than 600)" >&2
+      return 1
+    fi
+  fi
+
+  local line key val
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    case "$line" in
+      ''|\#*) continue ;;
+    esac
+    case "$line" in
+      *=*) ;;
+      *) continue ;;
+    esac
+    key="${line%%=*}"
+    val="${line#*=}"
+    case "$key" in
+      [A-Za-z_][A-Za-z0-9_]*) ;;
+      *) continue ;;
+    esac
+    # Strip one layer of matching single or double quotes only (literal; no expansion).
+    if [ "${#val}" -ge 2 ]; then
+      case "$val" in
+        \"*\") val="${val:1:${#val}-2}" ;;
+        \'*\') val="${val:1:${#val}-2}" ;;
+      esac
+    fi
+    printf -v "$key" '%s' "$val"
+    export "$key"
+  done <"$f"
 }
 
 cc_state_path() {
@@ -68,6 +129,121 @@ cc_csv_append() {
   printf '%s,%s,%s\n' "$post" "$(cc_iso_now)" "$decision" >>"$CC_CSV_FILE"
 }
 
+# Percent-decode for URL userinfo / path segments (best-effort; no secrets logged).
+cc_urldecode() {
+  local s="${1//+/ }"
+  printf '%b' "${s//%/\\x}"
+}
+
+# Export PG* / PGPASSFILE from a postgres URL. Never prints the URL or password.
+# Password goes to PGPASSFILE (mode 600) and PGPASSWORD; never on argv.
+cc_export_pg_from_url() {
+  local url="$1"
+  [ -n "$url" ] || return 1
+  case "$url" in
+    postgres://*|postgresql://*) ;;
+    *)
+      echo "cc_export_pg_from_url: unsupported URL scheme" >&2
+      return 1
+      ;;
+  esac
+
+  local rest userinfo hostpath hostport dbqs user pass host port db qs
+  rest="${url#postgres://}"
+  rest="${rest#postgresql://}"
+  userinfo="${rest%%@*}"
+  hostpath="${rest#*@}"
+  if [ "$userinfo" = "$rest" ]; then
+    echo "cc_export_pg_from_url: missing userinfo" >&2
+    return 1
+  fi
+
+  user="${userinfo%%:*}"
+  pass="${userinfo#*:}"
+  if [ "$pass" = "$userinfo" ]; then pass=""; fi
+  user="$(cc_urldecode "$user")"
+  pass="$(cc_urldecode "$pass")"
+
+  hostport="${hostpath%%/*}"
+  dbqs="${hostpath#*/}"
+  if [ "$hostport" = "$hostpath" ]; then
+    dbqs=""
+  fi
+  case "$hostport" in
+    \[*\].*) # unlikely IPv6 — take as host only if no port parse
+      host="$hostport"
+      port="5432"
+      ;;
+    *:*)
+      host="${hostport%:*}"
+      port="${hostport##*:}"
+      ;;
+    *)
+      host="$hostport"
+      port="5432"
+      ;;
+  esac
+
+  db="${dbqs%%\?*}"
+  qs=""
+  case "$dbqs" in
+    *\?*) qs="${dbqs#*\?}" ;;
+  esac
+  db="$(cc_urldecode "$db")"
+
+  local sslmode="require"
+  local pair k v
+  IFS='&' read -r -a pairs <<<"$qs"
+  for pair in "${pairs[@]+"${pairs[@]}"}"; do
+    [ -n "$pair" ] || continue
+    k="${pair%%=*}"
+    v="${pair#*=}"
+    case "$k" in
+      sslmode) sslmode="$(cc_urldecode "$v")" ;;
+    esac
+  done
+
+  export PGHOST="$host"
+  export PGPORT="$port"
+  export PGUSER="$user"
+  export PGDATABASE="$db"
+  export PGSSLMODE="$sslmode"
+  export PGPASSWORD="$pass"
+
+  local pgpass
+  pgpass="$(mktemp "${TMPDIR:-/tmp}/cc-pgpass.XXXXXX")"
+  chmod 600 "$pgpass"
+  # hostname:port:database:username:password
+  printf '%s:%s:%s:%s:%s\n' "$host" "$port" "$db" "$user" "$pass" >"$pgpass"
+  export PGPASSFILE="$pgpass"
+  CC_PGPASS_TMP="$pgpass"
+}
+
+cc_cleanup_pgpass() {
+  if [ -n "${CC_PGPASS_TMP:-}" ] && [ -f "${CC_PGPASS_TMP}" ]; then
+    rm -f "${CC_PGPASS_TMP}"
+  fi
+  unset CC_PGPASS_TMP
+}
+
+# Run psql with connection from env URL helpers — never put the URL on argv.
+cc_psql() {
+  local url="${COMM_CENTER_DATABASE_URL:-${WAKE_DATABASE_URL:-${DATABASE_URL:-}}}"
+  if [ -z "$url" ]; then
+    echo "cc_psql: COMM_CENTER_DATABASE_URL (or WAKE_DATABASE_URL) required" >&2
+    return 1
+  fi
+  cc_export_pg_from_url "$url" || return 1
+  local rc
+  set +e
+  psql -v ON_ERROR_STOP=1 "$@"
+  rc=$?
+  cc_cleanup_pgpass
+  set +e
+  return "$rc"
+}
+
+# POST webhook. Key and URL never appear on curl argv (curl --config + -H @file + body on stdin).
 cc_post_webhook() {
   local url="$1" key="$2" body="$3"
   local header_name="${WAKE_KEY_HEADER:-Authorization}"
@@ -81,12 +257,31 @@ cc_post_webhook() {
   if [ "${CC_DRY_RUN:-0}" = "1" ] || [ "${WAKE_DRY_RUN:-0}" = "1" ]; then
     return 0
   fi
-  curl -sS -f -X POST \
-    -H "${header_name}: ${auth}" \
-    -H "Content-Type: application/json" \
-    -d "$body" \
+
+  local tmp hdr cfg
+  tmp="$(mktemp -d "${TMPDIR:-/tmp}/cc-curl.XXXXXX")"
+  hdr="$tmp/hdr"
+  cfg="$tmp/curl.cfg"
+  printf '%s: %s\n' "$header_name" "$auth" >"$hdr"
+  chmod 600 "$hdr" "$cfg" 2>/dev/null || true
+  # curl config: url + headers via @file — no secret in process argv list.
+  {
+    printf 'url = "%s"\n' "${url//\\/\\\\}"
+    printf 'header = "@%s"\n' "$hdr"
+    printf 'header = "Content-Type: application/json"\n'
+  } >"$cfg"
+
+  local rc
+  set +e
+  printf '%s' "$body" | curl -sS -f -X POST \
+    --config "$cfg" \
+    -d @- \
     --max-time "${WAKE_HTTP_TIMEOUT:-30}" \
-    "$url" >/dev/null
+    >/dev/null
+  rc=$?
+  rm -rf "$tmp"
+  set +e
+  return "$rc"
 }
 
 # Berlin "now" parts: CC_DOW (mon..sun) CC_HM (HH:MM)
