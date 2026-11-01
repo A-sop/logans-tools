@@ -1,0 +1,18 @@
+# RR-010 step 1: watchman, the agent inbox gatekeeper (ln02 user unit). One tick per start.
+# Installed by scripts/dabos/ln02/install-watchman.sh, which replaces @REPO@ and @NODE_BIN@.
+# Secrets live only in the EnvironmentFile (mode 600, placed by Logan); none belong in this file.
+[Unit]
+Description=DABOS watchman: agent inbox gatekeeper (RR-010 step 1)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+EnvironmentFile=%h/.config/dabos/watchman.env
+Environment=PATH=@NODE_BIN@:/usr/local/bin:/usr/bin:/bin
+Environment=WATCHMAN_STATE_DIR=%h/.local/state/dabos-watchman
+ExecStart=@NODE_BIN@/npm run --silent dabos:watchman
+TimeoutStartSec=120
+Nice=10
+NoNewPrivileges=yes
