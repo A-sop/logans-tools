@@ -301,6 +301,7 @@ function baseInput(over: Partial<DigestInput> = {}): DigestInput {
     cadence: [],
     systemd: { timers: [], failedUnits: [] },
     checkoutSync: null,
+    openOrders: [],
     sourceErrors: [],
     ...over,
   };
@@ -509,6 +510,7 @@ describe('collectDigestInput', () => {
       'neon approval_queue',
       'neon stats',
       'neon role_runs',
+      'neon open-orders',
       'systemd',
       'checkout-sync',
     ]);

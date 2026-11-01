@@ -10,6 +10,12 @@
  * - no secret is read here; callers pass the token in.
  */
 import type { DabosSql } from '@/lib/dabos/dabos-connection';
+import {
+  buildOpenOrdersSection,
+  readOpenOrders,
+  routeStalledBuildOrders,
+  type OpenOrderLine,
+} from '@/lib/dabos/build-receipt';
 import { closedOrgWeek, type OrgStatWeek } from '@/lib/dabos/org-week';
 
 export const DIVISIONS = ['Div1', 'Div2', 'Div3', 'Div4', 'Div5', 'Div6', 'Div7'] as const;
@@ -530,6 +536,8 @@ export type DigestInput = {
   cadence: CadenceRun[] | null;
   systemd: { timers: TimerState[]; failedUnits: string[] } | null;
   checkoutSync: CheckoutSyncState | null;
+  /** Open build orders (start → 24 h after finish). null = source unavailable. */
+  openOrders: OpenOrderLine[] | null;
   sourceErrors: Array<{ source: string; error: string }>;
 };
 
@@ -558,6 +566,7 @@ export type StatusDigest = {
     needsDept13: string[];
     machineAlerts: string[];
     checkoutSync: CheckoutSyncState | null;
+    openOrders: OpenOrderLine[] | null;
     ownerPost: string;
     sourceErrors: Array<{ source: string; error: string }>;
   };
@@ -727,12 +736,19 @@ export function buildDigest(input: DigestInput): StatusDigest {
         ...cs.repos.map((r) => `- ${r.repo}: ${r.state}${r.message ? ` (${r.message})` : ''}`)
       );
   } else L.push('- unavailable');
-  if (input.sourceErrors.length) {
+  L.push('');
+  const openSection = buildOpenOrdersSection(input.openOrders);
+  if (openSection) L.push(openSection.trimEnd(), '');
+  else {
+    L.push('## Open orders');
+    L.push('- unavailable');
     L.push('');
+  }
+  if (input.sourceErrors.length) {
     L.push('## Source errors');
     L.push(...input.sourceErrors.map((e) => `- ${e.source}: ${e.error}`));
+    L.push('');
   }
-  L.push('');
 
   return {
     markdown: L.join('\n'),
@@ -746,6 +762,7 @@ export function buildDigest(input: DigestInput): StatusDigest {
       needsDept13,
       machineAlerts,
       checkoutSync: input.checkoutSync,
+      openOrders: input.openOrders,
       ownerPost: OWNER_POST,
       sourceErrors: input.sourceErrors,
     },
@@ -788,12 +805,20 @@ export async function collectDigestInput(deps: {
   let approvals = null;
   let stats = null;
   let cadence = null;
+  let openOrders: OpenOrderLine[] | null = null;
   if (deps.sql) {
     const sql = deps.sql;
     tasks = await safe('neon tasks', () => readTaskCounts(sql));
     approvals = await safe('neon approval_queue', () => readPendingApprovals(sql));
     stats = await safe('neon stats', () => readStatsPosted(sql, week));
     cadence = await safe('neon role_runs', () => readLatestCadenceRuns(sql));
+    openOrders = await safe('neon open-orders', () => readOpenOrders(sql, deps.now));
+    if (openOrders) {
+      const stalled = openOrders.filter((o) => o.status === 'stalled');
+      if (stalled.length) {
+        await safe('neon stall-route', () => routeStalledBuildOrders(sql, stalled, deps.now));
+      }
+    }
   } else sourceErrors.push({ source: 'neon', error: 'DABOS_DIGEST_DATABASE_URL not set' });
 
   const systemd = deps.run
@@ -819,6 +844,7 @@ export async function collectDigestInput(deps: {
     cadence,
     systemd,
     checkoutSync,
+    openOrders,
     sourceErrors,
   };
 }
