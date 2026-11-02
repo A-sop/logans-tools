@@ -42,6 +42,8 @@
     "dabos:cancel-agent-tasks": "tsx scripts/dabos/cancel-agent-tasks.ts",
     "dabos:hat-receipt": "tsx scripts/dabos/hat-receipt.ts",
     "dabos:route": "tsx scripts/dabos/route.ts",
+    "dabos:watchman": "tsx scripts/dabos/watchman.ts",
+    "dabos:inbox": "tsx scripts/dabos/dabos-inbox.ts",
     "intake:run": "tsx scripts/dabos-ops/run-local-intake.ts",
     "intake:init": "tsx scripts/dabos-ops/run-local-intake.ts --ensure-only",
     "intake:preflight": "tsx scripts/dabos-ops/preflight.ts",
