@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Comm-center courier: OUT → IN (or file / Dept2 exception). Idempotent; one transaction; no bodies in logs.
 # Usage: courier.sh [--post Div4]   (default: all posts due for courier this minute)
+# Note: --post selects which wake slots are considered by the runner; this SQL still routes
+# every eligible OUT row in one transaction (global courier pass).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -41,6 +43,8 @@ if [ -n "$ONLY_POST" ]; then
 fi
 
 # SQL: move OUT with ingest_meta.to → addressee IN; no to → filed_at; bad to → Dept2 IN.
+# Routing stamps routed_at/routed_from and clears `to` so hat-receipt OUT cannot loop.
+# Excludes filed_at / done / cancelled. Never leaves a self-route `to`.
 # Then P2: mark pending.cleared when blocker is out/done/cancelled.
 # Then P4 stalls into Dept2 IN (idempotent dept2-stall:<id>:<date>).
 # P5: last_checked on all pending for touched posts.
@@ -54,18 +58,35 @@ UPDATE tasks
        updated_at = NOW()
  WHERE basket = 'out'
    AND (ingest_meta ? 'filed_at') IS NOT TRUE
+   AND status NOT IN ('done', 'cancelled')
    AND (ingest_meta->>'to' IS NULL OR btrim(ingest_meta->>'to') = '');
 
--- 2) Misrouted / unknown 'to' → Dept2 IN (Div1 / Dept2)
+-- 1b) File done/cancelled OUT (never re-deliver)
+UPDATE tasks
+   SET ingest_meta = coalesce(ingest_meta, '{}'::jsonb)
+         || jsonb_build_object('filed_at', to_jsonb(NOW())),
+       updated_at = NOW()
+ WHERE basket = 'out'
+   AND (ingest_meta ? 'filed_at') IS NOT TRUE
+   AND status IN ('done', 'cancelled');
+
+-- 2) Misrouted / unknown 'to' → Dept2 IN (Div1 / Dept2); clear to so it cannot loop
 UPDATE tasks
    SET basket = 'in',
        division_id = 'Div1',
        department_id = 'Dept2',
        assigned_agent = NULL,
-       ingest_meta = coalesce(ingest_meta, '{}'::jsonb)
-         || jsonb_build_object('misrouted_at', to_jsonb(NOW()), 'misrouted_from_to', ingest_meta->>'to'),
+       ingest_meta = (coalesce(ingest_meta, '{}'::jsonb)
+         || jsonb_build_object(
+              'misrouted_at', to_jsonb(NOW()),
+              'misrouted_from_to', ingest_meta->>'to',
+              'routed_at', to_jsonb(NOW()),
+              'routed_from', ingest_meta->>'to'
+            )) - 'to',
        updated_at = NOW()
  WHERE basket = 'out'
+   AND (ingest_meta ? 'filed_at') IS NOT TRUE
+   AND status NOT IN ('done', 'cancelled')
    AND ingest_meta->>'to' IS NOT NULL
    AND btrim(ingest_meta->>'to') <> ''
    AND upper(btrim(ingest_meta->>'to')) NOT IN (
@@ -75,7 +96,48 @@ UPDATE tasks
      'DEPT18','DEPT19','DEPT20','DEPT21'
    );
 
--- 3) Route OUT → IN for Div posts
+-- 2b) Self-route (to resolves to current holder) → file; never bounce forever
+UPDATE tasks t
+   SET ingest_meta = (coalesce(t.ingest_meta, '{}'::jsonb)
+         || jsonb_build_object(
+              'filed_at', to_jsonb(NOW()),
+              'self_route_from', t.ingest_meta->>'to'
+            )) - 'to',
+       updated_at = NOW()
+ WHERE t.basket = 'out'
+   AND (t.ingest_meta ? 'filed_at') IS NOT TRUE
+   AND t.status NOT IN ('done', 'cancelled')
+   AND t.ingest_meta->>'to' IS NOT NULL
+   AND btrim(t.ingest_meta->>'to') <> ''
+   AND upper(btrim(t.ingest_meta->>'to')) IN (
+     'DIV1','DIV2','DIV3','DIV4','DIV5','DIV6','DIV7','LDW',
+     'DEPT1','DEPT2','DEPT3','DEPT4','DEPT5','DEPT6','DEPT7','DEPT8','DEPT9',
+     'DEPT10','DEPT11','DEPT12','DEPT13','DEPT14','DEPT15','DEPT16','DEPT17',
+     'DEPT18','DEPT19','DEPT20','DEPT21'
+   )
+   AND (
+     (
+       upper(btrim(t.ingest_meta->>'to')) LIKE 'DIV%'
+       AND ('Div' || right(upper(btrim(t.ingest_meta->>'to')), 1))
+           = coalesce(t.assigned_agent, t.division_id)
+     )
+     OR (
+       upper(btrim(t.ingest_meta->>'to')) = 'LDW'
+       AND upper(coalesce(t.assigned_agent, '')) = 'LDW'
+     )
+     OR (
+       upper(btrim(t.ingest_meta->>'to')) LIKE 'DEPT%'
+       AND t.department_id = ('Dept' || (substring(upper(btrim(t.ingest_meta->>'to')) from 5)::int)::text)
+       AND t.division_id = (
+         'Div' || ((ceil(substring(upper(btrim(t.ingest_meta->>'to')) from 5)::numeric / 3))::int)::text
+       )
+       AND (t.assigned_agent IS NULL OR t.assigned_agent NOT IN (
+         'LDW','ldw','Ldw','Div1','Div2','Div3','Div4','Div5','Div6','Div7'
+       ))
+     )
+   );
+
+-- 3) Route OUT → IN for Div/Dept/LDW posts; stamp routed_*; clear `to`
 UPDATE tasks t
    SET basket = 'in',
        division_id = CASE
@@ -97,8 +159,15 @@ UPDATE tasks t
            'Div' || right(upper(btrim(t.ingest_meta->>'to')), 1)
          ELSE t.assigned_agent
        END,
+       ingest_meta = (coalesce(t.ingest_meta, '{}'::jsonb)
+         || jsonb_build_object(
+              'routed_at', to_jsonb(NOW()),
+              'routed_from', t.ingest_meta->>'to'
+            )) - 'to',
        updated_at = NOW()
  WHERE t.basket = 'out'
+   AND (t.ingest_meta ? 'filed_at') IS NOT TRUE
+   AND t.status NOT IN ('done', 'cancelled')
    AND t.ingest_meta->>'to' IS NOT NULL
    AND btrim(t.ingest_meta->>'to') <> ''
    AND upper(btrim(t.ingest_meta->>'to')) IN (
@@ -106,6 +175,27 @@ UPDATE tasks t
      'DEPT1','DEPT2','DEPT3','DEPT4','DEPT5','DEPT6','DEPT7','DEPT8','DEPT9',
      'DEPT10','DEPT11','DEPT12','DEPT13','DEPT14','DEPT15','DEPT16','DEPT17',
      'DEPT18','DEPT19','DEPT20','DEPT21'
+   )
+   AND NOT (
+     (
+       upper(btrim(t.ingest_meta->>'to')) LIKE 'DIV%'
+       AND ('Div' || right(upper(btrim(t.ingest_meta->>'to')), 1))
+           = coalesce(t.assigned_agent, t.division_id)
+     )
+     OR (
+       upper(btrim(t.ingest_meta->>'to')) = 'LDW'
+       AND upper(coalesce(t.assigned_agent, '')) = 'LDW'
+     )
+     OR (
+       upper(btrim(t.ingest_meta->>'to')) LIKE 'DEPT%'
+       AND t.department_id = ('Dept' || (substring(upper(btrim(t.ingest_meta->>'to')) from 5)::int)::text)
+       AND t.division_id = (
+         'Div' || ((ceil(substring(upper(btrim(t.ingest_meta->>'to')) from 5)::numeric / 3))::int)::text
+       )
+       AND (t.assigned_agent IS NULL OR t.assigned_agent NOT IN (
+         'LDW','ldw','Ldw','Div1','Div2','Div3','Div4','Div5','Div6','Div7'
+       ))
+     )
    );
 
 -- 4) P2: clear pending when blocker task is out / done / cancelled
@@ -216,7 +306,7 @@ if ! command -v psql >/dev/null; then
 fi
 
 set +e
-psql "$DB_URL" -v ON_ERROR_STOP=1 -1 -c "$COURIER_SQL" >/dev/null
+cc_psql -1 -c "$COURIER_SQL" >/dev/null
 RC=$?
 set -e
 

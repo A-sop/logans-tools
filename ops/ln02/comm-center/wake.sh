@@ -134,7 +134,7 @@ SQL
 )"
 
 set +e
-CHECK_OUT="$(psql "$DB_URL" -v ON_ERROR_STOP=1 -At -F '|' -c "$CHECK_SQL" 2>/tmp/cc-wake-err.$$)"
+CHECK_OUT="$(cc_psql -At -F '|' -c "$CHECK_SQL" 2>/tmp/cc-wake-err.$$)"
 CHECK_RC=$?
 set -e
 CHECK_ERR="$(tr '\n' ' ' </tmp/cc-wake-err.$$ 2>/dev/null | head -c 200 || true)"
@@ -180,7 +180,7 @@ fi
 # Stall notice when IN survived 2 prior wakes (streak already >= 2 entering this wake)
 if [ "$IN_COUNT" -gt 0 ] && [ "$STATE_IN_STREAK" -ge 2 ] && [ -n "$DB_URL" ]; then
   BERLIN_DAY="$(TZ=Europe/Berlin date +%Y-%m-%d)"
-  psql "$DB_URL" -v ON_ERROR_STOP=1 -c "
+  cc_psql -c "
     INSERT INTO tasks (
       workspace_id, division_id, department_id, title, description,
       type, status, priority, basket, ingest_source, ingest_external_id, ingest_meta

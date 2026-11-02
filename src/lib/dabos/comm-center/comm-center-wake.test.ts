@@ -19,6 +19,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const ROOT = path.resolve(__dirname, '../../../../ops/ln02/comm-center');
 const WAKE = path.join(ROOT, 'wake.sh');
+const LIB = path.join(ROOT, 'lib.sh');
+const COURIER = path.join(ROOT, 'courier.sh');
 
 function findBash(): string | null {
   if (process.platform !== 'win32') return existsSync('/bin/bash') ? '/bin/bash' : null;
@@ -40,8 +42,13 @@ describe.skipIf(!BASH)('comm-center wake.sh', { timeout: 30_000 }, () => {
     log = path.join(dir, 'log.jsonl');
     csv = path.join(dir, 'counts.csv');
     mkdirSync(state);
-    writeFileSync(path.join(dir, 'empty.env'), '# none\n');
-    // stub psql absent path: missing DB URL triggers error path
+    const envPath = path.join(dir, 'empty.env');
+    writeFileSync(envPath, '# none\n');
+    try {
+      chmodSync(envPath, 0o600);
+    } catch {
+      /* Windows may ignore mode; bash tests still exercise parser */
+    }
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
@@ -107,5 +114,79 @@ describe.skipIf(!BASH)('comm-center clocks lib', { timeout: 15_000 }, () => {
     rmSync(p, { force: true });
     expect(r.status).toBe(0);
     expect(r.stdout).toContain('ok');
+  });
+});
+
+describe.skipIf(!BASH)('comm-center lib secrets + env (Amendment 2)', { timeout: 20_000 }, () => {
+  it('cc_post_webhook and cc_psql do not put secrets on argv', () => {
+    const lib = readFileSync(LIB, 'utf8');
+    const courier = readFileSync(COURIER, 'utf8');
+    const wake = readFileSync(WAKE, 'utf8');
+    // No curl -H with interpolated auth/key on argv
+    expect(lib).not.toMatch(/curl[^\n]*-H\s+"\$\{header_name\}:\s*\$\{auth\}"/);
+    expect(lib).toMatch(/--config/);
+    expect(lib).toMatch(/header = "@/);
+    // cc_psql must exist; callers must not pass URL as argv
+    expect(lib).toMatch(/cc_psql\s*\(\)/);
+    expect(lib).toMatch(/PGPASSFILE/);
+    expect(courier).not.toMatch(/psql\s+"\$DB_URL"/);
+    expect(courier).toMatch(/cc_psql/);
+    expect(wake).not.toMatch(/psql\s+"\$DB_URL"/);
+    expect(wake).toMatch(/cc_psql/);
+  });
+
+  it('cc_load_env parses KEY=VALUE literally and refuses wide mode on POSIX', () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), 'cc-env-'));
+    const good = path.join(dir, 'good.env');
+    const wide = path.join(dir, 'wide.env');
+    writeFileSync(good, 'HELLO=world\nEXPAND=$(echo pwned)\nTICK=`echo pwned`\n');
+    writeFileSync(wide, 'X=1\n');
+    try {
+      chmodSync(good, 0o600);
+      chmodSync(wide, 0o644);
+    } catch {
+      /* mode may be no-op on some Windows FS */
+    }
+
+    const script = `
+      set -euo pipefail
+      ROOT="${fwd(ROOT)}"
+      . "$ROOT/lib.sh"
+      cc_load_env "${fwd(good)}"
+      test "$HELLO" = "world"
+      # Literal — no command substitution
+      test "$EXPAND" = '$(echo pwned)'
+      test "$TICK" = '${'`'}echo pwned${'`'}'
+      case "$(uname -s 2>/dev/null || true)" in
+        MINGW*|MSYS*|CYGWIN*)
+          echo ok
+          exit 0
+          ;;
+      esac
+      if cc_load_env "${fwd(wide)}"; then
+        echo "wide-accepted"
+        exit 2
+      fi
+      echo ok
+    `;
+    const p = path.join(dir, 'run.sh');
+    writeFileSync(p, script.replace(/\r\n/g, '\n'));
+    chmodSync(p, 0o755);
+    const r = spawnSync(BASH!, [fwd(p)], { encoding: 'utf8' });
+    const err = (r.stderr || '') + (r.stdout || '');
+    rmSync(dir, { recursive: true, force: true });
+    expect(r.status, err).toBe(0);
+    expect(r.stdout).toContain('ok');
+    expect(r.stdout).not.toContain('wide-accepted');
+  });
+
+  it('cc_load_env does not shell-source (no dot of env file in function body)', () => {
+    const lib = readFileSync(LIB, 'utf8');
+    const loadStart = lib.indexOf('cc_load_env()');
+    const loadEnd = lib.indexOf('\ncc_state_path', loadStart);
+    const body = lib.slice(loadStart, loadEnd);
+    expect(body).not.toMatch(/^\s*\.\s+"\$f"/m);
+    expect(body).not.toMatch(/source\s+"\$f"/);
+    expect(body).toMatch(/wider than 600/);
   });
 });

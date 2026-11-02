@@ -21,6 +21,14 @@ async function setup(): Promise<PGlite> {
   return db;
 }
 
+function extractCourierSql(): string {
+  const courier = readRepoFile('ops/ln02/comm-center/courier.sh');
+  const sqlStart = courier.indexOf("COURIER_SQL=\"$(cat <<'SQL'");
+  const sqlBodyStart = courier.indexOf('\n', sqlStart) + 1;
+  const sqlBodyEnd = courier.indexOf('\nSQL\n', sqlBodyStart);
+  return courier.slice(sqlBodyStart, sqlBodyEnd);
+}
+
 describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
   let db: PGlite | null = null;
   afterEach(async () => {
@@ -44,6 +52,29 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
     await expect(
       db.exec(readRepoFile('scripts/dabos/sql/2026-11-01_comm_center_normalise_addressees.sql'))
     ).rejects.toThrow(/unmapped assigned_agent/);
+  });
+
+  it('normalises prod agent aliases (dept03 / Technical Secretary / DIV VI PUBLIC)', async () => {
+    db = await setup();
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, assigned_agent) VALUES
+        ('Div3', 'Dept9', 'p-stats', 'todo', 'in', 'dept03-perception-stats'),
+        ('Div4', 'Dept12', 'tech-sec', 'todo', 'in', 'Div4 Technical Secretary'),
+        ('Div6', 'Dept16', 'vi-public', 'todo', 'in', 'DIV VI PUBLIC');
+    `);
+    await db.exec(readRepoFile('scripts/dabos/sql/2026-11-01_comm_center_normalise_addressees.sql'));
+    const rows = await db.query<{
+      title: string;
+      assigned_agent: string;
+      division_id: string;
+      department_id: string;
+    }>(`SELECT title, assigned_agent, division_id, department_id FROM tasks ORDER BY title`);
+    const by = Object.fromEntries(rows.rows.map((r) => [r.title, r]));
+    expect(by['p-stats']?.assigned_agent).toBe('Div1');
+    expect(by['p-stats']?.division_id).toBe('Div1');
+    expect(by['p-stats']?.department_id).toBe('Dept3');
+    expect(by['tech-sec']?.assigned_agent).toBe('Div4');
+    expect(by['vi-public']?.assigned_agent).toBe('Div6');
   });
 
   it('rebaskets done→out, reassess→pending with stamps', async () => {
@@ -130,10 +161,7 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
     expect(routeBlock).toMatch(/SET basket = 'in'/);
     expect(routeBlock).not.toMatch(/basket\s*=\s*'pending'/);
 
-    const sqlStart = courier.indexOf("COURIER_SQL=\"$(cat <<'SQL'");
-    const sqlBodyStart = courier.indexOf('\n', sqlStart) + 1;
-    const sqlBodyEnd = courier.indexOf('\nSQL\n', sqlBodyStart);
-    const courierSql = courier.slice(sqlBodyStart, sqlBodyEnd);
+    const courierSql = extractCourierSql();
 
     db = await setup();
     // Sender writes OUT; courier delivers to recipient IN (never PENDING).
@@ -146,14 +174,82 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
           '{"from":"Div4","to":"Div1"}'::jsonb);
     `);
     await db.exec(courierSql);
-    const rows = await db.query<{ title: string; basket: string; division_id: string }>(
-      `SELECT title, basket, division_id FROM tasks WHERE title LIKE 'despatch-%' ORDER BY title`
-    );
+    const rows = await db.query<{
+      title: string;
+      basket: string;
+      division_id: string;
+      ingest_meta: { to?: string; routed_at?: string; routed_from?: string };
+    }>(`SELECT title, basket, division_id, ingest_meta FROM tasks WHERE title LIKE 'despatch-%' ORDER BY title`);
     const by = Object.fromEntries(rows.rows.map((r) => [r.title, r]));
     expect(by['despatch-to-div4']?.basket).toBe('in');
     expect(by['despatch-to-div4']?.division_id).toBe('Div4');
+    expect(by['despatch-to-div4']?.ingest_meta?.to).toBeUndefined();
+    expect(by['despatch-to-div4']?.ingest_meta?.routed_from).toBe('Div4');
+    expect(by['despatch-to-div4']?.ingest_meta?.routed_at).toBeTruthy();
     expect(by['despatch-to-div1']?.basket).toBe('in');
     expect(by['despatch-to-div1']?.division_id).toBe('Div1');
     expect(rows.rows.every((r) => r.basket !== 'pending')).toBe(true);
+  });
+
+  it('routing round trip: hat-receipt OUT does not re-deliver (Amendment 2)', async () => {
+    const courierSql = extractCourierSql();
+    db = await setup();
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, assigned_agent, ingest_meta)
+      VALUES ('Div1', 'Dept2', 'round-trip', 'todo', 'out', 'Div1',
+        '{"from":"Div1","to":"Div4"}'::jsonb);
+    `);
+    await db.exec(courierSql);
+    const afterRoute = await db.query<{
+      basket: string;
+      division_id: string;
+      ingest_meta: { to?: string; routed_at?: string; filed_at?: string };
+    }>(`SELECT basket, division_id, ingest_meta FROM tasks WHERE title = 'round-trip'`);
+    expect(afterRoute.rows[0]?.basket).toBe('in');
+    expect(afterRoute.rows[0]?.division_id).toBe('Div4');
+    expect(afterRoute.rows[0]?.ingest_meta?.to).toBeUndefined();
+
+    // Hat receipt: recipient finishes → OUT, meta unchanged (no new to).
+    await db.exec(`UPDATE tasks SET basket = 'out', updated_at = NOW() WHERE title = 'round-trip'`);
+    await db.exec(courierSql);
+    const afterReceipt = await db.query<{
+      basket: string;
+      division_id: string;
+      ingest_meta: { to?: string; filed_at?: string; routed_at?: string };
+    }>(`SELECT basket, division_id, ingest_meta FROM tasks WHERE title = 'round-trip'`);
+    // Filed (no to), still OUT — not bounced back to IN.
+    expect(afterReceipt.rows[0]?.basket).toBe('out');
+    expect(afterReceipt.rows[0]?.ingest_meta?.filed_at).toBeTruthy();
+    expect(afterReceipt.rows[0]?.ingest_meta?.to).toBeUndefined();
+
+    // Another courier pass must not revive it.
+    await db.exec(courierSql);
+    const afterAgain = await db.query<{ basket: string; division_id: string }>(
+      `SELECT basket, division_id FROM tasks WHERE title = 'round-trip'`
+    );
+    expect(afterAgain.rows[0]?.basket).toBe('out');
+    expect(afterAgain.rows[0]?.division_id).toBe('Div4');
+  });
+
+  it('excludes filed_at / done OUT from re-delivery (Amendment 2)', async () => {
+    const courierSql = extractCourierSql();
+    db = await setup();
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, ingest_meta) VALUES
+        ('Div1', 'Dept1', 'already-filed', 'todo', 'out',
+          '{"to":"Div4","filed_at":"2026-10-01T00:00:00Z"}'::jsonb),
+        ('Div1', 'Dept1', 'done-with-to', 'done', 'out',
+          '{"to":"Div4"}'::jsonb);
+    `);
+    await db.exec(courierSql);
+    const rows = await db.query<{ title: string; basket: string; division_id: string; ingest_meta: unknown }>(
+      `SELECT title, basket, division_id, ingest_meta FROM tasks WHERE title IN ('already-filed','done-with-to') ORDER BY title`
+    );
+    const by = Object.fromEntries(rows.rows.map((r) => [r.title, r]));
+    expect(by['already-filed']?.basket).toBe('out');
+    expect(by['already-filed']?.division_id).toBe('Div1');
+    expect(by['done-with-to']?.basket).toBe('out');
+    expect(by['done-with-to']?.division_id).toBe('Div1');
+    expect(JSON.stringify(by['done-with-to']?.ingest_meta)).toContain('filed_at');
   });
 });

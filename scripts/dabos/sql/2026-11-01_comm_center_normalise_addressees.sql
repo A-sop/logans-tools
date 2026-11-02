@@ -34,16 +34,26 @@ BEGIN
     ('Div 1','Div1'),('Div 2','Div2'),('Div 3','Div3'),('Div 4','Div4'),
     ('Div 5','Div5'),('Div 6','Div6'),('Div 7','Div7');
 
-  CREATE TEMP TABLE _agent_map (src text PRIMARY KEY, dst text NOT NULL) ON COMMIT DROP;
-  INSERT INTO _agent_map (src, dst)
-  SELECT src, dst FROM _div_map
+  -- dst = canonical assigned_agent; optional set_division / set_department for prod aliases
+  CREATE TEMP TABLE _agent_map (
+    src text PRIMARY KEY,
+    dst text NOT NULL,
+    set_division text,
+    set_department text
+  ) ON COMMIT DROP;
+  INSERT INTO _agent_map (src, dst, set_division, set_department)
+  SELECT src, dst, NULL::text, NULL::text FROM _div_map
   UNION ALL
   SELECT * FROM (VALUES
-    ('LDW','LDW'),('ldw','LDW'),('Ldw','LDW'),
+    ('LDW','LDW',NULL,NULL),('ldw','LDW',NULL,NULL),('Ldw','LDW',NULL,NULL),
     -- capability agents: identity map (unchanged)
-    ('research','research'),
-    ('gfp-weekly-stats','gfp-weekly-stats')
-  ) AS v(src, dst);
+    ('research','research',NULL,NULL),
+    ('gfp-weekly-stats','gfp-weekly-stats',NULL,NULL),
+    -- prod aliases (Dept13 FAIL @2cd4cc2b read-only query)
+    ('dept03-perception-stats','Div1','Div1','Dept3'),
+    ('Div4 Technical Secretary','Div4',NULL,NULL),
+    ('DIV VI PUBLIC','Div6',NULL,NULL)
+  ) AS v(src, dst, set_division, set_department);
 
   CREATE TEMP TABLE _dept_map (src text PRIMARY KEY, dst text NOT NULL) ON COMMIT DROP;
   INSERT INTO _dept_map (src, dst)
@@ -82,6 +92,7 @@ BEGIN
    WHERE assigned_agent IS NOT NULL
      AND NOT EXISTS (SELECT 1 FROM _agent_map m WHERE m.src = t.assigned_agent);
   IF unmapped IS NOT NULL THEN
+    RAISE NOTICE 'comm-center normalise: remaining unmapped assigned_agent values: %', unmapped;
     RAISE EXCEPTION 'unmapped assigned_agent values (refusing to guess): %', unmapped;
   END IF;
 
@@ -104,10 +115,16 @@ BEGIN
 
   UPDATE tasks t
      SET assigned_agent = m.dst,
+         division_id = coalesce(m.set_division, t.division_id),
+         department_id = coalesce(m.set_department, t.department_id),
          updated_at = NOW()
     FROM _agent_map m
    WHERE t.assigned_agent = m.src
-     AND t.assigned_agent IS DISTINCT FROM m.dst;
+     AND (
+       t.assigned_agent IS DISTINCT FROM m.dst
+       OR (m.set_division IS NOT NULL AND t.division_id IS DISTINCT FROM m.set_division)
+       OR (m.set_department IS NOT NULL AND t.department_id IS DISTINCT FROM m.set_department)
+     );
   GET DIAGNOSTICS n_agent = ROW_COUNT;
 
   UPDATE tasks t
