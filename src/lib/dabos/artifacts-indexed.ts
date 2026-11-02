@@ -9,8 +9,11 @@
  *
  * Window = org-week.ts stat week [Thu 14:00, next Thu 14:00) Europe/Berlin.
  *
- * Start point (acceptance line 7, amendment 1): the previous stat week's active Div1 row
- * `basis.page_fingerprints` whenever it exists, so a page counted once is never counted again.
+ * Start point (acceptance line 7, amendment 1; legacy amendment 2026-11-01): the previous stat
+ * week's active Div1 row `basis.page_fingerprints` whenever it exists, so a page counted once is
+ * never counted again. When that row lacks fingerprints (pre-fingerprint poster), reconstruct from
+ * wiki git history at the previous close (`start_source: reconstructed-prev`); present-but-invalid
+ * still fails closed; missing is never treated as an empty set.
  * End point, in order:
  *  1. git: the index on `origin/main` (a remote-tracking ref, never HEAD) as it was at the close =
  *     the newest commit touching the index with committer time strictly before the close, over
@@ -119,14 +122,23 @@ export function gitBeforeArg(t: Date): string {
 
 type Window = Pick<ClosedOrgWeek, 'start' | 'end'>;
 
-/** The previous stat week's active Div1 row, as read by loadPreviousDiv1Fingerprints. */
-export type PreviousDiv1Row = { week: string; fingerprints: string[]; gitEndCommit?: string | null };
+/**
+ * The previous stat week's active Div1 row, as read by loadPreviousDiv1Fingerprints.
+ * `missingFingerprints: true` = Neon row exists but lacks page_fingerprints (legacy); compute
+ * reconstructs from wiki git history. Never treat that as an empty fingerprint set.
+ */
+export type PreviousDiv1Row = {
+  week: string;
+  fingerprints: string[];
+  gitEndCommit?: string | null;
+  missingFingerprints?: boolean;
+};
 
 export type Div1WeeklyBasis = {
   wiki_index: string;
   method: 'git' | 'snapshot';
-  /** Where the start point came from. */
-  start_source: 'previous_row' | 'git_first_parent';
+  /** Where the start point came from. `reconstructed-prev` = legacy row, git at previous close. */
+  start_source: 'previous_row' | 'git_first_parent' | 'reconstructed-prev';
   pages_at_start: number;
   pages_at_end: number;
   pages_added: number;
@@ -369,6 +381,41 @@ export function readWikiIndexFromGit(
   }
 }
 
+/**
+ * Rebuild the previous week's fingerprint set from wiki git history at `previousClose`
+ * (current window start). Same fingerprint function and full-history close snapshot as #50.
+ * Fail closed when git is untrusted or snapshot-only — never invent an empty set.
+ */
+export function reconstructPreviousFingerprintsFromGit(
+  repoRoot: string,
+  previousClose: Date,
+  opts: { ref?: string; git?: GitRunner; source?: 'auto' | 'snapshot' } = {}
+): { ok: true; fingerprints: string[]; commit: string | null } | { ok: false; reason: string } {
+  if (opts.source === 'snapshot') {
+    return {
+      ok: false,
+      reason:
+        'cannot reconstruct previous fingerprints (basis:reconstructed-prev): source snapshot requested; needs wiki git history at the previous close',
+    };
+  }
+  const hist = readWikiIndexFromGit(
+    repoRoot,
+    { start: previousClose, end: previousClose },
+    { ref: opts.ref, git: opts.git, firstWeek: false }
+  );
+  if (!hist.ok) {
+    return {
+      ok: false,
+      reason: `cannot reconstruct previous fingerprints (basis:reconstructed-prev): ${hist.reason}`,
+    };
+  }
+  return {
+    ok: true,
+    fingerprints: wikiPageFingerprints(hist.endText),
+    commit: hist.endCommit,
+  };
+}
+
 export async function computeArtifactsIndexedWeekly(opts: {
   window: Window;
   repoRoot: string;
@@ -394,9 +441,31 @@ export async function computeArtifactsIndexedWeekly(opts: {
       reason: `previous-week Div1 row lookup failed: ${err instanceof Error ? err.message : String(err)}`,
     };
   }
-  const startFps = previous ? [...new Set(previous.fingerprints)].sort() : null;
 
   const ref = opts.gitRef ?? DEFAULT_WIKI_GIT_REF;
+  let startSource: Div1WeeklyBasis['start_source'] = 'git_first_parent';
+  let startFps: string[] | null = null;
+
+  if (previous?.missingFingerprints) {
+    // Legacy row: fingerprints absent — reconstruct from git at the previous close. Never treat as [].
+    const recon = reconstructPreviousFingerprintsFromGit(repoRoot, window.start, {
+      ref,
+      git: opts.git,
+      source: opts.source,
+    });
+    if (!recon.ok) return { ok: false, reason: recon.reason };
+    startFps = recon.fingerprints;
+    startSource = 'reconstructed-prev';
+    previous = {
+      week: previous.week,
+      fingerprints: recon.fingerprints,
+      gitEndCommit: recon.commit ?? previous.gitEndCommit ?? null,
+    };
+  } else if (previous) {
+    startFps = [...new Set(previous.fingerprints)].sort();
+    startSource = 'previous_row';
+  }
+
   const fromGit: GitHistory =
     opts.source === 'snapshot'
       ? { ok: false, reason: 'source snapshot requested', notGit: true }
@@ -421,7 +490,7 @@ export async function computeArtifactsIndexedWeekly(opts: {
       basis: {
         wiki_index: WIKI_INDEX_REL,
         method: 'git',
-        start_source: previous ? 'previous_row' : 'git_first_parent',
+        start_source: startSource,
         pages_at_start: start.length,
         pages_at_end: end.length,
         pages_added: added,
@@ -441,6 +510,13 @@ export async function computeArtifactsIndexedWeekly(opts: {
     return {
       ok: false,
       reason: `git unavailable (${fromGit.reason}) and no previous-week Div1 baseline row; cannot tell which pages were added this week`,
+    };
+  }
+  if (startSource === 'reconstructed-prev') {
+    // Snapshot path cannot reconstruct; should have failed above. Keep fail-closed if reached.
+    return {
+      ok: false,
+      reason: `cannot reconstruct previous fingerprints (basis:reconstructed-prev): git unavailable (${fromGit.reason})`,
     };
   }
   const mtime = statSync(indexAbs).mtime;
