@@ -268,6 +268,59 @@ describe.skipIf(!BASH)('wake-if-new runner + checks', { timeout: 30_000 }, () =>
     expect(lines[1]).toBe('2026-11-01T20:00:00.000000Z');
   });
 
+  it('wake_cursor_max normalises GitHub second vs Neon micro in same second (A3.1)', () => {
+    const script = `
+      . "${fwd(path.join(ROOT, 'lib.sh'))}"
+      gh='2026-11-05T12:00:00Z'
+      neon='2026-11-05T12:00:00.500000Z'
+      # Raw string compare wrongly ranks gh after neon; normalised max is neon.
+      echo "\$(wake_cursor_max "\$gh" "\$neon")"
+      echo "\$(wake_cursor_max "\$neon" "\$gh")"
+      # Same instant, different precision: either side is fine; both norms equal.
+      echo "\$(wake_cursor_norm "\$gh")"
+      echo "\$(wake_cursor_norm "\$neon")"
+    `;
+    const r = spawnSync(BASH!, ['-c', script], { encoding: 'utf8' });
+    expect(r.status).toBe(0);
+    const lines = r.stdout.trim().split(/\r?\n/);
+    expect(lines[0]).toBe('2026-11-05T12:00:00.500000Z');
+    expect(lines[1]).toBe('2026-11-05T12:00:00.500000Z');
+    expect(lines[2]).toBe('2026-11-05T12:00:00.000000Z');
+    expect(lines[3]).toBe('2026-11-05T12:00:00.500000Z');
+    // Prove the old bug: raw string would have picked gh
+    expect('2026-11-05T12:00:00Z' > '2026-11-05T12:00:00.500000Z').toBe(true);
+  });
+
+  it('wake_psql / wake_post_webhook restore errexit after success (A3.2)', () => {
+    const bin = path.join(dir, 'bin');
+    mkdirSync(bin);
+    writeFileSync(path.join(bin, 'psql'), `#!/usr/bin/env bash\necho ok\nexit 0\n`, 'utf8');
+    chmodSync(path.join(bin, 'psql'), 0o755);
+    writeFileSync(
+      path.join(bin, 'curl'),
+      `#!/usr/bin/env bash\n# swallow args; succeed\nexit 0\n`,
+      'utf8'
+    );
+    chmodSync(path.join(bin, 'curl'), 0o755);
+    const script = `
+      set -e
+      . "${fwd(path.join(ROOT, 'lib.sh'))}"
+      export PATH="${fwd(bin)}:$PATH"
+      wake_psql 'postgres://u:p@127.0.0.1:5432/db?sslmode=disable' -c 'select 1' >/dev/null
+      case \$- in *e*) echo psql_errexit_on ;; *) echo psql_errexit_off; exit 2 ;; esac
+      wake_post_webhook 'https://example.invalid/hook' 'k' '{"x":1}'
+      case \$- in *e*) echo curl_errexit_on ;; *) echo curl_errexit_off; exit 3 ;; esac
+      # Prove errexit still bites
+      false && true
+      echo should_not_reach
+    `;
+    const r = spawnSync(BASH!, ['-c', script], { encoding: 'utf8' });
+    expect(r.status).not.toBe(0);
+    expect(r.stdout).toMatch(/psql_errexit_on/);
+    expect(r.stdout).toMatch(/curl_errexit_on/);
+    expect(r.stdout).not.toMatch(/should_not_reach/);
+  });
+
   it('status_report keeps newer Neon over older GitHub (A2.4)', () => {
     const bin = path.join(dir, 'bin');
     mkdirSync(bin);

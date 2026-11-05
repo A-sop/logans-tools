@@ -141,12 +141,33 @@ wake_trim_psql_field() {
   printf '%s' "$s"
 }
 
-# Later of two ISO-8601 cursors (lexicographic works for zero-padded ISO). Empty loses.
+# Normalise ISO-8601 UTC cursors to the same fractional precision before compare.
+# GitHub emits second-precision (…Z); Neon emits microseconds (….USZ). Raw string
+# compare ranks "…12:00:00Z" after "…12:00:00.500000Z" ('Z' > '.').
+wake_cursor_norm() {
+  local s="${1:-}" base frac
+  [ -n "$s" ] || { printf ''; return 0; }
+  s="${s%Z}"
+  if [[ "$s" == *.* ]]; then
+    base="${s%%.*}"
+    frac="${s#*.}"
+  else
+    base="$s"
+    frac=""
+  fi
+  frac="${frac}000000"
+  frac="${frac:0:6}"
+  printf '%s.%sZ' "$base" "$frac"
+}
+
+# Later of two ISO-8601 cursors (normalised instant compare). Empty loses.
 wake_cursor_max() {
-  local a="${1:-}" b="${2:-}"
+  local a="${1:-}" b="${2:-}" na nb
   if [ -z "$a" ]; then printf '%s' "$b"; return 0; fi
   if [ -z "$b" ]; then printf '%s' "$a"; return 0; fi
-  if [[ "$a" > "$b" ]]; then printf '%s' "$a"; else printf '%s' "$b"; fi
+  na="$(wake_cursor_norm "$a")"
+  nb="$(wake_cursor_norm "$b")"
+  if [[ "$na" > "$nb" ]]; then printf '%s' "$a"; else printf '%s' "$b"; fi
 }
 
 wake_urldecode() {
@@ -249,12 +270,12 @@ wake_psql() {
     return 1
   fi
   wake_export_pg_from_url "$url" || return 1
-  local rc
+  local rc had_e=$-
   set +e
   psql -v ON_ERROR_STOP=1 "$@"
   rc=$?
   wake_cleanup_pgpass
-  set +e
+  [[ $had_e == *e* ]] && set -e
   return "$rc"
 }
 
@@ -285,7 +306,7 @@ wake_post_webhook() {
     printf 'header = "Content-Type: application/json"\n'
   } >"$cfg"
 
-  local rc
+  local rc had_e=$-
   set +e
   printf '%s' "$body" | curl -sS -f -X POST \
     --config "$cfg" \
@@ -294,7 +315,7 @@ wake_post_webhook() {
     >/dev/null
   rc=$?
   rm -rf "$tmp"
-  set +e
+  [[ $had_e == *e* ]] && set -e
   return "$rc"
 }
 
