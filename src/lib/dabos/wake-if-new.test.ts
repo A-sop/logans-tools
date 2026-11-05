@@ -296,25 +296,27 @@ describe.skipIf(!BASH)('wake-if-new runner + checks', { timeout: 30_000 }, () =>
     mkdirSync(bin);
     writeFileSync(path.join(bin, 'psql'), `#!/usr/bin/env bash\necho ok\nexit 0\n`, 'utf8');
     chmodSync(path.join(bin, 'psql'), 0o755);
-    writeFileSync(
-      path.join(bin, 'curl'),
-      `#!/usr/bin/env bash\n# swallow args; succeed\nexit 0\n`,
-      'utf8'
-    );
-    chmodSync(path.join(bin, 'curl'), 0o755);
+    // Prefer a shell function over PATH: Windows curl.exe often shadows a script named curl.
     const script = `
       set -e
       . "${fwd(path.join(ROOT, 'lib.sh'))}"
-      export PATH="${fwd(bin)}:$PATH"
+      curl() { cat >/dev/null; return 0; }
+      export -f curl
       wake_psql 'postgres://u:p@127.0.0.1:5432/db?sslmode=disable' -c 'select 1' >/dev/null
       case \$- in *e*) echo psql_errexit_on ;; *) echo psql_errexit_off; exit 2 ;; esac
       wake_post_webhook 'https://example.invalid/hook' 'k' '{"x":1}'
       case \$- in *e*) echo curl_errexit_on ;; *) echo curl_errexit_off; exit 3 ;; esac
-      # Prove errexit still bites
-      false && true
+      # Prove errexit still bites (bare false; &&-lists are exempt from errexit)
+      false
       echo should_not_reach
     `;
-    const r = spawnSync(BASH!, ['-c', script], { encoding: 'utf8' });
+    const r = spawnSync(BASH!, ['-c', script], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        PATH: `${fwd(bin)}${path.delimiter}${process.env.PATH || ''}`,
+      },
+    });
     expect(r.status).not.toBe(0);
     expect(r.stdout).toMatch(/psql_errexit_on/);
     expect(r.stdout).toMatch(/curl_errexit_on/);
