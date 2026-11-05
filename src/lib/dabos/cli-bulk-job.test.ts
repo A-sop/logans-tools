@@ -336,6 +336,82 @@ exit 0
     expect(log).toMatch(/timeout/);
   });
 
+  it('timeout kills TERM-ignoring descendant; later run gets the lock (A2.1)', () => {
+    const marker = path.join(dir, 'term-ignore-pids');
+    mkdirSync(marker);
+    const ignoreAgent = path.join(dir, 'term-ignore-agent');
+    // Ignore TERM; spawn a child sleep that also ignores TERM. Record PIDs for the test.
+    writeFileSync(
+      ignoreAgent,
+      `#!/usr/bin/env bash
+trap '' TERM
+sleep 120 &
+echo $! >"${fwd(marker)}/child.pid"
+echo $$ >"${fwd(marker)}/agent.pid"
+wait
+`
+    );
+    chmodSync(ignoreAgent, 0o755);
+
+    const r1 = spawnSync(
+      BASH!,
+      [fwd(SCRIPT), 'term-ignore', fwd(prompt), '--workdir', fwd(work), '--timeout', '2'],
+      {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          JOBS_ROOT: fwd(jobsRoot),
+          AGENT_BIN: fwd(ignoreAgent),
+        },
+      }
+    );
+    expect(r1.status).toBe(124);
+
+    // Survivors must be gone (group KILL), including the TERM-ignoring child.
+    const childPidPath = path.join(marker, 'child.pid');
+    const agentPidPath = path.join(marker, 'agent.pid');
+    expect(existsSync(childPidPath)).toBe(true);
+    const childPid = readFileSync(childPidPath, 'utf8').trim();
+    const agentPid = existsSync(agentPidPath)
+      ? readFileSync(agentPidPath, 'utf8').trim()
+      : '';
+    const childAlive = spawnSync(BASH!, ['-c', `kill -0 ${childPid} 2>/dev/null`], {
+      encoding: 'utf8',
+    });
+    expect(childAlive.status).not.toBe(0);
+    if (agentPid) {
+      const agentAlive = spawnSync(BASH!, ['-c', `kill -0 ${agentPid} 2>/dev/null`], {
+        encoding: 'utf8',
+      });
+      expect(agentAlive.status).not.toBe(0);
+    }
+
+    // Later run must acquire the lock (not exit 75 from a stale flock / lock dir).
+    const okAgent = path.join(dir, 'ok-after-timeout');
+    writeFileSync(okAgent, `#!/usr/bin/env bash\necho AFTER_OK\nexit 0\n`);
+    chmodSync(okAgent, 0o755);
+    const r2 = spawnSync(
+      BASH!,
+      [fwd(SCRIPT), 'term-ignore', fwd(prompt), '--workdir', fwd(work), '--timeout', '30'],
+      {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          JOBS_ROOT: fwd(jobsRoot),
+          AGENT_BIN: fwd(okAgent),
+        },
+      }
+    );
+    expect(r2.status).not.toBe(75);
+    expect(r2.status).toBe(0);
+    const runs = readdirSync(path.join(jobsRoot, 'term-ignore'));
+    const statuses = runs.map((id) =>
+      JSON.parse(readFileSync(path.join(jobsRoot, 'term-ignore', id, 'status.json'), 'utf8'))
+    );
+    expect(statuses.some((s) => s.exit_code === 75 && s.error === 'lock-busy')).toBe(false);
+    expect(statuses.some((s) => s.exit_code === 0)).toBe(true);
+  });
+
   it('handles spaces in prompt file path and workdir', () => {
     const spaceDir = path.join(dir, 'path with spaces');
     mkdirSync(spaceDir);

@@ -82,14 +82,16 @@ release_lock() {
   fi
 }
 
-kill_tree() {
+# TERM then KILL the whole process group (leader PID == PGID when started via setsid).
+kill_agent_group() {
   local pid="$1"
-  local kids
-  kids="$(pgrep -P "$pid" 2>/dev/null || true)"
-  for k in $kids; do
-    kill_tree "$k"
-  done
-  kill -TERM "$pid" 2>/dev/null || true
+  if [ -z "$pid" ]; then
+    return 0
+  fi
+  # Negative PID = process group. Fall back to the single PID if group kill fails.
+  kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
+  sleep 1
+  kill -KILL -- "-$pid" 2>/dev/null || kill -KILL "$pid" 2>/dev/null || true
 }
 
 # Lock BEFORE any write to a run directory (blocked runs must not touch a running job's files).
@@ -123,23 +125,34 @@ echo "started job=$JOB_NAME run_id=$RUN_ID timeout_sec=$TIMEOUT_SEC" >>"$LOG"
 # Do not echo argv. Prompt body stays in the file; agent is told the path.
 AGENT_PROMPT="Read the prompt file at ${PROMPT_FILE} and carry it out completely. Work in ${WORKDIR}. Write nothing that contains secrets."
 set +e
-(
-  cd "$WORKDIR"
-  # Intentionally unlogged invocation:
-  "$AGENT_BIN" -p --force --output-format text -- "$AGENT_PROMPT" >"$REPORT" 2>"$RUN_DIR/stderr.txt"
-) &
+# Own session/process group so timeout can TERM/KILL the whole tree. Close lock fd 9
+# in the child so a surviving agent cannot keep the flock.
+set +m
+if command -v setsid >/dev/null 2>&1; then
+  (
+    cd "$WORKDIR"
+    exec 9>&-
+    # Intentionally unlogged invocation:
+    exec setsid "$AGENT_BIN" -p --force --output-format text -- "$AGENT_PROMPT" >"$REPORT" 2>"$RUN_DIR/stderr.txt"
+  ) &
+else
+  # No setsid (e.g. Git Bash): enable job control so the background job gets its own PG.
+  set -m
+  (
+    cd "$WORKDIR"
+    exec 9>&-
+    # Intentionally unlogged invocation:
+    "$AGENT_BIN" -p --force --output-format text -- "$AGENT_PROMPT" >"$REPORT" 2>"$RUN_DIR/stderr.txt"
+  ) &
+  set +m
+fi
 AGENT_PID=$!
 elapsed=0
 TIMED_OUT=0
 while kill -0 "$AGENT_PID" 2>/dev/null; do
   if [ "$elapsed" -ge "$TIMEOUT_SEC" ]; then
     TIMED_OUT=1
-    kill_tree "$AGENT_PID"
-    sleep 1
-    kill -KILL "$AGENT_PID" 2>/dev/null || true
-    # Reap any remaining children
-    kids="$(pgrep -P "$AGENT_PID" 2>/dev/null || true)"
-    for k in $kids; do kill -KILL "$k" 2>/dev/null || true; done
+    kill_agent_group "$AGENT_PID"
     wait "$AGENT_PID" 2>/dev/null || true
     break
   fi
