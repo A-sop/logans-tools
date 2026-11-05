@@ -27,6 +27,9 @@ export const OPEN_AFTER_FINISH_MS = 24 * 60 * 60 * 1000;
 export type BuildReceiptPhase = 'start' | 'finish';
 export type FinishStatus = 'done' | 'failed';
 export type OpenOrderStatus = 'running' | 'done' | 'stalled';
+/** Build-order stall reason (P4 source stays dept2-stall). */
+export type StallReason = 'no-receipt';
+export const NO_RECEIPT_REASON: StallReason = 'no-receipt';
 
 export type StartReceiptInput = {
   orderId: string;
@@ -34,6 +37,8 @@ export type StartReceiptInput = {
   branch: string;
   machine: string;
   expectedFinish: string;
+  /** Optional alias for the stated due time (same meaning as expected_finish). */
+  clearBy?: string;
   prLinks?: string[];
   startedAt?: string;
 };
@@ -52,6 +57,7 @@ export type BuildReceiptRow = {
   branch: string | null;
   machine: string | null;
   expectedFinish: string | null;
+  clearBy: string | null;
   startedAt: string | null;
   finishedAt: string | null;
   finishStatus: FinishStatus | null;
@@ -68,6 +74,9 @@ export type OpenOrderLine = {
   lastActivityAt: string;
   lastActivityBerlin: string;
   expectedFinish: string | null;
+  clearBy: string | null;
+  /** Set when status is stalled (build order past due with no finish receipt). */
+  stallReason: StallReason | null;
 };
 
 export type WriteReceiptResult = {
@@ -153,11 +162,12 @@ export async function writeStartReceipt(
 ): Promise<WriteReceiptResult> {
   const orderId = requireOrderId(input.orderId);
   const expectedFinish = requireIso('expected_finish', input.expectedFinish);
+  const clearBy = input.clearBy ? requireIso('clear_by', input.clearBy) : null;
   const startedAt = input.startedAt
     ? requireIso('started_at', input.startedAt)
     : new Date().toISOString();
   const prLinks = input.prLinks ?? [];
-  const meta = {
+  const meta: Record<string, unknown> = {
     kind: 'build-receipt',
     phase: 'start',
     order_id: orderId,
@@ -169,6 +179,7 @@ export async function writeStartReceipt(
     expected_finish: expectedFinish,
     pr_links: prLinks,
   };
+  if (clearBy) meta.clear_by = clearBy;
   return insertOutReceipt(sql, {
     orderId,
     phase: 'start',
@@ -259,6 +270,7 @@ export async function readBuildReceipts(sql: DabosSql): Promise<BuildReceiptRow[
       branch: str(meta.branch),
       machine: str(meta.machine),
       expectedFinish: str(meta.expected_finish),
+      clearBy: str(meta.clear_by),
       startedAt: str(meta.started_at),
       finishedAt: str(meta.finished_at),
       finishStatus:
@@ -270,6 +282,16 @@ export async function readBuildReceipts(sql: DabosSql): Promise<BuildReceiptRow[
   return out;
 }
 
+/** Due instant for stall: expected_finish, else clear_by (stated due time). */
+export function dueInstant(start: BuildReceiptRow): Date | null {
+  for (const raw of [start.expectedFinish, start.clearBy]) {
+    if (!raw) continue;
+    const d = new Date(raw);
+    if (!Number.isNaN(d.getTime())) return d;
+  }
+  return null;
+}
+
 function toIso(v: unknown): string {
   if (v instanceof Date) return v.toISOString();
   if (typeof v === 'string') return new Date(v).toISOString();
@@ -278,7 +300,7 @@ function toIso(v: unknown): string {
 
 /**
  * Open from start until 24 h after finish.
- * stalled = start, no finish, now > expected_finish.
+ * stalled = start, no finish, now > expected_finish (or clear_by).
  */
 export function classifyOpenOrders(receipts: BuildReceiptRow[], now: Date): OpenOrderLine[] {
   const byOrder = new Map<string, { start?: BuildReceiptRow; finish?: BuildReceiptRow }>();
@@ -294,6 +316,7 @@ export function classifyOpenOrders(receipts: BuildReceiptRow[], now: Date): Open
     if (!start) continue;
     const finish = slot.finish;
     let status: OpenOrderStatus = 'running';
+    let stallReason: StallReason | null = null;
     let lastActivityAt = start.startedAt ?? start.createdAt;
     if (finish) {
       const finishedAt = finish.finishedAt ?? finish.createdAt;
@@ -302,9 +325,10 @@ export function classifyOpenOrders(receipts: BuildReceiptRow[], now: Date): Open
       if (now.getTime() > closeAt) continue; // no longer open
       status = 'done';
     } else {
-      const expected = start.expectedFinish ? new Date(start.expectedFinish) : null;
-      if (expected && !Number.isNaN(expected.getTime()) && now.getTime() > expected.getTime()) {
+      const due = dueInstant(start);
+      if (due && now.getTime() > due.getTime()) {
         status = 'stalled';
+        stallReason = NO_RECEIPT_REASON;
       }
     }
     lines.push({
@@ -316,6 +340,8 @@ export function classifyOpenOrders(receipts: BuildReceiptRow[], now: Date): Open
       lastActivityAt,
       lastActivityBerlin: berlinStamp(new Date(lastActivityAt)),
       expectedFinish: start.expectedFinish,
+      clearBy: start.clearBy,
+      stallReason,
     });
   }
   lines.sort((a, b) => a.orderId.localeCompare(b.orderId));
@@ -336,8 +362,10 @@ export function buildOpenOrdersSection(orders: OpenOrderLine[] | null): string {
     L.push('- none');
   } else {
     for (const o of orders) {
+      const reasonBit =
+        o.status === 'stalled' && o.stallReason ? ` · reason ${o.stallReason}` : '';
       L.push(
-        `- ${o.status}: ${o.orderId} · ${o.repo} · ${o.branch} · ${o.machine} · last ${o.lastActivityBerlin}`
+        `- ${o.status}: ${o.orderId} · ${o.repo} · ${o.branch} · ${o.machine}${reasonBit} · last ${o.lastActivityBerlin}`
       );
     }
   }
@@ -354,6 +382,7 @@ export type StallRouteResult = {
 /**
  * Route stalled orders to Dept2 IN. Never sets pending.
  * At most once per order per Berlin day (P4 dedupe).
+ * Build-order stalls carry reason `no-receipt` (source stays dept2-stall).
  */
 export async function routeStalledBuildOrders(
   sql: DabosSql,
@@ -364,15 +393,18 @@ export async function routeStalledBuildOrders(
   const results: StallRouteResult[] = [];
   for (const o of stalled) {
     if (o.status !== 'stalled') continue;
+    const reason = o.stallReason ?? NO_RECEIPT_REASON;
     const externalId = stallExternalId(o.orderId, day);
     const meta = {
       stall_of: o.orderId,
+      reason,
       rule: 'build_order_past_expected_finish',
       from: 'build-receipt',
       repo: o.repo,
       branch: o.branch,
       machine: o.machine,
       expected_finish: o.expectedFinish,
+      clear_by: o.clearBy,
     };
     const inserted = await sql`
       INSERT INTO tasks (
@@ -383,7 +415,7 @@ export async function routeStalledBuildOrders(
         ${'Div1'},
         ${'Dept2'},
         ${`Stall: build order ${o.orderId}`.slice(0, 200)},
-        ${`Build order ${o.orderId} past expected_finish; repo ${o.repo} branch ${o.branch}`},
+        ${`Build order ${o.orderId} reason ${reason}; repo ${o.repo} branch ${o.branch} machine ${o.machine}`},
         ${'agent'},
         ${'todo'},
         ${2},

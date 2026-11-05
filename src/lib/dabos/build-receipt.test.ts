@@ -6,6 +6,7 @@ import {
   berlinDay,
   buildOpenOrdersSection,
   classifyOpenOrders,
+  NO_RECEIPT_REASON,
   readOpenOrders,
   routeStalledBuildOrders,
   writeFinishReceipt,
@@ -101,6 +102,7 @@ describe('open-order classification + digest lines', () => {
     branch: 'div4/build-receipts',
     machine: 'HZR52',
     expectedFinish: '2026-11-01T21:00:00Z',
+    clearBy: null,
     startedAt: '2026-11-01T19:00:00Z',
     finishedAt: null,
     finishStatus: null,
@@ -116,7 +118,12 @@ describe('open-order classification + digest lines', () => {
       now
     );
     expect(running).toEqual([
-      expect.objectContaining({ orderId: 'run', status: 'running', machine: 'HZR52' }),
+      expect.objectContaining({
+        orderId: 'run',
+        status: 'running',
+        machine: 'HZR52',
+        stallReason: null,
+      }),
     ]);
 
     const done = classifyOpenOrders(
@@ -132,12 +139,30 @@ describe('open-order classification + digest lines', () => {
       now
     );
     expect(done[0]?.status).toBe('done');
+    expect(done[0]?.stallReason).toBeNull();
 
     const stalled = classifyOpenOrders(
       [baseStart({ orderId: 'stall', expectedFinish: '2026-11-01T20:00:00Z' })],
       now
     );
     expect(stalled[0]?.status).toBe('stalled');
+    expect(stalled[0]?.stallReason).toBe(NO_RECEIPT_REASON);
+
+    const byClearBy = classifyOpenOrders(
+      [
+        baseStart({
+          orderId: 'clear',
+          expectedFinish: null,
+          clearBy: '2026-11-01T20:00:00Z',
+        }),
+      ],
+      now
+    );
+    expect(byClearBy[0]).toMatchObject({
+      orderId: 'clear',
+      status: 'stalled',
+      stallReason: NO_RECEIPT_REASON,
+    });
 
     const closed = classifyOpenOrders(
       [
@@ -154,7 +179,7 @@ describe('open-order classification + digest lines', () => {
     expect(closed).toEqual([]);
   });
 
-  it('buildOpenOrdersSection and digest render running/done/stalled lines', () => {
+  it('buildOpenOrdersSection and digest render running/done/stalled lines with no-receipt', () => {
     const now = new Date('2026-11-01T21:30:00Z');
     const orders = classifyOpenOrders(
       [
@@ -173,8 +198,11 @@ describe('open-order classification + digest lines', () => {
     const section = buildOpenOrdersSection(orders);
     expect(section).toContain('## Open orders (3)');
     expect(section).toMatch(/running: a ·/);
-    expect(section).toMatch(/stalled: b ·/);
+    expect(section).toMatch(
+      /stalled: b · A-sop\/logans-tools · div4\/build-receipts · HZR52 · reason no-receipt ·/
+    );
     expect(section).toMatch(/done: c ·/);
+    expect(section).not.toMatch(/running: a .*reason/);
     expect(section).toContain('Berlin');
 
     const digest = buildDigest({
@@ -193,11 +221,15 @@ describe('open-order classification + digest lines', () => {
     });
     expect(digest.markdown).toContain('## Open orders (3)');
     expect(digest.markdown).toContain('stalled: b');
+    expect(digest.markdown).toContain('reason no-receipt');
     expect(digest.json.openOrders?.map((o) => o.status).sort()).toEqual([
       'done',
       'running',
       'stalled',
     ]);
+    expect(digest.json.openOrders?.find((o) => o.orderId === 'b')?.stallReason).toBe(
+      NO_RECEIPT_REASON
+    );
   });
 });
 
@@ -207,7 +239,7 @@ describe('stall routing once per Berlin day', { timeout: 60_000 }, () => {
     await db.close();
   });
 
-  it('inserts Dept2 IN once; second same-day route is a no-op; never pending', async () => {
+  it('inserts Dept2 IN once with reason no-receipt + repo/branch/machine; second same-day is no-op', async () => {
     db = await setup();
     const sql = pgliteSql(db);
     await writeStartReceipt(sql, {
@@ -220,7 +252,16 @@ describe('stall routing once per Berlin day', { timeout: 60_000 }, () => {
     });
     const now = new Date('2026-11-01T20:00:00Z');
     const open = await readOpenOrders(sql, now);
-    expect(open).toEqual([expect.objectContaining({ orderId: 'stall-9', status: 'stalled' })]);
+    expect(open).toEqual([
+      expect.objectContaining({
+        orderId: 'stall-9',
+        status: 'stalled',
+        stallReason: NO_RECEIPT_REASON,
+        repo: 'A-sop/logans-tools',
+        branch: 'div4/build-receipts',
+        machine: 'HZR52',
+      }),
+    ]);
 
     const r1 = await routeStalledBuildOrders(sql, open, now);
     expect(r1).toEqual([
@@ -233,8 +274,14 @@ describe('stall routing once per Berlin day', { timeout: 60_000 }, () => {
     const r2 = await routeStalledBuildOrders(sql, open, now);
     expect(r2[0]?.wrote).toBe(false);
 
-    const stalls = await db.query<{ basket: string; division_id: string; department_id: string; src: string }>(
-      `SELECT basket, division_id, department_id, ingest_source AS src
+    const stalls = await db.query<{
+      basket: string;
+      division_id: string;
+      department_id: string;
+      src: string;
+      meta: unknown;
+    }>(
+      `SELECT basket, division_id, department_id, ingest_source AS src, ingest_meta AS meta
          FROM tasks WHERE ingest_source = 'dept2-stall'`
     );
     expect(stalls.rows).toHaveLength(1);
@@ -245,6 +292,32 @@ describe('stall routing once per Berlin day', { timeout: 60_000 }, () => {
       src: 'dept2-stall',
     });
     expect(stalls.rows[0]!.basket).not.toBe('pending');
+    expect(stalls.rows[0]!.meta).toMatchObject({
+      reason: NO_RECEIPT_REASON,
+      stall_of: 'stall-9',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      from: 'build-receipt',
+    });
+  });
+});
+
+describe('P4 stall kinds stay on courier/wake', () => {
+  it('keeps existing P4 stall rule strings in courier/wake unchanged', () => {
+    const courier = readRepoFile('ops/ln02/comm-center/courier.sh');
+    const wake = readRepoFile('ops/ln02/comm-center/wake.sh');
+    for (const rule of [
+      'pending_gt_7d',
+      'clear_by_gt_24h',
+      'blocker_pending_gt_72h',
+      'blocker_in_gt_24h',
+    ]) {
+      expect(courier).toContain(`'${rule}'`);
+    }
+    expect(wake).toContain("'in_after_2_wakes'");
+    expect(courier).not.toContain('no-receipt');
+    expect(wake).not.toContain('no-receipt');
   });
 });
 

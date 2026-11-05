@@ -2,7 +2,8 @@
 
 Zero-token OUT-basket receipts for agent builds. Stacked on comm-center baskets (#66) and
 status digest (#61). Acceptance:
-`docs/acceptance/2026-11-01_build_receipts_open_orders_stall.ACCEPTANCE.md` (+ AMENDMENT-1).
+`docs/acceptance/2026-11-01_build_receipts_open_orders_stall.ACCEPTANCE.md`
+(+ AMENDMENT-1, AMENDMENT-2).
 
 ## CLI
 
@@ -21,14 +22,16 @@ Requires `DABOS_BUILD_RECEIPT_DATABASE_URL` (no fallback to `DATABASE_URL`).
 ## Digest (display only)
 
 The status digest gains an **Open orders** section: one line per order still open (from start
-until 24 h after finish) as `running` | `done` | `stalled`. The digest role is SELECT-only and
-never routes stalls.
+until 24 h after finish) as `running` | `done` | `stalled`. Stalled lines include
+`reason no-receipt`. The digest role is SELECT-only and never routes stalls.
 
 ## Stall alarm (separate job)
 
-Stalled orders are routed to Dept2 IN with `ingest_source='dept2-stall'` (at most once per
-order per Berlin day) by `dabos:route-stalls` under role `dabos_build_receipt`. Routing never
-sets `basket='pending'`.
+Stalled orders (start receipt, no finish, now past `expected_finish` or `clear_by`) are routed
+to Dept2 IN with `ingest_source='dept2-stall'` and `ingest_meta.reason='no-receipt'` (plus
+repo, branch, machine) at most once per order per Berlin day by `dabos:route-stalls` under
+role `dabos_build_receipt`. Routing never sets `basket='pending'`. Existing #66 P4 stall
+`rule` values are unchanged.
 
 ## SQL (files only)
 
