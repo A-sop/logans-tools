@@ -234,12 +234,12 @@ cc_psql() {
     return 1
   fi
   cc_export_pg_from_url "$url" || return 1
-  local rc
+  local rc had_e=$-
   set +e
   psql -v ON_ERROR_STOP=1 "$@"
   rc=$?
   cc_cleanup_pgpass
-  set +e
+  [[ $had_e == *e* ]] && set -e
   return "$rc"
 }
 
@@ -271,7 +271,7 @@ cc_post_webhook() {
     printf 'header = "Content-Type: application/json"\n'
   } >"$cfg"
 
-  local rc
+  local rc had_e=$-
   set +e
   printf '%s' "$body" | curl -sS -f -X POST \
     --config "$cfg" \
@@ -280,7 +280,7 @@ cc_post_webhook() {
     >/dev/null
   rc=$?
   rm -rf "$tmp"
-  set +e
+  [[ $had_e == *e* ]] && set -e
   return "$rc"
 }
 
