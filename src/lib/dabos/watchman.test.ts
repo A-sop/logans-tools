@@ -660,8 +660,13 @@ describe.sequential('send, dedupe and full ticks on PGlite', { timeout: 60_000 }
     await send({ subject: 'FYI a', dedupeKey: 'div4:m1' });
     await send({ subject: 'noted', body: '', dedupeKey: 'div4:m2' });
     await send({ claim: 'urgent', reason: 'security: made-up', dedupeKey: 'div4:m3' });
+    // insertSend stamps created_at with wall-clock now(); pin to the frozen NOW so the
+    // Berlin-day metrics window (2026-11-01) matches dispatched_at from tick(NOW).
+    await db.exec(`UPDATE agent_inbox SET created_at = '${NOW.toISOString()}'`);
     await tick(NOW);
-    await db.exec(`UPDATE agent_inbox SET status = 'delivered', delivered_at = now() WHERE batch_id IS NOT NULL`);
+    await db.exec(
+      `UPDATE agent_inbox SET status = 'delivered', delivered_at = '${NOW.toISOString()}' WHERE batch_id IS NOT NULL`
+    );
     const nextDay = new Date('2026-11-02T08:00:00Z');
     const r = await tick(nextDay);
     expect(r.metrics).toBe('written');
