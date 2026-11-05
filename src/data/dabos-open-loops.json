@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T19:20:57.720Z",
+  "generated_at": "2026-11-05T17:31:14.074Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
@@ -14,9 +14,9 @@
     "total": 155,
     "by_segment": {
       "treasury": 13,
-      "assets": 97,
+      "assets": 96,
       "mail": 13,
-      "esto": 5,
+      "esto": 6,
       "gfp": 6,
       "consulting": 3,
       "legal": 1,
@@ -34,7 +34,7 @@
       "Dept6": 6,
       "Dept7": 0,
       "Dept8": 13,
-      "Dept9": 97,
+      "Dept9": 96,
       "Dept10": 0,
       "Dept11": 1,
       "Dept12": 0,
@@ -45,15 +45,15 @@
       "Dept17": 0,
       "Dept18": 0,
       "Dept19": 0,
-      "Dept20": 5,
+      "Dept20": 6,
       "Dept21": 12
     }
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-10-15",
+    "since": "2026-10-30",
     "closed": 0,
-    "still_open": 1,
+    "still_open": 0,
     "by_dept": {
       "Dept1": {
         "closed": 0,
@@ -133,7 +133,7 @@
       },
       "Dept20": {
         "closed": 0,
-        "still_open": 1
+        "still_open": 0
       },
       "Dept21": {
         "closed": 0,
@@ -444,10 +444,10 @@
       "dept": "Dept20"
     },
     {
-      "id": "260929_green-bridge-patrick-murphy",
+      "id": "260929_green-bridge-client",
       "why": "Appointment done. Detail superseded by 261007_green-bridge-fk-akte-hzr. Client / payroll lane. Docs → mail@germanfinancialplanning.de.",
-      "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
-      "resume": "Green Bridge Patrick",
+      "canonical": "project-plans/green-bridge-europe-client-brief-2026-09-29.md · DATA 10_WORK\\Green-Bridge-Europe-GmbH-Co-KG\\",
+      "resume": "Green Bridge [client]",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -544,10 +544,10 @@
       "dept": "Dept1"
     },
     {
-      "id": "260929_green-bridge-patrick-murphy",
+      "id": "260929_green-bridge-client",
       "why": "Superseded detail by 261007_green-bridge-fk-akte-hzr — still own client / payroll lane.",
-      "canonical": "project-plans/green-bridge-europe-patrick-murphy-2026-09-29.md",
-      "resume": "Green Bridge Patrick",
+      "canonical": "project-plans/green-bridge-europe-client-brief-2026-09-29.md",
+      "resume": "Green Bridge [client]",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -864,10 +864,10 @@
       "dept": "Dept9"
     },
     {
-      "id": "261008_proxalto-dianatinasab-pack",
+      "id": "261008_proxalto-pack",
       "why": "NEW 2026-10-08 HZR drain. Proxalto Leben cancel pack filled (260626_); bank/sign/stamp/send + ensure Cursor skills on HZR. Foreign passport → Reisepass + Niederlassungserlaubnis Ausweis.",
-      "canonical": "Proviso docs/reference/handover-proxalto-dianatinasab-2026-10-08.md · leben-kuendigung-verlust-workflow.md",
-      "resume": "Dianatinasab Proxalto / Proxalto Kündigung pack",
+      "canonical": "Proviso docs/reference/handover-proxalto-2026-10-08.md · leben-kuendigung-verlust-workflow.md",
+      "resume": "[client] Proxalto / Proxalto Kündigung pack",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -1116,12 +1116,12 @@
     {
       "id": "261007_ramkhoo-eat-buchwald",
       "why": "Blaue Karte not issued. Buchwald mail sent 1 Oct. Do not re-file. Was on wip-LDW-20261004 only; restored to main 2026-10-08.",
-      "canonical": "Dropbox KUNDENORDNER\\Ramkhoo, Hamidreza\\!_Protokoll.md",
+      "canonical": "Dropbox KUNDENORDNER\\[client]\\!_Protokoll.md",
       "resume": "Ramkhoo Blaue Karte an Buchwald",
       "heat": "hot",
       "source": "chat-backlog",
-      "segment": "assets",
-      "dept": "Dept9"
+      "segment": "esto",
+      "dept": "Dept20"
     },
     {
       "id": "260819_acer-downloads-into-onedrive",
@@ -1356,7 +1356,7 @@
     {
       "id": "260922_jono-roi-sheets",
       "why": "From ship board. Score the three Allfinanz ROI Sheets.",
-      "canonical": "10_WORK\\LDW-GFP\\prospects\\Birkett-Jonothan\\!_Protokoll.md",
+      "canonical": "10_WORK\\LDW-GFP\\prospects\\[prospect]\\!_Protokoll.md",
       "resume": "Jono ROI sheets",
       "heat": "hot",
       "source": "chat-backlog",
@@ -1454,10 +1454,10 @@
       "dept": "Dept4"
     },
     {
-      "id": "261007_borghei-miri-vasp",
+      "id": "261007_vasp-client-hzr",
       "why": "docs/reference/venture-dvag/handover-borghei-miri-vasp-hzr-2026-10-07.md · Dropbox Akte",
       "canonical": "docs/reference/venture-dvag/handover-borghei-miri-vasp-hzr-2026-10-07.md · Dropbox Akte",
-      "resume": "Borghei Miri VASP / continue Reza Borghei",
+      "resume": "vasp-client-hzr-2026-10-07 / continue Reza vasp-client-hzr-2026-10-07",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -1727,9 +1727,9 @@
     },
     {
       "id": "261008_gfp-marika-mm-followup",
-      "why": "Money Manual / Marika client-pack chat drained for HZR migrate. Pack on GFP main; human closeout + voice + A-252 open.",
+      "why": "Money Manual / <prospect-name> client-pack chat drained for HZR migrate. Pack on GFP main; human closeout + voice + A-252 open.",
       "canonical": "GFP src/docs/handover-marika-money-manual-hzr-2026-10-08.md · DABOS docs/registers/gfp-marika-mm-followup-hzr-2026-10-08.md",
-      "resume": "Marika Money Manual / client pack closeout",
+      "resume": "<prospect-name> Money Manual / client pack closeout",
       "heat": "open",
       "source": "chat-backlog",
       "segment": "assets",
