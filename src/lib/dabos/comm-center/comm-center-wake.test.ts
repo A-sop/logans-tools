@@ -189,4 +189,37 @@ describe.skipIf(!BASH)('comm-center lib secrets + env (Amendment 2)', { timeout:
     expect(body).not.toMatch(/source\s+"\$f"/);
     expect(body).toMatch(/wider than 600/);
   });
+
+  it('cc_psql / cc_post_webhook restore errexit after success (A3.2)', () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), 'cc-errexit-'));
+    const bin = path.join(dir, 'bin');
+    mkdirSync(bin);
+    writeFileSync(path.join(bin, 'psql'), `#!/usr/bin/env bash\necho ok\nexit 0\n`, 'utf8');
+    chmodSync(path.join(bin, 'psql'), 0o755);
+    const script = `
+      set -e
+      . "${fwd(LIB)}"
+      curl() { cat >/dev/null; return 0; }
+      export -f curl
+      export COMM_CENTER_DATABASE_URL='postgres://u:p@127.0.0.1:5432/db?sslmode=disable'
+      cc_psql -c 'select 1' >/dev/null
+      case \$- in *e*) echo psql_errexit_on ;; *) echo psql_errexit_off; exit 2 ;; esac
+      cc_post_webhook 'https://example.invalid/hook' 'k' '{"x":1}'
+      case \$- in *e*) echo curl_errexit_on ;; *) echo curl_errexit_off; exit 3 ;; esac
+      false
+      echo should_not_reach
+    `;
+    const r = spawnSync(BASH!, ['-c', script], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        PATH: `${fwd(bin)}${path.delimiter}${process.env.PATH || ''}`,
+      },
+    });
+    rmSync(dir, { recursive: true, force: true });
+    expect(r.status).not.toBe(0);
+    expect(r.stdout).toMatch(/psql_errexit_on/);
+    expect(r.stdout).toMatch(/curl_errexit_on/);
+    expect(r.stdout).not.toMatch(/should_not_reach/);
+  });
 });

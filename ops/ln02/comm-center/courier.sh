@@ -151,12 +151,15 @@ UPDATE tasks t
        department_id = CASE
          WHEN upper(btrim(t.ingest_meta->>'to')) LIKE 'DEPT%' THEN
            'Dept' || (substring(upper(btrim(t.ingest_meta->>'to')) from 5)::int)::text
+         WHEN upper(btrim(t.ingest_meta->>'to')) LIKE 'DIV%' THEN NULL
+         WHEN upper(btrim(t.ingest_meta->>'to')) = 'LDW' THEN NULL
          ELSE t.department_id
        END,
        assigned_agent = CASE
          WHEN upper(btrim(t.ingest_meta->>'to')) = 'LDW' THEN 'LDW'
          WHEN upper(btrim(t.ingest_meta->>'to')) LIKE 'DIV%' THEN
            'Div' || right(upper(btrim(t.ingest_meta->>'to')), 1)
+         WHEN upper(btrim(t.ingest_meta->>'to')) LIKE 'DEPT%' THEN NULL
          ELSE t.assigned_agent
        END,
        ingest_meta = (coalesce(t.ingest_meta, '{}'::jsonb)

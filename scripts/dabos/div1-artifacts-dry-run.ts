@@ -88,7 +88,8 @@ async function main() {
     process.exit(2);
   }
   const b = res.basis;
-  console.log(`RESULT      : would post Div1 artifacts_indexed = ${res.value}`);
+  const reconTag = b.start_source === 'reconstructed-prev' ? ' (basis:reconstructed-prev)' : '';
+  console.log(`RESULT      : would post Div1 artifacts_indexed = ${res.value}${reconTag}`);
   console.log(`method      : ${b.method} (start ${b.start_source}); pages ${b.pages_at_start} -> ${b.pages_at_end}, +${b.pages_added} / -${b.pages_removed}`);
   if (b.method === 'git') {
     console.log(`git commits : ${b.git_start_commit?.slice(0, 8) ?? '-'} -> ${b.git_end_commit?.slice(0, 8) ?? '-'}; fetched ${b.git_fetched_at} via ${b.git_fetch_signal}`);

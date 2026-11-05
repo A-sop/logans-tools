@@ -45,6 +45,8 @@
     "dabos:route-stalls": "tsx scripts/dabos/build-receipt.ts route-stalls",
     "dabos:comm-center-rollback-export": "tsx scripts/dabos/comm-center-rollback-export.ts",
     "dabos:route": "tsx scripts/dabos/route.ts",
+    "dabos:watchman": "tsx scripts/dabos/watchman.ts",
+    "dabos:inbox": "tsx scripts/dabos/dabos-inbox.ts",
     "intake:run": "tsx scripts/dabos-ops/run-local-intake.ts",
     "intake:init": "tsx scripts/dabos-ops/run-local-intake.ts --ensure-only",
     "intake:preflight": "tsx scripts/dabos-ops/preflight.ts",

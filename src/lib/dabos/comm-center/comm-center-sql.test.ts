@@ -252,4 +252,70 @@ describe('comm-center SQL (PGlite)', { timeout: 60_000 }, () => {
     expect(by['done-with-to']?.division_id).toBe('Div1');
     expect(JSON.stringify(by['done-with-to']?.ingest_meta)).toContain('filed_at');
   });
+
+  it('Div5→Dept10 and Dept→Div leave the old Post IN (A3.1)', async () => {
+    // Mirrors wake.sh Post IN predicate (assigned_agent first, else division_id).
+    const inFor = (post: string) => `
+      SELECT count(*)::int AS n FROM tasks WHERE title = $1 AND basket = 'in' AND (
+        assigned_agent IN ('${post}', lower('${post}'), upper('${post}'))
+        OR (
+          (assigned_agent IS NULL OR assigned_agent NOT IN (
+            'LDW','ldw','Ldw','Div1','Div2','Div3','Div4','Div5','Div6','Div7',
+            'div1','div2','div3','div4','div5','div6','div7'
+          ))
+          AND division_id IN ('${post}', lower('${post}'), upper('${post}'))
+        )
+      )`;
+
+    const courierSql = extractCourierSql();
+    db = await setup();
+
+    // (a) Div5-held row forwarded to Dept10 → must leave Div5 IN, land in Div4 IN.
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, assigned_agent, ingest_meta)
+      VALUES ('Div5', 'Dept2', 'div5-to-dept10', 'todo', 'out', 'Div5',
+        '{"from":"Div5","to":"Dept10"}'::jsonb);
+    `);
+    await db.exec(courierSql);
+    const afterDept = await db.query<{
+      basket: string;
+      division_id: string;
+      department_id: string;
+      assigned_agent: string | null;
+    }>(
+      `SELECT basket, division_id, department_id, assigned_agent FROM tasks WHERE title = 'div5-to-dept10'`
+    );
+    expect(afterDept.rows[0]?.basket).toBe('in');
+    expect(afterDept.rows[0]?.division_id).toBe('Div4');
+    expect(afterDept.rows[0]?.department_id).toBe('Dept10');
+    expect(afterDept.rows[0]?.assigned_agent).toBeNull();
+    const div5Sees = await db.query<{ n: number }>(inFor('Div5'), ['div5-to-dept10']);
+    const div4Sees = await db.query<{ n: number }>(inFor('Div4'), ['div5-to-dept10']);
+    expect(div5Sees.rows[0]?.n).toBe(0);
+    expect(div4Sees.rows[0]?.n).toBe(1);
+
+    // (b) Reverse class: Dept13-held (no Div agent) sent to Div5 → leave Div4 IN, land in Div5 IN.
+    await db.exec(`
+      INSERT INTO tasks (division_id, department_id, title, status, basket, assigned_agent, ingest_meta)
+      VALUES ('Div4', 'Dept13', 'dept13-to-div5', 'todo', 'out', NULL,
+        '{"from":"Dept13","to":"Div5"}'::jsonb);
+    `);
+    await db.exec(courierSql);
+    const afterDiv = await db.query<{
+      basket: string;
+      division_id: string;
+      department_id: string | null;
+      assigned_agent: string | null;
+    }>(
+      `SELECT basket, division_id, department_id, assigned_agent FROM tasks WHERE title = 'dept13-to-div5'`
+    );
+    expect(afterDiv.rows[0]?.basket).toBe('in');
+    expect(afterDiv.rows[0]?.division_id).toBe('Div5');
+    expect(afterDiv.rows[0]?.assigned_agent).toBe('Div5');
+    expect(afterDiv.rows[0]?.department_id).toBeNull();
+    const div4Sees2 = await db.query<{ n: number }>(inFor('Div4'), ['dept13-to-div5']);
+    const div5Sees2 = await db.query<{ n: number }>(inFor('Div5'), ['dept13-to-div5']);
+    expect(div4Sees2.rows[0]?.n).toBe(0);
+    expect(div5Sees2.rows[0]?.n).toBe(1);
+  });
 });
