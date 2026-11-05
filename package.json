@@ -32,6 +32,7 @@
     "dabos:clear-seed-stats": "tsx scripts/dabos/clear-seed-stats.ts",
     "dabos:verify-establishment": "tsx scripts/dabos/verify-establishment.ts",
     "dabos:stats-snapshot": "tsx scripts/dabos/query-stats-snapshot.ts",
+    "dabos:week-stats-live": "tsx scripts/dabos/query-week-stats-live.ts",
     "dabos:esto-status": "tsx scripts/dabos/update-esto-round1.ts",
     "dabos:seed-open-tasks": "tsx scripts/dabos/seed-production-open-tasks.ts",
     "dabos:sync-open-loops": "tsx scripts/dabos/sync-open-loops.ts",
