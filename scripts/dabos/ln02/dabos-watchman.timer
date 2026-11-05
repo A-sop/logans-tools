@@ -1,0 +1,13 @@
+# RR-010 step 1: watchman tick every 5 minutes (batches flush at most every 2 h, 07:00-23:00 Berlin;
+# that rule lives in the code, not here).
+[Unit]
+Description=DABOS watchman timer (every 5 minutes)
+
+[Timer]
+OnCalendar=*-*-* *:00/5:00
+Persistent=false
+AccuracySec=30s
+Unit=dabos-watchman.service
+
+[Install]
+WantedBy=timers.target

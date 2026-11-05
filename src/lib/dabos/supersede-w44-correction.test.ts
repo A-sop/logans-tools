@@ -111,7 +111,8 @@ async function counts(db: PGlite) {
 }
 
 describe('migration 021 (supersede columns)', () => {
-  it('is idempotent (applies twice)', async () => {
+  // PGlite + double-apply of 021 can exceed the default 5s under a full parallel suite on Windows.
+  it('is idempotent (applies twice)', { timeout: 30_000 }, async () => {
     const db = await createDabosTestDb();
     await db.exec(MIGRATION_021);
     const cols = await db.query<{ n: number }>(`

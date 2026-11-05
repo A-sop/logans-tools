@@ -12,6 +12,7 @@ import {
   normaliseRemoteUrl,
   pageFingerprint,
   pagesAddedBetween,
+  reconstructPreviousFingerprintsFromGit,
   type PreviousDiv1Row,
   wikiPageFingerprints,
   wikiPageTargets,
@@ -282,6 +283,53 @@ describe('git: previous row = start point, origin/main at the close = end (F1)',
       loadPreviousFingerprints: async () => ({ week: '2026-W44', fingerprints: fps([2, 3, 4, 5, 6, 20, 7, 8]) }),
     });
     expect(r).toMatchObject({ ok: true, value: 2, basis: { start_source: 'previous_row', snapshot_baseline_week: '2026-W44' } });
+  });
+  it('legacy previous row (no page_fingerprints): reconstructs from git; start_source reconstructed-prev', async () => {
+    const recon = reconstructPreviousFingerprintsFromGit(repo, W44.start);
+    expect(recon.ok).toBe(true);
+    if (!recon.ok) return;
+    const legacy: PreviousDiv1Row = {
+      week: '2026-W43',
+      fingerprints: [],
+      missingFingerprints: true,
+    };
+    const r = await computeArtifactsIndexedWeekly({
+      window: W44,
+      repoRoot: repo,
+      loadPreviousFingerprints: async () => legacy,
+    });
+    expect(r).toMatchObject({
+      ok: true,
+      basis: { start_source: 'reconstructed-prev', snapshot_baseline_week: '2026-W43', method: 'git' },
+    });
+    if (!r.ok) return;
+    // Same value as storing the reconstructed set on the previous row (never silent empty start).
+    const withStored = await computeArtifactsIndexedWeekly({
+      window: W44,
+      repoRoot: repo,
+      loadPreviousFingerprints: async () => ({
+        week: '2026-W43',
+        fingerprints: recon.fingerprints,
+        gitEndCommit: recon.commit,
+      }),
+    });
+    expect(withStored).toMatchObject({ ok: true, value: r.value, basis: { start_source: 'previous_row' } });
+    expect(r.basis.pages_at_start).toBe(recon.fingerprints.length);
+    expect(r.basis.pages_at_start).toBeGreaterThan(0);
+  });
+  it('legacy previous row + snapshot source -> NOT POSTED (cannot reconstruct without git)', async () => {
+    const r = await computeArtifactsIndexedWeekly({
+      window: W44,
+      repoRoot: repo,
+      source: 'snapshot',
+      loadPreviousFingerprints: async () => ({
+        week: '2026-W43',
+        fingerprints: [],
+        missingFingerprints: true,
+      }),
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toMatch(/basis:reconstructed-prev/);
   });
 });
 
@@ -593,6 +641,51 @@ describe('postDivisionWeeklyStats emits the Div1 row', { timeout: 60_000 }, () =
     expect(inserts).toHaveLength(0);
     expect(res.notes.some((n) => n.startsWith('Div1 artifacts_indexed NOT POSTED - previous-week Div1 row lookup failed'))).toBe(true);
   });
+  it('invalid present fingerprints still fail closed; reconstruction is not attempted', async () => {
+    const rows: StatRow[] = [
+      {
+        ws: 'div-live-2026-W43',
+        recordedAt: '2026-10-22T11:59:59.999Z',
+        superseded: false,
+        recordedBy: 'week-close-poster',
+        // Present but invalid (wrong shape) — must not reconstruct as if the key were absent.
+        basis: { page_fingerprints: ['not-a-fingerprint'], value_note: 'legacy-looking' },
+      },
+    ];
+    const { sql, inserts } = fakeSql(rows);
+    const res = await postDivisionWeeklyStats({ dabosSql: sql, window: W44, dabosRepoRoot: repo, only: ['Div1'] });
+    expect(inserts).toHaveLength(0);
+    expect(
+      res.notes.some(
+        (n) =>
+          n.startsWith('Div1 artifacts_indexed NOT POSTED - previous-week Div1 row lookup failed') &&
+          n.includes('no valid basis.page_fingerprints')
+      )
+    ).toBe(true);
+    expect(res.notes.every((n) => !n.includes('reconstructed-prev'))).toBe(true);
+  });
+  it('legacy W43 row (no page_fingerprints key) -> W44 posts with start_source reconstructed-prev', async () => {
+    // Mirrors ln02: active W43 Div1 value 0 from week-close-poster, predating fingerprints.
+    const rows: StatRow[] = [
+      {
+        ws: 'div-live-2026-W43',
+        recordedAt: '2026-10-22T11:59:59.999Z',
+        superseded: false,
+        recordedBy: 'week-close-poster',
+        basis: { method: 'legacy', pages_at_end: 0 },
+      },
+    ];
+    const { sql, inserts } = fakeSql(rows);
+    const res = await postDivisionWeeklyStats({ dabosSql: sql, window: W44, dabosRepoRoot: repo, only: ['Div1'] });
+    expect(inserts).toHaveLength(1);
+    const basis = JSON.parse(String(inserts[0]!.basis)) as Record<string, unknown>;
+    expect(basis).toMatchObject({ start_source: 'reconstructed-prev', snapshot_baseline_week: '2026-W43', method: 'git' });
+    expect(inserts[0]!.value).toBeGreaterThan(0);
+    expect(res.notes.some((n) => n.includes('method git'))).toBe(true);
+  });
+  // Real W44 = 60 (232 -> 292) needs A-sop/DABOS git history; verify on ln02 after merge:
+  //   ~/bin/dabos-div1-dry-run.sh --week=2026-W44
+  // Expect exit 0, value 60, basis:reconstructed-prev (W43 legacy), neon MATCH.
   it('W45 on a mirror without git: uses the W44 Div1 row baseline', async () => {
     utimesSync(path.join(plain, 'docs', 'wiki', 'index.md'), new Date('2026-11-02T09:00:00Z'), new Date('2026-11-02T09:00:00Z'));
     const rows: StatRow[] = [
