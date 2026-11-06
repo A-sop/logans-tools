@@ -10,7 +10,7 @@ type DabosChromeProps = {
   shell: DabosShellData | null;
 };
 
-/** Cloud DABOS surfaces (Neon). Local-office pages (Status, Triage, DIL, Debt) stay at their URLs. */
+/** Cloud DABOS surfaces (Neon). Local-office pages (Status, Triage, Debt) stay at their URLs. */
 const DABOS_CHROME_LINKS = [
   { href: '/dabos', label: 'Board' },
   { href: '/dabos/open', label: 'Open' },
