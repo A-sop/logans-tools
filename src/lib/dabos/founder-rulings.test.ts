@@ -30,7 +30,16 @@ describe('lower conditions + founder ruling', () => {
     expect(p.entity_ids).toHaveLength(21);
     expect(p.condition).toBe('Confusion');
   });
+  it('6 Nov enemy and doubt climb presets cover Dept1-21', () => {
+    const enemy = FOUNDER_RULING_PRESETS['2026-11-06-enemy-climb']!;
+    const doubt = FOUNDER_RULING_PRESETS['2026-11-06-doubt-climb']!;
+    expect(enemy.entity_ids).toHaveLength(21);
+    expect(enemy.condition).toBe('Enemy');
+    expect(doubt.entity_ids).toHaveLength(21);
+    expect(doubt.condition).toBe('Doubt');
+  });
 });
+
 
 describe('upgrade gate (founder ruling 2026-10-22)', () => {
   it('blocks a raise from a computed or formula row', () => {
