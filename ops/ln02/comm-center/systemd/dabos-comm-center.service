@@ -1,0 +1,9 @@
+[Unit]
+Description=DABOS comm-center pick-up (courier + wake)
+Documentation=file:%h/Dev/logans-tools/src/docs/dabos/comm-center.md
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/.config/dabos/comm-center.env
+ExecStart=%h/bin/dabos-comm-center auto
+Nice=10

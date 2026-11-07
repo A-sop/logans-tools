@@ -1,0 +1,225 @@
+// @vitest-environment node
+/**
+ * Bash tests for ops/ln02/comm-center wake decision CSV (skip / wake / error escalation).
+ * Skipped where no POSIX bash exists.
+ */
+import { spawnSync } from 'child_process';
+import {
+  chmodSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'fs';
+import os from 'os';
+import path from 'path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
+const ROOT = path.resolve(__dirname, '../../../../ops/ln02/comm-center');
+const WAKE = path.join(ROOT, 'wake.sh');
+const LIB = path.join(ROOT, 'lib.sh');
+const COURIER = path.join(ROOT, 'courier.sh');
+
+function findBash(): string | null {
+  if (process.platform !== 'win32') return existsSync('/bin/bash') ? '/bin/bash' : null;
+  const gitBash = 'C:\\Program Files\\Git\\bin\\bash.exe';
+  return existsSync(gitBash) ? gitBash : null;
+}
+const BASH = findBash();
+const fwd = (p: string) => p.replace(/\\/g, '/');
+
+describe.skipIf(!BASH)('comm-center wake.sh', { timeout: 30_000 }, () => {
+  let dir: string;
+  let state: string;
+  let log: string;
+  let csv: string;
+
+  beforeEach(() => {
+    dir = mkdtempSync(path.join(os.tmpdir(), 'comm-center-'));
+    state = path.join(dir, 'state');
+    log = path.join(dir, 'log.jsonl');
+    csv = path.join(dir, 'counts.csv');
+    mkdirSync(state);
+    const envPath = path.join(dir, 'empty.env');
+    writeFileSync(envPath, '# none\n');
+    try {
+      chmodSync(envPath, 0o600);
+    } catch {
+      /* Windows may ignore mode; bash tests still exercise parser */
+    }
+  });
+  afterEach(() => rmSync(dir, { recursive: true, force: true }));
+
+  const run = (post: string, env: Record<string, string> = {}) => {
+    const r = spawnSync(BASH!, [fwd(WAKE), post], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        CC_STATE_DIR: fwd(state),
+        CC_LOG_FILE: fwd(log),
+        CC_CSV_FILE: fwd(csv),
+        CC_ENV_FILE: fwd(path.join(dir, 'empty.env')),
+        WAKE_DRY_RUN: '1',
+        WAKE_ERROR_WAKE_AFTER: '2',
+        // Force missing DB so check-error path runs without psql
+        COMM_CENTER_DATABASE_URL: '',
+        WAKE_DATABASE_URL: '',
+        DATABASE_URL: '',
+        ...env,
+      },
+    });
+    return {
+      code: r.status ?? 1,
+      csv: existsSync(csv) ? readFileSync(csv, 'utf8') : '',
+      log: existsSync(log) ? readFileSync(log, 'utf8') : '',
+      state: existsSync(path.join(state, `${post}.state.json`))
+        ? JSON.parse(readFileSync(path.join(state, `${post}.state.json`), 'utf8'))
+        : null,
+    };
+  };
+
+  it('records error then wakes with check-error on second failure', () => {
+    const r1 = run('Div4', { WAKE_DIV4_URL: 'http://example.invalid/hook', WAKE_DIV4_KEY: 'k' });
+    expect(r1.csv).toMatch(/Div4,.*,error/);
+    expect(r1.state.consecutive_errors).toBe(1);
+
+    const r2 = run('Div4', { WAKE_DIV4_URL: 'http://example.invalid/hook', WAKE_DIV4_KEY: 'k' });
+    expect(r2.csv).toMatch(/Div4,.*,wake/);
+    expect(r2.log).toMatch(/check-error/);
+  });
+
+  it('DIGEST slot skips without agent wake', () => {
+    const r = run('DIGEST');
+    expect(r.code).toBe(0);
+    expect(r.csv).toMatch(/DIGEST,.*,skip/);
+  });
+});
+
+describe.skipIf(!BASH)('comm-center clocks lib', { timeout: 15_000 }, () => {
+  it('loads clocks.env.example without syntax error', () => {
+    const script = `
+      set -euo pipefail
+      ROOT="${fwd(ROOT)}"
+      . "$ROOT/lib.sh"
+      cc_load_env "$ROOT/clocks.env.example"
+      test -n "\${COMM_CLOCK_DIV1:-}"
+      echo ok
+    `;
+    const p = path.join(os.tmpdir(), `cc-clocks-${Date.now()}.sh`);
+    writeFileSync(p, script.replace(/\r\n/g, '\n'));
+    chmodSync(p, 0o755);
+    const r = spawnSync(BASH!, [fwd(p)], { encoding: 'utf8' });
+    rmSync(p, { force: true });
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain('ok');
+  });
+});
+
+describe.skipIf(!BASH)('comm-center lib secrets + env (Amendment 2)', { timeout: 20_000 }, () => {
+  it('cc_post_webhook and cc_psql do not put secrets on argv', () => {
+    const lib = readFileSync(LIB, 'utf8');
+    const courier = readFileSync(COURIER, 'utf8');
+    const wake = readFileSync(WAKE, 'utf8');
+    // No curl -H with interpolated auth/key on argv
+    expect(lib).not.toMatch(/curl[^\n]*-H\s+"\$\{header_name\}:\s*\$\{auth\}"/);
+    expect(lib).toMatch(/--config/);
+    expect(lib).toMatch(/header = "@/);
+    // cc_psql must exist; callers must not pass URL as argv
+    expect(lib).toMatch(/cc_psql\s*\(\)/);
+    expect(lib).toMatch(/PGPASSFILE/);
+    expect(courier).not.toMatch(/psql\s+"\$DB_URL"/);
+    expect(courier).toMatch(/cc_psql/);
+    expect(wake).not.toMatch(/psql\s+"\$DB_URL"/);
+    expect(wake).toMatch(/cc_psql/);
+  });
+
+  it('cc_load_env parses KEY=VALUE literally and refuses wide mode on POSIX', () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), 'cc-env-'));
+    const good = path.join(dir, 'good.env');
+    const wide = path.join(dir, 'wide.env');
+    writeFileSync(good, 'HELLO=world\nEXPAND=$(echo pwned)\nTICK=`echo pwned`\n');
+    writeFileSync(wide, 'X=1\n');
+    try {
+      chmodSync(good, 0o600);
+      chmodSync(wide, 0o644);
+    } catch {
+      /* mode may be no-op on some Windows FS */
+    }
+
+    const script = `
+      set -euo pipefail
+      ROOT="${fwd(ROOT)}"
+      . "$ROOT/lib.sh"
+      cc_load_env "${fwd(good)}"
+      test "$HELLO" = "world"
+      # Literal — no command substitution
+      test "$EXPAND" = '$(echo pwned)'
+      test "$TICK" = '${'`'}echo pwned${'`'}'
+      case "$(uname -s 2>/dev/null || true)" in
+        MINGW*|MSYS*|CYGWIN*)
+          echo ok
+          exit 0
+          ;;
+      esac
+      if cc_load_env "${fwd(wide)}"; then
+        echo "wide-accepted"
+        exit 2
+      fi
+      echo ok
+    `;
+    const p = path.join(dir, 'run.sh');
+    writeFileSync(p, script.replace(/\r\n/g, '\n'));
+    chmodSync(p, 0o755);
+    const r = spawnSync(BASH!, [fwd(p)], { encoding: 'utf8' });
+    const err = (r.stderr || '') + (r.stdout || '');
+    rmSync(dir, { recursive: true, force: true });
+    expect(r.status, err).toBe(0);
+    expect(r.stdout).toContain('ok');
+    expect(r.stdout).not.toContain('wide-accepted');
+  });
+
+  it('cc_load_env does not shell-source (no dot of env file in function body)', () => {
+    const lib = readFileSync(LIB, 'utf8');
+    const loadStart = lib.indexOf('cc_load_env()');
+    const loadEnd = lib.indexOf('\ncc_state_path', loadStart);
+    const body = lib.slice(loadStart, loadEnd);
+    expect(body).not.toMatch(/^\s*\.\s+"\$f"/m);
+    expect(body).not.toMatch(/source\s+"\$f"/);
+    expect(body).toMatch(/wider than 600/);
+  });
+
+  it('cc_psql / cc_post_webhook restore errexit after success (A3.2)', () => {
+    const dir = mkdtempSync(path.join(os.tmpdir(), 'cc-errexit-'));
+    const bin = path.join(dir, 'bin');
+    mkdirSync(bin);
+    writeFileSync(path.join(bin, 'psql'), `#!/usr/bin/env bash\necho ok\nexit 0\n`, 'utf8');
+    chmodSync(path.join(bin, 'psql'), 0o755);
+    const script = `
+      set -e
+      . "${fwd(LIB)}"
+      curl() { cat >/dev/null; return 0; }
+      export -f curl
+      export COMM_CENTER_DATABASE_URL='postgres://u:p@127.0.0.1:5432/db?sslmode=disable'
+      cc_psql -c 'select 1' >/dev/null
+      case \$- in *e*) echo psql_errexit_on ;; *) echo psql_errexit_off; exit 2 ;; esac
+      cc_post_webhook 'https://example.invalid/hook' 'k' '{"x":1}'
+      case \$- in *e*) echo curl_errexit_on ;; *) echo curl_errexit_off; exit 3 ;; esac
+      false
+      echo should_not_reach
+    `;
+    const r = spawnSync(BASH!, ['-c', script], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        PATH: `${fwd(bin)}${path.delimiter}${process.env.PATH || ''}`,
+      },
+    });
+    rmSync(dir, { recursive: true, force: true });
+    expect(r.status).not.toBe(0);
+    expect(r.stdout).toMatch(/psql_errexit_on/);
+    expect(r.stdout).toMatch(/curl_errexit_on/);
+    expect(r.stdout).not.toMatch(/should_not_reach/);
+  });
+});

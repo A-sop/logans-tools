@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Wrapper installed to ~/bin/dabos-comm-center
+set -euo pipefail
+ROOT="${COMM_CENTER_ROOT:-$HOME/.local/share/dabos/comm-center}"
+exec bash "$ROOT/slot-runner.sh" "$@"
