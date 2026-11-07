@@ -1,0 +1,15 @@
+# Placeholder 4×/day Berlin — confirm against Grok routine panel before cutover.
+[Unit]
+Description=DABOS wake-if-new telegram triage timer (4×/day Berlin)
+
+[Timer]
+OnCalendar=*-*-* 08:00:00 Europe/Berlin
+OnCalendar=*-*-* 12:00:00 Europe/Berlin
+OnCalendar=*-*-* 16:00:00 Europe/Berlin
+OnCalendar=*-*-* 20:00:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=dabos-wake-telegram-triage.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,13 @@
+# Matches status-digest LDW read times (12:30 / 20:45 Berlin).
+[Unit]
+Description=DABOS wake-if-new status reports timer (12:30 + 20:45 Berlin)
+
+[Timer]
+OnCalendar=*-*-* 12:30:00 Europe/Berlin
+OnCalendar=*-*-* 20:45:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=dabos-wake-status-reports.service
+
+[Install]
+WantedBy=timers.target

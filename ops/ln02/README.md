@@ -1,4 +1,9 @@
-# ln02 ops: checkout sync + week-close Div1 clone (RR-010 step 0)
+# ln02 ops
+
+Also see **wake-if-new** (RR-010 item 3): `wake-if-new/` + `install-wake-if-new.sh` and
+`src/docs/dabos/wake-if-new.md`.
+
+# Checkout sync + week-close Div1 clone (RR-010 step 0)
 
 Files installed on ln02 (user `logancontrol`, systemd --user) by `install-ln02-checkout-sync.sh`:
 
