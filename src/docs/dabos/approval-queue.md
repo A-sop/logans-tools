@@ -1,4 +1,7 @@
-# approval_queue: the one place for Logan's yes/no (RR-010 step 2)
+# Founder approval queue (`approval_queue`) — Logan's yes/no (RR-010 step 2)
+
+**Canonical name:** Founder approval queue. **Not** “A5 decision table” (retired — A5 is the human-only send/pay/sign *rule*, not this board).  
+DABOS pointer: `C:\Dev\DABOS\docs\reference\dept02-coordination\founder-approval-queue.md`.
 
 Logan, Sun 1 Nov 2026, 14:54 Berlin (relayed by LDW Communicator): "Build the wake rules, the
 approval queue and one status digest on ln02? Yes to steps 1–3".

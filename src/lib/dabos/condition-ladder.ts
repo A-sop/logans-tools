@@ -51,11 +51,22 @@ export function nextBetterCondition(label: ConditionLabel): ConditionLabel | nul
   return UPPER_CONDITION_LADDER[idx - 1]!;
 }
 
+/** Absolute production floor: a flat series at/near zero is not Normal (founder 2026-11-06). */
+export const FLAT_ZERO_ABS_EPSILON = 1e-9;
+
 /**
  * Map weekly stat trend to PRD-004 **stat-indicated** upper ladder (3+ points required by caller).
  * Does not set working condition — see condition-state.ts.
+ *
+ * Flat non-zero bands → Normal. Flat **zero / near-zero absolute** → Non-Existence
+ * (doing nothing is not Normal — founder audit Dept4 2026-11-06).
  */
 export function conditionFromStatTrend(values: number[]): ConditionLabel {
+  const absMax = Math.max(...values.map((v) => Math.abs(v)));
+  if (absMax <= FLAT_ZERO_ABS_EPSILON) {
+    return 'Non-Existence';
+  }
+
   const mid = Math.floor(values.length / 2);
   const first = values.slice(0, mid);
   const second = values.slice(mid);
@@ -75,4 +86,4 @@ export function conditionFromStatTrend(values: number[]): ConditionLabel {
 }
 
 export const CONDITION_RULE_SUMMARY =
-  'PRD-004 stat-indicated ladder from relative weekly trend (Power Change … Non-Existence)';
+  'PRD-004 stat-indicated ladder from relative weekly trend (Power Change … Non-Existence); flat absolute-zero series → Non-Existence (not Normal)';

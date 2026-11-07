@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Thin wrapper installed to ~/bin/dabos-wake-if-new
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# When installed to ~/bin, WAKE_IF_NEW_ROOT points at the versioned tree.
+ROOT="${WAKE_IF_NEW_ROOT:-$ROOT}"
+exec "$ROOT/runner.sh" "$@"

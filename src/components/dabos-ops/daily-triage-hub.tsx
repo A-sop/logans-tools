@@ -24,7 +24,7 @@ function PipeCard({ pipe, href }: { pipe: PipeStatus; href?: string }) {
           <div className="mb-1 flex justify-between text-xs text-muted-foreground">
             <span>Ready for you</span>
             <span className="tabular-nums">
-              {pipe.reviewCount} / {pipe.reviewTargetMin}â€“{pipe.reviewTargetMax}
+              {pipe.reviewCount} / {pipe.reviewTargetMin}–{pipe.reviewTargetMax}
             </span>
           </div>
           <ProgressBar value={pipe.reviewCount} max={pipe.reviewTargetMin} />
@@ -55,17 +55,17 @@ export function DailyTriageHub({ data }: { data: DailyTriageData }) {
         <p className="text-sm font-medium tracking-wide text-muted-foreground">Daily habit</p>
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Triage hub</h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Morning coffee or afternoon lull â€” confirm prepared items, don&apos;t guilt-schedule weekly
+          Morning coffee or afternoon lull — confirm prepared items, don&apos;t guilt-schedule weekly
           inbox days. Automation refills the queue; you approve and file.
         </p>
         {!data.ranToday ? (
           <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
-            Pipeline has not run today. Task Scheduler should sync overnight captures â€” or run{' '}
+            Pipeline has not run today. Task Scheduler should sync overnight captures — or run{' '}
             <code className="text-xs">Run-DailyTriage.ps1</code> now.
           </p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Last pipeline: {data.lastPipelineRun ? new Date(data.lastPipelineRun).toLocaleString() : 'â€”'}
+            Last pipeline: {data.lastPipelineRun ? new Date(data.lastPipelineRun).toLocaleString() : '—'}
           </p>
         )}
       </header>
@@ -75,35 +75,32 @@ export function DailyTriageHub({ data }: { data: DailyTriageData }) {
           <p className="text-lg font-semibold text-foreground">{data.dailyNudge}</p>
           <p className="mt-2 text-sm text-muted-foreground">
             <span className="font-medium text-foreground">{data.totals.readyForHuman}</span> prepared
-            Â· <span className="font-medium text-foreground">{data.totals.rawBacklog}</span> raw backlog
+            · <span className="font-medium text-foreground">{data.totals.rawBacklog}</span> raw backlog
           </p>
         </div>
 
-        <PipeCard pipe={data.dataInbox} href="/dil/review" />
+        <PipeCard pipe={data.dataInbox} />
         <PipeCard pipe={data.wikiCapture} />
       </div>
 
       <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-        <h2 className="text-base font-semibold">What to do (10â€“20 min)</h2>
+        <h2 className="text-base font-semibold">What to do (10–20 min)</h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
           <li>
-            <Link href="/dil/review" className="font-medium text-primary hover:underline">
-              DIL review
-            </Link>{' '}
-            â€” approve renames/folders for DATA inbox ({data.dilReview.todo} todo)
+            Drain <code>C:\DATA\00_INBOX</code> via Paperless consume + Bridge to a real DATA home (
+            {data.dataInbox.rawCount} shallow files)
           </li>
           <li>
-            Open <code>DABOS/docs/wiki/needs_review/</code> â€” confirm{' '}
+            Open <code>DABOS/docs/wiki/needs_review/</code> — confirm{' '}
             <code>triage.md</code> per Telegram capture ({data.wikiCapture.reviewCount} items)
           </li>
-          <li>Say in Cursor: &quot;triage daily queue&quot; â€” agent knows the workflow</li>
+          <li>Say in Cursor: &quot;triage daily queue&quot; — agent knows the workflow</li>
         </ol>
       </section>
 
       <section className="text-xs text-muted-foreground">
         <p>
-          Agents: <code>Atlas/docs/admin/daily-triage.md</code> Â· rule{' '}
-          <code>.cursor/rules/daily-triage.mdc</code>
+          Agents: <code>DABOS/docs/reference/dept21-executive-director/founder-desk/daily-triage.md</code>
         </p>
       </section>
     </div>

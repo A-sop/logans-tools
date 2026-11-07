@@ -9,13 +9,20 @@ export function evaluateConditionFromPoints(
   meta: { entity_type: string; entity_id: string; metric_key: string; window_days: number }
 ): ConditionEvaluation {
   if (values.length < 3) {
+    // Honest indicated rung when there is no trend yet: Non-Existence
+    // (blank/null is not allowed — founder 2026-11-06). Working rung is separate.
     return {
-      condition: null,
-      stat_indicated_condition: null,
+      condition: 'Non-Existence',
+      stat_indicated_condition: 'Non-Existence',
       working_condition: null,
-      confidence: null,
+      confidence: 0.2,
       point_count: values.length,
-      basis: { ...meta, values },
+      basis: {
+        ...meta,
+        values,
+        rule: 'insufficient_data → stat_indicated Non-Existence (no 3-period series)',
+        kind: 'stat_indicated',
+      },
       reason: 'insufficient_data',
     };
   }

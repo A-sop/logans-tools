@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { DocumentRegistryIndex } from '@/lib/dabos-ops/document-intake/registry-sqlite';
-import { getRegistryPaths } from '@/lib/dabos-ops/document-intake/registry-config';
 
 const APP_ROOT = process.cwd();
 const DABOS_ROOT = process.env.DABOS_ROOT?.trim() || 'C:\\Dev\\DABOS';
@@ -27,12 +25,6 @@ export type DailyTriageData = {
   dailyNudge: string;
   dataInbox: PipeStatus;
   wikiCapture: PipeStatus;
-  dilReview: {
-    todo: number;
-    later: number;
-    unprocessedInbox: number;
-    detail: string;
-  };
   totals: {
     readyForHuman: number;
     rawBacklog: number;
@@ -85,25 +77,11 @@ function ranToday(iso: string | null): boolean {
 
 export function getDailyTriageData(): DailyTriageData {
   const wiki = countWikiReview();
-  let dilTodo = 0;
-  let dilLater = 0;
-
-  try {
-    const paths = getRegistryPaths();
-    const index = new DocumentRegistryIndex(paths.registryDbPath);
-    const stats = index.getReviewDecisionStats();
-    dilTodo = stats.todo;
-    dilLater = stats.later;
-    index.close();
-  } catch {
-    /* registry optional when DB missing */
-  }
 
   let dataInboxFiles = 0;
   try {
     if (fs.existsSync(DATA_INBOX)) {
       const walk = (dir: string, depth: number): number => {
-        // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
         if (depth > 2) return 0;
         let n = 0;
         for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -122,7 +100,7 @@ export function getDailyTriageData(): DailyTriageData {
   }
 
   const lastPipelineRun = readLastPipelineRun();
-  const readyForHuman = wiki.review + dilTodo;
+  const readyForHuman = wiki.review;
   const rawBacklog = wiki.raw + dataInboxFiles;
 
   return {
@@ -132,30 +110,24 @@ export function getDailyTriageData(): DailyTriageData {
     dailyNudge:
       readyForHuman > 0
         ? `Coffee triage: ${readyForHuman} items ready for you to confirm.`
-        : 'Pipeline can refill queues â€” run daily triage when you have 10 minutes.',
+        : 'Pipeline can refill queues — run daily triage when you have 10 minutes.',
     dataInbox: {
       label: 'C:\\DATA\\00_INBOX',
       rawCount: dataInboxFiles,
-      reviewCount: dilTodo,
+      reviewCount: 0,
       reviewTargetMin: WIKI_REVIEW_TARGET_MIN,
       reviewTargetMax: WIKI_REVIEW_TARGET_MAX,
-      detail: 'Documents you dropped knowing they need sorting.',
-      action: 'Open DIL review â€” rename, bucket, approve filing.',
+      detail: 'Documents awaiting Paperless consume / Bridge filing to a real DATA home.',
+      action: 'File via Paperless + Bridge (or Cursor Dept1). DIL retired 2026-11-06.',
     },
     wikiCapture: {
-      label: 'Telegram â†’ wiki',
+      label: 'Telegram → wiki',
       rawCount: wiki.raw,
       reviewCount: wiki.review,
       reviewTargetMin: WIKI_REVIEW_TARGET_MIN,
       reviewTargetMax: WIKI_REVIEW_TARGET_MAX,
       detail: 'Ideas, links, photos from Telegram (priority capture).',
-      action: 'Confirm triage.md â†’ wiki or DATA.',
-    },
-    dilReview: {
-      todo: dilTodo,
-      later: dilLater,
-      unprocessedInbox: dataInboxFiles,
-      detail: `${dataInboxFiles} file(s) under DATA inbox (shallow count).`,
+      action: 'Confirm triage.md → wiki or DATA.',
     },
     totals: {
       readyForHuman,

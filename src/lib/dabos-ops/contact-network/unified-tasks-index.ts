@@ -8,8 +8,8 @@ import type {
   UnifiedTaskTriageStatus,
   UnifiedTasksImportReport,
 } from '@/lib/dabos-ops/contact-network/unified-tasks-types';
-import type { BookmarkReviewFilter } from '@/lib/dabos-ops/contact-network/bookmark-review-types';
-import { BOOKMARK_IMPORT_NOTE, bookmarkReviewFromNotes } from '@/lib/dabos-ops/contact-network/bookmark-review-constants';
+/** Legacy DIL bookmark-review import marker (column still on DB; UI retired 2026-11-06). */
+const BOOKMARK_IMPORT_NOTE = 'imported from bookmarks export';
 
 type UnifiedTaskRow = {
   id: number;
@@ -584,111 +584,6 @@ export class UnifiedTasksIndex {
     return row ? mapRow(row) : null;
   }
 
-  public getBookmarkReviewStats(): { todo: number; noted: number; kept: number; totalOpen: number } {
-    const todo = (
-      this.db
-        .prepare(
-          `
-        SELECT COUNT(*) AS count FROM unified_tasks
-        WHERE source_system = 'bookmark' AND status = 'open' AND duplicate_of IS NULL
-          AND triage_status = 'needs_triage'
-          AND (bookmark_review IS NULL OR bookmark_review = 'pending')
-      `
-        )
-        .get() as { count: number }
-    ).count;
-    const noted = (
-      this.db
-        .prepare(
-          `
-        SELECT COUNT(*) AS count FROM unified_tasks
-        WHERE source_system = 'bookmark' AND status = 'open' AND duplicate_of IS NULL
-          AND triage_status = 'needs_triage' AND bookmark_review = 'noted'
-      `
-        )
-        .get() as { count: number }
-    ).count;
-    const kept = (
-      this.db
-        .prepare(
-          `
-        SELECT COUNT(*) AS count FROM unified_tasks
-        WHERE source_system = 'bookmark' AND duplicate_of IS NULL
-          AND (triage_status = 'promoted' OR bookmark_review = 'keep')
-      `
-        )
-        .get() as { count: number }
-    ).count;
-    const totalOpen = (
-      this.db
-        .prepare(
-          `
-        SELECT COUNT(*) AS count FROM unified_tasks
-        WHERE source_system = 'bookmark' AND status = 'open' AND duplicate_of IS NULL
-      `
-        )
-        .get() as { count: number }
-    ).count;
-    return { todo, noted, kept, totalOpen };
-  }
-
-  private bookmarkReviewWhere(filter: BookmarkReviewFilter): string {
-    const base = "source_system = 'bookmark' AND duplicate_of IS NULL";
-    switch (filter) {
-      case 'todo':
-        return `${base} AND status = 'open' AND triage_status = 'needs_triage' AND (bookmark_review IS NULL OR bookmark_review = 'pending')`;
-      case 'noted':
-        return `${base} AND status = 'open' AND triage_status = 'needs_triage' AND bookmark_review = 'noted'`;
-      case 'kept':
-        return `${base} AND (triage_status = 'promoted' OR bookmark_review = 'keep')`;
-      case 'all':
-      default:
-        return `${base} AND status = 'open' AND triage_status IN ('needs_triage', 'imported')`;
-    }
-  }
-
-  public listBookmarkReviewQueue(
-    filter: BookmarkReviewFilter,
-    limit: number,
-    offset: number
-  ): { items: UnifiedTaskRecord[]; total: number } {
-    const where = this.bookmarkReviewWhere(filter);
-    const total = (
-      this.db.prepare(`SELECT COUNT(*) AS count FROM unified_tasks WHERE ${where}`).get() as { count: number }
-    ).count;
-    const rows = this.db
-      .prepare(
-        `
-        SELECT * FROM unified_tasks
-        WHERE ${where}
-        ORDER BY
-          bookmark_added_at IS NULL,
-          bookmark_added_at ASC,
-          imported_at ASC,
-          id ASC
-        LIMIT ? OFFSET ?
-      `
-      )
-      .all(limit, offset) as UnifiedTaskRow[];
-    return { items: rows.map(mapRow), total };
-  }
-
-  public updateBookmarkNotes(id: number, notes: string): UnifiedTaskRecord | null {
-    const now = new Date().toISOString();
-    const review = bookmarkReviewFromNotes(notes);
-    const result = this.db
-      .prepare(
-        `
-        UPDATE unified_tasks
-        SET notes = ?, bookmark_review = ?, updated_at = ?
-        WHERE id = ? AND source_system = 'bookmark' AND status = 'open' AND triage_status = 'needs_triage'
-      `
-      )
-      .run(notes, review, now, id);
-    if (result.changes === 0) return null;
-    return this.getBookmarkById(id);
-  }
-
   public updateBookmarkLinkCheck(
     id: number,
     link: {
@@ -708,39 +603,6 @@ export class UnifiedTasksIndex {
       `
       )
       .run(link.linkStatus, link.linkCheckedAt, link.linkFinalUrl, link.linkCheckNote, now, id);
-    if (result.changes === 0) return null;
-    return this.getBookmarkById(id);
-  }
-
-  public applyBookmarkReviewDecision(
-    id: number,
-    decision: 'keep' | 'delete',
-    notes?: string | null
-  ): UnifiedTaskRecord | null {
-    const now = new Date().toISOString();
-    let triageStatus: UnifiedTaskTriageStatus = 'needs_triage';
-    let status: UnifiedTaskStatus = 'open';
-    let bookmarkReview: string;
-
-    if (decision === 'keep') {
-      triageStatus = 'promoted';
-      bookmarkReview = 'keep';
-    } else {
-      triageStatus = 'archived';
-      status = 'done';
-      bookmarkReview = 'delete';
-    }
-
-    const result = this.db
-      .prepare(
-        `
-        UPDATE unified_tasks
-        SET triage_status = ?, status = ?, bookmark_review = ?,
-            notes = COALESCE(?, notes), updated_at = ?
-        WHERE id = ? AND source_system = 'bookmark'
-      `
-      )
-      .run(triageStatus, status, bookmarkReview, notes ?? null, now, id);
     if (result.changes === 0) return null;
     return this.getBookmarkById(id);
   }

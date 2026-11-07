@@ -7,7 +7,5 @@ scripts/atlas-ops/
 src/lib/atlas-ops/
 src/components/atlas-ops/
 src/app/dabos/debt/
-src/app/dabos/dil/
 src/app/dabos/status/
 src/app/dabos/triage/
-src/app/api/dabos/dil/
