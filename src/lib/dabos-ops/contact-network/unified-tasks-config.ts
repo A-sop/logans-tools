@@ -1,5 +1,4 @@
 import * as path from 'path';
-import { getHousekeepingPaths } from '@/lib/dabos-ops/document-intake/registry-config';
 import type { UnifiedTaskInboxPaths } from '@/lib/dabos-ops/contact-network/unified-tasks-types';
 
 const DEFAULT_DATA_ROOT = 'C:\\DATA';
@@ -11,11 +10,19 @@ function readEnv(name: string): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+/** Housekeeping export dirs (was DIL registry-config; DIL retired 2026-11-06). */
+function housekeepingExports(dataRoot: string) {
+  const base = path.join(dataRoot, '10_WORK', 'dept01-housekeeping', 'exports');
+  return {
+    exportsTodo: path.join(base, 'todo'),
+    exportsBookmarks: path.join(base, 'bookmarks'),
+  };
+}
+
 export function getUnifiedTaskInboxPaths(): UnifiedTaskInboxPaths {
-  // Prefer DABOS_*; ATLAS_* kept as fallback for older .env.local copies.
   const dataRoot =
     readEnv('DABOS_DATA_ROOT') ?? readEnv('ATLAS_DATA_ROOT') ?? readEnv('DATA_ROOT') ?? DEFAULT_DATA_ROOT;
-  const hk = getHousekeepingPaths(dataRoot);
+  const hk = housekeepingExports(dataRoot);
   const archiveAttio = path.join(dataRoot, '90_ARCHIVE', '_from-inbox-drain-2026-07-12', 'tasks-attio-offboarded');
 
   return {

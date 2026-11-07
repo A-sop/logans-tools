@@ -116,12 +116,13 @@ function evaluateDivisionFromWeeklyRaw(
   meta: { entity_id: string; metric_key: string; year: number; calendar_week: number }
 ): { evaluation: ConditionEvaluation; currentPercentile: number | null } {
   if (weeklyValues.length < 3) {
+    // Blank indicated is not OK — Non-Existence until a real series exists (founder 2026-11-06).
     return {
       evaluation: {
-        condition: null,
-        stat_indicated_condition: null,
+        condition: 'Non-Existence',
+        stat_indicated_condition: 'Non-Existence',
         working_condition: null,
-        confidence: null,
+        confidence: 0.2,
         point_count: weeklyValues.length,
         basis: {
           entity_type: 'division',
@@ -130,6 +131,8 @@ function evaluateDivisionFromWeeklyRaw(
           year: meta.year,
           calendar_week: meta.calendar_week,
           weekly_values: weeklyValues,
+          rule: 'insufficient_data → stat_indicated Non-Existence (no 3-period series)',
+          kind: 'stat_indicated',
         },
         reason: 'insufficient_data',
       },

@@ -1,0 +1,9 @@
+[Unit]
+Description=DABOS wake-if-new: per-division status report gates
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/.config/dabos/wake-if-new.env
+ExecStart=%h/bin/dabos-wake-status-all
+Nice=10

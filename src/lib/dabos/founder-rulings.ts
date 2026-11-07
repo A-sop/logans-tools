@@ -30,6 +30,56 @@ export const FOUNDER_RULING_PRESETS: Record<string, FounderRulingPreset> = {
     ruling_ref: 'DABOS:docs/reference/staff-status/receipts/founder-decision-treason-2026-10-16.md',
     ruling_note: 'Founder rejected Treason claims; all Dept1-21 assigned Confusion.',
   },
+  '2026-11-06-treason-climb': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Treason',
+    ruling_date: '2026-11-06',
+    ruling_ref:
+      'DABOS:docs/reference/staff-status/receipts/founder-decision-improve-confusion-to-treason-all-depts-2026-11-06.md',
+    ruling_note:
+      'Founder OK Confusion EP then improve to Treason climb rung (not a Treason claim). Dept9 Danger parallel.',
+  },
+  '2026-11-06-enemy-climb': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Enemy',
+    ruling_date: '2026-11-06',
+    ruling_ref:
+      'DABOS:docs/reference/staff-status/receipts/founder-decision-improve-treason-to-enemy-all-depts-2026-11-06.md',
+    ruling_note:
+      'Founder OK Enemy formula EP then improve Treason→Enemy climb rung (not an Enemy claim). Dept9 Danger parallel.',
+  },
+  '2026-11-06-doubt-climb': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Doubt',
+    ruling_date: '2026-11-06',
+    ruling_ref:
+      'DABOS:docs/reference/staff-status/receipts/founder-decision-improve-enemy-to-doubt-all-depts-2026-11-06.md',
+    ruling_note:
+      'Founder OK Doubt formula EP then improve Enemy→Doubt climb. Dept9 Danger parallel. Fakers exposed by production.',
+  },
+  '2026-11-06-liability-climb': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Liability',
+    ruling_date: '2026-11-06',
+    ruling_ref:
+      'DABOS:docs/reference/staff-status/receipts/founder-decision-improve-doubt-to-liability-all-depts-2026-11-06.md',
+    ruling_note:
+      'Founder OK Liability formula EP then improve Doubt→Liability. Dept9 Danger parallel.',
+  },
+  '2026-11-06-non-existence-climb': {
+    entity_type: 'department',
+    entity_ids: ALL_DEPTS,
+    condition: 'Non-Existence',
+    ruling_date: '2026-11-06',
+    ruling_ref:
+      'DABOS:docs/reference/staff-status/receipts/founder-decision-improve-liability-to-non-existence-all-depts-2026-11-06.md',
+    ruling_note:
+      'Founder OK Non-Existence New Post formula EP. Lower climb complete. Upper rungs still require formula EP; no skip. Dept9 Danger parallel.',
+  },
 };
 
 /** Founder ruling wins over the computed working condition. */
