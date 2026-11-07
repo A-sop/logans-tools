@@ -1,5 +1,7 @@
 # Scripts
 
+CLI bulk jobs (RR-010 item 4): see `ops/cli-jobs/` and `src/docs/dabos/cli-bulk-jobs.md`.
+
 | Script | Description |
 |--------|-------------|
 | [README-screenshot-landing.md](./README-screenshot-landing.md) | Landing page screenshot — update `public/cm-landing.png` when CM landing page changes |
