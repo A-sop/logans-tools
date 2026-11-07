@@ -1,0 +1,540 @@
+// @vitest-environment node
+import { PGlite } from '@electric-sql/pglite';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import {
+  berlinDay,
+  buildOpenOrdersSection,
+  classifyOpenOrders,
+  NO_RECEIPT_REASON,
+  readOpenOrders,
+  routeStalledBuildOrders,
+  writeFinishReceipt,
+  writeStartReceipt,
+  type BuildReceiptRow,
+} from '@/lib/dabos/build-receipt';
+import { buildDigest, collectDigestInput } from '@/lib/dabos/status-digest';
+import { closedOrgWeek } from '@/lib/dabos/org-week';
+import { pgliteSql, readRepoFile } from '@/test/pglite-dabos';
+import { requireBuildReceiptDatabaseUrl } from '../../../scripts/dabos/build-receipt';
+
+async function setup(): Promise<PGlite> {
+  const db = new PGlite();
+  await db.exec(readRepoFile('migrations/001_create_tables.sql'));
+  await db.exec(readRepoFile('migrations/002_seed_org.sql'));
+  await db.exec(readRepoFile('migrations/018_task_ingest_basket.sql'));
+  return db;
+}
+
+describe('build-receipt start/finish/idempotence', { timeout: 60_000 }, () => {
+  let db: PGlite;
+  afterEach(async () => {
+    await db.close();
+  });
+
+  it('writes start and finish OUT rows; second call is idempotent', async () => {
+    db = await setup();
+    const sql = pgliteSql(db);
+    const start1 = await writeStartReceipt(sql, {
+      orderId: 'ord-21',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T22:30:00+01:00',
+      prLinks: ['https://github.com/A-sop/logans-tools/pull/67'],
+      startedAt: '2026-11-01T20:57:00Z',
+    });
+    expect(start1.wrote).toBe(true);
+    expect(start1.externalId).toBe('ord-21:start');
+
+    const start2 = await writeStartReceipt(sql, {
+      orderId: 'ord-21',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T22:30:00+01:00',
+      startedAt: '2026-11-01T20:57:00Z',
+    });
+    expect(start2.wrote).toBe(false);
+
+    const fin1 = await writeFinishReceipt(sql, {
+      orderId: 'ord-21',
+      status: 'done',
+      finishedAt: '2026-11-01T21:10:00Z',
+      prLinks: ['https://github.com/A-sop/logans-tools/pull/67'],
+    });
+    expect(fin1.wrote).toBe(true);
+    expect(fin1.externalId).toBe('ord-21:finish');
+
+    const fin2 = await writeFinishReceipt(sql, {
+      orderId: 'ord-21',
+      status: 'failed',
+      finishedAt: '2026-11-01T21:11:00Z',
+    });
+    expect(fin2.wrote).toBe(false);
+
+    const rows = await db.query<{ basket: string; ext: string; meta: unknown }>(
+      `SELECT basket, ingest_external_id AS ext, ingest_meta AS meta FROM tasks
+        WHERE ingest_source = 'build-receipt' ORDER BY ingest_external_id`
+    );
+    expect(rows.rows).toHaveLength(2);
+    expect(rows.rows.every((r) => r.basket === 'out')).toBe(true);
+    expect(rows.rows.every((r) => r.basket !== 'pending')).toBe(true);
+    const byExt = Object.fromEntries(rows.rows.map((r) => [r.ext, r]));
+    expect(byExt['ord-21:start']!.meta).toMatchObject({
+      kind: 'build-receipt',
+      phase: 'start',
+      from: 'Div4',
+    });
+    expect(byExt['ord-21:finish']!.meta).toMatchObject({
+      kind: 'build-receipt',
+      phase: 'finish',
+      status: 'done',
+    });
+  });
+});
+
+describe('open-order classification + digest lines', () => {
+  const baseStart = (over: Partial<BuildReceiptRow> = {}): BuildReceiptRow => ({
+    orderId: 'o1',
+    phase: 'start',
+    repo: 'A-sop/logans-tools',
+    branch: 'div4/build-receipts',
+    machine: 'HZR52',
+    expectedFinish: '2026-11-01T21:00:00Z',
+    clearBy: null,
+    startedAt: '2026-11-01T19:00:00Z',
+    finishedAt: null,
+    finishStatus: null,
+    prLinks: [],
+    createdAt: '2026-11-01T19:00:00Z',
+    ...over,
+  });
+
+  it('classifies running, done (within 24h), stalled; drops after 24h', () => {
+    const now = new Date('2026-11-01T21:30:00Z');
+    const running = classifyOpenOrders(
+      [baseStart({ orderId: 'run', expectedFinish: '2026-11-01T22:00:00Z' })],
+      now
+    );
+    expect(running).toEqual([
+      expect.objectContaining({
+        orderId: 'run',
+        status: 'running',
+        machine: 'HZR52',
+        stallReason: null,
+      }),
+    ]);
+
+    const done = classifyOpenOrders(
+      [
+        baseStart({ orderId: 'done1' }),
+        {
+          ...baseStart({ orderId: 'done1', phase: 'finish' }),
+          finishedAt: '2026-11-01T20:00:00Z',
+          finishStatus: 'done',
+          createdAt: '2026-11-01T20:00:00Z',
+        },
+      ],
+      now
+    );
+    expect(done[0]?.status).toBe('done');
+    expect(done[0]?.stallReason).toBeNull();
+
+    const stalled = classifyOpenOrders(
+      [baseStart({ orderId: 'stall', expectedFinish: '2026-11-01T20:00:00Z' })],
+      now
+    );
+    expect(stalled[0]?.status).toBe('stalled');
+    expect(stalled[0]?.stallReason).toBe(NO_RECEIPT_REASON);
+
+    const byClearBy = classifyOpenOrders(
+      [
+        baseStart({
+          orderId: 'clear',
+          expectedFinish: null,
+          clearBy: '2026-11-01T20:00:00Z',
+        }),
+      ],
+      now
+    );
+    expect(byClearBy[0]).toMatchObject({
+      orderId: 'clear',
+      status: 'stalled',
+      stallReason: NO_RECEIPT_REASON,
+    });
+
+    const closed = classifyOpenOrders(
+      [
+        baseStart({ orderId: 'old' }),
+        {
+          ...baseStart({ orderId: 'old', phase: 'finish' }),
+          finishedAt: '2026-10-30T20:00:00Z',
+          finishStatus: 'done',
+          createdAt: '2026-10-30T20:00:00Z',
+        },
+      ],
+      now
+    );
+    expect(closed).toEqual([]);
+  });
+
+  it('buildOpenOrdersSection and digest render running/done/stalled lines with no-receipt', () => {
+    const now = new Date('2026-11-01T21:30:00Z');
+    const orders = classifyOpenOrders(
+      [
+        baseStart({ orderId: 'a', expectedFinish: '2026-11-01T22:00:00Z' }),
+        baseStart({ orderId: 'b', expectedFinish: '2026-11-01T20:00:00Z' }),
+        baseStart({ orderId: 'c' }),
+        {
+          ...baseStart({ orderId: 'c', phase: 'finish' }),
+          finishedAt: '2026-11-01T20:30:00Z',
+          finishStatus: 'done',
+          createdAt: '2026-11-01T20:30:00Z',
+        },
+      ],
+      now
+    );
+    const section = buildOpenOrdersSection(orders);
+    expect(section).toContain('## Open orders (3)');
+    expect(section).toMatch(/running: a ·/);
+    expect(section).toMatch(
+      /stalled: b · A-sop\/logans-tools · div4\/build-receipts · HZR52 · reason no-receipt ·/
+    );
+    expect(section).toMatch(/done: c ·/);
+    expect(section).not.toMatch(/running: a .*reason/);
+    expect(section).toContain('Berlin');
+
+    const digest = buildDigest({
+      now,
+      host: 'ln02',
+      week: closedOrgWeek(now),
+      prs: [],
+      tasks: [],
+      approvals: [],
+      stats: null,
+      cadence: [],
+      systemd: null,
+      checkoutSync: null,
+      openOrders: orders,
+      sourceErrors: [],
+    });
+    expect(digest.markdown).toContain('## Open orders (3)');
+    expect(digest.markdown).toContain('stalled: b');
+    expect(digest.markdown).toContain('reason no-receipt');
+    expect(digest.json.openOrders?.map((o) => o.status).sort()).toEqual([
+      'done',
+      'running',
+      'stalled',
+    ]);
+    expect(digest.json.openOrders?.find((o) => o.orderId === 'b')?.stallReason).toBe(
+      NO_RECEIPT_REASON
+    );
+  });
+});
+
+describe('stall routing once per Berlin day', { timeout: 60_000 }, () => {
+  let db: PGlite;
+  afterEach(async () => {
+    await db.close();
+  });
+
+  it('inserts Dept2 IN once with reason no-receipt + repo/branch/machine; second same-day is no-op', async () => {
+    db = await setup();
+    const sql = pgliteSql(db);
+    await writeStartReceipt(sql, {
+      orderId: 'stall-9',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T18:00:00Z',
+      startedAt: '2026-11-01T17:00:00Z',
+    });
+    const now = new Date('2026-11-01T20:00:00Z');
+    const open = await readOpenOrders(sql, now);
+    expect(open).toEqual([
+      expect.objectContaining({
+        orderId: 'stall-9',
+        status: 'stalled',
+        stallReason: NO_RECEIPT_REASON,
+        repo: 'A-sop/logans-tools',
+        branch: 'div4/build-receipts',
+        machine: 'HZR52',
+      }),
+    ]);
+
+    const r1 = await routeStalledBuildOrders(sql, open, now);
+    expect(r1).toEqual([
+      expect.objectContaining({
+        orderId: 'stall-9',
+        wrote: true,
+        externalId: `stall-9:${berlinDay(now)}`,
+      }),
+    ]);
+    const r2 = await routeStalledBuildOrders(sql, open, now);
+    expect(r2[0]?.wrote).toBe(false);
+
+    const stalls = await db.query<{
+      basket: string;
+      division_id: string;
+      department_id: string;
+      src: string;
+      meta: unknown;
+    }>(
+      `SELECT basket, division_id, department_id, ingest_source AS src, ingest_meta AS meta
+         FROM tasks WHERE ingest_source = 'dept2-stall'`
+    );
+    expect(stalls.rows).toHaveLength(1);
+    expect(stalls.rows[0]).toMatchObject({
+      basket: 'in',
+      division_id: 'Div1',
+      department_id: 'Dept2',
+      src: 'dept2-stall',
+    });
+    expect(stalls.rows[0]!.basket).not.toBe('pending');
+    expect(stalls.rows[0]!.meta).toMatchObject({
+      reason: NO_RECEIPT_REASON,
+      stall_of: 'stall-9',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      from: 'build-receipt',
+    });
+  });
+});
+
+describe('P4 stall kinds stay on courier/wake', () => {
+  it('keeps existing P4 stall rule strings in courier/wake unchanged', () => {
+    const courier = readRepoFile('ops/ln02/comm-center/courier.sh');
+    const wake = readRepoFile('ops/ln02/comm-center/wake.sh');
+    for (const rule of [
+      'pending_gt_7d',
+      'clear_by_gt_24h',
+      'blocker_pending_gt_72h',
+      'blocker_in_gt_24h',
+    ]) {
+      expect(courier).toContain(`'${rule}'`);
+    }
+    expect(wake).toContain("'in_after_2_wakes'");
+    expect(courier).not.toContain('no-receipt');
+    expect(wake).not.toContain('no-receipt');
+  });
+});
+
+describe('build-receipt grants ACL (prod datacl)', { timeout: 60_000 }, () => {
+  const GRANTS = readRepoFile('scripts/dabos/sql/2026-11-01_build_receipt_role_grants.sql');
+  const UNDO = readRepoFile('scripts/dabos/sql/2026-11-01_build_receipt_role_grants.UNDO.sql');
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await setup();
+  });
+  afterEach(async () => {
+    await db.close();
+  });
+
+  async function resetRole() {
+    await db.exec(`
+      DO $$
+      DECLARE r text;
+      BEGIN
+        FOREACH r IN ARRAY ARRAY['dabos_build_receipt', 'br_createrole_owner', 'some_group']
+        LOOP
+          IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r) THEN
+            EXECUTE format('DROP OWNED BY %I CASCADE', r);
+            EXECUTE format('DROP ROLE %I', r);
+          END IF;
+        END LOOP;
+      END $$;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+    `);
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`
+      DO $$ BEGIN
+        EXECUTE 'REVOKE CREATE ON DATABASE "${dbName}" FROM PUBLIC';
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
+    `);
+  }
+
+  it('applies with prod-like PUBLIC =Tc (TEMPORARY+CONNECT) without pre-revoking TEMPORARY', async () => {
+    await resetRole();
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`GRANT CONNECT, TEMPORARY ON DATABASE "${dbName}" TO PUBLIC`);
+    const acl = (
+      await db.query<{ a: string | null }>(
+        `SELECT COALESCE(datacl::text, '') AS a FROM pg_database WHERE datname = current_database()`
+      )
+    ).rows[0]!.a;
+    expect(acl).toMatch(/=T/);
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec(GRANTS);
+    expect(
+      (
+        await db.query<{ ok: boolean }>(
+          `SELECT has_table_privilege('dabos_build_receipt', 'public.tasks', 'INSERT') AS ok`
+        )
+      ).rows[0]!.ok
+    ).toBe(true);
+    await db.exec(UNDO);
+  });
+
+  it('refuses PUBLIC CREATE on the database; TEMPORARY alone does not refuse', async () => {
+    await resetRole();
+    const dbName = (await db.query<{ d: string }>('SELECT current_database() AS d')).rows[0]!.d;
+    await db.exec(`CREATE ROLE dabos_build_receipt NOLOGIN; GRANT CREATE ON DATABASE "${dbName}" TO PUBLIC`);
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 3g/);
+    await db.exec('ROLLBACK');
+    await resetRole();
+
+    await db.exec(`CREATE ROLE dabos_build_receipt NOLOGIN; GRANT TEMP ON DATABASE "${dbName}" TO PUBLIC`);
+    await db.exec(GRANTS);
+    await db.exec(UNDO);
+  });
+
+  it('allows PG16+ CREATEROLE creator ADMIN membership (member = role)', async () => {
+    await resetRole();
+    await db.exec('CREATE ROLE br_createrole_owner NOLOGIN CREATEROLE');
+    await db.exec('SET ROLE br_createrole_owner');
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec('RESET ROLE');
+    await db.exec(GRANTS);
+    await db.exec(UNDO);
+  });
+
+  it('guard 0 refuses when the role is missing', async () => {
+    await resetRole();
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 0/);
+    await db.exec('ROLLBACK');
+  });
+
+  it('guard 3 refuses a column grant (e.g. GRANT UPDATE (title) ON tasks)', async () => {
+    await resetRole();
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec('GRANT UPDATE (title) ON public.tasks TO dabos_build_receipt');
+    await expect(db.exec(GRANTS)).rejects.toThrow(/guard 3d/);
+    await db.exec('ROLLBACK');
+  });
+});
+
+describe('DABOS_BUILD_RECEIPT_DATABASE_URL (no DATABASE_URL fallback)', () => {
+  it('returns the dedicated URL when set', () => {
+    expect(
+      requireBuildReceiptDatabaseUrl({
+        DABOS_BUILD_RECEIPT_DATABASE_URL: 'postgres://receipt-role@localhost/db',
+        DATABASE_URL: 'postgres://owner@localhost/db',
+      })
+    ).toBe('postgres://receipt-role@localhost/db');
+  });
+
+  it('exits non-zero with a clear message when unset even if DATABASE_URL is set', () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((code?: number) => {
+      throw new Error(`process.exit ${code}`);
+    }) as never);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() =>
+      requireBuildReceiptDatabaseUrl({
+        DATABASE_URL: 'postgres://owner@localhost/db',
+        DATABASE_URL_UNPOOLED: 'postgres://owner@localhost/db',
+      })
+    ).toThrow(/process\.exit 1/);
+    expect(errSpy.mock.calls.some((c) => String(c[0]).includes('DABOS_BUILD_RECEIPT_DATABASE_URL'))).toBe(
+      true
+    );
+    expect(errSpy.mock.calls.some((c) => String(c[0]).includes('no fallback to DATABASE_URL'))).toBe(true);
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+});
+
+describe('digest stays read-only; route-stalls uses receipt role', { timeout: 60_000 }, () => {
+  let db: PGlite;
+  afterEach(async () => {
+    await db.close();
+  });
+
+  it('collectDigestInput displays stalled orders but never INSERTs under dabos_status_digest', async () => {
+    db = await setup();
+    await db.exec('CREATE ROLE dabos_status_digest NOLOGIN');
+    await db.exec('GRANT USAGE ON SCHEMA public TO dabos_status_digest');
+    await db.exec('GRANT SELECT ON public.tasks TO dabos_status_digest');
+
+    const ownerSql = pgliteSql(db);
+    await writeStartReceipt(ownerSql, {
+      orderId: 'stall-digest',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T18:00:00Z',
+      startedAt: '2026-11-01T17:00:00Z',
+    });
+
+    await db.exec('SET ROLE dabos_status_digest');
+    const sql = pgliteSql(db);
+    const now = new Date('2026-11-01T20:00:00Z');
+    const input = await collectDigestInput({
+      now,
+      host: 'ln02',
+      sql,
+      github: null,
+      run: null,
+    });
+    expect(input.openOrders).toEqual([
+      expect.objectContaining({ orderId: 'stall-digest', status: 'stalled' }),
+    ]);
+    expect(input.sourceErrors.map((e) => e.source)).not.toContain('neon stall-route');
+    await db.exec('RESET ROLE');
+
+    const stalls = await db.query(
+      `SELECT id FROM tasks WHERE ingest_source = 'dept2-stall'`
+    );
+    expect(stalls.rows).toHaveLength(0);
+
+    // Confirm the digest role cannot INSERT (so a regression that re-adds routing would fail).
+    await db.exec('SET ROLE dabos_status_digest');
+    await expect(
+      db.exec(`INSERT INTO tasks (workspace_id, title, type, status, priority, basket, ingest_source, ingest_external_id)
+               VALUES ('x','x','agent','todo',3,'in','dept2-stall','probe')`)
+    ).rejects.toThrow(/permission denied/i);
+    await db.exec('RESET ROLE');
+  });
+
+  it('routeStalledBuildOrders INSERTs under dabos_build_receipt grants', async () => {
+    db = await setup();
+    const GRANTS = readRepoFile('scripts/dabos/sql/2026-11-01_build_receipt_role_grants.sql');
+    await db.exec(`
+      DO $$ BEGIN
+        EXECUTE 'REVOKE CREATE ON DATABASE "' || current_database() || '" FROM PUBLIC';
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END $$;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+    `);
+    await db.exec('CREATE ROLE dabos_build_receipt NOLOGIN');
+    await db.exec(GRANTS);
+
+    const ownerSql = pgliteSql(db);
+    await writeStartReceipt(ownerSql, {
+      orderId: 'stall-role',
+      repo: 'A-sop/logans-tools',
+      branch: 'div4/build-receipts',
+      machine: 'HZR52',
+      expectedFinish: '2026-11-01T18:00:00Z',
+      startedAt: '2026-11-01T17:00:00Z',
+    });
+
+    await db.exec('SET ROLE dabos_build_receipt');
+    const sql = pgliteSql(db);
+    const now = new Date('2026-11-01T20:00:00Z');
+    const open = await readOpenOrders(sql, now);
+    expect(open[0]?.status).toBe('stalled');
+    const routed = await routeStalledBuildOrders(sql, open, now);
+    expect(routed[0]?.wrote).toBe(true);
+    await db.exec('RESET ROLE');
+
+    const stalls = await db.query<{ basket: string; src: string }>(
+      `SELECT basket, ingest_source AS src FROM tasks WHERE ingest_source = 'dept2-stall'`
+    );
+    expect(stalls.rows).toHaveLength(1);
+    expect(stalls.rows[0]).toMatchObject({ basket: 'in', src: 'dept2-stall' });
+  });
+});

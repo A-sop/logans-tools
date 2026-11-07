@@ -1,0 +1,18 @@
+# Div4: route stalled build orders to Dept2 IN (ln02 user unit).
+# Installed by scripts/dabos/ln02/install-route-stalls.sh, which replaces @REPO@ and @NODE_BIN@.
+# Secrets live only in the EnvironmentFile (mode 600, placed by Logan); none belong in this file.
+# Role: dabos_build_receipt via DABOS_BUILD_RECEIPT_DATABASE_URL. Not the digest role.
+[Unit]
+Description=DABOS build-receipt route-stalls (Dept2 stall alarm)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+EnvironmentFile=%h/.config/dabos/build-receipt.env
+Environment=PATH=@NODE_BIN@:/usr/local/bin:/usr/bin:/bin
+ExecStart=@NODE_BIN@/npm run --silent dabos:route-stalls
+TimeoutStartSec=120
+Nice=10
+NoNewPrivileges=yes
