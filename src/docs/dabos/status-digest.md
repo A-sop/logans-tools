@@ -63,6 +63,11 @@ Logan places the two required secrets. Tip vars are opt-in: missing tip env = si
 failure. The runner never reads `.env.local`; the install script checks only that the file exists, is
 mode 600 and sets the two required names.
 
+**ln02 install note (2026-11-08):** tip enabled with `DABOS_DIGEST_TELEGRAM_TIP=1` + bot/chat from
+exec bot (`~/.dabos-exec.env`). Timer installed via `install-status-digest.sh --apply` using nvm
+Node (`~/.nvm/versions/node/v22.*/bin`) — system `/usr/bin/node` has no npm. Confirm tip with
+`journalctl --user -u dabos-status-digest -n 20` → `tip=ok`.
+
 ## Install / undo
 
 See `scripts/dabos/ln02/install-status-digest.sh` (dry run unless `--apply`) and

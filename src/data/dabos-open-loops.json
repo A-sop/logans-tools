@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-06T17:43:56.415Z",
+  "generated_at": "2026-11-08T20:55:21.927Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
@@ -51,7 +51,7 @@
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-10-31",
+    "since": "2026-11-02",
     "closed": 0,
     "still_open": 0,
     "by_dept": {

@@ -36,8 +36,20 @@ say "repo: $REPO"
   || bad "package.json in $REPO has no dabos:status-digest script"
 [ -d "$REPO/node_modules" ] || bad "$REPO/node_modules missing (run npm ci there first)"
 
-NODE_PATH_BIN="$(command -v node || true)"
-if [ -z "$NODE_PATH_BIN" ]; then bad "node not on PATH"; NODE_BIN=/usr/bin; else NODE_BIN="$(dirname "$NODE_PATH_BIN")"; fi
+# Prefer nvm Node on ln02 (/usr/bin/node is often present without npm).
+if [ -z "${NODE_BIN:-}" ]; then
+  for cand in \
+    "$HOME/.nvm/versions/node/v22.23.4/bin" \
+    "$HOME/.nvm/versions/node/v22.22.3/bin" \
+    "$(dirname "$(command -v node || true)")"
+  do
+    if [ -n "$cand" ] && [ -x "$cand/node" ] && [ -x "$cand/npm" ]; then
+      NODE_BIN="$cand"
+      break
+    fi
+  done
+fi
+if [ -z "${NODE_BIN:-}" ]; then bad "node+npm not found (set NODE_BIN or install nvm Node)"; NODE_BIN=/usr/bin; fi
 [ -x "$NODE_BIN/npm" ] || bad "npm not found next to node in $NODE_BIN"
 say "node bin: $NODE_BIN"
 
