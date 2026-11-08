@@ -860,7 +860,8 @@ export function errorText(e: unknown): string {
 }
 
 /** Default human pull URL for Telegram tips (override via DABOS_DIGEST_PULL_URL). */
-export const DEFAULT_DIGEST_PULL_URL = 'https://dabos.logans.tools/dabos/digest';
+/** Clean path on dabos subdomain (proxy rewrites /digest → /dabos/digest). */
+export const DEFAULT_DIGEST_PULL_URL = 'https://dabos.logans.tools/digest';
 
 /**
  * Founder ruling 2026-11-08: Telegram tip ≤5 lines —

@@ -21,7 +21,7 @@
  *   DABOS_DIGEST_TELEGRAM_TIP=1     enable tip send after a successful file or Neon write
  *   DABOS_DIGEST_TELEGRAM_BOT_TOKEN Bot API token (secret)
  *   DABOS_DIGEST_TELEGRAM_CHAT_ID   chat id (secret)
- *   DABOS_DIGEST_PULL_URL           optional; default https://dabos.logans.tools/dabos/digest
+ *   DABOS_DIGEST_PULL_URL           optional; default https://dabos.logans.tools/digest
  */
 import { execFile } from 'child_process';
 import fs from 'fs';
@@ -140,7 +140,8 @@ async function main() {
     else if (tipResult.reason === 'disabled') tipStatus = 'off';
     else if (tipResult.reason === 'missing_env') tipStatus = 'missing_env';
     else if (tipResult.reason === 'empty') tipStatus = 'empty';
-    else tipStatus = `http_${tipResult.status}`;
+    else if (tipResult.reason === 'http') tipStatus = `http_${tipResult.status}`;
+    else tipStatus = 'failed';
   }
 
   console.log(

@@ -835,7 +835,7 @@ describe('ln02 files and runner hygiene', () => {
     expect(doc).toContain('Owner: **Dept12 Production (Div4)**');
     expect(doc).toContain('checkout-sync.FAIL');
     expect(doc).toContain('`Dept13 PASS @<sha>` or `Dept13 FAIL @<sha>`');
-    expect(doc).toContain('/dabos/digest');
+    expect(doc).toContain('https://dabos.logans.tools/digest');
     expect(doc).toContain('DABOS_DIGEST_TELEGRAM_TIP');
     expect(doc).not.toMatch(/CONDITIONAL/);
   });

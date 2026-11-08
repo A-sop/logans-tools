@@ -12,7 +12,7 @@ of asking another agent for status.
 - Neon `role_runs`: newest row with `role_id = 'status_digest'`, `role_type = 'cadence'`.
   `summary_json->>'markdown'` is the full digest; `needsLogan`, `needsDept13`, `machineAlerts`,
   `divisions` and `sourceErrors` are structured.
-- Web pull: `https://dabos.logans.tools/dabos/digest` (Clerk-gated; `src/app/dabos/digest/page.tsx`).
+- Web pull: `https://dabos.logans.tools/digest` (Clerk-gated; rewrites to `src/app/dabos/digest/page.tsx`).
 
 ```sql
 SELECT ran_at, summary_json->>'markdown'
@@ -57,7 +57,7 @@ Tasks are counted only; titles and descriptions never enter the digest.
 | `DABOS_DIGEST_TELEGRAM_TIP` | set to `1` to enable tip send after a successful write (optional) | same file |
 | `DABOS_DIGEST_TELEGRAM_BOT_TOKEN` | Bot API token for tip send (optional; required only if tip=1) | same file |
 | `DABOS_DIGEST_TELEGRAM_CHAT_ID` | chat id for tip send (optional; required only if tip=1) | same file |
-| `DABOS_DIGEST_PULL_URL` | override tip pull link (default `https://dabos.logans.tools/dabos/digest`) | same file |
+| `DABOS_DIGEST_PULL_URL` | override tip pull link (default `https://dabos.logans.tools/digest`) | same file |
 
 Logan places the two required secrets. Tip vars are opt-in: missing tip env = silent pull-only, not a
 failure. The runner never reads `.env.local`; the install script checks only that the file exists, is
