@@ -15,15 +15,26 @@ import {
 export const DIVISIONS = ['Div1', 'Div2', 'Div3', 'Div4', 'Div5', 'Div6', 'Div7'] as const;
 export type DivisionId = (typeof DIVISIONS)[number];
 
-/** Primary GDS expected on div-live for every division (founder 2026-11-05). */
+/** Primary GDS expected on div-live (Neon 023 / FPL 30 Sep 65 map). */
 export const DIV_LIVE_PRIMARY: Record<DivisionId, string> = {
-  Div1: 'artifacts_indexed',
-  Div2: 'leads_or_touchpoints_created',
-  Div3: 'taxable_income_eur', // also monthly proviso-*; weekly div-live may be absent
-  Div4: 'shipped_outputs',
-  Div5: 'qa_pass_rate',
-  Div6: 'conversions', // venture children may live on gfp-live / other venture workspaces
-  Div7: 'plan_completion_rate',
+  Div1: 'comms_out',
+  Div2: 'new_enrollments',
+  Div3: 'collections_eur', // monthly proviso-*; weekly div-live may be absent
+  Div4: 'completions',
+  Div5: 'qual_cash_eur',
+  Div6: 'fsm_commissions_paid_eur', // dual half new_cf_addresses often on gfp-live
+  Div7: 'gross_income_eur', // often on proviso-* until weekly cash daybook exists
+};
+
+/** Dual GDS secondaries (null = single GDS). */
+export const DIV_LIVE_SECONDARY: Record<DivisionId, string | null> = {
+  Div1: 'comms_in',
+  Div2: 'product_sales',
+  Div3: 'bills_paid_eur',
+  Div4: null,
+  Div5: null,
+  Div6: 'new_cf_addresses',
+  Div7: null,
 };
 
 export type LiveStatRow = {
@@ -103,13 +114,13 @@ export async function fetchLiveWorkspaceRows(
   return (rows as Record<string, unknown>[]).map(mapRow);
 }
 
-/** Live Div3 taxable_income_eur rows on the latest proviso-YYYY-MM workspace. */
+/** Live Div3/Div7 GDS rows on the latest proviso-YYYY-MM workspace. */
 export async function fetchLatestProvisoIncome(sql: DabosSql): Promise<LiveStatRow[]> {
   const latest = await sql`
     SELECT workspace_id
     FROM stats
-    WHERE division_id = 'Div3'
-      AND metric_key = 'taxable_income_eur'
+    WHERE division_id IN ('Div3', 'Div7')
+      AND metric_key IN ('collections_eur', 'taxable_income_eur', 'gross_income_eur')
       AND workspace_id LIKE 'proviso-%'
       AND superseded_at IS NULL
     ORDER BY workspace_id DESC
@@ -118,13 +129,19 @@ export async function fetchLatestProvisoIncome(sql: DabosSql): Promise<LiveStatR
   const ws = (latest as { workspace_id: string }[])[0]?.workspace_id;
   if (!ws) return [];
   return fetchLiveWorkspaceRows(sql, ws).then((rows) =>
-    rows.filter((r) => r.division_id === 'Div3' && r.metric_key === 'taxable_income_eur')
+    rows.filter(
+      (r) =>
+        (r.division_id === 'Div3' || r.division_id === 'Div7') &&
+        r.department_id == null &&
+        ['collections_eur', 'taxable_income_eur', 'gross_income_eur'].includes(r.metric_key)
+    )
   );
 }
 
 function buildPrimaryCoverage(
   divLive: LiveStatRow[],
-  proviso: LiveStatRow[]
+  proviso: LiveStatRow[],
+  gfpLive: LiveStatRow[] = []
 ): PrimaryCoverage[] {
   const out: PrimaryCoverage[] = [];
   for (const div of DIVISIONS) {
@@ -144,7 +161,9 @@ function buildPrimaryCoverage(
       continue;
     }
     if (div === 'Div3') {
-      const p = proviso.find((r) => r.department_id == null);
+      const p =
+        proviso.find((r) => r.division_id === 'Div3' && r.metric_key === 'collections_eur') ??
+        proviso.find((r) => r.division_id === 'Div3' && r.metric_key === 'taxable_income_eur');
       if (p) {
         out.push({
           division_id: div,
@@ -153,7 +172,44 @@ function buildPrimaryCoverage(
           value: p.value,
           stats_id: p.id,
           workspace_id: p.workspace_id,
-          note: 'monthly proviso workspace (not div-live); income unit = month',
+          note: `monthly proviso (${p.metric_key}); unit = month`,
+        });
+        continue;
+      }
+    }
+    if (div === 'Div7') {
+      const p = proviso.find(
+        (r) => r.division_id === 'Div7' && r.metric_key === 'gross_income_eur'
+      );
+      if (p) {
+        out.push({
+          division_id: div,
+          metric_key: metric,
+          status: 'reported',
+          value: p.value,
+          stats_id: p.id,
+          workspace_id: p.workspace_id,
+          note: 'monthly proviso gross_income_eur; unit = month',
+        });
+        continue;
+      }
+    }
+    if (div === 'Div6') {
+      const secondary = DIV_LIVE_SECONDARY.Div6;
+      const gfp =
+        secondary &&
+        gfpLive.find(
+          (r) => r.division_id === 'Div6' && r.department_id == null && r.metric_key === secondary
+        );
+      if (gfp) {
+        out.push({
+          division_id: div,
+          metric_key: metric,
+          status: 'missing',
+          value: null,
+          stats_id: null,
+          workspace_id: gfp.workspace_id,
+          note: `fsm_commissions missing on div-live; gfp-live has ${secondary}=${gfp.value}`,
         });
         continue;
       }
@@ -167,10 +223,12 @@ function buildPrimaryCoverage(
       workspace_id: null,
       note:
         div === 'Div5'
-          ? 'no live row (to-report if zero Dept13 verdicts in window)'
+          ? 'no live row — create qual-cash-log.md (0 OK) or post after Qual product exists'
           : div === 'Div6'
-            ? 'div-live primary missing; check gfp-live / venture workspaces for children'
-            : undefined,
+            ? 'div-live fsm_commissions missing; check fsm-commissions-log + gfp-live new_cf'
+            : div === 'Div1'
+              ? 'create dabos-registers/comms-handled-log.md'
+              : undefined,
     });
   }
   return out;
@@ -191,7 +249,7 @@ export async function readWeekStatsLive(
     fetchLatestProvisoIncome(sql),
   ]);
 
-  const primaryCoverage = buildPrimaryCoverage(divLiveRows, provisoLatest);
+  const primaryCoverage = buildPrimaryCoverage(divLiveRows, provisoLatest, gfpLiveRows);
   return {
     weekId,
     divLiveWorkspace,

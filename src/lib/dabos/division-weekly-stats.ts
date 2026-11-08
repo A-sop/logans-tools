@@ -1,18 +1,8 @@
 /**
- * Division primary weekly/monthly stats → Neon (Dept03 / P03-1).
- * Reads local registers + Proviso Abrechnung (read-only). Never invents ship counts.
- *
- * Div map (STAT-MAP):
- *  Div1 artifacts_indexed (DABOS docs/wiki/index.md pages ADDED in the closed week; artifacts-indexed.ts)
- *  Div2 leads_or_touchpoints_created + Dept4 content_pieces_shipped (content factory = Div2)
- *  Div3 taxable_income_eur (Proviso commission Abrechnung + other incomes as added)
- *  Div4 shipped_outputs (ship-log rows with Validated (Dept13) = PASS <date> and Counts=yes)
- *  Div5 qa_pass_rate (Dept13 checklist PASS / decided verdict instances - per instance, not per PR/SHA)
- *  Div6 conversions — GFP poster (separate module)
- *  Div7 plan_completion_rate (establishment checklist reported / total depts)
- *
- * Cron on Vercel skips local-path metrics when files/DB are absent so we do not
- * overwrite honest Neon points with zero from an empty sandbox.
+ * Division + department weekly/monthly stats → Neon (Dept03 / P03-1).
+ * GDS keys: gds-metric-map.ts · counting rules: DABOS dept03-perception/stat-counting-rules.md
+ * Optional week logs under dabos-registers; missing log → skip (to-report), present → 0 OK.
+ * Cron skips local-path metrics when files/DB are absent (no fake zeros from empty sandbox).
  */
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
@@ -32,6 +22,14 @@ import {
   REGISTER_DATE_TIME_SOURCE,
   type ClosedOrgWeek,
 } from '@/lib/dabos/org-week-window';
+import {
+  countCommsUnits,
+  countEnrollments,
+  countProductSalesQty,
+  countVerdictsDecided,
+  readOptionalText,
+  sumEurLog,
+} from '@/lib/dabos/stat-log-counters';
 
 export type DivisionWeeklyResult = {
   workspaceId: string;
@@ -402,6 +400,23 @@ export async function postDivisionWeeklyStats(opts: {
 
   const contentStatusPath = path.join(REGISTERS, 'content-status-table.md');
   const pipelinePath = path.join(REGISTERS, 'pipeline-register.md');
+  const commsLogPath = path.join(REGISTERS, 'comms-handled-log.md');
+  const enrollmentsLogPath = path.join(REGISTERS, 'enrollments-log.md');
+  const productSalesLogPath = path.join(REGISTERS, 'product-sales-log.md');
+  const billsPaidLogPath = path.join(REGISTERS, 'bills-paid-log.md');
+  const fsmCommissionsLogPath = path.join(REGISTERS, 'fsm-commissions-log.md');
+  const qualCashLogPath = path.join(REGISTERS, 'qual-cash-log.md');
+  const despatchesLogPath = path.join(REGISTERS, 'despatches-cleared-log.md');
+  const designsLogPath = path.join(REGISTERS, 'designs-accepted-log.md');
+  const buildCompletionsLogPath = path.join(REGISTERS, 'build-completions-log.md');
+  const certsLogPath = path.join(REGISTERS, 'certs-issued-log.md');
+  const successStoriesLogPath = path.join(REGISTERS, 'success-stories-log.md');
+  const openDebtsLogPath = path.join(REGISTERS, 'open-debts-log.md');
+  const reservesLogPath = path.join(REGISTERS, 'reserves-log.md');
+  const conditionsLogPath = path.join(REGISTERS, 'conditions-from-stats-log.md');
+  const prioritiesLogPath = path.join(REGISTERS, 'priorities-locked-log.md');
+  const approvalsLogPath = path.join(REGISTERS, 'approvals-cleared-log.md');
+
   const contentStatus = readText(contentStatusPath);
   const pipeline = readText(pipelinePath);
   const shipLog = readText(SHIP_LOG);
@@ -413,17 +428,80 @@ export async function postDivisionWeeklyStats(opts: {
   const shipped = countShippedOutputs(shipLog, window);
   const qaRate = computeQaPassRate(validation, { window });
   const planRate = computePlanCompletionRate(checklist);
+  const verdictsDecided = countVerdictsDecided(
+    validation,
+    window,
+    instanceVerdict,
+    VALIDATED_ON_RE
+  );
 
-  const rows: Array<{
+  const commsOut = countCommsUnits(readOptionalText(commsLogPath), window, 'out');
+  const commsIn = countCommsUnits(readOptionalText(commsLogPath), window, 'in');
+  const enrollments = countEnrollments(readOptionalText(enrollmentsLogPath), window);
+  const productSales = countProductSalesQty(readOptionalText(productSalesLogPath), window);
+  const billsPaid = sumEurLog(readOptionalText(billsPaidLogPath), window, 2);
+  const fsmCommissions = sumEurLog(readOptionalText(fsmCommissionsLogPath), window, 3);
+  const qualCash = sumEurLog(readOptionalText(qualCashLogPath), window, 2);
+  const despatches = countEnrollments(readOptionalText(despatchesLogPath), window);
+  const designs = countEnrollments(readOptionalText(designsLogPath), window);
+  const buildCompletions = countEnrollments(readOptionalText(buildCompletionsLogPath), window);
+  const certsIssued = countEnrollments(readOptionalText(certsLogPath), window);
+  const successStories = countEnrollments(readOptionalText(successStoriesLogPath), window);
+  const openDebts = sumEurLog(readOptionalText(openDebtsLogPath), window, 2);
+  const reserves = sumEurLog(readOptionalText(reservesLogPath), window, 1);
+  const conditionsFromStats = countEnrollments(readOptionalText(conditionsLogPath), window);
+  const prioritiesLocked = countEnrollments(readOptionalText(prioritiesLogPath), window);
+  const approvalsCleared = countEnrollments(readOptionalText(approvalsLogPath), window);
+
+  type StatRow = {
     divisionId: string;
     departmentId: string | null;
     metricKey: string;
     value: number;
     source: string;
     basis?: Record<string, unknown>;
-  }> = [];
+  };
+  const rows: StatRow[] = [];
+  const push = (row: StatRow) => rows.push(row);
+  const pushOrNote = (
+    value: number | null,
+    row: Omit<StatRow, 'value'>,
+    missingNote: string
+  ) => {
+    if (value == null) {
+      notes.push(missingNote);
+      return;
+    }
+    push({ ...row, value });
+    notes.push(`${row.divisionId}${row.departmentId ? '.' + row.departmentId : ''}.${row.metricKey}=${value}`);
+  };
 
-  // Div1: wiki pages ADDED in the closed week (never the running total, never a silent 0).
+  // --- Div1 GDS + substat ---
+  pushOrNote(commsOut, {
+    divisionId: 'Div1',
+    departmentId: null,
+    metricKey: 'comms_out',
+    source: 'comms-handled-log.md Units where Direction=out',
+  }, `Div1.comms_out skipped — missing ${commsLogPath}`);
+  pushOrNote(commsIn, {
+    divisionId: 'Div1',
+    departmentId: null,
+    metricKey: 'comms_in',
+    source: 'comms-handled-log.md Units where Direction=in',
+  }, `Div1.comms_in skipped — missing ${commsLogPath}`);
+  pushOrNote(commsIn, {
+    divisionId: 'Div1',
+    departmentId: 'Dept1',
+    metricKey: 'comms_in',
+    source: 'comms-handled-log.md (Dept1 headline)',
+  }, `Dept1.comms_in skipped — missing ${commsLogPath}`);
+  pushOrNote(despatches, {
+    divisionId: 'Div1',
+    departmentId: 'Dept2',
+    metricKey: 'despatches_cleared',
+    source: 'despatches-cleared-log.md',
+  }, `Dept2.despatches_cleared skipped — missing ${despatchesLogPath}`);
+
   const div1 = await computeArtifactsIndexedWeekly({
     window,
     repoRoot: opts.dabosRepoRoot ?? resolveDiv1WikiRepoRoot(),
@@ -433,96 +511,264 @@ export async function postDivisionWeeklyStats(opts: {
     loadPreviousFingerprints: () => loadPreviousDiv1Fingerprints(dabosSql, window),
   });
   if (div1.ok) {
-    rows.push({
+    push({
       divisionId: 'Div1',
       departmentId: null,
       metricKey: 'artifacts_indexed',
       value: div1.value,
-      source: `DABOS docs/wiki/index.md: unique pages added in the closed week (${div1.basis.method})`,
+      source: `DABOS docs/wiki/index.md: unique pages added (${div1.basis.method})`,
+      basis: div1.basis,
+    });
+    push({
+      divisionId: 'Div1',
+      departmentId: 'Dept1',
+      metricKey: 'artifacts_indexed',
+      value: div1.value,
+      source: 'Dept1 substat mirror of wiki pages added',
       basis: div1.basis,
     });
     notes.push(
-      `Div1 artifacts_indexed=${div1.value} (wiki pages added in the closed week; ${div1.basis.pages_at_start} -> ${div1.basis.pages_at_end} pages, ${div1.basis.pages_removed} removed, method ${div1.basis.method})`
+      `Div1 artifacts_indexed=${div1.value} (${div1.basis.pages_at_start} -> ${div1.basis.pages_at_end})`
     );
   } else {
     notes.push(`Div1 artifacts_indexed NOT POSTED - ${div1.reason}`);
   }
 
+  // --- Div2 GDS + substats ---
+  pushOrNote(enrollments, {
+    divisionId: 'Div2',
+    departmentId: null,
+    metricKey: 'new_enrollments',
+    source: 'enrollments-log.md (paid+started in window)',
+  }, `Div2.new_enrollments skipped — missing ${enrollmentsLogPath}`);
+  pushOrNote(enrollments, {
+    divisionId: 'Div2',
+    departmentId: 'Dept6',
+    metricKey: 'new_enrollments',
+    source: 'enrollments-log.md (Dept6 headline)',
+  }, `Dept6.new_enrollments skipped — missing ${enrollmentsLogPath}`);
+  pushOrNote(productSales, {
+    divisionId: 'Div2',
+    departmentId: null,
+    metricKey: 'product_sales',
+    source: 'product-sales-log.md sum Qty',
+  }, `Div2.product_sales skipped — missing ${productSalesLogPath}`);
+
   if (contentStatus != null) {
-    rows.push({
+    push({
       divisionId: 'Div2',
       departmentId: 'Dept4',
       metricKey: 'content_pieces_shipped',
       value: contentPieces,
-      source: 'content-status-table.md (all-time snapshot, not windowed)',
+      source: 'content-status-table.md (snapshot)',
     });
-    notes.push(
-      `Div2 content_pieces_shipped=${contentPieces} (content factory / Dept4 submit-for-validation)`
-    );
+    push({
+      divisionId: 'Div2',
+      departmentId: 'Dept5',
+      metricKey: 'fulfillments_shipped',
+      value: contentPieces,
+      source: 'content-status-table.md proxy until fulfillments log exists',
+    });
+    notes.push(`Dept4.content_pieces_shipped=${contentPieces}; Dept5.fulfillments_shipped mirror`);
   } else {
     notes.push(`Div2 content_pieces_shipped skipped — missing ${contentStatusPath}`);
   }
 
   if (pipeline != null) {
-    rows.push({
+    push({
       divisionId: 'Div2',
       departmentId: null,
       metricKey: 'leads_or_touchpoints_created',
       value: touchpoints,
-      source: 'pipeline-register.md (open prospects snapshot, not windowed)',
+      source: 'pipeline-register.md (open prospects snapshot)',
     });
     notes.push(`Div2 leads_or_touchpoints_created=${touchpoints}`);
   } else {
     notes.push(`Div2 leads_or_touchpoints_created skipped — missing ${pipelinePath}`);
   }
 
-  if (shipLog != null) {
-    rows.push(
-      {
-        divisionId: 'Div4',
-        departmentId: null,
-        metricKey: 'shipped_outputs',
-        value: shipped,
-        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
-      },
-      {
-        divisionId: 'Div4',
-        departmentId: 'Dept12',
-        metricKey: 'shipped_outputs',
-        value: shipped,
-        source: 'docs/registers/ship-log.md Counts=yes, Date in closed week',
-      }
-    );
-    notes.push(`Div4 shipped_outputs=${shipped} (ship-log Counts=yes, dated in closed week)`);
-  } else {
-    notes.push(`Div4 shipped_outputs skipped — missing ${SHIP_LOG}`);
-  }
+  // --- Div3 weekly substats (GDS collections mainly on proviso-*; bills from log) ---
+  pushOrNote(billsPaid, {
+    divisionId: 'Div3',
+    departmentId: null,
+    metricKey: 'bills_paid_eur',
+    source: 'bills-paid-log.md sum EUR',
+  }, `Div3.bills_paid_eur skipped — missing ${billsPaidLogPath}`);
+  pushOrNote(billsPaid, {
+    divisionId: 'Div3',
+    departmentId: 'Dept8',
+    metricKey: 'bills_paid_eur',
+    source: 'bills-paid-log.md (Dept8 headline)',
+  }, `Dept8.bills_paid_eur skipped — missing ${billsPaidLogPath}`);
+  pushOrNote(openDebts, {
+    divisionId: 'Div3',
+    departmentId: 'Dept7',
+    metricKey: 'open_debts_eur',
+    source: 'open-debts-log.md (substat; not bills paid)',
+  }, `Dept7.open_debts_eur skipped — missing ${openDebtsLogPath}`);
+  pushOrNote(reserves, {
+    divisionId: 'Div3',
+    departmentId: 'Dept9',
+    metricKey: 'reserves_eur',
+    source: 'reserves-log.md',
+  }, `Dept9.reserves_eur skipped — missing ${reservesLogPath}`);
 
+  // --- Div4 completions ---
+  if (shipLog != null) {
+    const shipSource = 'docs/registers/ship-log.md Counts=yes, PASS date in closed week';
+    for (const key of ['shipped_outputs', 'completions'] as const) {
+      push({ divisionId: 'Div4', departmentId: null, metricKey: key, value: shipped, source: shipSource });
+      push({ divisionId: 'Div4', departmentId: 'Dept12', metricKey: key, value: shipped, source: shipSource });
+    }
+    notes.push(`Div4 completions=${shipped} (ship-log mirror)`);
+  } else {
+    notes.push(`Div4 completions skipped — missing ${SHIP_LOG}`);
+  }
+  pushOrNote(designs, {
+    divisionId: 'Div4',
+    departmentId: 'Dept10',
+    metricKey: 'designs_accepted',
+    source: 'designs-accepted-log.md',
+  }, `Dept10.designs_accepted skipped — missing ${designsLogPath}`);
+  pushOrNote(buildCompletions, {
+    divisionId: 'Div4',
+    departmentId: 'Dept11',
+    metricKey: 'build_completions',
+    source: 'build-completions-log.md',
+  }, `Dept11.build_completions skipped — missing ${buildCompletionsLogPath}`);
+
+  // --- Div5 Qual ---
+  pushOrNote(qualCash, {
+    divisionId: 'Div5',
+    departmentId: null,
+    metricKey: 'qual_cash_eur',
+    source: 'qual-cash-log.md (0 OK until paid Qual product exists)',
+  }, `Div5.qual_cash_eur skipped — missing ${qualCashLogPath}`);
   if (qaRate != null) {
-    rows.push({
+    push({
       divisionId: 'Div5',
       departmentId: null,
       metricKey: 'qa_pass_rate',
       value: qaRate,
-      source: 'docs/registers/dept13-validation-checklists.md Validated on in closed week',
+      source: 'dept13-validation-checklists.md',
     });
     notes.push(`Div5 qa_pass_rate=${qaRate}`);
   } else {
-    notes.push('Div5 qa_pass_rate to-report (no row posted): 0 Dept13 verdicts validated in the closed week');
+    notes.push('Div5 qa_pass_rate to-report: 0 Dept13 verdicts in window');
   }
+  pushOrNote(verdictsDecided, {
+    divisionId: 'Div5',
+    departmentId: 'Dept13',
+    metricKey: 'verdicts_decided',
+    source: 'Dept13 instances with Verdict PASS/FAIL Validated on in window',
+  }, 'Dept13.verdicts_decided skipped — validation register missing');
+  // reviews_completed: FAIL verdicts in window (repair demand)
+  if (validation != null && verdictsDecided != null) {
+    const fails = countVerdictsDecided(
+      validation,
+      window,
+      (b) => (instanceVerdict(b) === 'FAIL' ? 'FAIL' : null),
+      VALIDATED_ON_RE
+    );
+    if (fails != null) {
+      push({
+        divisionId: 'Div5',
+        departmentId: 'Dept14',
+        metricKey: 'reviews_completed',
+        value: fails,
+        source: 'FAIL verdicts in window (proxy until Review log)',
+      });
+      notes.push(`Dept14.reviews_completed=${fails} (FAIL proxy)`);
+    }
+  }
+  pushOrNote(certsIssued, {
+    divisionId: 'Div5',
+    departmentId: 'Dept15',
+    metricKey: 'certs_issued',
+    source: 'certs-issued-log.md',
+  }, `Dept15.certs_issued skipped — missing ${certsLogPath}`);
 
+  // --- Div6 FSM half on div-live; new_cf also from GFP poster ---
+  pushOrNote(fsmCommissions, {
+    divisionId: 'Div6',
+    departmentId: null,
+    metricKey: 'fsm_commissions_paid_eur',
+    source: 'fsm-commissions-log.md',
+  }, `Div6.fsm_commissions_paid_eur skipped — missing ${fsmCommissionsLogPath}`);
+  pushOrNote(fsmCommissions, {
+    divisionId: 'Div6',
+    departmentId: 'Dept17',
+    metricKey: 'fsm_commissions_paid_eur',
+    source: 'fsm-commissions-log.md (Dept17 headline)',
+  }, `Dept17.fsm_commissions_paid_eur skipped — missing ${fsmCommissionsLogPath}`);
+  pushOrNote(successStories, {
+    divisionId: 'Div6',
+    departmentId: 'Dept18',
+    metricKey: 'success_stories_published',
+    source: 'success-stories-log.md',
+  }, `Dept18.success_stories_published skipped — missing ${successStoriesLogPath}`);
+
+  // --- Div7 substats; GI from Proviso below ---
   if (planRate != null) {
-    rows.push({
+    push({
       divisionId: 'Div7',
       departmentId: null,
       metricKey: 'plan_completion_rate',
       value: planRate,
-      source: 'establishment-checklist.md (snapshot)',
+      source: 'establishment-checklist.md',
+    });
+    push({
+      divisionId: 'Div7',
+      departmentId: 'Dept21',
+      metricKey: 'plan_completion_rate',
+      value: planRate,
+      source: 'establishment-checklist.md substat',
     });
     notes.push(`Div7 plan_completion_rate=${planRate}`);
   } else {
     notes.push('Div7 plan_completion_rate skipped — establishment checklist unreadable');
   }
+  pushOrNote(conditionsFromStats, {
+    divisionId: 'Div7',
+    departmentId: 'Dept19',
+    metricKey: 'conditions_from_stats',
+    source: 'conditions-from-stats-log.md',
+  }, `Dept19.conditions_from_stats skipped — missing ${conditionsLogPath}`);
+  pushOrNote(prioritiesLocked, {
+    divisionId: 'Div7',
+    departmentId: 'Dept20',
+    metricKey: 'priorities_locked',
+    source: 'priorities-locked-log.md',
+  }, `Dept20.priorities_locked skipped — missing ${prioritiesLogPath}`);
+  pushOrNote(approvalsCleared, {
+    divisionId: 'Div7',
+    departmentId: 'Dept21',
+    metricKey: 'approvals_cleared',
+    source: 'approvals-cleared-log.md',
+  }, `Dept21.approvals_cleared skipped — missing ${approvalsLogPath}`);
+
+  // Dept3 headline: how many division GDS primaries we are about to insert this run
+  const gdsKeysPosted = rows.filter(
+    (r) =>
+      r.departmentId == null &&
+      [
+        'comms_out',
+        'new_enrollments',
+        'collections_eur',
+        'completions',
+        'qual_cash_eur',
+        'fsm_commissions_paid_eur',
+        'gross_income_eur',
+      ].includes(r.metricKey)
+  ).length;
+  push({
+    divisionId: 'Div1',
+    departmentId: 'Dept3',
+    metricKey: 'stats_posted_on_time',
+    value: gdsKeysPosted,
+    source: 'count of GDS primary rows in this poster batch (Div-level)',
+  });
+  notes.push(`Dept3.stats_posted_on_time=${gdsKeysPosted} (GDS primaries in this batch)`);
 
   const only = opts.only ? new Set(opts.only) : null;
   for (const row of rows) {
@@ -553,25 +799,47 @@ export async function postDivisionWeeklyStats(opts: {
       const ws = `proviso-${yyyy}-${mm}`;
       // Last day of Abrechnung Monat (JS: day 0 of next month index)
       const recorded = new Date(Date.UTC(Number(yyyy), Number(mm), 0, 22, 0, 0)).toISOString();
-      const okDiv = await insertStat(dabosSql, {
-        workspaceId: ws,
-        divisionId: 'Div3',
-        departmentId: null,
-        metricKey: 'taxable_income_eur',
-        value: m.eur,
-        recordedAt: recorded,
-      });
-      const okDept = await insertStat(dabosSql, {
-        workspaceId: ws,
-        divisionId: 'Div3',
-        departmentId: 'Dept7',
-        metricKey: 'taxable_income_eur',
-        value: m.eur,
-        recordedAt: recorded,
-      });
-      if (okDiv || okDept) {
-        inserted.push(`Div3.taxable_income_eur@${m.monat}`);
-        notes.push(`Proviso ${m.monat}: €${m.eur} (${m.lineCount} Abrechnung lines, VB ${LW_VB})`);
+      const provisoRows: Array<{
+        divisionId: string;
+        departmentId: string | null;
+        metricKey: string;
+      }> = [
+        { divisionId: 'Div3', departmentId: null, metricKey: 'taxable_income_eur' },
+        { divisionId: 'Div3', departmentId: 'Dept7', metricKey: 'taxable_income_eur' },
+        // GDS: Abrechnung residual counted as collections until a cash-register feed exists
+        { divisionId: 'Div3', departmentId: null, metricKey: 'collections_eur' },
+        { divisionId: 'Div3', departmentId: 'Dept7', metricKey: 'collections_eur' },
+        // Exec GDS: org GI for the month (same Proviso residual for now)
+        { divisionId: 'Div7', departmentId: null, metricKey: 'gross_income_eur' },
+      ];
+      let any = false;
+      for (const pr of provisoRows) {
+        const ok = await insertStat(dabosSql, {
+          workspaceId: ws,
+          divisionId: pr.divisionId,
+          departmentId: pr.departmentId,
+          metricKey: pr.metricKey,
+          value: m.eur,
+          recordedAt: recorded,
+          basis: {
+            source: 'proviso-commission_events',
+            monat: m.monat,
+            line_count: m.lineCount,
+            vb: LW_VB,
+            note:
+              pr.metricKey === 'collections_eur' || pr.metricKey === 'gross_income_eur'
+                ? 'Proviso Abrechnung residual EUR as collections/GI until cash daybook exists'
+                : 'taxable substat (EÜR)',
+          },
+          recordedBy: 'week-close-poster',
+        });
+        if (ok) {
+          any = true;
+          inserted.push(`${pr.divisionId}.${pr.metricKey}@${m.monat}`);
+        }
+      }
+      if (any) {
+        notes.push(`Proviso ${m.monat}: €${m.eur} (${m.lineCount} lines) → taxable + collections + Div7 GI`);
       }
     }
   } catch (err) {

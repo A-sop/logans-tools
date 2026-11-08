@@ -8,7 +8,9 @@ import {
 
 describe('week-stats-live', () => {
   it('maps every division to a div-live primary metric', () => {
-    expect(DIV_LIVE_PRIMARY.Div6).toBe('conversions');
+    expect(DIV_LIVE_PRIMARY.Div6).toBe('fsm_commissions_paid_eur');
+    expect(DIV_LIVE_PRIMARY.Div7).toBe('gross_income_eur');
+    expect(DIV_LIVE_PRIMARY.Div4).toBe('completions');
     expect(Object.keys(DIV_LIVE_PRIMARY)).toHaveLength(7);
   });
 

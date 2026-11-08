@@ -6,6 +6,12 @@ type StatTrendChartProps = {
   label: string;
   /** SVG viewBox height; default 72 for drilldowns */
   height?: number;
+  /** CSS height class for the SVG; default matches drilldown */
+  svgClassName?: string;
+  /** Poster / source credit under the chart */
+  credit?: string | null;
+  /** Extra range line (oldest → newest) */
+  rangeLabel?: string | null;
 };
 
 function formatChartValue(value: number): string {
@@ -59,6 +65,9 @@ export function StatTrendChart({
   metricKey,
   label,
   height = 72,
+  svgClassName = 'h-[72px] w-full',
+  credit = null,
+  rangeLabel = null,
 }: StatTrendChartProps) {
   const width = 320;
   const g = geometry(points, width, height);
@@ -70,13 +79,16 @@ export function StatTrendChart({
 
   return (
     <div
-      className="w-full max-w-md rounded-lg border border-border bg-muted/20 p-3"
+      className="w-full rounded-lg border border-border bg-muted/20 p-3"
       role="img"
       aria-label={ariaLabel}
     >
       <div className="mb-2 flex items-baseline justify-between gap-2">
         <p className="text-xs font-medium text-muted-foreground">
           {metricKey} · {points.length} pt{points.length === 1 ? '' : 's'}
+          {rangeLabel ? (
+            <span className="ml-1 font-normal">· {rangeLabel}</span>
+          ) : null}
         </p>
         {latest ? (
           <p className="text-sm font-semibold tabular-nums">
@@ -91,7 +103,7 @@ export function StatTrendChart({
         <svg
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="none"
-          className="h-[72px] w-full"
+          className={svgClassName}
         >
           <polygon points={g.area} className="fill-primary/10" />
           <polyline
@@ -105,9 +117,12 @@ export function StatTrendChart({
         </svg>
       ) : (
         <div className="flex h-[72px] items-center justify-center text-xs text-muted-foreground">
-          Missing · no weekly points yet
+          Missing · no points yet
         </div>
       )}
+      {credit ? (
+        <p className="mt-2 text-[11px] leading-snug text-muted-foreground">Credit: {credit}</p>
+      ) : null}
     </div>
   );
 }

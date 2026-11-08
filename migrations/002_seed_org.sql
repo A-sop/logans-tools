@@ -1,13 +1,14 @@
 -- Seed Div1–Div7 and Dept1–Dept21 (canonical IDs; names from DABOS org chart docs)
 
+-- GDS keys per FPL 30 Sep 65 map (migration 023 duals secondary_metric_key on live DB).
 INSERT INTO divisions (id, operational_name, description, primary_metric_key) VALUES
-  ('Div1', 'Comms & Intelligence', 'Indexing, discovery, and visibility — not a message bottleneck.', 'artifacts_indexed'),
-  ('Div2', 'Dissemination', 'Content, channels, and outbound touchpoints.', 'leads_or_touchpoints_created'),
-  ('Div3', 'Treasury', 'Capital, costs, and physical asset reserve.', 'net_eur'),
-  ('Div4', 'Technical', 'Build, ship, and systems production.', 'shipped_outputs'),
-  ('Div5', 'Qualification', 'Validation gate — approved outputs only count.', 'qa_pass_rate'),
-  ('Div6', 'Public', 'Market interface, conversion, and retention.', 'conversions'),
-  ('Div7', 'Executive', 'Priorities, conditions, and strategic decisions.', 'plan_completion_rate')
+  ('Div1', 'Comms & Intelligence', 'Comm handled out/in (modern Letters).', 'comms_out'),
+  ('Div2', 'Dissemination', 'New enrollments + product/book/course sales.', 'new_enrollments'),
+  ('Div3', 'Treasury', 'Collections vs bills paid (dual GDS).', 'collections_eur'),
+  ('Div4', 'Technical', 'Completions — finished exchangeable delivery.', 'completions'),
+  ('Div5', 'Qualification', 'Cash paid for Qual/correction services.', 'qual_cash_eur'),
+  ('Div6', 'Public', 'FSM commissions paid / new CF addresses.', 'fsm_commissions_paid_eur'),
+  ('Div7', 'Executive', 'Gross Income of the org.', 'gross_income_eur')
 ON CONFLICT (id) DO UPDATE SET
   operational_name = EXCLUDED.operational_name,
   description = EXCLUDED.description,

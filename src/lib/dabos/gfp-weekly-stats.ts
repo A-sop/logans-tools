@@ -155,6 +155,19 @@ export async function postGfpWeeklyStats(opts: {
         metric_key: 'lead_magnets_shipped',
         value: leadMagnetsShipped,
       },
+      // GDS secondary: new CF addresses — guide opt-ins this week (addressable public)
+      {
+        division_id: 'Div6',
+        department_id: null as string | null,
+        metric_key: 'new_cf_addresses',
+        value: leadMagnetsShipped,
+      },
+      {
+        division_id: 'Div6',
+        department_id: 'Dept16',
+        metric_key: 'new_cf_addresses',
+        value: leadMagnetsShipped,
+      },
       {
         division_id: 'Div6',
         department_id: 'Dept17',
@@ -185,7 +198,9 @@ export async function postGfpWeeklyStats(opts: {
           note:
             row.metric_key === 'termin_clicks' || row.metric_key === 'conversions'
               ? bookingNote
-              : 'guide campaign_leads week rollup',
+              : row.metric_key === 'new_cf_addresses'
+                ? 'guide campaign_leads created_at in week = new CF addresses (GDS secondary)'
+                : 'guide campaign_leads week rollup',
           year,
           week,
           window: { start: window.start.toISOString(), end: window.end.toISOString() },

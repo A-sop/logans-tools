@@ -196,8 +196,13 @@ describe('GFP poster: leads count in the stat week they arrived', () => {
 
     expect(first.bookingsSkipped).toBe('booked_at_column_missing');
     expect(first.terminClicksBookedProxy).toBeNull();
-    expect(first.inserted).toEqual(['lead_magnets_shipped']);
+    expect(first.inserted).toEqual([
+      'lead_magnets_shipped',
+      'new_cf_addresses',
+      'new_cf_addresses',
+    ]);
     expect(await statValue(dabos, 'gfp-live-2026-W44', 'termin_clicks')).toBeNull();
+    expect(await statValue(dabos, 'gfp-live-2026-W44', 'new_cf_addresses')).toBe(1);
 
     // 004 applied (+ a new booking with a known instant): the next run inserts only the missing rows.
     await legacy.exec(`ALTER TABLE campaign_leads ADD COLUMN booked_at TIMESTAMPTZ;`);
@@ -225,9 +230,15 @@ describe('GFP poster: leads count in the stat week they arrived', () => {
     const res = await postGfpWeeklyStats({ dabosSql, gfpSql, year: 2026, week: 44 });
 
     expect(res.terminClicksBookedProxy).toBe(1);
-    expect(res.inserted).toEqual(['lead_magnets_shipped']);
+    expect(res.inserted).toEqual([
+      'lead_magnets_shipped',
+      'new_cf_addresses',
+      'new_cf_addresses',
+    ]);
     expect(await statValue(dabos, 'gfp-live-2026-W44', 'termin_clicks')).toBe(0);
     expect(await statValue(dabos, 'gfp-live-2026-W44', 'conversions')).toBe(0);
+    // lead created_at 2026-10-20 is outside W44 arrival window → new_cf 0
+    expect(await statValue(dabos, 'gfp-live-2026-W44', 'new_cf_addresses')).toBe(0);
   });
 
   it('resolveGfpStatWeek posts the week that closed at the last Thu 14:00 Berlin (label matches)', () => {

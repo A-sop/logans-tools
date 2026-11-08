@@ -202,8 +202,10 @@ export async function evaluateBoardConditionsWithSql(
     label: weekLabel(year, week),
   };
 
-  const divisions = await sql`SELECT id, primary_metric_key FROM divisions ORDER BY id`;
-  const departments = await sql`SELECT id, division_id FROM departments ORDER BY id`;
+  const divisions = await sql`SELECT id, primary_metric_key, secondary_metric_key FROM divisions ORDER BY id`;
+  const departments = await sql`
+    SELECT id, division_id, primary_metric_key FROM departments ORDER BY id
+  `;
   const statRows = await sql`
     SELECT workspace_id, division_id, department_id, metric_key, value::float8 AS value, recorded_at
     FROM stats
@@ -275,7 +277,10 @@ export async function evaluateBoardConditionsWithSql(
   for (const dept of departments) {
     const id = dept.id as string;
     const divisionId = dept.division_id as string;
-    const metricKey = metricByDivision.get(divisionId) ?? 'tasks_completed';
+    const metricKey =
+      (dept.primary_metric_key as string | null) ??
+      metricByDivision.get(divisionId) ??
+      'tasks_completed';
     const { values, snapshot } = weeklyValuesFromPoints(
       points,
       (p) => p.department_id === id && p.metric_key === metricKey,
