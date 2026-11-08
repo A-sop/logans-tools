@@ -24,9 +24,9 @@ ORDER BY ran_at DESC LIMIT 1;
 
 | Section | Source |
 |---|---|
-| Needs Logan | open PRs whose latest Dept13 verdict is PASS at the current head; pending approval_queue rows |
-| Needs Dept13 | open non-draft PRs with no verdict, or a verdict on an older sha (STALE) |
-| FAIL at current head | open PRs whose current-head Dept13 verdict is FAIL |
+| Needs you | open PRs whose latest Dept13 verdict is PASS at the current head; pending approval_queue rows |
+| Waiting on Dept13 review | open non-draft PRs with no verdict, or a verdict on an older sha |
+| Failed review at current head | open PRs whose current-head Dept13 verdict is FAIL |
 | Divisions table | PRs by title prefix (`Div N`, else `Dept N` → division), task counts, approvals, stats posted for the last closed org week |
 | Merged in 24 h | both repos |
 | Cadences | latest `role_runs` per cadence role |
@@ -39,8 +39,8 @@ Dept13 verdicts are PASS or FAIL only. A review or comment body carries a verdic
 head sha and nothing else on the line (`parseDept13Verdict`, `VERDICT_LINE_RE`). Free text such as
 `Dept13 PASS (...) @<sha>`, markdown around the line, a short or long sha, or a verdict on a later
 line is not a verdict. A verdict is **current** only when its full 40-hex sha equals the PR's head
-sha (`shaMatches`: no prefix match, no truncation); otherwise the PR is listed as STALE under Needs
-Dept13.
+sha (`shaMatches`: no prefix match, no truncation); otherwise the PR is listed under Waiting on
+Dept13 review as reviewed on an older commit.
 
 Tasks are counted only; titles and descriptions never enter the digest.
 

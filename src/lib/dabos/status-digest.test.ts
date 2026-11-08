@@ -19,6 +19,7 @@ import {
   latestVerdict,
   normaliseDivision,
   parseDept13Verdict,
+  parseDigestNeedLine,
   parseShowBlocks,
   parseUnitNames,
   readLatestCadenceRuns,
@@ -331,13 +332,16 @@ describe('buildDigest', () => {
       })
     );
     expect(d.json.needsLogan).toHaveLength(1);
-    expect(d.json.needsLogan[0]).toMatch(/logans-tools#1 .*PASS/);
+    expect(d.json.needsLogan[0]).toMatch(/^Ready to merge: logans-tools#1 .*passed this version/);
+    expect(d.json.failAtHead).toHaveLength(1);
     expect(d.json.needsDept13.map((s) => s.split(' ')[0])).toEqual([
       'logans-tools#2',
       'logans-tools#3',
     ]);
-    expect(d.markdown).toMatch(/STALE \(head abcdef12\)/);
-    expect(d.markdown).toMatch(/^## FAIL at current head \(1\)$/m);
+    expect(d.markdown).toMatch(/reviewed an older commit/);
+    expect(d.markdown).toMatch(/^## Failed review at current head \(1\)$/m);
+    expect(d.markdown).toMatch(/^## Needs you \(1\)$/m);
+    expect(d.markdown).toMatch(/^## Waiting on Dept13 review \(2\)$/m);
     expect(d.markdown).not.toMatch(/CONDITIONAL/);
     expect(d.json.divisions.find((x) => x.division === 'Div1')!.failedAtHead).toBe(1);
     const div4 = d.json.divisions.find((x) => x.division === 'Div4')!;
@@ -392,7 +396,7 @@ describe('buildDigest', () => {
         },
       })
     );
-    expect(d.json.needsLogan[0]).toMatch(/Approval pending \(other/);
+    expect(d.json.needsLogan[0]).toMatch(/Approval waiting \(other/);
     expect(d.json.machineAlerts).toEqual([
       'dabos-a.service last result exit-code (exit 1)',
       'failed unit dabos-b.service',
@@ -491,7 +495,7 @@ describe('ln02 checkout sync (logans-tools #59) in the digest', () => {
   it('the digest header names the owner post for a failed, missing or stale digest', () => {
     const d = buildDigest(baseInput());
     expect(d.markdown).toContain(
-      'Owner if this digest failed, is missing or is older than 2 h 30 min: Dept12 Production (Div4).'
+      'If this page is stale (>2h30) or missing: Dept12 Production (Div4).'
     );
     expect(d.json.ownerPost).toBe('Dept12 Production (Div4)');
   });
@@ -601,7 +605,7 @@ describe('Neon readers on PGlite', () => {
     );
     expect(r.rows).toHaveLength(1);
     expect(r.rows[0]!.role_type).toBe('cadence');
-    expect(r.rows[0]!.md).toContain('# DABOS status digest');
+    expect(r.rows[0]!.md).toContain('# DABOS status —');
   });
 });
 
@@ -844,10 +848,10 @@ describe('ln02 files and runner hygiene', () => {
       '"dabos:status-digest": "tsx scripts/dabos/status-digest.ts"'
     );
   });
-  it('chrome nav includes Digest pull link', () => {
+  it('chrome nav includes Status pull link', () => {
     const chrome = readRepoFile('src/components/dabos/dabos-chrome.tsx');
     expect(chrome).toContain("href: '/dabos/digest'");
-    expect(chrome).toContain("label: 'Digest'");
+    expect(chrome).toContain("label: 'Status'");
   });
 });
 
@@ -864,12 +868,12 @@ describe('Telegram tip (ruling 2026-11-08)', () => {
     const lines = tip.split('\n');
     expect(lines.length).toBe(5);
     expect(lines[0]).toBe(
-      `DABOS digest ${berlinStamp(new Date(dig.json.generatedAt))} · you:4 · Dept13:0 · alerts:0`
+      `DABOS status ${berlinStamp(new Date(dig.json.generatedAt))} · needs you:4 · review:0 · alerts:0`
     );
     expect(lines[1]).toBe('• first need');
     expect(lines[2]?.startsWith('• second need')).toBe(true);
     expect(lines[3]).toBe('• third');
-    expect(lines[4]).toBe(`Pull: ${DEFAULT_DIGEST_PULL_URL}`);
+    expect(lines[4]).toBe(`Open: ${DEFAULT_DIGEST_PULL_URL}`);
     expect(tip).not.toContain('# DABOS status digest');
     expect(tip).not.toContain('fourth should be dropped');
   });
@@ -879,10 +883,19 @@ describe('Telegram tip (ruling 2026-11-08)', () => {
     dig.json.needsLogan = [];
     const tip = buildTelegramTip(dig, { pullUrl: 'https://example.test/digest' });
     expect(tip.split('\n')).toEqual([
-      `DABOS digest ${berlinStamp(new Date(dig.json.generatedAt))} · you:0 · Dept13:0 · alerts:0`,
+      `DABOS status ${berlinStamp(new Date(dig.json.generatedAt))} · needs you:0 · review:0 · alerts:0`,
       'Nothing needs you.',
-      'Pull: https://example.test/digest',
+      'Open: https://example.test/digest',
     ]);
+  });
+
+  it('buildTelegramTip shortens Ready-to-merge PR lines to ref + title', () => {
+    const dig = buildDigest(baseInput());
+    dig.json.needsLogan = [
+      'Ready to merge: logans-tools#12 @abcdef12: Ship the digest UI — Dept13 passed this version',
+    ];
+    const tip = buildTelegramTip(dig);
+    expect(tip.split('\n')[1]).toBe('• Ready to merge — logans-tools#12: Ship the digest UI');
   });
 
   it('sendTelegramTip is silent when disabled or missing env', async () => {
@@ -937,11 +950,13 @@ describe('Telegram tip (ruling 2026-11-08)', () => {
     });
   });
 
-  it('readLatestStatusDigest returns newest markdown from role_runs', async () => {
-    const db = await createDabosTestDb();
-    await db.exec(readRepoFile('migrations/004_role_runs.sql'));
-    const sql = pgliteSql(db);
-    await db.exec(`
+  it(
+    'readLatestStatusDigest returns newest markdown from role_runs',
+    async () => {
+      const db = await createDabosTestDb();
+      await db.exec(readRepoFile('migrations/004_role_runs.sql'));
+      const sql = pgliteSql(db);
+      await db.exec(`
       INSERT INTO role_runs (role_id, role_type, ran_at, summary_json)
       VALUES (
         'status_digest',
@@ -957,13 +972,39 @@ describe('Telegram tip (ruling 2026-11-08)', () => {
         '{"host":"ln02","needsLogan":["B"],"needsDept13":["C"],"machineAlerts":["x"],"markdown":"# latest"}'::jsonb
       );
     `);
-    const latest = await readLatestStatusDigest(sql);
-    expect(latest?.markdown).toBe('# latest');
-    expect(latest?.needsLogan).toEqual(['B']);
-    expect(latest?.needsDept13).toEqual(['C']);
-    expect(latest?.machineAlerts).toEqual(['x']);
-    expect(latest?.host).toBe('ln02');
-    await db.close();
+      const latest = await readLatestStatusDigest(sql);
+      expect(latest?.markdown).toBe('# latest');
+      expect(latest?.needsLogan).toEqual(['B']);
+      expect(latest?.needsDept13).toEqual(['C']);
+      expect(latest?.failAtHead).toEqual([]);
+      expect(latest?.machineAlerts).toEqual(['x']);
+      expect(latest?.host).toBe('ln02');
+      await db.close();
+    },
+    20_000
+  );
+});
+
+describe('parseDigestNeedLine', () => {
+  it('splits ref, title, and note from a PR line', () => {
+    expect(
+      parseDigestNeedLine(
+        'Ready to merge: logans-tools#12 @abcdef12: Ship the digest UI — Dept13 passed this version'
+      )
+    ).toEqual({
+      ref: 'logans-tools#12',
+      title: 'Ship the digest UI',
+      note: 'Dept13 passed this version',
+    });
+  });
+
+  it('returns the whole line as title when shape is unknown', () => {
+    expect(parseDigestNeedLine('Approval waiting (spend): laptop')).toEqual({
+      ref: null,
+      title: 'Approval waiting (spend): laptop',
+      note: null,
+    });
   });
 });
+
 

@@ -568,6 +568,7 @@ export type StatusDigest = {
     divisions: DivisionSummary[];
     needsLogan: string[];
     needsDept13: string[];
+    failAtHead: string[];
     machineAlerts: string[];
     checkoutSync: CheckoutSyncState | null;
     openOrders: OpenOrderLine[] | null;
@@ -598,15 +599,18 @@ function prRef(p: PrSummary): string {
   return `${repo}#${p.number}`;
 }
 
+/** Short human note for a PR line (no agent jargon). */
+function reviewNote(p: PrSummary): string {
+  if (!p.dept13) return 'waiting on Dept13 review';
+  if (p.dept13.current) {
+    return p.dept13.verdict === 'PASS' ? 'Dept13 passed this version' : 'Dept13 failed this version';
+  }
+  return `Dept13 reviewed an older commit (@${p.dept13.sha.slice(0, 8)}; head ${p.headSha.slice(0, 8)})`;
+}
+
 function prLine(p: PrSummary): string {
   const sha = p.headSha.slice(0, 8);
-  let verdict = 'no Dept13 verdict';
-  if (p.dept13) {
-    verdict = p.dept13.current
-      ? `Dept13 ${p.dept13.verdict} @${p.dept13.sha.slice(0, 8)} (current head)`
-      : `Dept13 ${p.dept13.verdict} @${p.dept13.sha.slice(0, 8)} is STALE (head ${sha})`;
-  }
-  return `${prRef(p)}${p.draft ? ' (draft)' : ''} @${sha}: ${p.title} — ${verdict}`;
+  return `${prRef(p)}${p.draft ? ' (draft)' : ''} @${sha}: ${p.title} — ${reviewNote(p)}`;
 }
 
 export function buildDigest(input: DigestInput): StatusDigest {
@@ -637,9 +641,10 @@ export function buildDigest(input: DigestInput): StatusDigest {
   });
 
   const needsLogan = [
-    ...ready.map((p) => `Merge yes? ${prLine(p)}`),
+    ...ready.map((p) => `Ready to merge: ${prLine(p)}`),
     ...(input.approvals ?? []).map(
-      (a) => `Approval pending (${a.kind}, since ${berlinStamp(new Date(a.createdAt))}): ${a.title}`
+      (a) =>
+        `Approval waiting (${a.kind}, since ${berlinStamp(new Date(a.createdAt))}): ${a.title}`
     ),
   ];
   const needsDept13 = needs13.map(prLine);
@@ -655,31 +660,28 @@ export function buildDigest(input: DigestInput): StatusDigest {
   for (const u of input.systemd?.failedUnits ?? []) machineAlerts.push(`failed unit ${u}`);
   machineAlerts.push(...checkoutSyncAlerts(input.checkoutSync));
 
+  const failAtHead = failing.map((p) => prLine(p));
+
   const L: string[] = [];
-  L.push(`# DABOS status digest — ${berlinStamp(input.now)}`);
+  L.push(`# DABOS status — ${berlinStamp(input.now)}`);
   L.push('');
-  L.push(`Host ${input.host}. Stat week closed last: ${input.week.id} (${input.week.label}).`);
-  L.push(
-    'Pull-only full digest (ln02 file + Neon + /dabos/digest). Optional Telegram tip is ≤5 lines and separate — ruling-digest-delivery-2026-11-08.'
-  );
-  L.push(
-    `Owner if this digest failed, is missing or is older than 2 h 30 min: ${OWNER_POST}.`
-  );
+  L.push(`Host ${input.host}. Last closed stat week: ${input.week.id}.`);
+  L.push(`If this page is stale (>2h30) or missing: ${OWNER_POST}.`);
   L.push('');
-  L.push(`## Needs Logan (${needsLogan.length})`);
+  L.push(`## Needs you (${needsLogan.length})`);
   L.push(...(needsLogan.length ? needsLogan.map((s) => `- ${s}`) : ['- nothing']));
   L.push('');
-  L.push(`## Needs Dept13 at current head (${needsDept13.length})`);
+  L.push(`## Waiting on Dept13 review (${needsDept13.length})`);
   L.push(...(needsDept13.length ? needsDept13.map((s) => `- ${s}`) : ['- nothing']));
-  if (failing.length) {
+  if (failAtHead.length) {
     L.push('');
-    L.push(`## FAIL at current head (${failing.length})`);
-    L.push(...failing.map((p) => `- ${prLine(p)}`));
+    L.push(`## Failed review at current head (${failAtHead.length})`);
+    L.push(...failAtHead.map((s) => `- ${s}`));
   }
   L.push('');
   L.push('## Divisions');
   L.push(
-    '| Div | open PRs | need Dept13 | ready for Logan | merged 24h | tasks open | reassess | approvals | stats ' +
+    '| Div | open PRs | need review | ready for you | merged 24h | open tasks | reassess | approvals | stats ' +
       input.week.id +
       ' |'
   );
@@ -766,6 +768,7 @@ export function buildDigest(input: DigestInput): StatusDigest {
       divisions,
       needsLogan,
       needsDept13,
+      failAtHead,
       machineAlerts,
       checkoutSync: input.checkoutSync,
       openOrders: input.openOrders,
@@ -879,18 +882,29 @@ export function buildTelegramTip(
   const nAlert = digest.json.machineAlerts.length;
   const stamp = berlinStamp(new Date(digest.json.generatedAt));
   const lines: string[] = [
-    `DABOS digest ${stamp} · you:${nLogan} · Dept13:${n13} · alerts:${nAlert}`,
+    `DABOS status ${stamp} · needs you:${nLogan} · review:${n13} · alerts:${nAlert}`,
   ];
   if (nLogan === 0) {
     lines.push('Nothing needs you.');
   } else {
     for (const item of digest.json.needsLogan.slice(0, maxNeeds)) {
-      const one = item.replace(/\s+/g, ' ').trim().slice(0, 120);
-      if (one) lines.push(`• ${one}`);
+      const bullet = tipNeedBullet(item);
+      if (bullet) lines.push(bullet);
     }
   }
-  lines.push(`Pull: ${pull}`);
+  lines.push(`Open: ${pull}`);
   return lines.slice(0, 5).join('\n');
+}
+
+/** One tip bullet: keep ref + title; drop long review footnotes. */
+function tipNeedBullet(item: string): string {
+  const parts = parseDigestNeedLine(item);
+  if (parts.ref) {
+    const action = /^(Ready to merge|Merge yes\?)/i.test(item.trim()) ? 'Ready to merge — ' : '';
+    return `• ${action}${parts.ref}: ${parts.title}`.replace(/\s+/g, ' ').trim().slice(0, 122);
+  }
+  const one = item.replace(/\s+/g, ' ').trim().slice(0, 120);
+  return one ? `• ${one}` : '';
 }
 
 export type TelegramTipSendResult =
@@ -945,13 +959,64 @@ export async function sendTelegramTip(deps: {
   return { sent: true, messageId };
 }
 
+function asStringList(v: unknown): string[] {
+  return Array.isArray(v) ? v.map(String) : [];
+}
+
+function asDivisions(v: unknown): DivisionSummary[] {
+  if (!Array.isArray(v)) return [];
+  return v
+    .map((row) => {
+      if (!row || typeof row !== 'object') return null;
+      const r = row as Record<string, unknown>;
+      const division = typeof r.division === 'string' ? r.division : null;
+      if (!division) return null;
+      return {
+        division: division as DivisionSummary['division'],
+        openPrs: Number(r.openPrs) || 0,
+        needsDept13: Number(r.needsDept13) || 0,
+        readyForLogan: Number(r.readyForLogan) || 0,
+        failedAtHead: Number(r.failedAtHead) || 0,
+        mergedLast24h: Number(r.mergedLast24h) || 0,
+        openTasks: Number(r.openTasks) || 0,
+        reassessTasks: Number(r.reassessTasks) || 0,
+        pendingApprovals: Number(r.pendingApprovals) || 0,
+        statsPostedLastWeek:
+          r.statsPostedLastWeek === null || r.statsPostedLastWeek === undefined
+            ? null
+            : Boolean(r.statsPostedLastWeek),
+      } satisfies DivisionSummary;
+    })
+    .filter((d): d is DivisionSummary => d !== null);
+}
+
+/** Split a digester PR line into scannable parts for the pull UI. */
+export function parseDigestNeedLine(line: string): {
+  ref: string | null;
+  title: string;
+  note: string | null;
+} {
+  const raw = line.replace(/\s+/g, ' ').trim();
+  const body = raw.replace(/^(Ready to merge|Merge yes\?):\s*/i, '');
+  const m = body.match(
+    /^((?:DABOS|logans-tools)#\d+(?:\s*\(draft\))?)\s*@[0-9a-f]{7,40}:\s*(.+?)\s*—\s*(.+)$/i
+  );
+  if (!m) return { ref: null, title: raw, note: null };
+  return { ref: m[1]!.trim(), title: m[2]!.trim(), note: m[3]!.trim() };
+}
+
 /** Newest status_digest row for the pull UI. */
 export async function readLatestStatusDigest(sql: DabosSql): Promise<{
   ranAt: string;
   markdown: string;
   needsLogan: string[];
   needsDept13: string[];
+  failAtHead: string[];
   machineAlerts: string[];
+  divisions: DivisionSummary[];
+  week: string | null;
+  ownerPost: string | null;
+  sourceErrors: Array<{ source: string; error: string }>;
   host: string | null;
 } | null> {
   const rows = (await sql`
@@ -964,16 +1029,27 @@ export async function readLatestStatusDigest(sql: DabosSql): Promise<{
   if (!rows.length) return null;
   const j = rows[0].summary_json ?? {};
   const markdown = typeof j.markdown === 'string' ? j.markdown : '';
-  const needsLogan = Array.isArray(j.needsLogan) ? j.needsLogan.map(String) : [];
-  const needsDept13 = Array.isArray(j.needsDept13) ? j.needsDept13.map(String) : [];
-  const machineAlerts = Array.isArray(j.machineAlerts) ? j.machineAlerts.map(String) : [];
-  const host = typeof j.host === 'string' ? j.host : null;
+  const sourceErrors = Array.isArray(j.sourceErrors)
+    ? j.sourceErrors
+        .map((e) => {
+          if (!e || typeof e !== 'object') return null;
+          const row = e as Record<string, unknown>;
+          if (typeof row.source !== 'string' || typeof row.error !== 'string') return null;
+          return { source: row.source, error: row.error };
+        })
+        .filter((e): e is { source: string; error: string } => e !== null)
+    : [];
   return {
     ranAt: toIso(rows[0].ran_at),
     markdown,
-    needsLogan,
-    needsDept13,
-    machineAlerts,
-    host,
+    needsLogan: asStringList(j.needsLogan),
+    needsDept13: asStringList(j.needsDept13),
+    failAtHead: asStringList(j.failAtHead),
+    machineAlerts: asStringList(j.machineAlerts),
+    divisions: asDivisions(j.divisions),
+    week: typeof j.week === 'string' ? j.week : null,
+    ownerPost: typeof j.ownerPost === 'string' ? j.ownerPost : null,
+    sourceErrors,
+    host: typeof j.host === 'string' ? j.host : null,
   };
 }

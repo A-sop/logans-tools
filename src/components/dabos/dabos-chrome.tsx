@@ -13,7 +13,7 @@ type DabosChromeProps = {
 /** Cloud DABOS surfaces (Neon). Local-office pages (Status, Triage, Debt) stay at their URLs. */
 const DABOS_CHROME_LINKS = [
   { href: '/dabos', label: 'Board' },
-  { href: '/dabos/digest', label: 'Digest' },
+  { href: '/dabos/digest', label: 'Status' },
   { href: '/dabos/conditions', label: 'Conditions' },
   { href: '/dabos/open', label: 'Open' },
   { href: '/dabos/comm', label: 'Comm' },
