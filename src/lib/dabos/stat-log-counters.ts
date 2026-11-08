@@ -85,6 +85,42 @@ export function countProductSalesQty(md: string | null, window: WeekWindow): num
   return sumLogColumn(md, window, 3);
 }
 
+/** Publish log: | Date | Item | Channel | Venture | … | → row count in window */
+export function countPublishLogRows(md: string | null, window: WeekWindow): number | null {
+  return countLogRows(md, window);
+}
+
+/**
+ * Trading research: | Date | Venture | Kind | Units | Note |
+ * researchKinds=true → Kind ≠ paper_test; false → Kind = paper_test only.
+ */
+export function sumTradingResearchUnits(
+  md: string | null,
+  window: WeekWindow,
+  paperTestsOnly: boolean
+): number | null {
+  return sumLogColumn(md, window, 3, (c) => {
+    const kind = (c[2] ?? '').toLowerCase().trim();
+    if (!kind) return false;
+    const isPaper = kind === 'paper_test' || kind === 'paper-test' || kind === 'backtest';
+    return paperTestsOnly ? isPaper : !isPaper;
+  });
+}
+
+/** Market research: | Date | Venture | Topic | Units | Note | → sum Units (blank Units = 1) */
+export function sumMarketResearchUnits(md: string | null, window: WeekWindow): number | null {
+  if (md == null) return null;
+  let sum = 0;
+  for (const row of dataRows(md)) {
+    const c = cells(row);
+    if (!isEntryInClosedOrgWeek(c[0] ?? '', window)) continue;
+    const raw = (c[3] ?? '').replace(/[€,\s]/g, '');
+    const n = Number(raw);
+    sum += Number.isFinite(n) && raw !== '' ? n : 1;
+  }
+  return sum;
+}
+
 /** EUR logs: | Date | … | EUR | … | with EUR at valueColIndex */
 export function sumEurLog(
   md: string | null,

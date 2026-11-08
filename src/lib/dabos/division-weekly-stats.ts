@@ -26,9 +26,12 @@ import {
   countCommsUnits,
   countEnrollments,
   countProductSalesQty,
+  countPublishLogRows,
   countVerdictsDecided,
   readOptionalText,
   sumEurLog,
+  sumMarketResearchUnits,
+  sumTradingResearchUnits,
 } from '@/lib/dabos/stat-log-counters';
 
 export type DivisionWeeklyResult = {
@@ -56,6 +59,7 @@ export function resolveDiv1WikiRepoRoot(
   return env.DABOS_WIKI_REPO_ROOT?.trim() || env.DABOS_REPO_ROOT?.trim() || path.join('C:', 'Dev', 'DABOS');
 }
 const SHIP_LOG = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'ship-log.md');
+const PUBLISH_LOG = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'publish-log.md');
 const VALIDATION = path.join(DABOS_REPO_ROOT, 'docs', 'registers', 'dept13-validation-checklists.md');
 const ESTABLISHMENT = path.join(
   DABOS_REPO_ROOT,
@@ -416,6 +420,8 @@ export async function postDivisionWeeklyStats(opts: {
   const conditionsLogPath = path.join(REGISTERS, 'conditions-from-stats-log.md');
   const prioritiesLogPath = path.join(REGISTERS, 'priorities-locked-log.md');
   const approvalsLogPath = path.join(REGISTERS, 'approvals-cleared-log.md');
+  const tradingResearchLogPath = path.join(REGISTERS, 'trading-research-log.md');
+  const marketResearchLogPath = path.join(REGISTERS, 'market-research-log.md');
 
   const contentStatus = readText(contentStatusPath);
   const pipeline = readText(pipelinePath);
@@ -452,6 +458,21 @@ export async function postDivisionWeeklyStats(opts: {
   const conditionsFromStats = countEnrollments(readOptionalText(conditionsLogPath), window);
   const prioritiesLocked = countEnrollments(readOptionalText(prioritiesLogPath), window);
   const approvalsCleared = countEnrollments(readOptionalText(approvalsLogPath), window);
+  const contentPublished = countPublishLogRows(readOptionalText(PUBLISH_LOG), window);
+  const tradingResearch = sumTradingResearchUnits(
+    readOptionalText(tradingResearchLogPath),
+    window,
+    false
+  );
+  const tradingPaperTests = sumTradingResearchUnits(
+    readOptionalText(tradingResearchLogPath),
+    window,
+    true
+  );
+  const marketResearch = sumMarketResearchUnits(
+    readOptionalText(marketResearchLogPath),
+    window
+  );
 
   type StatRow = {
     divisionId: string;
@@ -562,17 +583,23 @@ export async function postDivisionWeeklyStats(opts: {
       value: contentPieces,
       source: 'content-status-table.md (snapshot)',
     });
-    push({
-      divisionId: 'Div2',
-      departmentId: 'Dept5',
-      metricKey: 'fulfillments_shipped',
-      value: contentPieces,
-      source: 'content-status-table.md proxy until fulfillments log exists',
-    });
-    notes.push(`Dept4.content_pieces_shipped=${contentPieces}; Dept5.fulfillments_shipped mirror`);
+    notes.push(`Dept4.content_pieces_shipped=${contentPieces}`);
   } else {
     notes.push(`Div2 content_pieces_shipped skipped — missing ${contentStatusPath}`);
   }
+  // Dept5: published this week (publish-log); fulfillments proxy = published until true fulfillments log
+  pushOrNote(contentPublished, {
+    divisionId: 'Div2',
+    departmentId: 'Dept5',
+    metricKey: 'content_pieces_published',
+    source: 'docs/registers/publish-log.md rows in closed week',
+  }, `Dept5.content_pieces_published skipped — missing ${PUBLISH_LOG}`);
+  pushOrNote(contentPublished, {
+    divisionId: 'Div2',
+    departmentId: 'Dept5',
+    metricKey: 'fulfillments_shipped',
+    source: 'proxy = content_pieces_published until fulfillments log exists',
+  }, `Dept5.fulfillments_shipped skipped — missing ${PUBLISH_LOG}`);
 
   if (pipeline != null) {
     push({
@@ -636,6 +663,20 @@ export async function postDivisionWeeklyStats(opts: {
     metricKey: 'build_completions',
     source: 'build-completions-log.md',
   }, `Dept11.build_completions skipped — missing ${buildCompletionsLogPath}`);
+  pushOrNote(tradingResearch, {
+    divisionId: 'Div4',
+    departmentId: 'Dept10',
+    metricKey: 'trading_research_units',
+    source: 'trading-research-log.md Units where Kind≠paper_test',
+    basis: { venture: 'trading' },
+  }, `Dept10.trading_research_units skipped — missing ${tradingResearchLogPath}`);
+  pushOrNote(tradingPaperTests, {
+    divisionId: 'Div4',
+    departmentId: 'Dept11',
+    metricKey: 'trading_paper_tests',
+    source: 'trading-research-log.md Units where Kind=paper_test',
+    basis: { venture: 'trading' },
+  }, `Dept11.trading_paper_tests skipped — missing ${tradingResearchLogPath}`);
 
   // --- Div5 Qual ---
   pushOrNote(qualCash, {
@@ -707,6 +748,12 @@ export async function postDivisionWeeklyStats(opts: {
     metricKey: 'success_stories_published',
     source: 'success-stories-log.md',
   }, `Dept18.success_stories_published skipped — missing ${successStoriesLogPath}`);
+  pushOrNote(marketResearch, {
+    divisionId: 'Div6',
+    departmentId: 'Dept16',
+    metricKey: 'market_research_notes',
+    source: 'market-research-log.md Units (blank=1) in closed week',
+  }, `Dept16.market_research_notes skipped — missing ${marketResearchLogPath}`);
 
   // --- Div7 substats; GI from Proviso below ---
   if (planRate != null) {
