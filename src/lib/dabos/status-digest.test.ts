@@ -6,8 +6,11 @@ import { closedOrgWeek } from '@/lib/dabos/org-week';
 import {
   SERVICE_PROPS,
   TIMER_PROPS,
+  berlinStamp,
   buildDigest,
+  buildTelegramTip,
   collectDigestInput,
+  DEFAULT_DIGEST_PULL_URL,
   divisionForDepartment,
   divisionFromTitle,
   errorText,
@@ -19,10 +22,12 @@ import {
   parseShowBlocks,
   parseUnitNames,
   readLatestCadenceRuns,
+  readLatestStatusDigest,
   readPendingApprovals,
   readStatsPosted,
   readSystemdUserState,
   readTaskCounts,
+  sendTelegramTip,
   shaMatches,
   VERDICT_LINE_RE,
   OWNER_POST,
@@ -801,7 +806,7 @@ describe('ln02 files and runner hygiene', () => {
     );
     expect(install).toMatch(/grep -qE "\^\$\{name\}=\.\+" "\$ENV_FILE"/);
   });
-  it('runner never loads .env.local and reads only its two secret names', () => {
+  it('runner never loads .env.local and only reads DABOS_DIGEST_* names', () => {
     expect(runner).not.toMatch(/load-env|loadEnvLocal|\.env\.local'|dotenv/);
     const names = [...runner.matchAll(/process\.env\.([A-Z0-9_]+)/g)].map((m) => m[1]);
     for (const n of names) expect(n).toMatch(/^DABOS_DIGEST_/);
@@ -815,6 +820,10 @@ describe('ln02 files and runner hygiene', () => {
         'DABOS_DIGEST_UNIT_FILTER',
         'DABOS_DIGEST_HOST',
         'DABOS_DIGEST_CHECKOUT_SYNC_DIR',
+        'DABOS_DIGEST_TELEGRAM_TIP',
+        'DABOS_DIGEST_PULL_URL',
+        'DABOS_DIGEST_TELEGRAM_BOT_TOKEN',
+        'DABOS_DIGEST_TELEGRAM_CHAT_ID',
       ])
     );
   });
@@ -826,6 +835,8 @@ describe('ln02 files and runner hygiene', () => {
     expect(doc).toContain('Owner: **Dept12 Production (Div4)**');
     expect(doc).toContain('checkout-sync.FAIL');
     expect(doc).toContain('`Dept13 PASS @<sha>` or `Dept13 FAIL @<sha>`');
+    expect(doc).toContain('/dabos/digest');
+    expect(doc).toContain('DABOS_DIGEST_TELEGRAM_TIP');
     expect(doc).not.toMatch(/CONDITIONAL/);
   });
   it('package.json wires the npm script', () => {
@@ -833,4 +844,126 @@ describe('ln02 files and runner hygiene', () => {
       '"dabos:status-digest": "tsx scripts/dabos/status-digest.ts"'
     );
   });
+  it('chrome nav includes Digest pull link', () => {
+    const chrome = readRepoFile('src/components/dabos/dabos-chrome.tsx');
+    expect(chrome).toContain("href: '/dabos/digest'");
+    expect(chrome).toContain("label: 'Digest'");
+  });
 });
+
+describe('Telegram tip (ruling 2026-11-08)', () => {
+  it('buildTelegramTip is ≤5 lines with counts, needs, and pull URL', () => {
+    const dig = buildDigest(baseInput());
+    dig.json.needsLogan = [
+      'first need',
+      'second need that is quite long '.repeat(10).trim(),
+      'third',
+      'fourth should be dropped',
+    ];
+    const tip = buildTelegramTip(dig);
+    const lines = tip.split('\n');
+    expect(lines.length).toBe(5);
+    expect(lines[0]).toBe(
+      `DABOS digest ${berlinStamp(new Date(dig.json.generatedAt))} · you:4 · Dept13:0 · alerts:0`
+    );
+    expect(lines[1]).toBe('• first need');
+    expect(lines[2]?.startsWith('• second need')).toBe(true);
+    expect(lines[3]).toBe('• third');
+    expect(lines[4]).toBe(`Pull: ${DEFAULT_DIGEST_PULL_URL}`);
+    expect(tip).not.toContain('# DABOS status digest');
+    expect(tip).not.toContain('fourth should be dropped');
+  });
+
+  it('buildTelegramTip says nothing needs you when empty', () => {
+    const dig = buildDigest(baseInput());
+    dig.json.needsLogan = [];
+    const tip = buildTelegramTip(dig, { pullUrl: 'https://example.test/digest' });
+    expect(tip.split('\n')).toEqual([
+      `DABOS digest ${berlinStamp(new Date(dig.json.generatedAt))} · you:0 · Dept13:0 · alerts:0`,
+      'Nothing needs you.',
+      'Pull: https://example.test/digest',
+    ]);
+  });
+
+  it('sendTelegramTip is silent when disabled or missing env', async () => {
+    expect(
+      await sendTelegramTip({
+        text: 'hi',
+        enabled: false,
+        botToken: 't',
+        chatId: '1',
+      })
+    ).toEqual({ sent: false, reason: 'disabled' });
+    expect(
+      await sendTelegramTip({
+        text: 'hi',
+        enabled: true,
+        botToken: '',
+        chatId: '1',
+      })
+    ).toEqual({ sent: false, reason: 'missing_env' });
+  });
+
+  it('sendTelegramTip POSTs tip text and redacts token on HTTP error', async () => {
+    const secret = '123456:ABC-SECRET';
+    const calls: Array<{ url: string; body: string }> = [];
+    const fetchFn: FetchLike = async (url, init) => {
+      calls.push({ url: String(url), body: String(init?.body ?? '') });
+      return {
+        ok: false,
+        status: 401,
+        json: async () => ({}),
+        text: async () => `unauthorized ${secret}`,
+      };
+    };
+    const r = await sendTelegramTip({
+      text: 'tip body',
+      enabled: true,
+      botToken: secret,
+      chatId: '-1001',
+      fetchFn,
+    });
+    expect(r).toEqual({
+      sent: false,
+      reason: 'http',
+      status: 401,
+      detail: 'unauthorized <token>',
+    });
+    expect(calls[0]?.url).toContain(`/bot${secret}/sendMessage`);
+    expect(JSON.parse(calls[0]!.body)).toMatchObject({
+      chat_id: '-1001',
+      text: 'tip body',
+      disable_web_page_preview: true,
+    });
+  });
+
+  it('readLatestStatusDigest returns newest markdown from role_runs', async () => {
+    const db = await createDabosTestDb();
+    await db.exec(readRepoFile('migrations/004_role_runs.sql'));
+    const sql = pgliteSql(db);
+    await db.exec(`
+      INSERT INTO role_runs (role_id, role_type, ran_at, summary_json)
+      VALUES (
+        'status_digest',
+        'cadence',
+        '2026-11-01T10:00:00Z',
+        '{"host":"ln02","needsLogan":["A"],"needsDept13":[],"machineAlerts":[],"markdown":"# old"}'::jsonb
+      );
+      INSERT INTO role_runs (role_id, role_type, ran_at, summary_json)
+      VALUES (
+        'status_digest',
+        'cadence',
+        '2026-11-01T12:00:00Z',
+        '{"host":"ln02","needsLogan":["B"],"needsDept13":["C"],"machineAlerts":["x"],"markdown":"# latest"}'::jsonb
+      );
+    `);
+    const latest = await readLatestStatusDigest(sql);
+    expect(latest?.markdown).toBe('# latest');
+    expect(latest?.needsLogan).toEqual(['B']);
+    expect(latest?.needsDept13).toEqual(['C']);
+    expect(latest?.machineAlerts).toEqual(['x']);
+    expect(latest?.host).toBe('ln02');
+    await db.close();
+  });
+});
+

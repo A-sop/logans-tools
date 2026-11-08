@@ -17,6 +17,11 @@
  *   DABOS_DIGEST_HOST           default os.hostname()
  *   DABOS_DIGEST_CHECKOUT_SYNC_DIR  default ~/.local/state/dabos (reads only checkout-sync.FAIL and
  *                               checkout-sync.status.json from logans-tools #59's sync)
+ * Telegram tip (opt-in; missing tip env = silent pull-only, not a failure — ruling 2026-11-08):
+ *   DABOS_DIGEST_TELEGRAM_TIP=1     enable tip send after a successful file or Neon write
+ *   DABOS_DIGEST_TELEGRAM_BOT_TOKEN Bot API token (secret)
+ *   DABOS_DIGEST_TELEGRAM_CHAT_ID   chat id (secret)
+ *   DABOS_DIGEST_PULL_URL           optional; default https://dabos.logans.tools/dabos/digest
  */
 import { execFile } from 'child_process';
 import fs from 'fs';
@@ -26,9 +31,11 @@ import path from 'path';
 import { createDabosSql } from '../../src/lib/dabos/dabos-connection';
 import {
   buildDigest,
+  buildTelegramTip,
   collectDigestInput,
   errorText,
   insertDigestRow,
+  sendTelegramTip,
   type FetchLike,
   type ReadText,
   type RunCommand,
@@ -116,9 +123,29 @@ async function main() {
       console.error(`role_runs insert failed: ${errorText(e)}`);
     }
   }
+  let tipStatus = 'skipped';
+  if (wroteFile || wroteRow) {
+    const tipEnabled = process.env.DABOS_DIGEST_TELEGRAM_TIP === '1';
+    const tip = buildTelegramTip(digest, {
+      pullUrl: process.env.DABOS_DIGEST_PULL_URL?.trim() || undefined,
+    });
+    const tipResult = await sendTelegramTip({
+      text: tip,
+      enabled: tipEnabled,
+      botToken: process.env.DABOS_DIGEST_TELEGRAM_BOT_TOKEN,
+      chatId: process.env.DABOS_DIGEST_TELEGRAM_CHAT_ID,
+      fetchFn: fetch as unknown as FetchLike,
+    });
+    if (tipResult.sent) tipStatus = 'ok';
+    else if (tipResult.reason === 'disabled') tipStatus = 'off';
+    else if (tipResult.reason === 'missing_env') tipStatus = 'missing_env';
+    else if (tipResult.reason === 'empty') tipStatus = 'empty';
+    else tipStatus = `http_${tipResult.status}`;
+  }
+
   console.log(
     `status digest ${now.toISOString()}: file=${wroteFile ? 'ok' : 'FAILED'} row=${wroteRow ? 'ok' : sql ? 'FAILED' : 'skipped'} ` +
-      `needsLogan=${digest.json.needsLogan.length} needsDept13=${digest.json.needsDept13.length} ` +
+      `tip=${tipStatus} needsLogan=${digest.json.needsLogan.length} needsDept13=${digest.json.needsDept13.length} ` +
       `alerts=${digest.json.machineAlerts.length} sourceErrors=${input.sourceErrors.length}`
   );
   const closable = sql as unknown as { end?: () => Promise<void> } | null;

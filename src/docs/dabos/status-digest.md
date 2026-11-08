@@ -1,8 +1,10 @@
 # DABOS status digest (ln02)
 
-One Div1–7 digest, built on ln02 by a user systemd timer and **read, not sent**. Nobody is woken by
-it. LDW reads it at 12:30 and 20:45 Berlin; any agent may read it instead of asking another agent for
-status.
+One Div1–7 digest, built on ln02 by a user systemd timer. **Full digest = pull** (file + Neon + web).
+Optional **Telegram tip ≤5 lines** (counts + up to three “needs you” lines + pull link) — founder
+ruling `DABOS/docs/reference/founder-office/ruling-digest-delivery-2026-11-08.md`. No Grok essay,
+no Slack by default. LDW pulls at 12:30 and 20:45 Berlin (or whenever); any agent may pull instead
+of asking another agent for status.
 
 ## Where it lands
 
@@ -10,6 +12,7 @@ status.
 - Neon `role_runs`: newest row with `role_id = 'status_digest'`, `role_type = 'cadence'`.
   `summary_json->>'markdown'` is the full digest; `needsLogan`, `needsDept13`, `machineAlerts`,
   `divisions` and `sourceErrors` are structured.
+- Web pull: `https://dabos.logans.tools/dabos/digest` (Clerk-gated; `src/app/dabos/digest/page.tsx`).
 
 ```sql
 SELECT ran_at, summary_json->>'markdown'
@@ -51,9 +54,14 @@ Tasks are counted only; titles and descriptions never enter the digest.
 |---|---|---|
 | `DABOS_DIGEST_DATABASE_URL` | Neon connection string for role `dabos_status_digest` (SELECT on six tables, INSERT on role_runs) | ln02 `~/.config/dabos/status-digest.env`, mode 600 |
 | `DABOS_DIGEST_GITHUB_TOKEN` | fine-grained PAT, read-only *Pull requests* + *Metadata* on `A-sop/DABOS` and `A-sop/logans-tools` | same file |
+| `DABOS_DIGEST_TELEGRAM_TIP` | set to `1` to enable tip send after a successful write (optional) | same file |
+| `DABOS_DIGEST_TELEGRAM_BOT_TOKEN` | Bot API token for tip send (optional; required only if tip=1) | same file |
+| `DABOS_DIGEST_TELEGRAM_CHAT_ID` | chat id for tip send (optional; required only if tip=1) | same file |
+| `DABOS_DIGEST_PULL_URL` | override tip pull link (default `https://dabos.logans.tools/dabos/digest`) | same file |
 
-Logan places both. The runner never reads `.env.local`; the install script checks only that the file
-exists, is mode 600 and sets both names.
+Logan places the two required secrets. Tip vars are opt-in: missing tip env = silent pull-only, not a
+failure. The runner never reads `.env.local`; the install script checks only that the file exists, is
+mode 600 and sets the two required names.
 
 ## Install / undo
 

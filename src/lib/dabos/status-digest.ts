@@ -131,8 +131,13 @@ type GhComment = { body?: string | null; created_at?: string | null; updated_at?
 
 export type FetchLike = (
   _url: string,
-  _init?: { headers?: Record<string, string> }
-) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
+  _init?: { method?: string; headers?: Record<string, string>; body?: string }
+) => Promise<{
+  ok: boolean;
+  status: number;
+  json(): Promise<unknown>;
+  text?: () => Promise<string>;
+}>;
 
 async function ghGet<T>(fetchFn: FetchLike, token: string, path: string): Promise<T> {
   const res = await fetchFn(`https://api.github.com${path}`, {
@@ -654,7 +659,9 @@ export function buildDigest(input: DigestInput): StatusDigest {
   L.push(`# DABOS status digest — ${berlinStamp(input.now)}`);
   L.push('');
   L.push(`Host ${input.host}. Stat week closed last: ${input.week.id} (${input.week.label}).`);
-  L.push('Read, not sent: nobody is woken by this file. LDW reads it at 12:30 and 20:45 Berlin.');
+  L.push(
+    'Pull-only full digest (ln02 file + Neon + /dabos/digest). Optional Telegram tip is ≤5 lines and separate — ruling-digest-delivery-2026-11-08.'
+  );
   L.push(
     `Owner if this digest failed, is missing or is older than 2 h 30 min: ${OWNER_POST}.`
   );
@@ -850,4 +857,122 @@ export function errorText(e: unknown): string {
     .replace(/postgres(?:ql)?:\/\/\S+/gi, '<connection string>')
     .replace(/\b(gh[pousr]_|github_pat_)[A-Za-z0-9_]+/g, '<token>')
     .slice(0, 300);
+}
+
+/** Default human pull URL for Telegram tips (override via DABOS_DIGEST_PULL_URL). */
+export const DEFAULT_DIGEST_PULL_URL = 'https://dabos.logans.tools/dabos/digest';
+
+/**
+ * Founder ruling 2026-11-08: Telegram tip ≤5 lines —
+ * one counts line + up to three “needs you” lines + pull link.
+ * Never includes full digest markdown, Neon task titles, or secrets.
+ */
+export function buildTelegramTip(
+  digest: StatusDigest,
+  opts?: { pullUrl?: string; maxNeedsLines?: number }
+): string {
+  const pull = (opts?.pullUrl ?? DEFAULT_DIGEST_PULL_URL).trim() || DEFAULT_DIGEST_PULL_URL;
+  const maxNeeds = opts?.maxNeedsLines ?? 3;
+  const nLogan = digest.json.needsLogan.length;
+  const n13 = digest.json.needsDept13.length;
+  const nAlert = digest.json.machineAlerts.length;
+  const stamp = berlinStamp(new Date(digest.json.generatedAt));
+  const lines: string[] = [
+    `DABOS digest ${stamp} · you:${nLogan} · Dept13:${n13} · alerts:${nAlert}`,
+  ];
+  if (nLogan === 0) {
+    lines.push('Nothing needs you.');
+  } else {
+    for (const item of digest.json.needsLogan.slice(0, maxNeeds)) {
+      const one = item.replace(/\s+/g, ' ').trim().slice(0, 120);
+      if (one) lines.push(`• ${one}`);
+    }
+  }
+  lines.push(`Pull: ${pull}`);
+  return lines.slice(0, 5).join('\n');
+}
+
+export type TelegramTipSendResult =
+  | { sent: false; reason: 'disabled' | 'missing_env' | 'empty' }
+  | { sent: true; messageId?: number }
+  | { sent: false; reason: 'http'; status: number; detail: string };
+
+/**
+ * Opt-in Telegram Bot API send. Secrets from env only (never logged).
+ * DABOS_DIGEST_TELEGRAM_TIP=1 + BOT_TOKEN + CHAT_ID required.
+ */
+export async function sendTelegramTip(deps: {
+  text: string;
+  botToken: string | null | undefined;
+  chatId: string | null | undefined;
+  enabled: boolean;
+  fetchFn?: FetchLike;
+}): Promise<TelegramTipSendResult> {
+  if (!deps.enabled) return { sent: false, reason: 'disabled' };
+  const token = deps.botToken?.trim();
+  const chatId = deps.chatId?.trim();
+  if (!token || !chatId) return { sent: false, reason: 'missing_env' };
+  const text = deps.text.trim();
+  if (!text) return { sent: false, reason: 'empty' };
+  const fetchFn = deps.fetchFn ?? (fetch as unknown as FetchLike);
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  const res = await fetchFn(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text,
+      disable_web_page_preview: true,
+    }),
+  });
+  if (!res.ok) {
+    const body = res.text ? await res.text().catch(() => '') : '';
+    return {
+      sent: false,
+      reason: 'http',
+      status: res.status,
+      detail: body.split(token).join('<token>').slice(0, 200),
+    };
+  }
+  let messageId: number | undefined;
+  try {
+    const data = (await res.json()) as { result?: { message_id?: number } };
+    messageId = data.result?.message_id;
+  } catch {
+    /* ignore parse */
+  }
+  return { sent: true, messageId };
+}
+
+/** Newest status_digest row for the pull UI. */
+export async function readLatestStatusDigest(sql: DabosSql): Promise<{
+  ranAt: string;
+  markdown: string;
+  needsLogan: string[];
+  needsDept13: string[];
+  machineAlerts: string[];
+  host: string | null;
+} | null> {
+  const rows = (await sql`
+    SELECT ran_at, summary_json
+    FROM role_runs
+    WHERE role_id = ${DIGEST_ROLE_ID}
+    ORDER BY ran_at DESC
+    LIMIT 1
+  `) as Array<{ ran_at: Date | string; summary_json: Record<string, unknown> | null }>;
+  if (!rows.length) return null;
+  const j = rows[0].summary_json ?? {};
+  const markdown = typeof j.markdown === 'string' ? j.markdown : '';
+  const needsLogan = Array.isArray(j.needsLogan) ? j.needsLogan.map(String) : [];
+  const needsDept13 = Array.isArray(j.needsDept13) ? j.needsDept13.map(String) : [];
+  const machineAlerts = Array.isArray(j.machineAlerts) ? j.machineAlerts.map(String) : [];
+  const host = typeof j.host === 'string' ? j.host : null;
+  return {
+    ranAt: toIso(rows[0].ran_at),
+    markdown,
+    needsLogan,
+    needsDept13,
+    machineAlerts,
+    host,
+  };
 }
