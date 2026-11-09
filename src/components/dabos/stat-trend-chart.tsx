@@ -79,24 +79,27 @@ export function StatTrendChart({
 
   return (
     <div
-      className="w-full rounded-lg border border-border bg-muted/20 p-3"
+      className="w-full rounded-lg border border-border bg-card p-3 text-[color:var(--dabos-on-surface,#121826)] shadow-sm"
+      data-slot="card"
       role="img"
       aria-label={ariaLabel}
     >
       <div className="mb-2 flex items-baseline justify-between gap-2">
-        <p className="text-xs font-medium text-muted-foreground">
+        <p className="text-xs font-medium text-[color:var(--dabos-muted-on-surface,#3f4a5c)]">
           {metricKey} · {points.length} pt{points.length === 1 ? '' : 's'}
           {rangeLabel ? (
             <span className="ml-1 font-normal">· {rangeLabel}</span>
           ) : null}
         </p>
         {latest ? (
-          <p className="text-sm font-semibold tabular-nums">
+          <p className="text-sm font-semibold tabular-nums text-[color:var(--dabos-on-surface,#121826)]">
             {formatChartValue(latest.value)}
-            <span className="ml-1 text-xs font-normal text-muted-foreground">{latest.label}</span>
+            <span className="ml-1 text-xs font-normal text-[color:var(--dabos-muted-on-surface,#3f4a5c)]">
+              {latest.label}
+            </span>
           </p>
         ) : (
-          <p className="text-xs text-muted-foreground">Missing</p>
+          <p className="text-xs text-[color:var(--dabos-muted-on-surface,#3f4a5c)]">Missing</p>
         )}
       </div>
       {g ? (
@@ -105,23 +108,25 @@ export function StatTrendChart({
           preserveAspectRatio="none"
           className={svgClassName}
         >
-          <polygon points={g.area} className="fill-primary/10" />
+          <polygon points={g.area} fill="hsl(219 91% 58% / 0.12)" />
           <polyline
             points={g.line}
             fill="none"
-            className="stroke-primary"
-            strokeWidth={2}
+            stroke="hsl(219 91% 45%)"
+            strokeWidth={2.5}
             strokeLinejoin="round"
             strokeLinecap="round"
           />
         </svg>
       ) : (
-        <div className="flex h-[72px] items-center justify-center text-xs text-muted-foreground">
+        <div className="flex h-[72px] items-center justify-center text-xs text-[color:var(--dabos-muted-on-surface,#3f4a5c)]">
           Missing · no points yet
         </div>
       )}
       {credit ? (
-        <p className="mt-2 text-[11px] leading-snug text-muted-foreground">Credit: {credit}</p>
+        <p className="mt-2 text-[11px] leading-snug text-[color:var(--dabos-muted-on-surface,#3f4a5c)]">
+          Credit: {credit}
+        </p>
       ) : null}
     </div>
   );

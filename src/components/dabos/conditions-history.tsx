@@ -60,17 +60,22 @@ export function ConditionsHistory({ bundle }: ConditionsHistoryProps) {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 font-sans">
       <header className="space-y-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-wide text-[color:var(--dabos-on-canvas)]/75">
           Dept19 Conditions · all-time Neon series
         </p>
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Conditions history</h1>
-        <p className="max-w-3xl text-sm text-muted-foreground">
+        <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--dabos-on-canvas)] sm:text-3xl">
+          Conditions history
+        </h1>
+        <p className="max-w-3xl text-sm text-[color:var(--dabos-on-canvas)]/80">
           Every active posted point (not the org-board sparkline). Poster credit stays on the series.
           More history = more honest present-time reading. Working condition is still Neon working
           (often Non-Existence until Handle climb); indicated is the engine ladder on the primary.
         </p>
-        <p className="text-xs text-muted-foreground">
-          <Link href="/dabos" className="underline underline-offset-2 hover:text-foreground">
+        <p className="text-xs text-[color:var(--dabos-on-canvas)]/70">
+          <Link
+            href="/dabos"
+            className="underline underline-offset-2 hover:text-[color:var(--dabos-on-canvas)]"
+          >
             ← Organizing board
           </Link>
           {' · '}
@@ -89,9 +94,9 @@ export function ConditionsHistory({ bundle }: ConditionsHistoryProps) {
         );
 
         return (
-          <section key={divId} className="space-y-4 border-t border-border pt-6">
+          <section key={divId} className="space-y-4 border-t border-white/20 pt-6">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-lg font-semibold text-[color:var(--dabos-on-canvas)]">
                 {divId} — {div.operational_name}
               </h2>
               <ConditionBadge
@@ -99,7 +104,7 @@ export function ConditionsHistory({ bundle }: ConditionsHistoryProps) {
                 statIndicated={(w?.indicated as ConditionLabel | null) ?? null}
               />
               {div.primary_metric_key ? (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-[color:var(--dabos-on-canvas)]/70">
                   primary {div.primary_metric_key}
                 </span>
               ) : null}
@@ -112,7 +117,9 @@ export function ConditionsHistory({ bundle }: ConditionsHistoryProps) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No active division-level series yet.</p>
+              <p className="text-sm text-[color:var(--dabos-on-canvas)]/75">
+                No active division-level series yet.
+              </p>
             )}
 
             <div className="space-y-4">
