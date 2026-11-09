@@ -16,6 +16,11 @@ export default function DabosCommRoutingPage() {
   return (
     <main className="font-sans text-sm">
       <div className="mb-4 max-w-3xl">
+        <p className="text-xs text-muted-foreground">
+          <Link href="/dabos/systems" className="underline-offset-2 hover:underline">
+            ← Systems
+          </Link>
+        </p>
         <h1 className="text-xl font-semibold tracking-tight">Comm routing</h1>
         <p className="mt-1 text-muted-foreground">
           Dept2 three-line discipline. Scrambling line types = bureaucracy + insolvency. Almost all

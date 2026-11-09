@@ -87,3 +87,28 @@ export function conditionFromStatTrend(values: number[]): ConditionLabel {
 
 export const CONDITION_RULE_SUMMARY =
   'PRD-004 stat-indicated ladder from relative weekly trend (Power Change … Non-Existence); flat absolute-zero series → Non-Existence (not Normal)';
+
+/**
+ * One-line next climb hint for founder UI (PRD-014 Phase C).
+ * Not a substitute for the ethics handbook — just the first move.
+ */
+const CLIMB_HINTS: Partial<Record<ConditionLabel, string>> = {
+  Confusion: 'Get orientation — find who is on post and what the product is.',
+  Treason: 'Deliver the product you agreed to; stop covert opposition.',
+  Enemy: 'Cease hostilities; open an honest line with the org.',
+  Doubt: 'Pick a side — this project or leave cleanly.',
+  Liability: 'Repair known damage; stop the harm you were warned about.',
+  'Non-Existence': 'New Post: find a line → make yourself known → learn what is needed → produce it.',
+  Danger: 'Handle the out-point first (Probable WHY); then resume production.',
+  Emergency: 'Ignore distractions; push the one vital action that changes the stat.',
+  Normal: 'Keep exchanging; raise quality without inventing crises.',
+  Affluence: 'Protect the channels that are working; do not over-expand.',
+  Power: 'Take responsibility for the whole product; hand down authority cleanly.',
+  'Power Change': 'Complete the handoff formula — leave the post in Power for the next holder.',
+};
+
+/** Short climb cue for the working condition (or null if unknown). */
+export function climbHintForCondition(label: string | null | undefined): string | null {
+  if (!label || !isConditionLabel(label)) return null;
+  return CLIMB_HINTS[label] ?? `Complete the ${label} formula to EP, then improve one rung.`;
+}

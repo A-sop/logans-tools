@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { setSipgateAssistConsumed } from '@/app/dabos/sipgate/actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { dabosConfigured } from '@/lib/dabos/server-data';
@@ -37,10 +39,15 @@ export default async function SipgateAssistInboxPage() {
   return (
     <div className="space-y-4">
       <div>
+        <p className="text-xs text-muted-foreground">
+          <Link href="/dabos/systems" className="underline-offset-2 hover:underline">
+            ← Systems
+          </Link>
+        </p>
         <h1 className="text-xl font-semibold">sipgate Assist mailbox</h1>
         <p className="text-sm text-muted-foreground">
           Summaries from shared-channel webhooks. Mitschriften are not stored by default.
-          {pending.length > 0 ? ` ${pending.length} pending.` : ' Queue empty.'}
+          {pending.length > 0 ? ` ${pending.length} pending.` : ' Nothing queued.'}
         </p>
       </div>
 
@@ -54,10 +61,11 @@ export default async function SipgateAssistInboxPage() {
       ) : events.length === 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>No events yet</CardTitle>
+            <CardTitle>Nothing queued</CardTitle>
             <CardDescription>
-              Paste the webhook URL (path token, no <code>?k=</code>) into sipgate Desktop Labs →
-              AI Assist Webhook, format JSON, then make a shared-channel test call.
+              Empty is fine. Setup (one click away): paste the webhook URL (path token, no{' '}
+              <code>?k=</code>) into sipgate Desktop Labs → AI Assist Webhook, format JSON, then a
+              shared-channel test call.
             </CardDescription>
           </CardHeader>
         </Card>

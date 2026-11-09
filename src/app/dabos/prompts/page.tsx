@@ -49,6 +49,11 @@ export default async function DabosPromptsPage({
     <main className="font-sans text-sm">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
+          <p className="text-xs text-muted-foreground">
+            <Link href="/dabos/systems" className="underline-offset-2 hover:underline">
+              ← Systems
+            </Link>
+          </p>
           <h1 className="text-xl font-semibold tracking-tight">Prompt register</h1>
           <p className="mt-1 max-w-2xl text-muted-foreground">
             Neon mirror of ln02 metadata. No prompt bodies. Edit status on ln02 via Set-PromptStatus /
@@ -57,6 +62,17 @@ export default async function DabosPromptsPage({
         </div>
         <p className="text-xs text-muted-foreground">{rows.length} items</p>
       </div>
+
+      {rows.length === 0 ? (
+        <p className="mb-4 rounded-lg border border-border bg-card px-3 py-3 text-sm text-muted-foreground">
+          Nothing queued.{' '}
+          <Link href="/dabos/systems" className="underline-offset-2 hover:underline">
+            Back to Systems
+          </Link>
+          {' · '}
+          Sync from ln02 with the prompt-register harness when you have items.
+        </p>
+      ) : null}
 
       <form className="mb-4 flex flex-wrap gap-2" method="get">
         <input

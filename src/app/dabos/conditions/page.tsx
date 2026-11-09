@@ -4,6 +4,11 @@ import { fetchAllTimeStatsBundle } from '@/lib/dabos/all-time-stats';
 import { getDabosSql } from '@/lib/dabos/db';
 import { dabosConfigured } from '@/lib/dabos/server-data';
 
+export const metadata = {
+  title: 'Conditions — DABOS',
+  description: 'Working condition per division and climb hints; Neon series archive below',
+};
+
 export const dynamic = 'force-dynamic';
 
 function SetupPanel() {
@@ -17,7 +22,7 @@ function SetupPanel() {
         </CardDescription>
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground">
-        Conditions history needs Neon <code>stats</code> + <code>entity_condition_state</code>.
+        Conditions needs Neon <code>stats</code> + <code>entity_condition_state</code>.
       </CardContent>
     </Card>
   );
