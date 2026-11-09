@@ -1,59 +1,199 @@
-import { OrgBoard } from '@/components/dabos/org-board/org-board';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  BOARD_STAT_YEAR,
-  clampCalendarWeek,
-  currentCalendarWeek,
-  weeksInYear,
-} from '@/lib/dabos/calendar-week';
-import { dabosConfigured, fetchOrgBoardData } from '@/lib/dabos/server-data';
+import Link from 'next/link';
 
-function SetupPanel() {
+import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
+import { getStatCutoffSnapshot } from '@/lib/dabos/org-week';
+import {
+  parseDigestNeedLine,
+  partitionMachineAlerts,
+  readLatestStatusDigest,
+} from '@/lib/dabos/status-digest';
+
+export const metadata = {
+  title: 'Home — DABOS',
+  description: 'What needs you, what is on fire, and the next deadline',
+};
+
+export const dynamic = 'force-dynamic';
+
+const NEEDS_YOU_CAP = 5;
+
+function berlinDeadlineLine(deadlineIso: string, past: boolean): string {
+  const when = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Berlin',
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(deadlineIso));
+  return past ? `Stat cutoff was ${when} Berlin — late` : `Next deadline: ${when} Berlin`;
+}
+
+function NeedRows({ items }: { items: string[] }) {
+  if (!items.length) {
+    return (
+      <p className="rounded-lg border border-border bg-card px-3 py-3 text-sm text-[color:var(--dabos-muted-on-surface)]">
+        Nothing needs you right now.
+      </p>
+    );
+  }
   return (
-    <Card className="border-dashed">
-      <CardHeader>
-        <CardTitle>Database not configured</CardTitle>
-        <CardDescription>
-          Add <code>DATABASE_URL</code> to <code>.env.local</code>, then run{' '}
-          <code>npm run dabos:migrate</code>.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="text-sm text-muted-foreground">
-        Homelab: <code>Atlas/docs/admin/dabos-ln02-homelab-setup.md</code>
-      </CardContent>
-    </Card>
+    <ul className="divide-y divide-border/80 rounded-lg border border-border bg-card">
+      {items.map((item, i) => {
+        const parts = parseDigestNeedLine(item);
+        return (
+          <li key={`${i}-${item.slice(0, 48)}`} className="px-3 py-2.5 sm:px-4">
+            <div className="text-sm font-medium leading-snug text-foreground">{parts.title}</div>
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[color:var(--dabos-muted-on-surface)]">
+              {parts.ref ? <span className="font-mono tabular-nums">{parts.ref}</span> : null}
+              {parts.note ? <span>{parts.note}</span> : null}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
-type PageProps = {
-  searchParams: Promise<{ year?: string; cw?: string; period?: string }>;
-};
+export default async function DabosHomePage() {
+  const cutoff = getStatCutoffSnapshot();
+  const deadlineLine = berlinDeadlineLine(cutoff.deadline_iso, cutoff.past_current_deadline);
 
-export default async function DabosOrgMapPage({ searchParams }: PageProps) {
-  if (!dabosConfigured()) {
-    return <SetupPanel />;
+  if (!hasDabosDb()) {
+    return (
+      <main className="mx-auto max-w-2xl space-y-6 font-[family-name:var(--font-dabos-body)]">
+        <header className="space-y-2">
+          <p className="font-[family-name:var(--font-dabos-display)] text-3xl font-semibold tracking-tight text-[color:var(--dabos-on-canvas)] sm:text-4xl">
+            DABOS
+          </p>
+          <p className="text-sm text-[color:var(--dabos-on-canvas)]/85">{deadlineLine}</p>
+        </header>
+        <p className="rounded-lg border border-dashed border-border bg-card px-3 py-3 text-sm text-muted-foreground">
+          Database is not configured on this host. Add <code>DATABASE_URL</code>, then reload.
+        </p>
+      </main>
+    );
   }
 
-  const params = await searchParams;
-  const year = params.year ? Number(params.year) : BOARD_STAT_YEAR;
-  const statYear = Number.isFinite(year) ? Math.floor(year) : BOARD_STAT_YEAR;
-  const cwRaw = params.cw ? Number(params.cw) : currentCalendarWeek(statYear);
-  const calendarWeek = clampCalendarWeek(statYear, cwRaw);
+  let latest: Awaited<ReturnType<typeof readLatestStatusDigest>> = null;
+  let loadError: string | null = null;
+  try {
+    latest = await readLatestStatusDigest(getDabosSql());
+  } catch (e) {
+    loadError = e instanceof Error ? e.message : String(e);
+  }
 
-  const board = await fetchOrgBoardData({
-    year: statYear,
-    calendarWeek,
-    period: params.period,
-  });
+  const needs = (latest?.needsLogan ?? []).slice(0, NEEDS_YOU_CAP);
+  const needsTotal = latest?.needsLogan.length ?? 0;
+  const { actionable: machineAlerts } = partitionMachineAlerts(latest?.machineAlerts ?? []);
+  const failCount = latest?.failAtHead.length ?? 0;
+  const onFireCount = machineAlerts.length + failCount;
 
   return (
-    <OrgBoard
-      divisions={board.divisions}
-      week={board.week}
-      period={board.period}
-      executive={board.executive}
-      cadence={board.cadence}
-      maxWeek={weeksInYear(statYear)}
-    />
+    <main className="mx-auto max-w-2xl space-y-6 font-[family-name:var(--font-dabos-body)]">
+      <header className="space-y-2">
+        <p className="font-[family-name:var(--font-dabos-display)] text-3xl font-semibold tracking-tight text-[color:var(--dabos-on-canvas)] sm:text-4xl">
+          DABOS
+        </p>
+        <p
+          className={
+            cutoff.past_current_deadline
+              ? 'text-sm font-medium text-[color:var(--dabos-danger)]'
+              : 'text-sm text-[color:var(--dabos-on-canvas)]/85'
+          }
+        >
+          {deadlineLine}
+          {cutoff.week_label ? (
+            <span className="ml-2 text-[color:var(--dabos-on-canvas)]/65">· {cutoff.week_label}</span>
+          ) : null}
+        </p>
+        <p className="text-xs text-[color:var(--dabos-on-canvas)]/70">
+          <Link
+            href="/dabos/conditions"
+            className="underline-offset-2 hover:text-[color:var(--dabos-on-canvas)] hover:underline"
+          >
+            Conditions pulse
+          </Link>
+          <span aria-hidden> · </span>
+          <Link
+            href="/dabos/board"
+            className="underline-offset-2 hover:text-[color:var(--dabos-on-canvas)] hover:underline"
+          >
+            Full org board
+          </Link>
+        </p>
+      </header>
+
+      {loadError ? (
+        <p className="text-sm text-destructive" role="alert">
+          Could not load status: {loadError.slice(0, 200)}
+        </p>
+      ) : null}
+
+      {!loadError && !latest ? (
+        <p className="rounded-lg border border-border bg-card px-3 py-3 text-sm text-[color:var(--dabos-muted-on-surface)]">
+          No status digest yet. The ln02 timer writes it about every two hours.
+        </p>
+      ) : null}
+
+      <section className="space-y-2">
+        <div className="flex items-baseline justify-between gap-2">
+          <h1 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+            Needs you
+          </h1>
+          {needsTotal > NEEDS_YOU_CAP ? (
+            <span className="text-xs tabular-nums text-[color:var(--dabos-on-canvas)]/70">
+              showing {NEEDS_YOU_CAP} of {needsTotal}
+            </span>
+          ) : null}
+        </div>
+        <NeedRows items={needs} />
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+          On fire
+        </h2>
+        {onFireCount === 0 ? (
+          <p className="rounded-lg border border-border bg-card px-3 py-3 text-sm text-[color:var(--dabos-muted-on-surface)]">
+            Nothing on fire.
+          </p>
+        ) : (
+          <details className="rounded-lg border border-destructive/35 bg-card open:shadow-sm">
+            <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-destructive">
+              {onFireCount} alert{onFireCount === 1 ? '' : 's'} — expand
+            </summary>
+            <ul className="space-y-1 border-t border-border/80 px-3 py-2.5 text-sm text-[color:var(--dabos-on-surface)]">
+              {failCount ? (
+                <li>
+                  <Link href="/dabos/digest" className="font-medium text-destructive underline-offset-2 hover:underline">
+                    {failCount} failed review{failCount === 1 ? '' : 's'}
+                  </Link>
+                </li>
+              ) : null}
+              {machineAlerts.map((a, i) => (
+                <li key={`fire-${i}-${a.slice(0, 40)}`}>{a}</li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </section>
+
+      <div className="flex flex-wrap gap-2 pt-1">
+        <Link
+          href="/dabos/open"
+          className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Open all needs
+        </Link>
+        <Link
+          href="/dabos/digest"
+          className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+        >
+          Pull full Status
+        </Link>
+      </div>
+    </main>
   );
 }

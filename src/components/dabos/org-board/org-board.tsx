@@ -108,7 +108,7 @@ export function OrgBoard({ divisions, week, period, executive, cadence, maxWeek 
     <div className="dabos-org-board">
       <div className="dabos-org-board__shell">
         <div className="dabos-org-board__page-header">
-          <Link href="/dabos" className="dabos-org-board__page-title">
+          <Link href="/dabos/board" className="dabos-org-board__page-title">
             {BOARD_PAGE_TITLE}
           </Link>
           <p className="dabos-org-board__page-subtitle">{BOARD_PAGE_SUBTITLE}</p>

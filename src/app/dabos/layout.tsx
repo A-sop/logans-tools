@@ -7,8 +7,8 @@ import { DabosViewProvider } from '@/components/dabos/view-mode';
 import { dabosConfigured, fetchDabosShell } from '@/lib/dabos/server-data';
 
 export const metadata: Metadata = {
-  title: 'DABOS Organizing Board',
-  description: 'Digital Agent Business Orchestrator System',
+  title: 'DABOS',
+  description: 'Digital Agent Business Orchestrator System — founder operating surface',
 };
 
 /** Clerk-gated; must not be CDN-cached as a signed-out 404. */

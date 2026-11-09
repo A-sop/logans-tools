@@ -706,3 +706,95 @@
 .execOverlay { font-size: 0.88rem !important; line-height: 1.15; }
 .drumBand { overflow: visible !important; }
 .drumStage { --band-h: 0.8rem !important; --strip-h: 2.9rem !important; }
+
+/* PRD-014 Phase B — list-first Open */
+.viewToggle {
+  display: inline-flex;
+  border: 1px solid var(--ol-line);
+  border-radius: 0.5rem;
+  background: var(--ol-card);
+  padding: 0.15rem;
+  gap: 0.15rem;
+}
+.viewBtn {
+  border: 0;
+  background: transparent;
+  color: var(--ol-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+.viewBtnActive {
+  background: var(--ol-ink);
+  color: #fff;
+}
+.urgencyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-width: 42rem;
+}
+.urgencySection {
+  border: 1px solid var(--ol-line);
+  border-radius: 0.55rem;
+  background: var(--ol-card);
+  overflow: hidden;
+}
+.urgencySummary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+.urgencySummary::-webkit-details-marker { display: none; }
+.urgencyDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.urgencyDot_hot { background: var(--ol-hot); }
+.urgencyDot_open { background: var(--ol-open); }
+.urgencyDot_ship { background: var(--ol-ship); }
+.urgencyLabel { flex: 1; }
+.urgencyCount {
+  font-family: var(--ol-mono);
+  font-size: 0.8rem;
+  color: var(--ol-muted);
+}
+.urgencyEmpty {
+  margin: 0;
+  padding: 0 0.85rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ol-muted);
+}
+.urgencyItems {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.35rem;
+  border-top: 1px solid var(--ol-line);
+}
+.urgencyItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid rgba(200, 210, 222, 0.55);
+}
+.urgencyItem:last-child { border-bottom: 0; }
+.urgencyWhy {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.urgencyMeta {
+  font-family: var(--ol-mono);
+  font-size: 0.72rem;
+  color: var(--ol-muted);
+}

@@ -76,7 +76,14 @@ export function ConditionsHistory({ bundle }: ConditionsHistoryProps) {
             href="/dabos"
             className="underline underline-offset-2 hover:text-[color:var(--dabos-on-canvas)]"
           >
-            ← Organizing board
+            ← Home
+          </Link>
+          {' · '}
+          <Link
+            href="/dabos/board"
+            className="underline underline-offset-2 hover:text-[color:var(--dabos-on-canvas)]"
+          >
+            Board
           </Link>
           {' · '}
           {activeCount} active points · {series.length} series · {supersededCount} superseded

@@ -14,20 +14,37 @@ type DabosChromeProps = {
   shell: DabosShellData | null;
 };
 
-/** Cloud DABOS surfaces (Neon). Phase A keeps current labels; Phase B shrinks IA. */
+/** Primary chrome ≤5 (PRD-014 Phase B). Conditions parked; Comm/Prompts/sipgate under Systems. */
 const DABOS_CHROME_LINKS = [
-  { href: '/dabos', label: 'Board', match: (p: string) => p === '/dabos' },
-  { href: '/dabos/digest', label: 'Status', match: (p: string) => p.startsWith('/dabos/digest') || p.startsWith('/dabos/status') },
-  { href: '/dabos/conditions', label: 'Conditions', match: (p: string) => p.startsWith('/dabos/conditions') },
+  { href: '/dabos', label: 'Home', match: (p: string) => p === '/dabos' },
   { href: '/dabos/open', label: 'Open', match: (p: string) => p.startsWith('/dabos/open') },
-  { href: '/dabos/comm', label: 'Comm', match: (p: string) => p.startsWith('/dabos/comm') },
-  { href: '/dabos/prompts', label: 'Prompts', match: (p: string) => p.startsWith('/dabos/prompts') },
-  { href: '/dabos/sipgate', label: 'sipgate', match: (p: string) => p.startsWith('/dabos/sipgate') },
+  {
+    href: '/dabos/digest',
+    label: 'Status',
+    match: (p: string) => p.startsWith('/dabos/digest') || p.startsWith('/dabos/status'),
+  },
+  { href: '/dabos/board', label: 'Board', match: (p: string) => p.startsWith('/dabos/board') },
+  {
+    href: '/dabos/systems',
+    label: 'Systems',
+    match: (p: string) =>
+      p.startsWith('/dabos/systems') ||
+      p.startsWith('/dabos/comm') ||
+      p.startsWith('/dabos/prompts') ||
+      p.startsWith('/dabos/sipgate') ||
+      p.startsWith('/dabos/conditions'),
+  },
 ] as const;
 
-/** Cadence pills: Board + Status only (PRD-014 Phase A — not on empty Systems pages). */
+/** Cadence pills: Home + Systems only (PRD-014 §4.2). */
 function showCadencePills(pathname: string): boolean {
-  return pathname === '/dabos' || pathname.startsWith('/dabos/digest') || pathname.startsWith('/dabos/status');
+  return (
+    pathname === '/dabos' ||
+    pathname.startsWith('/dabos/systems') ||
+    pathname.startsWith('/dabos/comm') ||
+    pathname.startsWith('/dabos/prompts') ||
+    pathname.startsWith('/dabos/sipgate')
+  );
 }
 
 function formatLastRun(iso: string | null): string {

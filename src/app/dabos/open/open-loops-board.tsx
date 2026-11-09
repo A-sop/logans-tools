@@ -369,6 +369,52 @@ function PrayerDrum({
   );
 }
 
+function UrgencyList({
+  data,
+  heat,
+}: {
+  data: OpenLoopsSnapshot;
+  heat: HeatFilter;
+}) {
+  const sections: { key: Exclude<HeatFilter, 'all'>; label: string; items: OpenLoopItem[] }[] = [
+    { key: 'hot', label: 'Hot', items: data.hot },
+    { key: 'open', label: 'Open', items: data.open },
+    { key: 'ship', label: 'Ship', items: data.ship },
+  ];
+  const visible = heat === 'all' ? sections : sections.filter((s) => s.key === heat);
+
+  return (
+    <div className={styles.urgencyList} aria-label="Open loops by urgency">
+      {visible.map((section) => (
+        <details key={section.key} className={styles.urgencySection} open={section.items.length > 0}>
+          <summary className={styles.urgencySummary}>
+            <span className={`${styles.urgencyDot} ${styles[`urgencyDot_${section.key}`]}`} aria-hidden />
+            <span className={styles.urgencyLabel}>{section.label}</span>
+            <span className={styles.urgencyCount}>{section.items.length}</span>
+          </summary>
+          {section.items.length === 0 ? (
+            <p className={styles.urgencyEmpty}>Nothing in {section.label.toLowerCase()}.</p>
+          ) : (
+            <ul className={styles.urgencyItems}>
+              {section.items.map((item) => (
+                <li key={item.id} className={styles.urgencyItem}>
+                  <span className={styles.urgencyWhy}>{item.why}</span>
+                  <span className={styles.urgencyMeta}>
+                    {itemDept(item)}
+                    {item.status ? ` · ${item.status}` : ''}
+                    {item.priority != null ? ` · P${item.priority}` : ''}
+                    {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </details>
+      ))}
+    </div>
+  );
+}
+
 export function OpenLoopsBoard({
   data,
   live = false,
@@ -381,6 +427,8 @@ export function OpenLoopsBoard({
   workingConditions?: Record<string, ConditionLabel | null>;
 }) {
   const [heat, setHeat] = useState<HeatFilter>('all');
+  /** Founder default = list; Deep = 3D drum (PRD-014 Phase B). */
+  const [view, setView] = useState<'list' | 'drum'>('list');
   const [openId, setOpenId] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -499,63 +547,87 @@ export function OpenLoopsBoard({
     <div className={styles.root} ref={rootRef}>
       <header className={styles.header}>
         <h1 className={styles.title}>Open loops</h1>
+        <div className={styles.viewToggle} role="group" aria-label="Open view">
+          <button
+            type="button"
+            className={`${styles.viewBtn} ${view === 'list' ? styles.viewBtnActive : ''}`}
+            aria-pressed={view === 'list'}
+            onClick={() => setView('list')}
+          >
+            List
+          </button>
+          <button
+            type="button"
+            className={`${styles.viewBtn} ${view === 'drum' ? styles.viewBtnActive : ''}`}
+            aria-pressed={view === 'drum'}
+            onClick={() => setView('drum')}
+          >
+            Deep
+          </button>
+        </div>
         <AimRow data={data} heat={heat} setHeat={setHeat} live={live} />
       </header>
 
-      <div className={styles.drumWrap}>
-        <div className={styles.boardDrum}>
-          <div className={styles.execHeader}>
-            <div className={`${styles.execPlate} ${styles.execPlateEd}`}>
-              <span>{EXECUTIVE_LABELS.director}</span>
-              <strong>{total}</strong>
+      {view === 'list' ? (
+        <UrgencyList data={data} heat={heat} />
+      ) : (
+        <div className={styles.drumWrap}>
+          <div className={styles.boardDrum}>
+            <div className={styles.execHeader}>
+              <div className={`${styles.execPlate} ${styles.execPlateEd}`}>
+                <span>{EXECUTIVE_LABELS.director}</span>
+                <strong>{total}</strong>
+              </div>
             </div>
+            <PrayerDrum
+              paused={openId !== null}
+              faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
+              band={[
+                {
+                  key: 'dco',
+                  row: 0,
+                  a0: drumOrder.indexOf(DCO_DIVISION_IDS[0]),
+                  a1: drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1]),
+                  node: (
+                    <span className={styles.execOverlay}>
+                      <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
+                      <strong>{countFor(DCO_DIVISION_IDS)}</strong>
+                    </span>
+                  ),
+                },
+                {
+                  key: 'oec',
+                  row: 0,
+                  a0: drumOrder.indexOf(ORG_DIVISION_IDS[0]),
+                  a1: drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1]),
+                  node: (
+                    <span className={styles.execOverlay}>
+                      <span>{EXECUTIVE_LABELS.orgSecretary}</span>
+                      <strong>{countFor(ORG_DIVISION_IDS)}</strong>
+                    </span>
+                  ),
+                },
+              ]}
+            />
+            {openDept ? (
+              <div
+                className={styles.drumPop}
+                onMouseEnter={() => closeTimer.current && clearTimeout(closeTimer.current)}
+                onMouseLeave={() =>
+                  window.matchMedia('(hover: hover)').matches && scheduleClose(openDept!.id)
+                }
+              >
+                <TaskPopover
+                  title={`${deptNumberLabel(openDept.id, { short: true })} \u00b7 ${deptRoleLabel(openDept)}`}
+                  items={byDept.get(openDept.id) ?? []}
+                  alignRight={false}
+                  onClose={() => setOpenId(null)}
+                />
+              </div>
+            ) : null}
           </div>
-          <PrayerDrum
-            paused={openId !== null}
-            faces={drumOrder.map((id) => ({ key: id, node: renderDivision(id) }))}
-            band={[
-              {
-                key: 'dco',
-                row: 0,
-                a0: drumOrder.indexOf(DCO_DIVISION_IDS[0]),
-                a1: drumOrder.indexOf(DCO_DIVISION_IDS[DCO_DIVISION_IDS.length - 1]),
-                node: (
-                  <span className={styles.execOverlay}>
-                    <span>{EXECUTIVE_LABELS.dcoSecretary}</span>
-                    <strong>{countFor(DCO_DIVISION_IDS)}</strong>
-                  </span>
-                ),
-              },
-              {
-                key: 'oec',
-                row: 0,
-                a0: drumOrder.indexOf(ORG_DIVISION_IDS[0]),
-                a1: drumOrder.indexOf(ORG_DIVISION_IDS[ORG_DIVISION_IDS.length - 1]),
-                node: (
-                  <span className={styles.execOverlay}>
-                    <span>{EXECUTIVE_LABELS.orgSecretary}</span>
-                    <strong>{countFor(ORG_DIVISION_IDS)}</strong>
-                  </span>
-                ),
-              },
-            ]}
-          />
-          {openDept ? (
-            <div
-              className={styles.drumPop}
-              onMouseEnter={() => closeTimer.current && clearTimeout(closeTimer.current)}
-              onMouseLeave={() => window.matchMedia('(hover: hover)').matches && scheduleClose(openDept!.id)}
-            >
-              <TaskPopover
-                title={`${deptNumberLabel(openDept.id, { short: true })} \u00b7 ${deptRoleLabel(openDept)}`}
-                items={byDept.get(openDept.id) ?? []}
-                alignRight={false}
-                onClose={() => setOpenId(null)}
-              />
-            </div>
-          ) : null}
         </div>
-      </div>
+      )}
     </div>
   );
 }
