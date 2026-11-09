@@ -107,6 +107,14 @@ export function sumTradingResearchUnits(
   });
 }
 
+/**
+ * AE eingereicht: | Date | Venture | Case-ref | EH | Note |
+ * Sum EH for Neugeschäft submitted in the closed org week.
+ */
+export function sumAeEingereicht(md: string | null, window: WeekWindow): number | null {
+  return sumLogColumn(md, window, 3);
+}
+
 /** Market research: | Date | Venture | Topic | Units | Note | → sum Units (blank Units = 1) */
 export function sumMarketResearchUnits(md: string | null, window: WeekWindow): number | null {
   if (md == null) return null;

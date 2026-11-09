@@ -4,10 +4,15 @@ import {
   countCommsUnits,
   countEnrollments,
   countPublishLogRows,
+  sumAeEingereicht,
   sumEurLog,
   sumMarketResearchUnits,
   sumTradingResearchUnits,
 } from '@/lib/dabos/stat-log-counters';
+import {
+  countContentPiecesProduced,
+  countContentPiecesShipped,
+} from '@/lib/dabos/division-weekly-stats';
 
 const WEEK = closedOrgWeekForIsoWeek(2026, 45); // closed week labelled 2026-W45
 
@@ -75,5 +80,31 @@ describe('stat-log-counters', () => {
 | 2026-10-30 | trading | channels | 2 | ok |
 `;
     expect(sumMarketResearchUnits(md, WEEK)).toBe(3);
+  });
+
+  it('sums ae_eingereicht EH in window and returns 0 for empty present log', () => {
+    const empty = `| Date | Venture | Case-ref | EH | Note |\n|------|---------|----------|----|------|\n`;
+    expect(sumAeEingereicht(empty, WEEK)).toBe(0);
+    expect(sumAeEingereicht(null, WEEK)).toBeNull();
+    const md = `
+| Date | Venture | Case-ref | EH | Note |
+|------|---------|----------|----|------|
+| 2026-10-30 | DVAG_Praxis | AB | 2.5 | eingereicht |
+| 2026-09-01 | DVAG_Praxis | CD | 9 | outside |
+`;
+    expect(sumAeEingereicht(md, WEEK)).toBe(2.5);
+  });
+
+  it('counts content produced vs shipped from status table', () => {
+    const md = `
+| piece_id | venture | type | produced | submitted_validation | quality_ok | tc_ok | scheduled | published | notes |
+|----------|---------|------|----------|-------------------|------------|-------|-----------|-----------|-------|
+| a | gfp | post | 2026-10-01 | — | PENDING | n/a | — | — | draft |
+| b | gfp | video | 2026-10-02 | 2026-10-03 | PASS | n/a | — | — | shipped |
+| *(none yet — honest empty)* | | | | | | | | | |
+`;
+    expect(countContentPiecesProduced(md)).toBe(2);
+    expect(countContentPiecesShipped(md)).toBe(1);
+    expect(countContentPiecesProduced(null)).toBe(0);
   });
 });

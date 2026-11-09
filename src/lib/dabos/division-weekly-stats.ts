@@ -29,6 +29,7 @@ import {
   countPublishLogRows,
   countVerdictsDecided,
   readOptionalText,
+  sumAeEingereicht,
   sumEurLog,
   sumMarketResearchUnits,
   sumTradingResearchUnits,
@@ -76,20 +77,40 @@ function readText(filePath: string): string | null {
   return readFileSync(filePath, 'utf8');
 }
 
+/** Content-status data rows (skip header / honest-empty placeholders). */
+function contentStatusDataRows(contentStatusMd: string): string[] {
+  return contentStatusMd
+    .split('\n')
+    .filter((line) => /^\| [^|]+\|/.test(line) && !line.includes('piece_id') && !line.includes('---'))
+    .filter((row) => !/\*\(none|\*\(empty|honest empty/i.test(row));
+}
+
+function contentStatusDateCell(cells: string[], index: number): boolean {
+  const raw = cells[index] ?? '';
+  if (!raw || raw === '—' || raw === '-' || raw.startsWith('*(')) return false;
+  return /^\d{4}-\d{2}-\d{2}/.test(raw) || raw.toLowerCase() === 'yes';
+}
+
 /** Content factory = Div2. Count pieces submitted for validation. */
 export function countContentPiecesShipped(contentStatusMd: string | null): number {
   if (!contentStatusMd) return 0;
-  const rows = contentStatusMd
-    .split('\n')
-    .filter((line) => /^\| [^|]+\|/.test(line) && !line.includes('piece_id') && !line.includes('---'));
   let n = 0;
-  for (const row of rows) {
-    if (/\*\(none|\*\(empty|honest empty/i.test(row)) continue;
+  for (const row of contentStatusDataRows(contentStatusMd)) {
     const cells = row.split('|').map((c) => c.trim());
     // | piece_id | venture | type | produced | submitted_validation | ...
-    const submitted = cells[5] ?? '';
-    if (!submitted || submitted === '—' || submitted === '-' || submitted.startsWith('*(')) continue;
-    if (/^\d{4}-\d{2}-\d{2}/.test(submitted) || submitted.toLowerCase() === 'yes') n += 1;
+    if (contentStatusDateCell(cells, 5)) n += 1;
+  }
+  return n;
+}
+
+/** Content factory leading: rows with a real produced date (before handoff). */
+export function countContentPiecesProduced(contentStatusMd: string | null): number {
+  if (!contentStatusMd) return 0;
+  let n = 0;
+  for (const row of contentStatusDataRows(contentStatusMd)) {
+    const cells = row.split('|').map((c) => c.trim());
+    // | piece_id | venture | type | produced | ...
+    if (contentStatusDateCell(cells, 4)) n += 1;
   }
   return n;
 }
@@ -422,6 +443,7 @@ export async function postDivisionWeeklyStats(opts: {
   const approvalsLogPath = path.join(REGISTERS, 'approvals-cleared-log.md');
   const tradingResearchLogPath = path.join(REGISTERS, 'trading-research-log.md');
   const marketResearchLogPath = path.join(REGISTERS, 'market-research-log.md');
+  const aeEingereichtLogPath = path.join(REGISTERS, 'ae-eingereicht-log.md');
 
   const contentStatus = readText(contentStatusPath);
   const pipeline = readText(pipelinePath);
@@ -430,6 +452,7 @@ export async function postDivisionWeeklyStats(opts: {
   const checklist = readText(ESTABLISHMENT);
 
   const contentPieces = countContentPiecesShipped(contentStatus);
+  const contentProduced = countContentPiecesProduced(contentStatus);
   const touchpoints = countPipelineTouchpoints(pipeline);
   const shipped = countShippedOutputs(shipLog, window);
   const qaRate = computeQaPassRate(validation, { window });
@@ -473,6 +496,7 @@ export async function postDivisionWeeklyStats(opts: {
     readOptionalText(marketResearchLogPath),
     window
   );
+  const aeEingereicht = sumAeEingereicht(readOptionalText(aeEingereichtLogPath), window);
 
   type StatRow = {
     divisionId: string;
@@ -584,8 +608,16 @@ export async function postDivisionWeeklyStats(opts: {
       source: 'content-status-table.md (snapshot)',
     });
     notes.push(`Dept4.content_pieces_shipped=${contentPieces}`);
+    push({
+      divisionId: 'Div2',
+      departmentId: 'Dept4',
+      metricKey: 'content_pieces_produced',
+      value: contentProduced,
+      source: 'content-status-table.md produced column (snapshot)',
+    });
+    notes.push(`Dept4.content_pieces_produced=${contentProduced}`);
   } else {
-    notes.push(`Div2 content_pieces_shipped skipped — missing ${contentStatusPath}`);
+    notes.push(`Div2 content_pieces_shipped/produced skipped — missing ${contentStatusPath}`);
   }
   // Dept5: published this week (publish-log); fulfillments proxy = published until true fulfillments log
   pushOrNote(contentPublished, {
@@ -742,6 +774,13 @@ export async function postDivisionWeeklyStats(opts: {
     metricKey: 'fsm_commissions_paid_eur',
     source: 'fsm-commissions-log.md (Dept17 headline)',
   }, `Dept17.fsm_commissions_paid_eur skipped — missing ${fsmCommissionsLogPath}`);
+  pushOrNote(aeEingereicht, {
+    divisionId: 'Div6',
+    departmentId: 'Dept17',
+    metricKey: 'ae_eingereicht',
+    source: 'ae-eingereicht-log.md sum EH (Neugeschäft submitted; empty→0)',
+    basis: { venture: 'DVAG_Praxis' },
+  }, `Dept17.ae_eingereicht skipped — missing ${aeEingereichtLogPath}`);
   pushOrNote(successStories, {
     divisionId: 'Div6',
     departmentId: 'Dept18',
