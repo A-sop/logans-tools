@@ -9,6 +9,8 @@ type StatCutoffCountdownProps = {
   weekLabel: string;
   timezone: string;
   pastCurrentDeadline: boolean;
+  /** PRD-014 Phase A: compact chip instead of billboard */
+  compact?: boolean;
   className?: string;
 };
 
@@ -31,6 +33,7 @@ export function StatCutoffCountdown({
   weekLabel,
   timezone,
   pastCurrentDeadline,
+  compact = false,
   className,
 }: StatCutoffCountdownProps) {
   const [remaining, setRemaining] = useState(() =>
@@ -47,6 +50,32 @@ export function StatCutoffCountdown({
   }, [deadlineIso]);
 
   const urgent = remaining > 0 && remaining < 4 * 60 * 60 * 1000;
+
+  if (compact) {
+    return (
+      <div
+        className={cn(
+          'inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-0.5 rounded-md border border-white/25 bg-black/30 px-2.5 py-1 text-[color:var(--dabos-on-canvas)] shadow-sm',
+          urgent && 'border-amber-300/60 bg-amber-950/50',
+          className
+        )}
+        title={`${weekLabel} · Thu 14:00 ${timezone}${pastCurrentDeadline ? ' · next deadline' : ''}`}
+      >
+        <span className="text-[10px] font-medium uppercase tracking-wide opacity-80">Cutoff</span>
+        <span
+          className={cn(
+            'font-mono text-sm font-semibold tabular-nums tracking-tight',
+            urgent ? 'text-amber-200' : 'text-[color:var(--dabos-on-canvas)]'
+          )}
+        >
+          {formatCountdown(remaining)}
+        </span>
+        <span className="hidden text-[10px] opacity-75 sm:inline">
+          Thu 14:00{pastCurrentDeadline ? ' · next' : ''}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div

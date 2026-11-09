@@ -1,8 +1,12 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { StatCutoffCountdown } from '@/components/dabos/stat-cutoff-countdown';
 import { UserButton } from '@clerk/nextjs';
 import type { DabosShellData } from '@/lib/dabos/server-data';
+import { cn } from '@/lib/utils';
 
 import { ActivityBadge } from './condition-badge';
 
@@ -10,16 +14,21 @@ type DabosChromeProps = {
   shell: DabosShellData | null;
 };
 
-/** Cloud DABOS surfaces (Neon). Local-office pages (Status, Triage, Debt) stay at their URLs. */
+/** Cloud DABOS surfaces (Neon). Phase A keeps current labels; Phase B shrinks IA. */
 const DABOS_CHROME_LINKS = [
-  { href: '/dabos', label: 'Board' },
-  { href: '/dabos/digest', label: 'Status' },
-  { href: '/dabos/conditions', label: 'Conditions' },
-  { href: '/dabos/open', label: 'Open' },
-  { href: '/dabos/comm', label: 'Comm' },
-  { href: '/dabos/prompts', label: 'Prompts' },
-  { href: '/dabos/sipgate', label: 'sipgate' },
+  { href: '/dabos', label: 'Board', match: (p: string) => p === '/dabos' },
+  { href: '/dabos/digest', label: 'Status', match: (p: string) => p.startsWith('/dabos/digest') || p.startsWith('/dabos/status') },
+  { href: '/dabos/conditions', label: 'Conditions', match: (p: string) => p.startsWith('/dabos/conditions') },
+  { href: '/dabos/open', label: 'Open', match: (p: string) => p.startsWith('/dabos/open') },
+  { href: '/dabos/comm', label: 'Comm', match: (p: string) => p.startsWith('/dabos/comm') },
+  { href: '/dabos/prompts', label: 'Prompts', match: (p: string) => p.startsWith('/dabos/prompts') },
+  { href: '/dabos/sipgate', label: 'sipgate', match: (p: string) => p.startsWith('/dabos/sipgate') },
 ] as const;
+
+/** Cadence pills: Board + Status only (PRD-014 Phase A — not on empty Systems pages). */
+function showCadencePills(pathname: string): boolean {
+  return pathname === '/dabos' || pathname.startsWith('/dabos/digest') || pathname.startsWith('/dabos/status');
+}
 
 function formatLastRun(iso: string | null): string {
   if (!iso) return 'never';
@@ -31,6 +40,9 @@ function formatLastRun(iso: string | null): string {
 }
 
 export function DabosChrome({ shell }: DabosChromeProps) {
+  const pathname = usePathname() ?? '/dabos';
+  const cadenceOk = showCadencePills(pathname);
+
   return (
     <header className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -41,16 +53,19 @@ export function DabosChrome({ shell }: DabosChromeProps) {
               weekLabel={shell.cutoff.week_label}
               timezone={shell.cutoff.timezone}
               pastCurrentDeadline={shell.cutoff.past_current_deadline}
+              compact
             />
-            {shell.role_runs.length > 0 ? (
-              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+            {cadenceOk && shell.role_runs.length > 0 ? (
+              <div className="flex flex-wrap gap-2 text-xs text-[color:var(--dabos-on-canvas)]/85">
                 {shell.role_runs.map((run) => (
                   <span
                     key={run.role_id}
-                    className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2 py-0.5"
+                    className="inline-flex items-center gap-1 rounded-md border border-white/20 bg-black/25 px-2 py-0.5"
                   >
-                    <span className="font-medium text-foreground">{run.role_id.replace(/_/g, ' ')}</span>
-                    <span>{formatLastRun(run.ran_at)}</span>
+                    <span className="font-medium text-[color:var(--dabos-on-canvas)]">
+                      {run.role_id.replace(/_/g, ' ')}
+                    </span>
+                    <span className="opacity-80">{formatLastRun(run.ran_at)}</span>
                   </span>
                 ))}
               </div>
@@ -59,24 +74,36 @@ export function DabosChrome({ shell }: DabosChromeProps) {
         ) : (
           <Link
             href="/dabos"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="text-sm font-medium text-[color:var(--dabos-on-canvas)]/80 hover:text-[color:var(--dabos-on-canvas)]"
           >
             DABOS — configure DATABASE_URL to enable cadence
           </Link>
         )}
       </div>
-      <div className="flex shrink-0 flex-wrap items-center gap-2 self-end sm:self-start">
-        {DABOS_CHROME_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="text-sm font-medium text-muted-foreground hover:text-foreground"
-          >
-            {link.label}
-          </Link>
-        ))}
+      <nav
+        aria-label="DABOS"
+        className="flex shrink-0 flex-wrap items-center gap-1 self-end sm:self-start"
+      >
+        {DABOS_CHROME_LINKS.map((link) => {
+          const active = link.match(pathname);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={active ? 'page' : undefined}
+              className={cn(
+                'rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors',
+                active
+                  ? 'bg-white/15 text-[color:var(--dabos-on-canvas)] ring-1 ring-white/35'
+                  : 'text-[color:var(--dabos-on-canvas)]/75 hover:bg-white/10 hover:text-[color:var(--dabos-on-canvas)]'
+              )}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
         <UserButton />
-      </div>
+      </nav>
     </header>
   );
 }

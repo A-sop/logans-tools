@@ -1005,6 +1005,30 @@ export function parseDigestNeedLine(line: string): {
   return { ref: m[1]!.trim(), title: m[2]!.trim(), note: m[3]!.trim() };
 }
 
+/**
+ * PRD-014 Phase A: systemd noise humans do not chase (desktop portals, user session helpers).
+ * Tip/JSON still carries them; Status demotes into a collapsed bucket.
+ */
+const NOISE_MACHINE_ALERT_RE =
+  /xdg-desktop-portal|xdg-permission|pipewire|pulseaudio|gvfs|evolution-|\.scope\b|user@\d+\.service/i;
+
+export function isNoiseMachineAlert(alert: string): boolean {
+  return NOISE_MACHINE_ALERT_RE.test(alert);
+}
+
+export function partitionMachineAlerts(alerts: string[]): {
+  actionable: string[];
+  noise: string[];
+} {
+  const actionable: string[] = [];
+  const noise: string[] = [];
+  for (const a of alerts) {
+    if (isNoiseMachineAlert(a)) noise.push(a);
+    else actionable.push(a);
+  }
+  return { actionable, noise };
+}
+
 /** Newest status_digest row for the pull UI. */
 export async function readLatestStatusDigest(sql: DabosSql): Promise<{
   ranAt: string;

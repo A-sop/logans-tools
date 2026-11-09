@@ -405,6 +405,26 @@ describe('buildDigest', () => {
   });
 });
 
+describe('partitionMachineAlerts (PRD-014 Phase A)', () => {
+  it('demotes desktop-portal / session noise and keeps actionable units', async () => {
+    const { partitionMachineAlerts } = await import('./status-digest');
+    const { actionable, noise } = partitionMachineAlerts([
+      'failed unit dabos-status-digest.service',
+      'failed unit xdg-desktop-portal.service',
+      'timer foo.timer is inactive/dead',
+      'failed unit xdg-desktop-portal-gtk.service',
+    ]);
+    expect(actionable).toEqual([
+      'failed unit dabos-status-digest.service',
+      'timer foo.timer is inactive/dead',
+    ]);
+    expect(noise).toEqual([
+      'failed unit xdg-desktop-portal.service',
+      'failed unit xdg-desktop-portal-gtk.service',
+    ]);
+  });
+});
+
 describe('ln02 checkout sync (logans-tools #59) in the digest', () => {
   const DIR = '/home/u/.local/state/dabos';
   const files = (m: Record<string, string>) => {

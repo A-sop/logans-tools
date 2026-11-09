@@ -56,6 +56,7 @@ body {
 /*
  * DABOS canvas ("Anachronistic Authority"): matte cosmic navy #050F26, CSS/SVG starfield,
  * glossy sheen and radial glow. No photo.
+ * PRD-014 Phase A: legibility tokens — light on canvas, dark muted on white surfaces.
  */
 body:has(.dabos-standalone) {
   background:
@@ -65,6 +66,68 @@ body:has(.dabos-standalone) {
   background-color: #050f26;
   background-attachment: fixed;
   min-height: 100vh;
+  /* Hide Clerk development / first-user marketing chrome on the founder surface */
+  --clerk-footer-display: none;
 }
-.dabos-standalone { font-family: var(--font-dabos-body), ui-sans-serif, system-ui, sans-serif; }
-.dabos-standalone :is(h1, h2, h3) { font-family: var(--font-dabos-display), Georgia, serif; letter-spacing: 0.06em; }
+body:has(.dabos-standalone) .cl-internal-b3fm6y,
+body:has(.dabos-standalone) [data-clerk-developer-bar],
+body:has(.dabos-standalone) .cl-userButton-root ~ div[role='status'],
+body:has(.dabos-standalone) a[href*='clerk.com'][href*='dashboard'] {
+  display: none !important;
+}
+
+.dabos-standalone {
+  --dabos-canvas: #050f26;
+  --dabos-on-canvas: #eef2f8;
+  --dabos-surface: #ffffff;
+  --dabos-on-surface: #121826;
+  --dabos-muted-on-surface: #3f4a5c;
+  --dabos-danger: #b91c1c;
+  --dabos-ok: #15803d;
+  /* Page chrome reads on navy; surfaces reset below */
+  --foreground: 220 25% 95%;
+  --muted-foreground: 220 14% 78%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 25% 12%;
+  --border: 220 16% 78%;
+  --muted: 220 16% 94%;
+  color: var(--dabos-on-canvas);
+  font-family: var(--font-dabos-body), ui-sans-serif, system-ui, sans-serif;
+}
+.dabos-standalone :is(h1, h2, h3) {
+  font-family: var(--font-dabos-display), Georgia, serif;
+  letter-spacing: 0.06em;
+  color: var(--dabos-on-canvas);
+}
+/* Opaque surfaces: dark type + AA muted (never gold/tan on white) */
+.dabos-standalone :is(.bg-card, .bg-background, [data-slot='card']) {
+  color: var(--dabos-on-surface);
+  --foreground: 222 25% 12%;
+  --muted-foreground: 220 15% 32%;
+  --card-foreground: 222 25% 12%;
+}
+.dabos-standalone :is(.bg-card, .bg-background, [data-slot='card']) :is(h1, h2, h3) {
+  color: var(--dabos-on-surface);
+}
+.dabos-standalone .text-muted-foreground {
+  color: hsl(220 14% 78%);
+}
+.dabos-standalone :is(.bg-card, .bg-background, [data-slot='card'], .border.bg-muted\/40, .border.bg-muted\/50, .border.bg-muted\/60, .bg-muted\/20, .bg-muted\/40)
+  .text-muted-foreground,
+.dabos-standalone :is(.divide-y, table) .text-muted-foreground {
+  color: var(--dabos-muted-on-surface);
+}
+/* Org board page title sat as dark navy on the starfield — force canvas contrast */
+.dabos-standalone .dabos-org-board__page-title,
+.dabos-standalone .dabos-org-board__page-subtitle {
+  color: var(--dabos-on-canvas);
+}
+.dabos-standalone .dabos-org-board__page-title:hover {
+  color: #ffffff;
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.dabos-standalone) {
+    background-image:
+      radial-gradient(ellipse at 50% 45%, #1a3470 0%, #0b1d4a 30%, #050f26 70%);
+  }
+}

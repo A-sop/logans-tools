@@ -1,6 +1,7 @@
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 import {
   parseDigestNeedLine,
+  partitionMachineAlerts,
   readLatestStatusDigest,
   type DivisionSummary,
 } from '@/lib/dabos/status-digest';
@@ -35,7 +36,7 @@ function NeedRows({ items, empty }: { items: string[]; empty: string }) {
         return (
           <li key={`${i}-${item.slice(0, 48)}`} className="px-3 py-2.5 sm:px-4">
             <div className="text-sm font-medium leading-snug text-foreground">{parts.title}</div>
-            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[color:var(--dabos-muted-on-surface)]">
               {parts.ref ? <span className="font-mono tabular-nums">{parts.ref}</span> : null}
               {parts.note ? <span>{parts.note}</span> : null}
             </div>
@@ -116,7 +117,7 @@ function CountChip({
         : 'border-border bg-card text-foreground';
   return (
     <div className={`rounded-lg border px-3 py-2 ${toneClass}`}>
-      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="text-xs text-[color:var(--dabos-muted-on-surface)]">{label}</div>
       <div className="mt-0.5 text-xl font-semibold tabular-nums tracking-tight">{count}</div>
     </div>
   );
@@ -172,30 +173,35 @@ export default async function DabosDigestPage() {
   const stale = ageMin > 150;
   const ageLabel =
     ageMin < 60 ? `${ageMin}m ago` : `${Math.floor(ageMin / 60)}h ${ageMin % 60}m ago`;
+  const { actionable: machineAlerts, noise: noiseAlerts } = partitionMachineAlerts(
+    latest.machineAlerts
+  );
 
   return (
     <main className="mx-auto max-w-4xl space-y-8 font-[family-name:var(--font-dabos-body)] text-sm">
       <header className="space-y-3">
         <div>
-          <h1 className="font-[family-name:var(--font-dabos-display)] text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h1 className="font-[family-name:var(--font-dabos-display)] text-2xl font-semibold tracking-tight text-[color:var(--dabos-on-canvas)] sm:text-3xl">
             Status
           </h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="mt-1 text-[color:var(--dabos-on-canvas)]/80">
             What needs you, what is waiting on review, and how the divisions look.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-          <span className="rounded-md border border-border bg-muted/40 px-2 py-1 tabular-nums">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="rounded-md border border-border bg-card px-2 py-1 tabular-nums text-[color:var(--dabos-muted-on-surface)]">
             {berlinWhen(latest.ranAt)} Berlin
           </span>
-          <span className="rounded-md border border-border bg-muted/40 px-2 py-1">{ageLabel}</span>
+          <span className="rounded-md border border-border bg-card px-2 py-1 text-[color:var(--dabos-muted-on-surface)]">
+            {ageLabel}
+          </span>
           {latest.host ? (
-            <span className="rounded-md border border-border bg-muted/40 px-2 py-1">
+            <span className="rounded-md border border-border bg-card px-2 py-1 text-[color:var(--dabos-muted-on-surface)]">
               {latest.host}
             </span>
           ) : null}
           {latest.week ? (
-            <span className="rounded-md border border-border bg-muted/40 px-2 py-1">
+            <span className="rounded-md border border-border bg-card px-2 py-1 text-[color:var(--dabos-muted-on-surface)]">
               week {latest.week}
             </span>
           ) : null}
@@ -204,7 +210,7 @@ export default async function DabosDigestPage() {
               Stale — chase {latest.ownerPost ?? 'Dept12'}
             </span>
           ) : (
-            <span className="rounded-md border border-border bg-muted/40 px-2 py-1 text-foreground">
+            <span className="rounded-md border border-border bg-card px-2 py-1 text-[color:var(--dabos-on-surface)]">
               Fresh
             </span>
           )}
@@ -219,43 +225,63 @@ export default async function DabosDigestPage() {
           />
           <CountChip
             label="Alerts"
-            count={latest.machineAlerts.length}
-            tone={latest.machineAlerts.length ? 'danger' : 'default'}
+            count={machineAlerts.length}
+            tone={machineAlerts.length ? 'danger' : 'default'}
           />
         </div>
       </header>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold tracking-tight">Needs you</h2>
+        <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+          Needs you
+        </h2>
         <NeedRows items={latest.needsLogan} empty="Nothing needs you right now." />
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold tracking-tight">Waiting on Dept13 review</h2>
+        <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+          Waiting on review
+        </h2>
         <NeedRows
           items={latest.needsDept13}
-          empty="Nothing is waiting on a Dept13 verdict."
+          empty="Nothing is waiting on review."
         />
       </section>
 
       {latest.failAtHead.length ? (
         <section className="space-y-2">
-          <h2 className="text-base font-semibold tracking-tight">Failed review at current head</h2>
+          <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+            Failed review
+          </h2>
           <NeedRows items={latest.failAtHead} empty="None." />
         </section>
       ) : null}
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold tracking-tight">Machine alerts</h2>
-        {latest.machineAlerts.length ? (
-          <ul className="list-disc space-y-1 rounded-lg border border-border bg-card px-3 py-2.5 pl-8 text-sm">
-            {latest.machineAlerts.map((a, i) => (
+        <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
+          Machine alerts
+        </h2>
+        {machineAlerts.length ? (
+          <ul className="list-disc space-y-1 rounded-lg border border-border bg-card px-3 py-2.5 pl-8 text-sm text-[color:var(--dabos-on-surface)]">
+            {machineAlerts.map((a, i) => (
               <li key={`${i}-${a.slice(0, 40)}`}>{a}</li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">No machine alerts.</p>
+          <p className="text-sm text-[color:var(--dabos-on-canvas)]/75">No machine alerts.</p>
         )}
+        {noiseAlerts.length ? (
+          <details className="rounded-lg border border-border/60 bg-card/80 px-3 py-2">
+            <summary className="cursor-pointer text-sm font-medium text-[color:var(--dabos-muted-on-surface)]">
+              Noise alerts ({noiseAlerts.length}) — desktop portals / session helpers
+            </summary>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-[color:var(--dabos-muted-on-surface)]">
+              {noiseAlerts.map((a, i) => (
+                <li key={`noise-${i}-${a.slice(0, 40)}`}>{a}</li>
+              ))}
+            </ul>
+          </details>
+        ) : null}
       </section>
 
       <section className="space-y-2">

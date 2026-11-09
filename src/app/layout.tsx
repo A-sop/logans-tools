@@ -18,7 +18,14 @@ export default function RootLayout({
   const htmlLang = defaultLocale === 'de' ? 'de' : 'en';
 
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        layout: {
+          // PRD-014 Phase A: founder DABOS surface — no Clerk first-user / dev marketing chrome
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
+      }}
+    >
       <html lang={htmlLang} suppressHydrationWarning>
         <body className="antialiased">
           <RootBodyShell>{children}</RootBodyShell>
