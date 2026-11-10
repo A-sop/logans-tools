@@ -14,6 +14,10 @@ import {
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { computePoints, type WisdomRow } from '../../src/lib/hww/points';
+import {
+  parseRudimentsMarkdown,
+  rudimentsSummaryFromDays,
+} from '../../src/lib/hww/rudiments';
 import { lastNStatWeeks, statWeekForDate } from '../../src/lib/hww/stat-week';
 
 const HWW = process.env.HWW_DATA_DIR?.trim() || 'C:\\DATA\\20_ADMIN\\!_HWW';
@@ -21,6 +25,9 @@ const HEALTH = 'C:\\DATA\\20_ADMIN\\!_HEALTH';
 const FINANCE = 'C:\\DATA\\20_ADMIN\\!_FINANCE-TRACKER';
 const BOOK = path.join(FINANCE, 'ldw-books.gnucash');
 const DEBTS = path.join(FINANCE, 'debt', 'debts.csv');
+const RUDIMENTS =
+  process.env.PERSONAL_RUDIMENTS_PATH?.trim() ||
+  'C:\\DATA\\10_WORK\\dabos-registers\\personal-rudiments.md';
 
 type Rec = {
   stat: string;
@@ -457,12 +464,43 @@ function main() {
     }
   }
 
+  // --- Rudiments (daily in/out only — never ruin text) ---
+  let rudimentsBlock: ReturnType<typeof rudimentsSummaryFromDays> & {
+    source: string;
+    missing?: boolean;
+  };
+  if (existsSync(RUDIMENTS)) {
+    const days = parseRudimentsMarkdown(readFileSync(RUDIMENTS, 'utf8'));
+    rudimentsBlock = { ...rudimentsSummaryFromDays(days), source: 'personal-rudiments.md' };
+    for (const d of days.slice(0, 90)) {
+      if (d.ruds_in == null) continue;
+      records.push({
+        stat: 'rudiments_in',
+        date: d.date,
+        value: d.ruds_in ? 1 : 0,
+        unit: 'bool',
+        area: 'personal',
+        kind: d.ruds_in ? 'in' : 'out',
+        source_file: 'personal-rudiments.md',
+        source_key: d.date,
+      });
+    }
+  } else {
+    flags.push('personal-rudiments.md missing');
+    rudimentsBlock = {
+      ...rudimentsSummaryFromDays([]),
+      source: 'personal-rudiments.md',
+      missing: true,
+    };
+  }
+
   const latestRenpho = renpho.rows[0] ?? {};
   const summary = {
     built_at: new Date().toISOString(),
     provisional_wealth: true,
-    sections: ['health', 'wealth', 'wisdom'],
+    sections: ['health', 'wealth', 'wisdom', 'rudiments'],
     flags,
+    rudiments: rudimentsBlock,
     health: {
       renpho_stale: renpho.stale,
       latest_measured_at: latestRenpho.measured_at ?? null,

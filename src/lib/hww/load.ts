@@ -8,6 +8,8 @@ export type HwwSummary = {
   health: Record<string, unknown>;
   wealth: Record<string, unknown>;
   wisdom: Record<string, unknown>;
+  /** Daily rudiments in/out strip — never includes ruin text */
+  rudiments?: Record<string, unknown>;
   flags: string[];
   sections: string[];
 };

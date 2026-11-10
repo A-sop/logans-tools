@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
+import { isHwwAccessAllowed } from '@/lib/hww/auth';
 import { resolveHwwRecords, resolveHwwSummary } from '@/lib/hww/load';
 
 export const dynamic = 'force-dynamic';
@@ -10,8 +10,8 @@ export async function GET(request: Request) {
   if (!userId) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  if (!isHwwClerkUserAllowed(userId)) {
-    return new NextResponse('Not Found', { status: 404 });
+  if (!(await isHwwAccessAllowed(userId))) {
+    return new NextResponse('Forbidden', { status: 403 });
   }
 
   const summary = await resolveHwwSummary();

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
-import { notFound, redirect } from 'next/navigation';
-import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
+import { redirect } from 'next/navigation';
+import { isHwwAccessAllowed } from '@/lib/hww/auth';
 import { getHwwDataDir } from '@/lib/hww/paths';
 import { resolveHwwRecords, resolveHwwSummary, type HwwRecord } from '@/lib/hww/load';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -48,9 +48,9 @@ export default async function HwwPage({ searchParams }: { searchParams: Promise<
   if (!userId) {
     redirect('/sign-in?redirect_url=%2Fhww');
   }
-  // Logan-only by Clerk user id (404 for signed-in non-Logan, including other allowlisted DABOS emails).
-  if (!isHwwClerkUserAllowed(userId)) {
-    notFound();
+  // Same gate as DABOS board (DABOS_ALLOWED_EMAILS) — no second Clerk-user-id wall.
+  if (!(await isHwwAccessAllowed(userId))) {
+    redirect('/sign-in?error=access_denied&redirect_url=%2Fhww');
   }
 
   const q = await searchParams;
@@ -73,6 +73,13 @@ export default async function HwwPage({ searchParams }: { searchParams: Promise<
   const maxPts = Math.max(1, ...wisdomWeeks.map((w) => w.student_points));
   const health = summary.health as Record<string, unknown>;
   const wealth = summary.wealth as Record<string, unknown>;
+  const rudiments = (summary.rudiments ?? {}) as {
+    today_status?: string;
+    ruds_in_days_7d?: number;
+    ruds_out_days_7d?: number;
+    missing?: boolean;
+    last_14?: { date: string; ruds_in: boolean | null }[];
+  };
   const sourceLabel = getHwwDataDir() ? 'local DATA' : 'Neon';
   const exportQs = new URLSearchParams();
   if (q.stat) exportQs.set('stat', q.stat);
@@ -112,6 +119,65 @@ export default async function HwwPage({ searchParams }: { searchParams: Promise<
           </CardContent>
         </Card>
       ) : null}
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium text-muted-foreground">Rudiments</CardTitle>
+          <CardDescription>
+            Daily pre-flight — ruds in before heavy work; ruds out = flag the day (not a failure)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          {rudiments.missing ? (
+            <p className="text-xs text-muted-foreground">
+              No rudiments file on last build. Tick{' '}
+              <code className="text-foreground">personal-rudiments.md</code> then{' '}
+              <code className="text-foreground">npm run hww:build && npm run hww:sync</code>.
+            </p>
+          ) : (
+            <>
+              <p>
+                Today:{' '}
+                <span className="font-medium tabular-nums">
+                  {rudiments.today_status === 'in'
+                    ? 'ruds in'
+                    : rudiments.today_status === 'out'
+                      ? 'ruds out'
+                      : rudiments.today_status === 'logged'
+                        ? 'logged (partial)'
+                        : 'not ticked'}
+                </span>
+                {' · '}
+                7d in {String(rudiments.ruds_in_days_7d ?? 0)} / out{' '}
+                {String(rudiments.ruds_out_days_7d ?? 0)}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {(rudiments.last_14 ?? []).map((d) => {
+                  const tone =
+                    d.ruds_in === true
+                      ? 'bg-foreground text-background'
+                      : d.ruds_in === false
+                        ? 'bg-destructive/80 text-destructive-foreground'
+                        : 'bg-muted text-muted-foreground';
+                  return (
+                    <Link
+                      key={d.date}
+                      href={`/hww?stat=rudiments_in&date=${d.date}`}
+                      title={`${d.date}: ${d.ruds_in === true ? 'in' : d.ruds_in === false ? 'out' : '?'}`}
+                      className={`inline-flex h-7 min-w-7 items-center justify-center rounded px-1.5 text-[10px] tabular-nums ${tone}`}
+                    >
+                      {d.date.slice(5)}
+                    </Link>
+                  );
+                })}
+              </div>
+              <Link href="/hww?stat=rudiments_in" className="block text-xs text-primary hover:underline">
+                Rudiments history →
+              </Link>
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>

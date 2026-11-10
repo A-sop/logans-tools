@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { isHwwClerkUserAllowed } from '@/lib/hww/auth';
+import { isHwwAccessAllowed } from '@/lib/hww/auth';
 import { getHwwDataDir, resolveEvidencePath } from '@/lib/hww/paths';
 
 export const dynamic = 'force-dynamic';
@@ -15,8 +15,8 @@ export async function GET(
   if (!userId) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  if (!isHwwClerkUserAllowed(userId)) {
-    return new NextResponse('Not Found', { status: 404 });
+  if (!(await isHwwAccessAllowed(userId))) {
+    return new NextResponse('Forbidden', { status: 403 });
   }
 
   // Evidence files stay on local DATA only (not synced to Neon).

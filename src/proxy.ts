@@ -113,7 +113,7 @@ function isDabosProtectedRequest(request: NextRequest): boolean {
   if (isDabosSipgateWebhookPath(pathname)) return false;
   if (pathname.startsWith('/api/dabos')) return true;
   if (isDabosAppPath(pathname)) return true;
-  // Private HWW dashboard (Neon or local DATA) — Clerk; Logan-only via HWW_ALLOWED_CLERK_USER_IDS in page
+  // Private HWW dashboard (Neon or local DATA) — Clerk + DABOS_ALLOWED_EMAILS (same as board)
   if (pathname === '/hww' || pathname.startsWith('/hww/')) return true;
   if (isDabosHost(host, hostname) && !isStaticPassthrough(pathname)) return true;
 
