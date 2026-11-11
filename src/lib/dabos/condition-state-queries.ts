@@ -89,8 +89,8 @@ export async function upsertEntityConditionState(
       NOW()
     )
     ON CONFLICT (entity_type, entity_id) DO UPDATE SET
-      -- A founder ruling overrides the computed condition; refresh must not undo it.
-      working_condition = CASE WHEN entity_condition_state.condition_source = 'founder_ruling'
+      -- An assigned condition (founder ruling or Dept19 + Dept3 Ethics) overrides the computed one; refresh must not undo it.
+      working_condition = CASE WHEN entity_condition_state.condition_source IN ('founder_ruling', 'dept19_ethics')
         THEN entity_condition_state.working_condition ELSE EXCLUDED.working_condition END,
       stat_indicated_condition = EXCLUDED.stat_indicated_condition,
       stat_indicated_at = EXCLUDED.stat_indicated_at,
@@ -106,7 +106,7 @@ export async function syncEntityConditionFromEvaluation(
   evaluation: ConditionEvaluation
 ): Promise<ConditionEvaluation> {
   const existing = await getEntityConditionState(sql, entityType, entityId);
-  // A stat can only suggest: a founder-ruled condition is kept and reported as-is.
+  // A stat can only suggest: an assigned condition (founder or Dept19 + Ethics) is kept and reported as-is.
   const resolved = resolveWorkingWithOverride(
     syncWorkingCondition(existing?.working_condition ?? null, evaluation.stat_indicated_condition),
     existing?.working_condition
