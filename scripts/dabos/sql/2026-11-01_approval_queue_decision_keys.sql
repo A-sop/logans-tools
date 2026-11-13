@@ -72,10 +72,12 @@ BEGIN
   IF to_regclass('public.approval_queue') IS NULL THEN
     RAISE EXCEPTION 'guard 0: table public.approval_queue not found';
   END IF;
+  -- Exclude later additive columns (dedupe_key + human_context from 024) from the 012 pin.
   SELECT string_agg(column_name || ':' || data_type || ':' || is_nullable, '|' ORDER BY column_name)
     INTO base_cols
     FROM information_schema.columns
-   WHERE table_schema = 'public' AND table_name = 'approval_queue' AND column_name <> 'dedupe_key';
+   WHERE table_schema = 'public' AND table_name = 'approval_queue'
+     AND column_name NOT IN ('dedupe_key', 'human_context');
   IF base_cols IS DISTINCT FROM expected_cols THEN
     RAISE EXCEPTION 'guard 0b: approval_queue columns differ from migration 012 as read on prod: %', base_cols;
   END IF;

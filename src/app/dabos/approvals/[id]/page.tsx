@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { decideApprovalAction } from '@/app/dabos/approvals/actions';
-import { approvalContextPath, readApprovalById } from '@/lib/dabos/approval-detail';
+import { readApprovalById } from '@/lib/dabos/approval-detail';
+import { resolveApprovalContext } from '@/lib/dabos/approval-human-context';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 
 export const dynamic = 'force-dynamic';
@@ -38,9 +39,14 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
   const row = await readApprovalById(getDabosSql(), id);
   if (!row) notFound();
 
-  const context = approvalContextPath(row.payload);
+  const context = resolveApprovalContext({
+    humanContext: row.humanContext,
+    body: row.body,
+    payload: row.payload,
+  });
   const pending = row.status === 'pending';
   const payloadPretty = JSON.stringify(row.payload, null, 2);
+  const showingHuman = Boolean(row.humanContext?.trim());
 
   return (
     <main className="mx-auto max-w-2xl space-y-6 font-[family-name:var(--font-dabos-body)] text-sm">
@@ -69,24 +75,30 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
         </div>
       </header>
 
-      {row.body ? (
+      {context ? (
+        <section className="space-y-1">
+          <h2 className="text-base font-semibold tracking-tight">Context</h2>
+          <p
+            className={`whitespace-pre-wrap rounded-lg border border-border bg-card px-3 py-2.5 text-[color:var(--dabos-on-surface)] ${
+              showingHuman ? 'text-sm' : 'font-mono text-xs'
+            }`}
+          >
+            {context}
+          </p>
+        </section>
+      ) : null}
+
+      {row.body && showingHuman ? (
         <section className="space-y-1">
           <h2 className="text-base font-semibold tracking-tight">Prompt</h2>
           <p className="whitespace-pre-wrap rounded-lg border border-border bg-card px-3 py-2.5 text-[color:var(--dabos-on-surface)]">
             {row.body}
           </p>
         </section>
-      ) : (
-        <p className="text-sm text-muted-foreground">No body text on this row — see payload below.</p>
-      )}
+      ) : null}
 
-      {context ? (
-        <section className="space-y-1">
-          <h2 className="text-base font-semibold tracking-tight">Context</h2>
-          <p className="rounded-lg border border-border bg-card px-3 py-2.5 font-mono text-xs text-[color:var(--dabos-on-surface)]">
-            {context}
-          </p>
-        </section>
+      {!row.body && !context ? (
+        <p className="text-sm text-muted-foreground">No context on this row — see payload below.</p>
       ) : null}
 
       {row.taskId ? (

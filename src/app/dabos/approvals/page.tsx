@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { listPendingApprovalsDetailed, approvalContextPath } from '@/lib/dabos/approval-detail';
+import { listPendingApprovalsDetailed } from '@/lib/dabos/approval-detail';
+import { resolveApprovalContext } from '@/lib/dabos/approval-human-context';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 
 export const metadata = {
@@ -69,7 +70,13 @@ export default async function ApprovalsListPage({ searchParams }: PageProps) {
       ) : (
         <ul className="divide-y divide-border/80 rounded-lg border border-border bg-card">
           {rows.map((row) => {
-            const context = approvalContextPath(row.payload);
+            const context = resolveApprovalContext({
+              humanContext: row.humanContext,
+              body: row.body,
+              payload: row.payload,
+            });
+            const preview =
+              context && context.length > 140 ? `${context.slice(0, 137).trimEnd()}…` : context;
             return (
               <li key={row.id} className="px-3 py-2.5 sm:px-4">
                 <Link
@@ -81,8 +88,12 @@ export default async function ApprovalsListPage({ searchParams }: PageProps) {
                 <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[color:var(--dabos-muted-on-surface)]">
                   <span>{row.kind}</span>
                   <span className="tabular-nums">{berlinWhen(row.createdAt)}</span>
-                  {context ? <span className="font-mono">{context}</span> : null}
                 </div>
+                {preview ? (
+                  <p className="mt-1 line-clamp-2 text-xs text-[color:var(--dabos-muted-on-surface)]">
+                    {preview}
+                  </p>
+                ) : null}
               </li>
             );
           })}

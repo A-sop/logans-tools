@@ -29,15 +29,37 @@ and say so in the title.
   type lives in `payload.decision`.
 - `title`: one line Logan can answer with yes or no, for example
   `Merge logans-tools #61 and apply its SQL on prod?`
-- `body`: at most a few lines: what changes, the risk, the undo.
-- `payload`: `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (exactly `PASS @<full 40-hex head sha>`;
-  Dept13 verdicts are PASS or FAIL only),
+- `human_context` **(required for new rows)**: founder-facing CONTEXT panel text, **≤800 chars**
+  (aim 500–800). Plain English: what this is, why now, what Yes does, what No does, plus 1–3
+  **paths/URLs** (not file contents). Migration `024_approval_queue_human_context.sql`.
+- `body`: short agent prompt / path hints (optional once `human_context` is filled).
+- `payload`: machine JSON — `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (exactly
+  `PASS @<full 40-hex head sha>`; Dept13 verdicts are PASS or FAIL only),
   `apply_method` (for SQL), `host` (for machine changes), `order_ref` (e.g. `RR-010`), and, once
   decided, `logan_words` and `logan_at` (Berlin time) when the decision came through LDW
-  Communicator.
+  Communicator. **Not** shown as CONTEXT (except path hints when `human_context` is empty).
 - `requested_by`: the filing post, e.g. `Div4`. `division_id` / `department_id`: the doing post.
 - `dedupe_key`: from the table above (built by `decisionKey()` in
   `src/lib/dabos/approval-queue-standard.ts`). Filing twice is a no-op.
+
+### Token discipline (hard)
+
+- Store **≤500–800 chars** in `human_context`. DB check caps at 800.
+- **Never** dump full PRDs, briefs, or transcripts into Neon or into agent prompts by default.
+- Agents creating AQ rows **must** write `human_context` at create time (template below).
+- UI CONTEXT panel reads `human_context` only; payload stays for machines.
+- If `human_context` is empty, UI falls back to `body` + useful path hints — never alone
+  `decision:other`.
+
+Template (`src/lib/dabos/approval-human-context.ts`):
+
+```text
+What: <one sentence>
+Why now: <one sentence>
+Yes: <what happens if Logan approves>
+No: <what happens if Logan rejects>
+Links: <1–3 paths or URLs — not file contents>
+```
 
 Never put DVAG client data, prospect names, account ids or secret values in any column. Refer to
 sensitive values by commit and path only.
@@ -45,10 +67,12 @@ sensitive values by commit and path only.
 ## Filing (the doing agent)
 
 ```sql
-INSERT INTO approval_queue (kind, title, body, payload, requested_by, division_id, department_id, dedupe_key)
-VALUES ('other', $1, $2, $3::jsonb, 'Div4', 'Div4', 'Dept11', $4)
+INSERT INTO approval_queue (kind, title, body, human_context, payload, requested_by, division_id, department_id, dedupe_key)
+VALUES ('other', $1, $2, $3, $4::jsonb, 'Div4', 'Div4', 'Dept11', $5)
 ON CONFLICT (dedupe_key) WHERE dedupe_key IS NOT NULL DO NOTHING;
 ```
+
+Tier0 POST `/api/dabos/tier0/approvals` accepts `human_context` (max 800).
 
 File only after the Dept13 PASS at the same head sha. Then send nothing else: LDW Communicator
 and the status digest read pending rows.

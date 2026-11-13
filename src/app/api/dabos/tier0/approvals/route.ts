@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { dabosDbUnavailable, jsonError, requireDabosDb } from '@/lib/dabos/api-utils';
+import { clampHumanContext, HUMAN_CONTEXT_MAX } from '@/lib/dabos/approval-human-context';
 import { getDabosSql } from '@/lib/dabos/db';
 import { authorizeTier0 } from '@/lib/dabos/tier0-auth';
 import { fetchPendingApprovals, formatTier0Approvals } from '@/lib/dabos/tier0';
@@ -28,6 +29,8 @@ const createSchema = z.object({
   kind: z.enum(['send_message', 'spend', 'exec_capture', 'external_commit', 'other']),
   title: z.string().min(1).max(500),
   body: z.string().optional().nullable(),
+  /** Founder-facing CONTEXT (≤800 chars). Required for new rows — agents fill at create. */
+  human_context: z.string().max(HUMAN_CONTEXT_MAX).optional().nullable(),
   payload: z.record(z.unknown()).optional(),
   division_id: z.string().optional().nullable(),
   department_id: z.string().optional().nullable(),
@@ -53,14 +56,19 @@ export async function POST(request: Request) {
   }
 
   const input = parsed.data;
+  const humanContext =
+    typeof input.human_context === 'string' && input.human_context.trim()
+      ? clampHumanContext(input.human_context)
+      : null;
   const sql = getDabosSql();
   const rows = await sql`
     INSERT INTO approval_queue (
-      kind, title, body, payload, division_id, department_id, task_id, requested_by
+      kind, title, body, human_context, payload, division_id, department_id, task_id, requested_by
     ) VALUES (
       ${input.kind},
       ${input.title},
       ${input.body ?? null},
+      ${humanContext},
       ${JSON.stringify(input.payload ?? {})}::jsonb,
       ${input.division_id ?? null},
       ${input.department_id ?? null},
