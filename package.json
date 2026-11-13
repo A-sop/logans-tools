@@ -49,6 +49,7 @@
     "dabos:route": "tsx scripts/dabos/route.ts",
     "dabos:watchman": "tsx scripts/dabos/watchman.ts",
     "dabos:inbox": "tsx scripts/dabos/dabos-inbox.ts",
+    "dabos:process-approval-replies": "tsx scripts/dabos/process-approval-replies.ts",
     "scan-inbox": "tsx scripts/dabos-ops/scan-inbox/rename-from-pdf.ts",
     "hww:build": "tsx scripts/hww/build-hww-summary.ts",
     "hww:sync": "tsx scripts/hww/sync-hww-to-neon.ts"

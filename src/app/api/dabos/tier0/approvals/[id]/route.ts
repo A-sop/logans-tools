@@ -13,6 +13,9 @@ export const dynamic = 'force-dynamic';
 const decideSchema = z.object({
   action: z.enum(['approve', 'reject']),
   decided_by: z.string().optional(),
+  /** Optional founder note for agents (≤800 chars, no secrets). */
+  founder_reply: z.string().max(800).optional(),
+  comment: z.string().max(800).optional(), // alias
 });
 
 export async function POST(request: Request, context: RouteContext) {
@@ -39,7 +42,8 @@ export async function POST(request: Request, context: RouteContext) {
     sql,
     id,
     parsed.data.action,
-    parsed.data.decided_by ?? 'founder'
+    parsed.data.decided_by ?? 'founder',
+    parsed.data.founder_reply ?? parsed.data.comment
   );
 
   if (!result.ok) {

@@ -36,6 +36,11 @@ and say so in the title.
 - `body`: short agent prompt / path hints (optional once `human_context` is filled). UI hides
   Prompt when `human_context` already covers the same substance; otherwise labels it
   **Agent summary (short)**.
+- `founder_reply` **(optional on decide)**: Logan’s short note written with Yes/No on the detail
+  page (or Tier0 API `founder_reply` / `comment`). **≤800 chars**, no secrets. Stuck on the row
+  after decide so agents can read it. Migration `025_approval_queue_founder_reply.sql`.
+- `reply_processed_at`: NULL until an agent has consumed `founder_reply`. Wake batch = unprocessed
+  only (not full history dumps).
 - `payload`: machine JSON — `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (exactly
   `PASS @<full 40-hex head sha>`; Dept13 verdicts are PASS or FAIL only),
   `apply_method` (for SQL), `host` (for machine changes), `order_ref` (e.g. `RR-010`), and, once
@@ -48,11 +53,14 @@ and say so in the title.
 ### Token discipline (hard)
 
 - Store **≤500–800 chars** in `human_context`. DB check caps at 800.
+- Store **≤800 chars** in `founder_reply` (aim one sticky note). DB check caps at 800.
 - **Never** dump full PRDs, briefs, or transcripts into Neon or into agent prompts by default.
 - Agents creating AQ rows **must** write `human_context` at create time (template below).
 - UI CONTEXT panel reads `human_context` only; payload stays for machines.
 - If `human_context` is empty, UI falls back to `body` + useful path hints — never alone
   `decision:other`.
+- Agents processing replies read **only** unprocessed `founder_reply` rows — never whole
+  `approval_queue` history dumps.
 
 Template (`src/lib/dabos/approval-human-context.ts`):
 
@@ -82,12 +90,42 @@ and the status digest read pending rows.
 
 ## Deciding (Logan, or LDW Communicator relaying Logan verbatim)
 
-- Logan decides on the Tier0 board, `/approve <id>` or the Tier0 API: `decided_by` = `founder`.
+- Logan decides on `/dabos/approvals/<id>`, `/approve <id>`, or the Tier0 API:
+  `decided_by` = `founder`. Optional textarea **Reply for agents** → column `founder_reply`
+  (written only on Yes/No submit; empty stays NULL).
+- Tier0 POST `/api/dabos/tier0/approvals/<id>` accepts `founder_reply` or alias `comment` (max 800).
 - LDW Communicator, relaying Logan's exact words for that specific item (LDW Communicator
   authority rule): set `status`, `decided_by = 'Logan via LDW Communicator'`, `decided_at = now()`,
   and add `logan_words` and `logan_at` to `payload`, only `WHERE id = $1 AND status = 'pending'`.
+  Prefer also setting `founder_reply` to the same short text when agents should batch on it.
 - No other agent decides a row. Sending, paying and signing stay with Logan in person; a row
   never stands in for that.
+
+## Founder reply — wake / batch (agents)
+
+Not a second inbox. One short note stuck on the decided Neon row.
+
+1. Logan types optional reply → Yes or No → row is `approved`/`rejected` with `founder_reply`.
+2. Agents wake (session start, timer, or `npm run dabos:process-approval-replies`) and poll:
+
+```sql
+SELECT id, status, title, founder_reply, decided_at, department_id
+FROM approval_queue
+WHERE founder_reply IS NOT NULL
+  AND reply_processed_at IS NULL
+  AND status IN ('approved', 'rejected')
+ORDER BY decided_at ASC
+LIMIT 50;
+```
+
+3. Handle each short reply (route work, close loops, adjust next ask). Then mark processed:
+
+```bash
+npm run dabos:process-approval-replies -- --mark <uuid>
+# or after a full batch: --mark-all
+```
+
+CLI without flags only **lists** (dry). Do not overbuild chat threads or a parallel messaging table.
 
 ## Acting (the doing agent)
 

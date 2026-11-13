@@ -10,6 +10,8 @@ export type ApprovalDetail = {
   title: string;
   body: string | null;
   humanContext: string | null;
+  founderReply: string | null;
+  replyProcessedAt: string | null;
   payload: Record<string, unknown>;
   status: string;
   requestedBy: string;
@@ -34,6 +36,8 @@ type ApprovalRow = {
   title: string;
   body: string | null;
   human_context: string | null;
+  founder_reply: string | null;
+  reply_processed_at: Date | string | null;
   payload: unknown;
   status: string;
   requested_by: string;
@@ -57,6 +61,8 @@ function mapRow(r: ApprovalRow): ApprovalDetail {
     title: r.title,
     body: r.body,
     humanContext: r.human_context,
+    founderReply: r.founder_reply,
+    replyProcessedAt: toIso(r.reply_processed_at),
     payload,
     status: r.status,
     requestedBy: r.requested_by,
@@ -81,6 +87,8 @@ export async function readApprovalById(
       title,
       body,
       human_context,
+      founder_reply,
+      reply_processed_at,
       payload,
       status,
       requested_by,
@@ -111,6 +119,8 @@ export async function listPendingApprovalsDetailed(
       title,
       body,
       human_context,
+      founder_reply,
+      reply_processed_at,
       payload,
       status,
       requested_by,

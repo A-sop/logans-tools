@@ -8,10 +8,14 @@ import {
   resolveApprovalContext,
 } from '@/lib/dabos/approval-human-context';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
+import { FOUNDER_REPLY_MAX } from '@/lib/dabos/tier0';
 
 export const dynamic = 'force-dynamic';
 
-type PageProps = { params: Promise<{ id: string }> };
+type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ decided?: string }>;
+};
 
 function berlinWhen(iso: string): string {
   return new Intl.DateTimeFormat('en-GB', {
@@ -25,8 +29,9 @@ function berlinWhen(iso: string): string {
   }).format(new Date(iso));
 }
 
-export default async function ApprovalDetailPage({ params }: PageProps) {
+export default async function ApprovalDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const sp = await searchParams;
 
   if (!hasDabosDb()) {
     return (
@@ -79,6 +84,12 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
             <span className="rounded-md border border-border bg-card px-2 py-1">{row.departmentId}</span>
           ) : null}
         </div>
+        {sp.decided === '1' ? (
+          <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm" role="status">
+            Decision saved
+            {row.founderReply ? ' · reply stuck on this row for agents.' : '.'}
+          </p>
+        ) : null}
       </header>
 
       {context ? (
@@ -122,34 +133,66 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
       ) : null}
 
       {pending ? (
-        <section className="flex flex-wrap gap-2">
-          <form action={decideApprovalAction}>
+        <section className="space-y-3">
+          <form action={decideApprovalAction} className="space-y-3">
             <input type="hidden" name="id" value={row.id} />
-            <input type="hidden" name="action" value="approve" />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Yes
-            </button>
-          </form>
-          <form action={decideApprovalAction}>
-            <input type="hidden" name="id" value={row.id} />
-            <input type="hidden" name="action" value="reject" />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
-            >
-              No
-            </button>
+            <div className="space-y-1.5">
+              <label htmlFor="founder_reply" className="text-sm font-medium leading-none">
+                Reply for agents (optional)
+              </label>
+              <textarea
+                id="founder_reply"
+                name="founder_reply"
+                rows={3}
+                maxLength={FOUNDER_REPLY_MAX}
+                placeholder="Comment (no secrets)…"
+                className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              />
+              <p className="text-xs text-muted-foreground">
+                Saved on Yes/No · ≤{FOUNDER_REPLY_MAX} chars · agents batch when they wake
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                name="action"
+                value="approve"
+                className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Yes
+              </button>
+              <button
+                type="submit"
+                name="action"
+                value="reject"
+                className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+              >
+                No
+              </button>
+            </div>
           </form>
         </section>
       ) : (
-        <p className="text-sm text-muted-foreground">
-          Already {row.status}
-          {row.decidedBy ? ` by ${row.decidedBy}` : ''}
-          {row.decidedAt ? ` · ${berlinWhen(row.decidedAt)}` : ''}.
-        </p>
+        <section className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Already {row.status}
+            {row.decidedBy ? ` by ${row.decidedBy}` : ''}
+            {row.decidedAt ? ` · ${berlinWhen(row.decidedAt)}` : ''}.
+          </p>
+          {row.founderReply ? (
+            <div className="space-y-1">
+              <h2 className="text-base font-semibold tracking-tight">Your reply</h2>
+              <p className="whitespace-pre-wrap rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-[color:var(--dabos-on-surface)]">
+                {row.founderReply}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {row.replyProcessedAt
+                  ? `Agents marked processed · ${berlinWhen(row.replyProcessedAt)}`
+                  : 'Waiting for agent batch (reply_processed_at still empty).'}
+              </p>
+            </div>
+          ) : null}
+        </section>
       )}
 
       <details className="rounded-lg border border-border bg-muted/20 px-3 py-2">

@@ -128,16 +128,33 @@ export async function formatTier0Approvals(sql: Sql): Promise<string> {
   return lines.join('\n');
 }
 
+/** Max chars for founder_reply (matches DB check + human_context discipline). */
+export const FOUNDER_REPLY_MAX = 800;
+
+export function normalizeFounderReply(raw: string | null | undefined): string | null {
+  const trimmed = (raw ?? '').trim();
+  if (!trimmed) return null;
+  return trimmed.length > FOUNDER_REPLY_MAX
+    ? trimmed.slice(0, FOUNDER_REPLY_MAX)
+    : trimmed;
+}
+
 export async function decideApproval(
   sql: Sql,
   id: string,
   action: 'approve' | 'reject',
-  decidedBy: string
+  decidedBy: string,
+  founderReply?: string | null
 ): Promise<{ ok: true; row: ApprovalRow } | { ok: false; error: string }> {
   const status = action === 'approve' ? 'approved' : 'rejected';
+  const reply = normalizeFounderReply(founderReply);
   const rows = await sql`
     UPDATE approval_queue
-    SET status = ${status}, decided_by = ${decidedBy}, decided_at = NOW()
+    SET
+      status = ${status},
+      decided_by = ${decidedBy},
+      decided_at = NOW(),
+      founder_reply = ${reply}
     WHERE id = ${id}::uuid AND status = 'pending'
     RETURNING id, kind, title, body, status, created_at
   `;
