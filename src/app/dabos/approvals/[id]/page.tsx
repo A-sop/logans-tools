@@ -3,7 +3,10 @@ import { notFound } from 'next/navigation';
 
 import { decideApprovalAction } from '@/app/dabos/approvals/actions';
 import { readApprovalById } from '@/lib/dabos/approval-detail';
-import { resolveApprovalContext } from '@/lib/dabos/approval-human-context';
+import {
+  bodyAddsBeyondHumanContext,
+  resolveApprovalContext,
+} from '@/lib/dabos/approval-human-context';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 
 export const dynamic = 'force-dynamic';
@@ -47,6 +50,9 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
   const pending = row.status === 'pending';
   const payloadPretty = JSON.stringify(row.payload, null, 2);
   const showingHuman = Boolean(row.humanContext?.trim());
+  const showAgentSummary =
+    Boolean(row.body?.trim()) &&
+    (!showingHuman || bodyAddsBeyondHumanContext(row.body, row.humanContext));
 
   return (
     <main className="mx-auto max-w-2xl space-y-6 font-[family-name:var(--font-dabos-body)] text-sm">
@@ -88,16 +94,24 @@ export default async function ApprovalDetailPage({ params }: PageProps) {
         </section>
       ) : null}
 
-      {row.body && showingHuman ? (
+      {showAgentSummary ? (
         <section className="space-y-1">
-          <h2 className="text-base font-semibold tracking-tight">Prompt</h2>
-          <p className="whitespace-pre-wrap rounded-lg border border-border bg-card px-3 py-2.5 text-[color:var(--dabos-on-surface)]">
+          <h2 className="text-base font-semibold tracking-tight">
+            {showingHuman ? 'Agent summary (short)' : 'Prompt'}
+          </h2>
+          <p
+            className={`whitespace-pre-wrap rounded-lg border border-border bg-card px-3 py-2.5 text-sm ${
+              showingHuman
+                ? 'text-muted-foreground'
+                : 'text-[color:var(--dabos-on-surface)]'
+            }`}
+          >
             {row.body}
           </p>
         </section>
       ) : null}
 
-      {!row.body && !context ? (
+      {!showAgentSummary && !context ? (
         <p className="text-sm text-muted-foreground">No context on this row — see payload below.</p>
       ) : null}
 

@@ -31,8 +31,11 @@ and say so in the title.
   `Merge logans-tools #61 and apply its SQL on prod?`
 - `human_context` **(required for new rows)**: founder-facing CONTEXT panel text, **≤800 chars**
   (aim 500–800). Plain English: what this is, why now, what Yes does, what No does, plus 1–3
-  **paths/URLs** (not file contents). Migration `024_approval_queue_human_context.sql`.
-- `body`: short agent prompt / path hints (optional once `human_context` is filled).
+  **brief/doc paths** (not file contents). Never `https://dabos.logans.tools/open` — founder is
+  already in the dabos UI. Migration `024_approval_queue_human_context.sql`.
+- `body`: short agent prompt / path hints (optional once `human_context` is filled). UI hides
+  Prompt when `human_context` already covers the same substance; otherwise labels it
+  **Agent summary (short)**.
 - `payload`: machine JSON — `decision`, `repo`, `pr`, `head_sha` (full), `dept13_verdict` (exactly
   `PASS @<full 40-hex head sha>`; Dept13 verdicts are PASS or FAIL only),
   `apply_method` (for SQL), `host` (for machine changes), `order_ref` (e.g. `RR-010`), and, once
@@ -58,7 +61,7 @@ What: <one sentence>
 Why now: <one sentence>
 Yes: <what happens if Logan approves>
 No: <what happens if Logan rejects>
-Links: <1–3 paths or URLs — not file contents>
+Links: <1–3 brief/doc paths — never dabos.logans.tools/open>
 ```
 
 Never put DVAG client data, prospect names, account ids or secret values in any column. Refer to
