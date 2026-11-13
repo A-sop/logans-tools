@@ -1,4 +1,5 @@
 import { Cinzel, IBM_Plex_Mono, Inter } from 'next/font/google';
+import { redirect } from 'next/navigation';
 
 import { OpenLoopsBoard } from './open-loops-board';
 import { getOpenLoopsSnapshot } from '@/lib/dabos/open-loops';
@@ -69,7 +70,17 @@ async function loadOrg(): Promise<OpenOrgDivision[]> {
   }
 }
 
-export default async function DabosOpenLoopsPage() {
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+type PageProps = { searchParams: Promise<{ aq?: string }> };
+
+export default async function DabosOpenLoopsPage({ searchParams }: PageProps) {
+  const { aq } = await searchParams;
+  if (aq && UUID_RE.test(aq)) {
+    redirect(`/dabos/approvals/${aq.toLowerCase()}`);
+  }
+
   let data: Awaited<ReturnType<typeof getLiveOpenLoops>>;
   try {
     data = await getLiveOpenLoops();

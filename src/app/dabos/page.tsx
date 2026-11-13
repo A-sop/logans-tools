@@ -1,11 +1,12 @@
 import Link from 'next/link';
 
+import { DigestNeedRows } from '@/components/dabos/digest-need-rows';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 import { getStatCutoffSnapshot } from '@/lib/dabos/org-week';
 import {
-  parseDigestNeedLine,
   partitionMachineAlerts,
   readLatestStatusDigest,
+  readPendingApprovals,
 } from '@/lib/dabos/status-digest';
 
 export const metadata = {
@@ -30,32 +31,6 @@ function berlinDeadlineLine(deadlineIso: string, past: boolean): string {
   return past ? `Stat cutoff was ${when} Berlin — late` : `Next deadline: ${when} Berlin`;
 }
 
-function NeedRows({ items }: { items: string[] }) {
-  if (!items.length) {
-    return (
-      <p className="rounded-lg border border-border bg-card px-3 py-3 text-sm text-[color:var(--dabos-muted-on-surface)]">
-        Nothing needs you right now.
-      </p>
-    );
-  }
-  return (
-    <ul className="divide-y divide-border/80 rounded-lg border border-border bg-card">
-      {items.map((item, i) => {
-        const parts = parseDigestNeedLine(item);
-        return (
-          <li key={`${i}-${item.slice(0, 48)}`} className="px-3 py-2.5 sm:px-4">
-            <div className="text-sm font-medium leading-snug text-foreground">{parts.title}</div>
-            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[color:var(--dabos-muted-on-surface)]">
-              {parts.ref ? <span className="font-mono tabular-nums">{parts.ref}</span> : null}
-              {parts.note ? <span>{parts.note}</span> : null}
-            </div>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
 export default async function DabosHomePage() {
   const cutoff = getStatCutoffSnapshot();
   const deadlineLine = berlinDeadlineLine(cutoff.deadline_iso, cutoff.past_current_deadline);
@@ -77,9 +52,12 @@ export default async function DabosHomePage() {
   }
 
   let latest: Awaited<ReturnType<typeof readLatestStatusDigest>> = null;
+  let pendingApprovals: Awaited<ReturnType<typeof readPendingApprovals>> = [];
   let loadError: string | null = null;
   try {
-    latest = await readLatestStatusDigest(getDabosSql());
+    const sql = getDabosSql();
+    latest = await readLatestStatusDigest(sql);
+    pendingApprovals = await readPendingApprovals(sql);
   } catch (e) {
     loadError = e instanceof Error ? e.message : String(e);
   }
@@ -148,7 +126,11 @@ export default async function DabosHomePage() {
             </span>
           ) : null}
         </div>
-        <NeedRows items={needs} />
+        <DigestNeedRows
+          items={needs}
+          pendingApprovals={pendingApprovals}
+          empty="Nothing needs you right now."
+        />
       </section>
 
       <section className="space-y-2">

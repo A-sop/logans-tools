@@ -12,6 +12,59 @@ export type ApprovalRow = {
   created_at: string;
 };
 
+export type ApprovalDetail = ApprovalRow & {
+  payload: Record<string, unknown>;
+  requested_by: string;
+  division_id: string | null;
+  department_id: string | null;
+  decided_by: string | null;
+  decided_at: string | null;
+};
+
+export async function fetchApprovalDetail(
+  sql: Sql,
+  id: string
+): Promise<ApprovalDetail | null> {
+  const rows = await sql`
+    SELECT
+      id,
+      kind,
+      title,
+      body,
+      payload,
+      status,
+      requested_by,
+      division_id,
+      department_id,
+      decided_by,
+      decided_at,
+      created_at
+    FROM approval_queue
+    WHERE id = ${id}::uuid
+    LIMIT 1
+  `;
+  const row = rows[0];
+  if (!row) return null;
+  const payload =
+    row.payload && typeof row.payload === 'object' && !Array.isArray(row.payload)
+      ? (row.payload as Record<string, unknown>)
+      : {};
+  return {
+    id: row.id as string,
+    kind: row.kind as string,
+    title: row.title as string,
+    body: (row.body as string | null) ?? null,
+    status: row.status as string,
+    created_at: (row.created_at as Date).toISOString(),
+    payload,
+    requested_by: (row.requested_by as string) ?? 'system',
+    division_id: (row.division_id as string | null) ?? null,
+    department_id: (row.department_id as string | null) ?? null,
+    decided_by: (row.decided_by as string | null) ?? null,
+    decided_at: row.decided_at ? (row.decided_at as Date).toISOString() : null,
+  };
+}
+
 export async function fetchPendingApprovals(sql: Sql, limit = 10): Promise<ApprovalRow[]> {
   const rows = await sql`
     SELECT id, kind, title, body, status, created_at

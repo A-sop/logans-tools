@@ -35,6 +35,11 @@ const LINKS = [
     title: 'Status dump',
     blurb: 'Full pull digest including agent text dump.',
   },
+  {
+    href: '/dabos/approvals',
+    title: 'Approvals',
+    blurb: 'Pending founder yes/no — open a row for prompt, context, Yes/No.',
+  },
 ] as const;
 
 function formatLastRun(iso: string | null): string {

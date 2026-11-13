@@ -396,7 +396,7 @@ describe('buildDigest', () => {
         },
       })
     );
-    expect(d.json.needsLogan[0]).toMatch(/Approval waiting \(other/);
+    expect(d.json.needsLogan[0]).toMatch(/Approval waiting \[aq:a\] \(other/);
     expect(d.json.machineAlerts).toEqual([
       'dabos-a.service last result exit-code (exit 1)',
       'failed unit dabos-b.service',
@@ -1015,6 +1015,8 @@ describe('parseDigestNeedLine', () => {
       ref: 'logans-tools#12',
       title: 'Ship the digest UI',
       note: 'Dept13 passed this version',
+      approvalId: null,
+      href: null,
     });
   });
 
@@ -1023,7 +1025,29 @@ describe('parseDigestNeedLine', () => {
       ref: null,
       title: 'Approval waiting (spend): laptop',
       note: null,
+      approvalId: null,
+      href: null,
     });
+  });
+
+  it('extracts aq id and href from bracket and trailing forms', () => {
+    const id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+    expect(
+      parseDigestNeedLine(
+        `Approval waiting [aq:${id}] (other, since Fri 13 Nov 16:00): Merge #99`
+      )
+    ).toEqual({
+      ref: null,
+      title: 'Approval waiting (other, since Fri 13 Nov 16:00): Merge #99',
+      note: null,
+      approvalId: id,
+      href: `/dabos/approvals/${id}`,
+    });
+    expect(
+      parseDigestNeedLine(
+        `Approval waiting (other, since Fri 13 Nov 16:00): Merge #99 · aq:${id}`
+      ).approvalId
+    ).toBe(id);
   });
 });
 

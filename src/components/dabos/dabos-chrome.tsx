@@ -32,6 +32,7 @@ const DABOS_CHROME_LINKS = [
       p.startsWith('/dabos/comm') ||
       p.startsWith('/dabos/prompts') ||
       p.startsWith('/dabos/sipgate') ||
+      p.startsWith('/dabos/approvals') ||
       p.startsWith('/dabos/conditions'),
   },
 ] as const;

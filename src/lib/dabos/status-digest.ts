@@ -644,7 +644,7 @@ export function buildDigest(input: DigestInput): StatusDigest {
     ...ready.map((p) => `Ready to merge: ${prLine(p)}`),
     ...(input.approvals ?? []).map(
       (a) =>
-        `Approval waiting (${a.kind}, since ${berlinStamp(new Date(a.createdAt))}): ${a.title}`
+        `Approval waiting [aq:${a.id}] (${a.kind}, since ${berlinStamp(new Date(a.createdAt))}): ${a.title}`
     ),
   ];
   const needsDept13 = needs13.map(prLine);
@@ -995,14 +995,39 @@ export function parseDigestNeedLine(line: string): {
   ref: string | null;
   title: string;
   note: string | null;
+  approvalId: string | null;
+  href: string | null;
 } {
   const raw = line.replace(/\s+/g, ' ').trim();
-  const body = raw.replace(/^(Ready to merge|Merge yes\?):\s*/i, '');
+  const aqMatch = raw.match(/\baq:([0-9a-f-]{36})\b/i);
+  const approvalId = aqMatch?.[1] ?? null;
+  const withoutAq = approvalId
+    ? raw
+        .replace(/\s*\[aq:[0-9a-f-]{36}\]\s*/i, ' ')
+        .replace(/\s*·\s*aq:[0-9a-f-]{36}\b/i, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+    : raw;
+  const body = withoutAq.replace(/^(Ready to merge|Merge yes\?):\s*/i, '');
   const m = body.match(
     /^((?:DABOS|logans-tools)#\d+(?:\s*\(draft\))?)\s*@[0-9a-f]{7,40}:\s*(.+?)\s*—\s*(.+)$/i
   );
-  if (!m) return { ref: null, title: raw, note: null };
-  return { ref: m[1]!.trim(), title: m[2]!.trim(), note: m[3]!.trim() };
+  if (!m) {
+    return {
+      ref: null,
+      title: withoutAq,
+      note: null,
+      approvalId,
+      href: approvalId ? `/dabos/approvals/${approvalId}` : null,
+    };
+  }
+  return {
+    ref: m[1]!.trim(),
+    title: m[2]!.trim(),
+    note: m[3]!.trim(),
+    approvalId,
+    href: approvalId ? `/dabos/approvals/${approvalId}` : null,
+  };
 }
 
 /**

@@ -1,8 +1,9 @@
+import { DigestNeedRows } from '@/components/dabos/digest-need-rows';
 import { getDabosSql, hasDabosDb } from '@/lib/dabos/db';
 import {
-  parseDigestNeedLine,
   partitionMachineAlerts,
   readLatestStatusDigest,
+  readPendingApprovals,
   type DivisionSummary,
 } from '@/lib/dabos/status-digest';
 
@@ -23,28 +24,6 @@ function berlinWhen(iso: string): string {
     minute: '2-digit',
     hour12: false,
   }).format(new Date(iso));
-}
-
-function NeedRows({ items, empty }: { items: string[]; empty: string }) {
-  if (!items.length) {
-    return <p className="text-sm text-muted-foreground">{empty}</p>;
-  }
-  return (
-    <ul className="divide-y divide-border/80 rounded-lg border border-border bg-card">
-      {items.map((item, i) => {
-        const parts = parseDigestNeedLine(item);
-        return (
-          <li key={`${i}-${item.slice(0, 48)}`} className="px-3 py-2.5 sm:px-4">
-            <div className="text-sm font-medium leading-snug text-foreground">{parts.title}</div>
-            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[color:var(--dabos-muted-on-surface)]">
-              {parts.ref ? <span className="font-mono tabular-nums">{parts.ref}</span> : null}
-              {parts.note ? <span>{parts.note}</span> : null}
-            </div>
-          </li>
-        );
-      })}
-    </ul>
-  );
 }
 
 function StatsCell({ value }: { value: boolean | null }) {
@@ -136,9 +115,12 @@ export default async function DabosDigestPage() {
   }
 
   let latest: Awaited<ReturnType<typeof readLatestStatusDigest>> = null;
+  let pendingApprovals: Awaited<ReturnType<typeof readPendingApprovals>> = [];
   let loadError: string | null = null;
   try {
-    latest = await readLatestStatusDigest(getDabosSql());
+    const sql = getDabosSql();
+    latest = await readLatestStatusDigest(sql);
+    pendingApprovals = await readPendingApprovals(sql);
   } catch (e) {
     loadError = e instanceof Error ? e.message : String(e);
   }
@@ -235,17 +217,18 @@ export default async function DabosDigestPage() {
         <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
           Needs you
         </h2>
-        <NeedRows items={latest.needsLogan} empty="Nothing needs you right now." />
+        <DigestNeedRows
+          items={latest.needsLogan}
+          pendingApprovals={pendingApprovals}
+          empty="Nothing needs you right now."
+        />
       </section>
 
       <section className="space-y-2">
         <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
           Waiting on review
         </h2>
-        <NeedRows
-          items={latest.needsDept13}
-          empty="Nothing is waiting on review."
-        />
+        <DigestNeedRows items={latest.needsDept13} empty="Nothing is waiting on review." />
       </section>
 
       {latest.failAtHead.length ? (
@@ -253,7 +236,7 @@ export default async function DabosDigestPage() {
           <h2 className="text-base font-semibold tracking-tight text-[color:var(--dabos-on-canvas)]">
             Failed review
           </h2>
-          <NeedRows items={latest.failAtHead} empty="None." />
+          <DigestNeedRows items={latest.failAtHead} empty="None." />
         </section>
       ) : null}
 
