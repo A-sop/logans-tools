@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-11-08T20:55:21.927Z",
+  "generated_at": "2026-11-18T19:29:46.871Z",
   "sources": {
     "backlog": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG.md",
     "shipBoard": "docs/reference/dept21-executive-director/founder-desk/SHIP-BOARD.md",
     "archive": "docs/reference/dept21-executive-director/founder-desk/OPEN-CHAT-BACKLOG-ARCHIVE.md"
   },
   "counts": {
-    "hot": 144,
+    "hot": 143,
     "open": 11,
     "ship": 0,
-    "still_open": 155,
+    "still_open": 154,
     "closed": 44,
-    "total": 155,
+    "total": 154,
     "by_segment": {
       "treasury": 13,
-      "assets": 96,
+      "assets": 95,
       "mail": 13,
       "esto": 6,
       "gfp": 6,
@@ -34,7 +34,7 @@
       "Dept6": 6,
       "Dept7": 0,
       "Dept8": 13,
-      "Dept9": 96,
+      "Dept9": 95,
       "Dept10": 0,
       "Dept11": 1,
       "Dept12": 0,
@@ -51,7 +51,7 @@
   },
   "last_week": {
     "window_days": 7,
-    "since": "2026-11-02",
+    "since": "2026-11-12",
     "closed": 0,
     "still_open": 0,
     "by_dept": {
@@ -675,9 +675,9 @@
     },
     {
       "id": "261007_field-journal-hzr",
-      "why": "HZR migrate. Field Journal PWA + APAC trip. Christine Balboa called + journal updated. Live = ln02 :3010.",
+      "why": "PAUSED 2026-11-16. Field Journal PWA + APAC trip parked. Repo + ln02 :3010 kept; no active chase.",
       "canonical": "project-plans/field-journal-hzr-resume-2026-10-07.md · C:\\Dev\\field-journal",
-      "resume": "Field Journal / APAC 2026 / ln02 field-journal",
+      "resume": "reopen Field Journal only",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -944,19 +944,9 @@
       "dept": "Dept1"
     },
     {
-      "id": "261008_bridgelife-hzr",
-      "why": "NEW 2026-10-08 HZR drain. Product folder handoff: pluggable store/storage/auth (Clerk deferred). Sync tree → HZR; boot dry-run; no real PII. Git not real yet.",
-      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md · A-241",
-      "resume": "BridgeLife HZR boot / bridgelife dry run",
-      "heat": "hot",
-      "source": "chat-backlog",
-      "segment": "assets",
-      "dept": "Dept9"
-    },
-    {
       "id": "261008_bridgelife-compiled-hzr",
-      "why": "HZR migrate 2026-10-08. bridgelife_compiled product tree + pluggable store/S3/auth; LDW :3000 verified. No real PII. Distinct from mail-MVP row.",
-      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md",
+      "why": "HZR migrate 2026-10-08. bridgelife_compiled product tree + pluggable store/S3/auth; LDW :3000 verified. No real PII. Distinct from mail-MVP row. Canonical BridgeLife product drain (supersedes 261007_bridgelife-hzr / former 261008_bridgelife-hzr duplicate).",
+      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md · A-241",
       "resume": "BridgeLife HZR / bridgelife dry run",
       "heat": "hot",
       "source": "chat-backlog",
@@ -1095,7 +1085,7 @@
     },
     {
       "id": "261007_telegram-export-ingest",
-      "why": "NEW. Telegram Desktop DataExport_2026-10-06 filed off Desktop → C:\\DATA\\10_WORK\\dept01-housekeeping\\telegram-exports\\DataExport_2026-10-06\\ (result.json + chats). Ingest links/notes into DABOS Inbox / wiki (same pattern as 2026-06-14 export drain).",
+      "why": "NEW. Telegram Desktop DataExport_2026-10-06 filed off Desktop → C:\\DATA\\20_ADMIN\\DABOS\\dept01-housekeeping\\telegram-exports\\DataExport_2026-10-06\\ (result.json + chats). Ingest links/notes into DABOS Inbox / wiki (same pattern as 2026-06-14 export drain).",
       "canonical": "That folder · docs/wiki/inbox/ · false-dupe fix may touch same bot",
       "resume": "telegram export ingest / DataExport 2026-10-06",
       "heat": "hot",
@@ -1475,9 +1465,9 @@
     },
     {
       "id": "261007_field-journal-hzr",
-      "why": "Field Journal / Christine Balboa chat drained 2026-10-07 on LDW for HZR migrate. App + trip continue on HZR / ln02.",
-      "canonical": "field-journal-hzr-resume-2026-10-07.md · repo C:\\Dev\\field-journal · live",
-      "resume": "Field Journal / APAC 2026 / ln02 field-journal",
+      "why": "PAUSED 2026-11-16. See canonical § above. Repo + ln02 kept.",
+      "canonical": "field-journal-hzr-resume-2026-10-07.md · C:\\Dev\\field-journal",
+      "resume": "reopen Field Journal only",
       "heat": "hot",
       "source": "chat-backlog",
       "segment": "assets",
@@ -1717,9 +1707,9 @@
     },
     {
       "id": "261007_bridgelife-hzr",
-      "why": "BridgeLife chat drained 2026-10-07 on LDW for HZR migrate. Localhost dry-run worked; product handoff lives in the compiled repo.",
-      "canonical": "C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md · README.md · AGENTS.md",
-      "resume": "BridgeLife HZR / bridgelife dry run",
+      "why": "SUPERSEDED 2026-11-09 (OPEN-CHAT-BACKLOG dedupe, task def365a6). Same drain as 261008_bridgelife-compiled-hzr.",
+      "canonical": "## 261008_bridgelife-compiled-hzr · C:\\Dev\\bridgelife_compiled\\OPEN-CHAT-BACKLOG.md",
+      "resume": "",
       "heat": "open",
       "source": "chat-backlog",
       "segment": "assets",

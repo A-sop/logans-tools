@@ -191,7 +191,17 @@
 .popDot_hot { background: var(--ol-hot); }
 .popDot_open { background: var(--ol-open); }
 .popDot_ship { background: var(--ol-ship); }
+.popBody { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
 .popText { overflow-wrap: anywhere; }
+.popCanonical,
+.popResume,
+.popPrompt {
+  font-family: var(--ol-mono);
+  font-size: 0.68rem;
+  color: var(--ol-muted);
+  overflow-wrap: anywhere;
+}
+.popPrompt { color: var(--ol-open); }
 .popMeta { grid-column: 2; font-family: var(--ol-mono); font-size: 0.68rem; color: var(--ol-muted); }
 .popEmpty { margin: 0.45rem 0; color: var(--ol-muted); font-size: 0.84rem; }
 

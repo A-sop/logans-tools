@@ -131,7 +131,7 @@ export async function runStatCrawl(opts: {
       SELECT id FROM tasks
       WHERE division_id = 'Div1'
         AND department_id = 'Dept3'
-        AND status IN ('todo', 'doing', 'blocked')
+        AND status IN ('todo', 'doing', 'blocked', 'open')
         AND title = ${title}
       LIMIT 1
     `;

@@ -122,7 +122,18 @@ function TaskPopover({
           {items.map((item) => (
             <li key={item.id} className={styles.popItem}>
               <span className={`${styles.popDot} ${styles[`popDot_${item.heat}`]}`} aria-hidden />
-              <span className={styles.popText}>{item.why}</span>
+              <div className={styles.popBody}>
+                <span className={styles.popText}>{item.why.split('\n')[0]}</span>
+                {item.canonical ? (
+                  <span className={styles.popCanonical}>SSOT: {item.canonical}</span>
+                ) : null}
+                {item.resume ? <span className={styles.popResume}>Resume: {item.resume}</span> : null}
+                {item.why.includes('\nPrompt:') ? (
+                  <span className={styles.popPrompt}>
+                    {item.why.split('\n').find((l) => l.startsWith('Prompt:'))}
+                  </span>
+                ) : null}
+              </div>
               <span className={styles.popMeta}>
                 {item.status ?? item.heat}
                 {item.priority != null ? ` · P${item.priority}` : ''}

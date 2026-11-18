@@ -85,7 +85,7 @@ export async function fetchDeptActivityMap(): Promise<Map<string, DeptActivity>>
     const rows = await sql`
       SELECT
         department_id,
-        COUNT(*) FILTER (WHERE status IN ('todo', 'doing', 'blocked'))::int AS open_count,
+        COUNT(*) FILTER (WHERE status IN ('todo', 'doing', 'blocked', 'open'))::int AS open_count,
         COUNT(*) FILTER (WHERE status = 'doing')::int AS doing_count,
         COUNT(*) FILTER (WHERE status = 'doing' AND assigned_agent IS NOT NULL)::int AS doing_agent_count
       FROM tasks

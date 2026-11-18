@@ -213,7 +213,8 @@ export async function countOpenTasks(divisionId: string): Promise<number> {
     SELECT COUNT(*)::int AS n
     FROM tasks
     WHERE division_id = ${divisionId}
-      AND status IN ('todo', 'doing', 'blocked')
+      AND status IN ('todo', 'doing', 'blocked', 'open')
+      AND basket IN ('in', 'pending')
   `;
   return (rows[0]?.n as number) ?? 0;
 }

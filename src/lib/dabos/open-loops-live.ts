@@ -9,17 +9,47 @@ import {
   type OpenLoopsSnapshot,
 } from '@/lib/dabos/open-loops';
 
-/** Task statuses that count as open on the board (same set as countOpenTasks). */
-const OPEN_STATUSES = ['todo', 'doing', 'blocked'];
+/**
+ * Task statuses that count as open on the board (same set as countOpenTasks).
+ * Include legacy `open` — some despatches used it; without this they vanish from /open.
+ */
+const OPEN_STATUSES = ['todo', 'doing', 'blocked', 'open'];
 
 type TaskRow = {
   id: string;
   title: string | null;
+  description: string | null;
   status: string;
   priority: number | null;
   department_id: string | null;
+  basket: string | null;
+  ingest_meta: Record<string, unknown> | null;
   created_at: string | Date;
 };
+
+function fieldFromDescription(description: string | null, key: string): string {
+  if (!description) return '';
+  const re = new RegExp(`^${key}:\\s*(.+)$`, 'im');
+  const m = description.match(re);
+  return m?.[1]?.trim() ?? '';
+}
+
+function parseLoopFields(row: TaskRow): { why: string; canonical: string; resume: string } {
+  const meta = row.ingest_meta ?? {};
+  const human = fieldFromDescription(row.description, 'Human');
+  const ssot =
+    fieldFromDescription(row.description, 'SSOT') ||
+    (typeof meta.canonical === 'string' ? meta.canonical : '') ||
+    '';
+  const resume =
+    fieldFromDescription(row.description, 'Resume') ||
+    (typeof meta.resume === 'string' ? meta.resume : '') ||
+    '';
+  const prompt = fieldFromDescription(row.description, 'Prompt');
+  const whyBase = human || row.title || '(untitled)';
+  const why = prompt ? `${whyBase}\nPrompt: ${prompt}` : whyBase;
+  return { why, canonical: ssot, resume };
+}
 
 /**
  * Heat from live task fields:
@@ -50,9 +80,11 @@ export async function getLiveOpenLoops(): Promise<OpenLoopsSnapshot & { live: bo
   const sql = getDabosSql();
   const statuses = [...OPEN_STATUSES, 'review'];
   const rows = (await sql`
-    SELECT id::text, title, status, priority, department_id, created_at
+    SELECT id::text, title, description, status, priority, department_id, basket,
+           ingest_meta, created_at
     FROM tasks
     WHERE status = ANY(${statuses})
+      AND basket IN ('in', 'pending')
     ORDER BY priority ASC NULLS LAST, created_at ASC
   `) as TaskRow[];
 
@@ -66,19 +98,22 @@ export async function getLiveOpenLoops(): Promise<OpenLoopsSnapshot & { live: bo
   `) as { department_id: string | null; closed_all: number; closed_7d: number }[];
 
   const since = new Date(Date.now() - 7 * 864e5);
-  const items: OpenLoopItem[] = rows.map((r) => ({
-    id: r.id,
-    why: r.title ?? '(untitled)',
-    canonical: '',
-    resume: '',
-    heat: heatFor(r),
-    segment: fallback.segments[0],
-    dept: asDept(r.department_id),
-    source: 'chat-backlog',
-    status: r.status,
-    priority: r.priority,
-    created_at: new Date(r.created_at).toISOString(),
-  }));
+  const items: OpenLoopItem[] = rows.map((r) => {
+    const parsed = parseLoopFields(r);
+    return {
+      id: r.id,
+      why: parsed.why,
+      canonical: parsed.canonical,
+      resume: parsed.resume,
+      heat: heatFor(r),
+      segment: fallback.segments[0],
+      dept: asDept(r.department_id),
+      source: 'chat-backlog',
+      status: r.status,
+      priority: r.priority,
+      created_at: new Date(r.created_at).toISOString(),
+    };
+  });
 
   const hot = items.filter((i) => i.heat === 'hot');
   const open = items.filter((i) => i.heat === 'open');
