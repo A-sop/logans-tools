@@ -90,6 +90,29 @@ function AimRow({
   );
 }
 
+function loopTitle(item: OpenLoopItem): string {
+  return item.why.split('\n')[0];
+}
+
+function loopPrompt(item: OpenLoopItem): string | undefined {
+  return item.why.split('\n').find((l) => l.startsWith('Prompt:'));
+}
+
+function LoopDetailFields({ item, showEmpty = false }: { item: OpenLoopItem; showEmpty?: boolean }) {
+  const prompt = loopPrompt(item);
+  const hasExtra = Boolean(item.canonical || item.resume || prompt);
+  return (
+    <>
+      {item.canonical ? <span className={styles.popCanonical}>SSOT: {item.canonical}</span> : null}
+      {item.resume ? <span className={styles.popResume}>Resume: {item.resume}</span> : null}
+      {prompt ? <span className={styles.popPrompt}>{prompt}</span> : null}
+      {showEmpty && !hasExtra ? (
+        <span className={styles.popEmptyInline}>No SSOT / resume / prompt filed on this task yet.</span>
+      ) : null}
+    </>
+  );
+}
+
 function TaskPopover({
   title,
   items,
@@ -123,16 +146,8 @@ function TaskPopover({
             <li key={item.id} className={styles.popItem}>
               <span className={`${styles.popDot} ${styles[`popDot_${item.heat}`]}`} aria-hidden />
               <div className={styles.popBody}>
-                <span className={styles.popText}>{item.why.split('\n')[0]}</span>
-                {item.canonical ? (
-                  <span className={styles.popCanonical}>SSOT: {item.canonical}</span>
-                ) : null}
-                {item.resume ? <span className={styles.popResume}>Resume: {item.resume}</span> : null}
-                {item.why.includes('\nPrompt:') ? (
-                  <span className={styles.popPrompt}>
-                    {item.why.split('\n').find((l) => l.startsWith('Prompt:'))}
-                  </span>
-                ) : null}
+                <span className={styles.popText}>{loopTitle(item)}</span>
+                <LoopDetailFields item={item} />
               </div>
               <span className={styles.popMeta}>
                 {item.status ?? item.heat}
@@ -408,14 +423,23 @@ function UrgencyList({
           ) : (
             <ul className={styles.urgencyItems}>
               {section.items.map((item) => (
-                <li key={item.id} className={styles.urgencyItem}>
-                  <span className={styles.urgencyWhy}>{item.why}</span>
-                  <span className={styles.urgencyMeta}>
-                    {itemDept(item)}
-                    {item.status ? ` · ${item.status}` : ''}
-                    {item.priority != null ? ` · P${item.priority}` : ''}
-                    {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
-                  </span>
+                <li key={item.id}>
+                  <details className={styles.urgencyItem}>
+                    <summary className={styles.urgencyItemSummary}>
+                      <span className={styles.urgencyChevron} aria-hidden />
+                      <span className={styles.urgencyWhy}>{loopTitle(item)}</span>
+                      <span className={styles.urgencyMeta}>
+                        {itemDept(item)}
+                        {item.status ? ` · ${item.status}` : ''}
+                        {item.priority != null ? ` · P${item.priority}` : ''}
+                        {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
+                      </span>
+                      <span className={styles.urgencyDetailsHint}>Details</span>
+                    </summary>
+                    <div className={styles.urgencyDetail}>
+                      <LoopDetailFields item={item} showEmpty />
+                    </div>
+                  </details>
                 </li>
               ))}
             </ul>
