@@ -8,12 +8,13 @@ import { createHash } from 'crypto';
 import type { Sql } from '@/lib/dabos/db';
 import { preparePendingIngestMeta } from '@/lib/dabos/comm-center/write-pending';
 import type { PendingMeta } from '@/lib/dabos/comm-center/pending';
+import { resolveIngestCycleFields } from '@/lib/dabos/ingest-cycle-meta';
 
 export function urlHash(url: string): string {
   return createHash('sha256').update(url).digest('hex').slice(0, 32);
 }
 
-export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api'; // wire: which IN
+export type IngestMouth = 'telegram' | 'slack' | 'buzz' | 'api' | 'bookmark'; // wire: which IN
 
 /**
  * DVAG keyword regex — never post captures matching these terms.
@@ -43,6 +44,10 @@ export type IngestInput = {
   basket?: IngestBasket;
   /** Required when basket='pending'. */
   pending?: PendingMeta | Record<string, unknown>;
+  /** Optional override; default derived from payload (Class I mouth_kind). */
+  mouth_kind?: string;
+  /** Optional override; default 0 on new capture. */
+  cycle_stage?: number;
 };
 
 export type IngestResult = {
@@ -237,6 +242,7 @@ export async function ingestCapture(
 
   let title: string;
   let description: string;
+
   let meta: Record<string, unknown>;
 
   if (isPointerMode) {
@@ -247,6 +253,13 @@ export async function ingestCapture(
       `sha256: ${sha256}`,
       `IN: ${input.mouth} · ${external_id}`,
     ].join('\n');
+    const cycleFields = resolveIngestCycleFields({
+      mouth: input.mouth,
+      text: input.text,
+      attachments: input.attachments,
+      mouth_kind: input.mouth_kind,
+      cycle_stage: input.cycle_stage,
+    });
     meta = {
       mouth: input.mouth,
       external_id,
@@ -260,6 +273,8 @@ export async function ingestCapture(
       routed_reason,
       route_candidates: auto?.candidates ?? [],
       url_hashes: (input.urls ?? []).map(urlHash),
+      mouth_kind: cycleFields.mouth_kind,
+      cycle_stage: cycleFields.cycle_stage,
       ...(dupOf ? { dup_of: dupOf.id } : {}),
     };
   } else {
@@ -277,6 +292,14 @@ export async function ingestCapture(
     ]
       .filter(Boolean)
       .join('');
+    const cycleFields = resolveIngestCycleFields({
+      mouth: input.mouth,
+      text: input.text,
+      urls,
+      attachments,
+      mouth_kind: input.mouth_kind,
+      cycle_stage: input.cycle_stage,
+    });
     meta = {
       mouth: input.mouth,
       external_id,
@@ -288,6 +311,8 @@ export async function ingestCapture(
       is_agent: parsed.is_agent,
       routed_reason,
       route_candidates: auto?.candidates ?? [],
+      mouth_kind: cycleFields.mouth_kind,
+      cycle_stage: cycleFields.cycle_stage,
       ...(dupOf ? { dup_of: dupOf.id } : {}),
     };
   }

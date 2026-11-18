@@ -134,6 +134,8 @@ describe('ingestCapture with mocked DB', () => {
     expect(meta.store_path).toBe('docs/wiki/inbox/2026-10-13-test.md');
     expect(meta.urls).toBeUndefined();
     expect(meta.attachments).toBeUndefined();
+    expect(meta.mouth_kind).toBe('text');
+    expect(meta.cycle_stage).toBe(0);
   });
 
   it('legacy mode includes body and URLs in description', async () => {
@@ -183,6 +185,8 @@ describe('ingestCapture with mocked DB', () => {
     const meta = JSON.parse(metaJson);
     expect(meta.pointer).toBeUndefined();
     expect(meta.urls).toEqual(['https://example.com']);
+    expect(meta.mouth_kind).toBe('link');
+    expect(meta.cycle_stage).toBe(0);
   });
 
   it('returns existing task on duplicate external_id (idempotency)', async () => {

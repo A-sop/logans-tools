@@ -5,11 +5,16 @@
 
 export const HUMAN_CONTEXT_MAX = 800;
 
-/** Template agents fill when filing an approval_queue row. */
-export const HUMAN_CONTEXT_TEMPLATE = `What: <one sentence>
-Why now: <one sentence>
-Yes: <what happens if Logan approves>
-No: <what happens if Logan rejects>
+/**
+ * Template agents fill when filing an approval_queue row.
+ * Hard rule: CONTEXT must be decision-grade — name the authorization substance
+ * (what policy/spend/merge/secret changes), not only the process/script steps.
+ * "Yes = run Export-PolicyPdf" alone is a miss; say what the letter/action decides.
+ */
+export const HUMAN_CONTEXT_TEMPLATE = `What: <what this authorizes / decides — substance, not only the ritual>
+Why now / why it matters: <one sentence; note what stays broken or deferred while pending>
+Yes: <commit Logan is making + next physical/agent steps; ink/send/pay stay his hands when A5>
+No / later: <what stays as-is; name any non-blockers e.g. GFP not gated>
 Links: <1–3 brief/doc paths — never dabos.logans.tools/open (already in UI)>`;
 
 /**

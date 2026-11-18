@@ -30,9 +30,11 @@ and say so in the title.
 - `title`: one line Logan can answer with yes or no, for example
   `Merge logans-tools #61 and apply its SQL on prod?`
 - `human_context` **(required for new rows)**: founder-facing CONTEXT panel text, **≤800 chars**
-  (aim 500–800). Plain English: what this is, why now, what Yes does, what No does, plus 1–3
-  **brief/doc paths** (not file contents). Never `https://dabos.logans.tools/open` — founder is
-  already in the dabos UI. Migration `024_approval_queue_human_context.sql`.
+  (aim 500–800). Plain English: **what this authorizes / decides** (substance first), why it
+  matters / what stays broken while pending, what Yes commits to, what No/later leaves as-is,
+  plus 1–3 **brief/doc paths** (not file contents). Never process-only (“run Export-PolicyPdf”)
+  without naming the policy/action being authorized. Never `https://dabos.logans.tools/open` —
+  founder is already in the dabos UI. Migration `024_approval_queue_human_context.sql`.
 - `body`: short agent prompt / path hints (optional once `human_context` is filled). UI hides
   Prompt when `human_context` already covers the same substance; otherwise labels it
   **Agent summary (short)**.
@@ -65,12 +67,16 @@ and say so in the title.
 Template (`src/lib/dabos/approval-human-context.ts`):
 
 ```text
-What: <one sentence>
-Why now: <one sentence>
-Yes: <what happens if Logan approves>
-No: <what happens if Logan rejects>
+What: <what this authorizes / decides — substance, not only the ritual>
+Why now / why it matters: <one sentence; note what stays broken or deferred while pending>
+Yes: <commit Logan is making + next physical/agent steps; ink/send/pay stay his hands when A5>
+No / later: <what stays as-is; name any non-blockers e.g. GFP not gated>
 Links: <1–3 brief/doc paths — never dabos.logans.tools/open>
 ```
+
+**Anti-pattern:** filing `Yes: Export-PolicyPdf → print → ink` with no line on *what the letter
+decides*. Founder cannot executive-decide from ritual alone — put designation / spend / merge
+substance in `What` / `Why it matters`.
 
 Never put DVAG client data, prospect names, account ids or secret values in any column. Refer to
 sensitive values by commit and path only.

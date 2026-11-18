@@ -9,7 +9,7 @@ import { authorizeTier0 } from '@/lib/dabos/tier0-auth';
 export const dynamic = 'force-dynamic';
 
 const bodySchema = z.object({
-  mouth: z.enum(['telegram', 'slack', 'buzz', 'api']),
+  mouth: z.enum(['telegram', 'slack', 'buzz', 'api', 'bookmark']),
   external_id: z.string().min(1).max(200),
   text: z.string().max(20000).default(''),
   urls: z.array(z.string().min(1).max(2000)).max(50).optional(),
@@ -22,6 +22,8 @@ const bodySchema = z.object({
   title: z.string().max(120).optional(),
   sha256: z.string().regex(/^[0-9a-fA-F]{64}$/).transform((v) => v.toLowerCase()).optional(),
   store_path: z.string().max(500).optional(),
+  mouth_kind: z.string().max(40).optional(),
+  cycle_stage: z.number().int().min(0).max(9).optional(),
 });
 
 /**
@@ -80,6 +82,8 @@ export async function POST(request: Request) {
       title: parsed.data.title,
       sha256: parsed.data.sha256,
       store_path: parsed.data.store_path,
+      mouth_kind: parsed.data.mouth_kind,
+      cycle_stage: parsed.data.cycle_stage,
     });
 
     return NextResponse.json(
