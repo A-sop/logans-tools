@@ -318,7 +318,7 @@ export async function ingestCapture(
   }
 
   const basePriority = input.priority ?? (parsed.is_work ? 2 : 3);
-  const priority = Math.min(5, Math.max(1, dupOf ? Math.min(basePriority, Number(dupOf.priority ?? 3) - 1) : basePriority));
+  const priority = Math.min(6, Math.max(1, dupOf ? Math.min(basePriority, Number(dupOf.priority ?? 3) - 1) : basePriority));
   // Dept1 intake rule: captures never go to the founder; agent by default.
   // Only a non-task item posted straight to the api mouth stays with the founder.
   const isCapture = input.mouth !== 'api';

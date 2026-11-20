@@ -18,7 +18,7 @@ const bodySchema = z.object({
   wiki_bundle: z.string().max(500).optional(),
   department_id: z.string().max(20).optional().nullable(),
   division_id: z.string().max(20).optional().nullable(),
-  priority: z.number().int().min(1).max(5).optional(),
+  priority: z.number().int().min(1).max(6).optional(),
   title: z.string().max(120).optional(),
   sha256: z.string().regex(/^[0-9a-fA-F]{64}$/).transform((v) => v.toLowerCase()).optional(),
   store_path: z.string().max(500).optional(),

@@ -168,6 +168,7 @@ export type OpenLoopItem = {
   /** Live task fields (Neon tasks). */
   status?: string;
   priority?: number | null;
+  priority_reason?: string | null;
   created_at?: string;
 };
 

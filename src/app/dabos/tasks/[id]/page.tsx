@@ -6,6 +6,7 @@ import { TaskActions } from '@/components/dabos/task-actions';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dabosConfigured, fetchTask } from '@/lib/dabos/server-data';
+import { priorityLabel } from '@/lib/dabos/priority-bands';
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -32,8 +33,12 @@ export default async function TaskPage({ params }: PageProps) {
         <h2 className="mt-2 text-xl font-semibold">{task.title as string}</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           <Badge>{task.status as string}</Badge>
+          {task.priority != null ? <Badge variant="secondary">{priorityLabel(task.priority as number)}</Badge> : null}
           {task.assigned_agent ? <Badge variant="secondary">{task.assigned_agent as string}</Badge> : null}
         </div>
+        {task.priority_reason ? (
+          <p className="mt-3 text-sm">{task.priority_reason as string}</p>
+        ) : null}
         {task.description ? (
           <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
             {task.description as string}

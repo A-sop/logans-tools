@@ -300,7 +300,7 @@ export async function fetchDepartmentDashboard(divisionId: string, deptId: strin
   if (!division) return null;
 
   const tasks = await sql`
-    SELECT id, title, status, priority, type, assigned_agent, created_at, updated_at, completed_at
+    SELECT id, title, status, priority, priority_reason, type, assigned_agent, created_at, updated_at, completed_at
     FROM tasks
     WHERE division_id = ${divisionId} AND department_id = ${deptId}
     ORDER BY

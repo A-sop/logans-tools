@@ -32,12 +32,14 @@ import {
   statSourceLabel,
 } from '@/lib/dabos/stat-provenance';
 import type { ConditionEvaluation } from '@/lib/dabos/types';
+import { priorityLabel } from '@/lib/dabos/priority-bands';
 
 type TaskRow = {
   id: string;
   title: string;
   status: string;
   priority: number;
+  priority_reason?: string | null;
   type: string;
   assigned_agent: string | null;
   created_at: string;
@@ -99,6 +101,7 @@ function TaskTable({ tasks, emptyMessage }: { tasks: TaskRow[]; emptyMessage: st
       <TableHeader>
         <TableRow>
           <TableHead>Title</TableHead>
+          <TableHead>Priority</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Agent</TableHead>
         </TableRow>
@@ -115,6 +118,9 @@ function TaskTable({ tasks, emptyMessage }: { tasks: TaskRow[]; emptyMessage: st
                   agent
                 </Badge>
               ) : null}
+            </TableCell>
+            <TableCell className="whitespace-nowrap text-xs" title={task.priority_reason ?? undefined}>
+              {priorityLabel(task.priority)}
             </TableCell>
             <TableCell>{task.status}</TableCell>
             <TableCell className="text-muted-foreground">{task.assigned_agent ?? '—'}</TableCell>

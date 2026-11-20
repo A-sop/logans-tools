@@ -12,7 +12,7 @@ const createTaskSchema = z.object({
   description: z.string().optional().nullable(),
   type: z.enum(['human', 'agent', 'approval']).optional(),
   status: z.enum(['todo', 'doing', 'blocked', 'done', 'cancelled']).optional(),
-  priority: z.number().int().min(1).max(5).optional(),
+  priority: z.number().int().min(1).max(6).optional(),
   assigned_to: z.string().optional().nullable(),
   assigned_agent: z.string().optional().nullable(),
   research_tier: z.number().int().min(1).max(2).optional(),

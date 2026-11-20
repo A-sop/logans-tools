@@ -21,6 +21,7 @@ type TaskRow = {
   description: string | null;
   status: string;
   priority: number | null;
+  priority_reason: string | null;
   department_id: string | null;
   basket: string | null;
   ingest_meta: Record<string, unknown> | null;
@@ -53,14 +54,14 @@ function parseLoopFields(row: TaskRow): { why: string; canonical: string; resume
 
 /**
  * Heat from live task fields:
- * - hot: doing/blocked, or priority 1-2
+ * - hot: doing/blocked, or priority 1-3 (promotion, income, financial cans)
  * - ship: status "review" (ready to ship)
  * - open: everything else
  */
 function heatFor(row: TaskRow): OpenLoopItem['heat'] {
   if (row.status === 'review') return 'ship';
   if (row.status === 'doing' || row.status === 'blocked') return 'hot';
-  if (row.priority != null && row.priority <= 2) return 'hot';
+  if (row.priority != null && row.priority <= 3) return 'hot';
   return 'open';
 }
 
@@ -80,7 +81,7 @@ export async function getLiveOpenLoops(): Promise<OpenLoopsSnapshot & { live: bo
   const sql = getDabosSql();
   const statuses = [...OPEN_STATUSES, 'review'];
   const rows = (await sql`
-    SELECT id::text, title, description, status, priority, department_id, basket,
+    SELECT id::text, title, description, status, priority, priority_reason, department_id, basket,
            ingest_meta, created_at
     FROM tasks
     WHERE status = ANY(${statuses})
@@ -111,6 +112,7 @@ export async function getLiveOpenLoops(): Promise<OpenLoopsSnapshot & { live: bo
       source: 'chat-backlog',
       status: r.status,
       priority: r.priority,
+      priority_reason: r.priority_reason,
       created_at: new Date(r.created_at).toISOString(),
     };
   });

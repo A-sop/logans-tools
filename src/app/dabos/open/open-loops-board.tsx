@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import type { OpenLoopItem, OpenLoopsSnapshot } from '@/lib/dabos/open-loops';
+import { priorityLabel } from '@/lib/dabos/priority-bands';
 import { closedShare, itemDept, resolveGoals } from '@/lib/dabos/open-loops';
 import {
   DCO_DIVISION_IDS,
@@ -100,9 +101,12 @@ function loopPrompt(item: OpenLoopItem): string | undefined {
 
 function LoopDetailFields({ item, showEmpty = false }: { item: OpenLoopItem; showEmpty?: boolean }) {
   const prompt = loopPrompt(item);
-  const hasExtra = Boolean(item.canonical || item.resume || prompt);
+  const hasExtra = Boolean(item.canonical || item.resume || prompt || item.priority_reason);
   return (
     <>
+      {item.priority_reason ? (
+        <span className={styles.popCanonical}>{priorityLabel(item.priority)} — {item.priority_reason}</span>
+      ) : null}
       {item.canonical ? <span className={styles.popCanonical}>SSOT: {item.canonical}</span> : null}
       {item.resume ? <span className={styles.popResume}>Resume: {item.resume}</span> : null}
       {prompt ? <span className={styles.popPrompt}>{prompt}</span> : null}
@@ -151,7 +155,7 @@ function TaskPopover({
               </div>
               <span className={styles.popMeta}>
                 {item.status ?? item.heat}
-                {item.priority != null ? ` · P${item.priority}` : ''}
+                {item.priority != null ? ` · ${priorityLabel(item.priority)}` : ''}
                 {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
               </span>
             </li>
@@ -431,7 +435,7 @@ function UrgencyList({
                       <span className={styles.urgencyMeta}>
                         {itemDept(item)}
                         {item.status ? ` · ${item.status}` : ''}
-                        {item.priority != null ? ` · P${item.priority}` : ''}
+                        {item.priority != null ? ` · ${priorityLabel(item.priority)}` : ''}
                         {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
                       </span>
                       <span className={styles.urgencyDetailsHint}>Details</span>

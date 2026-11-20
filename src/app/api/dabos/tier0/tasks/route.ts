@@ -21,7 +21,7 @@ const createSchema = z.object({
   title: z.string().min(1).max(500),
   description: z.string().optional().nullable(),
   type: z.enum(['human', 'agent', 'approval']).default('agent'),
-  priority: z.number().int().min(1).max(5).optional(),
+  priority: z.number().int().min(1).max(6).optional(),
   assigned_agent: z.string().optional().nullable(),
   research_tier: z.number().int().min(1).max(2).optional(),
   requested_by: z.string().optional(),

@@ -11,7 +11,7 @@ const patchTaskSchema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional().nullable(),
   status: z.enum(['todo', 'doing', 'blocked', 'done', 'cancelled']).optional(),
-  priority: z.number().int().min(1).max(5).optional(),
+  priority: z.number().int().min(1).max(6).optional(),
   assigned_to: z.string().optional().nullable(),
   assigned_agent: z.string().optional().nullable(),
   research_tier: z.number().int().min(1).max(2).optional(),
