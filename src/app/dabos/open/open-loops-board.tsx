@@ -399,6 +399,45 @@ function PrayerDrum({
   );
 }
 
+/** Live query order is priority, then created_at. Within a priority, created_at ascending. */
+function loopsInPriorityOrder(data: OpenLoopsSnapshot, heat: HeatFilter): OpenLoopItem[] {
+  const all = [...data.hot, ...data.open, ...data.ship];
+  const filtered = heat === 'all' ? all : all.filter((i) => i.heat === heat);
+  return filtered.toSorted((a, b) => {
+    const pa = a.priority == null ? Number.POSITIVE_INFINITY : a.priority;
+    const pb = b.priority == null ? Number.POSITIVE_INFINITY : b.priority;
+    if (pa !== pb) return pa - pb;
+    if (a.created_at && b.created_at && a.created_at !== b.created_at) {
+      return a.created_at < b.created_at ? -1 : 1;
+    }
+    return 0;
+  });
+}
+
+function prioritySections(items: OpenLoopItem[]): { key: string; label: string; items: OpenLoopItem[] }[] {
+  const byKey = new Map<string, OpenLoopItem[]>();
+  for (const item of items) {
+    const key = item.priority == null ? 'none' : String(item.priority);
+    const list = byKey.get(key);
+    if (list) list.push(item);
+    else byKey.set(key, [item]);
+  }
+  const numbered = [...byKey.keys()]
+    .filter((key) => key !== 'none')
+    .map(Number)
+    .sort((a, b) => a - b);
+  const sections = numbered.map((n) => ({
+    key: String(n),
+    label: priorityLabel(n),
+    items: byKey.get(String(n)) ?? [],
+  }));
+  const none = byKey.get('none');
+  if (none && none.length > 0) {
+    sections.push({ key: 'none', label: 'No priority', items: none });
+  }
+  return sections;
+}
+
 function UrgencyList({
   data,
   heat,
@@ -406,48 +445,42 @@ function UrgencyList({
   data: OpenLoopsSnapshot;
   heat: HeatFilter;
 }) {
-  const sections: { key: Exclude<HeatFilter, 'all'>; label: string; items: OpenLoopItem[] }[] = [
-    { key: 'hot', label: 'Hot', items: data.hot },
-    { key: 'open', label: 'Open', items: data.open },
-    { key: 'ship', label: 'Ship', items: data.ship },
-  ];
-  const visible = heat === 'all' ? sections : sections.filter((s) => s.key === heat);
+  const sections = prioritySections(loopsInPriorityOrder(data, heat));
 
   return (
-    <div className={styles.urgencyList} aria-label="Open loops by urgency">
-      {visible.map((section) => (
-        <details key={section.key} className={styles.urgencySection} open={section.items.length > 0}>
+    <div className={styles.urgencyList} aria-label="Open loops by priority">
+      {sections.length === 0 ? (
+        <p className={styles.urgencyEmpty}>Nothing in this filter.</p>
+      ) : null}
+      {sections.map((section) => (
+        <details key={section.key} className={styles.urgencySection} open>
           <summary className={styles.urgencySummary}>
-            <span className={`${styles.urgencyDot} ${styles[`urgencyDot_${section.key}`]}`} aria-hidden />
+            <span className={styles.urgencyDot} aria-hidden />
             <span className={styles.urgencyLabel}>{section.label}</span>
             <span className={styles.urgencyCount}>{section.items.length}</span>
           </summary>
-          {section.items.length === 0 ? (
-            <p className={styles.urgencyEmpty}>Nothing in {section.label.toLowerCase()}.</p>
-          ) : (
-            <ul className={styles.urgencyItems}>
-              {section.items.map((item) => (
-                <li key={item.id}>
-                  <details className={styles.urgencyItem}>
-                    <summary className={styles.urgencyItemSummary}>
-                      <span className={styles.urgencyChevron} aria-hidden />
-                      <span className={styles.urgencyWhy}>{loopTitle(item)}</span>
-                      <span className={styles.urgencyMeta}>
-                        {itemDept(item)}
-                        {item.status ? ` · ${item.status}` : ''}
-                        {item.priority != null ? ` · ${priorityLabel(item.priority)}` : ''}
-                        {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
-                      </span>
-                      <span className={styles.urgencyDetailsHint}>Details</span>
-                    </summary>
-                    <div className={styles.urgencyDetail}>
-                      <LoopDetailFields item={item} showEmpty />
-                    </div>
-                  </details>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className={styles.urgencyItems}>
+            {section.items.map((item) => (
+              <li key={item.id}>
+                <details className={styles.urgencyItem}>
+                  <summary className={styles.urgencyItemSummary}>
+                    <span className={styles.urgencyChevron} aria-hidden />
+                    <span className={styles.urgencyWhy}>{loopTitle(item)}</span>
+                    <span className={styles.urgencyMeta}>
+                      {itemDept(item)}
+                      {item.status ? ` · ${item.status}` : ''}
+                      {` · ${item.heat}`}
+                      {item.created_at ? ` · ${ageLabel(item.created_at)}` : ''}
+                    </span>
+                    <span className={styles.urgencyDetailsHint}>Details</span>
+                  </summary>
+                  <div className={styles.urgencyDetail}>
+                    <LoopDetailFields item={item} showEmpty />
+                  </div>
+                </details>
+              </li>
+            ))}
+          </ul>
         </details>
       ))}
     </div>

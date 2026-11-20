@@ -768,6 +768,7 @@
   height: 0.55rem;
   border-radius: 99px;
   flex-shrink: 0;
+  background: var(--ol-ink);
 }
 .urgencyDot_hot { background: var(--ol-hot); }
 .urgencyDot_open { background: var(--ol-open); }
